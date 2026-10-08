@@ -7,29 +7,87 @@
     "k": 8,
     "perfScale": 1.5,
     "zClip": 3,
-    "confidence": { "high": 15, "mid": 6 }
+    "confidence": {
+      "high": 15,
+      "mid": 6
+    }
   },
   "evidence": {
     "_comment": "根拠の軸(基準12〜16)。kindWeights・confidence の点数・tournament の coach・proPerYear の LJL 以外・otherPer は AI の起案で、価値責任者の確定を要する",
     "shotcalling": {
-      "base": 5.0,
+      "base": 5,
       "max": 9.5,
-      "strengthPoints": { "強": 1.5, "中": 1.0, "弱": 0.5 },
-      "kindWeights": { "player": 1, "coach": 1, "other-game": 1, "other": 0, "owner-confirmation": 1 },
-      "negativeCap": 4.0,
+      "strengthPoints": {
+        "強": 1.5,
+        "中": 1,
+        "弱": 0.5
+      },
+      "kindWeights": {
+        "player": 1,
+        "coach": 1,
+        "other-game": 1,
+        "other": 0,
+        "owner-confirmation": 1
+      },
+      "negativeCap": 4,
       "noPositive": 2.5,
-      "confidence": { "highHuman": 2, "midHuman": 1, "midAiPoints": 2, "aiPoints": { "強": 2, "中": 1, "弱": 0.5 } }
+      "confidence": {
+        "highHuman": 2,
+        "midHuman": 1,
+        "midAiPoints": 2,
+        "aiPoints": {
+          "強": 2,
+          "中": 1,
+          "弱": 0.5
+        }
+      }
     },
     "tournament": {
-      "seasonScores": [2.0, 4.0, 5.5, 6.5],
+      "seasonScores": [
+        2,
+        4,
+        5.5,
+        6.5
+      ],
       "gamesFull": 30,
-      "gamesMax": 1.0,
+      "gamesMax": 1,
       "coachPerSeason": 0.5,
-      "coachMax": 1.0,
-      "proPerYear": { "LJL": 0.5, "LJL CS": 0.25, "その他のプロ": 0.25 },
-      "proMax": 2.0,
+      "coachMax": 1,
+      "proPerYear": {
+        "LJL": 0.5,
+        "LJL CS": 0.25,
+        "その他のプロ": 0.25
+      },
+      "proMax": 2,
       "otherPer": 0.5,
-      "otherMax": 1.0
+      "otherMax": 1
+    }
+  },
+  "form": {
+    "windowDays": 14,
+    "minGames": 3,
+    "queues": [
+      420,
+      440
+    ],
+    "minMinutes": 10,
+    "shrinkGames": 5,
+    "winRateScale": 0.15,
+    "lpScale": 150,
+    "practiceCap": 30,
+    "weights": {
+      "winRate": 0.5,
+      "lp": 0.3,
+      "practice": 0.2
+    },
+    "swing": 0.1,
+    "min": 0.9,
+    "max": 1.1,
+    "labels": {
+      "best": 0.6,
+      "good": 0.2,
+      "bad": -0.2,
+      "worst": -0.6
     }
   }
 }
