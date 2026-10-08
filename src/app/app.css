@@ -670,3 +670,146 @@ a {
     transition: none !important;
   }
 }
+
+/* ---------- チームのページ ---------- */
+.court {
+  --team: var(--gold);
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+}
+.court-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.court-emblem .emblem {
+  width: 84px;
+  height: 84px;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--team) 60%, transparent));
+  animation: spin 120s linear infinite;
+}
+.court-name {
+  margin: 2px 0;
+  font-family: var(--caps);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  font-size: clamp(1.6rem, 6vw, 2.8rem);
+  line-height: 1.1;
+}
+.court-overall {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.court-overall .num,
+.court-tier-head .num {
+  font-family: var(--serif-latin);
+  font-weight: 600;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+@media (min-width: 900px) {
+  .court-head {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .court-overall {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+.court-whole {
+  padding: 22px;
+  animation: rise 0.6s 0.06s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.court-tiers {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  .court-tiers {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.court-tier {
+  padding: 20px 16px;
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.court-tier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.court-tier-head .num {
+  font-size: 1.8rem;
+}
+.court-members {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.house-name a:hover {
+  color: var(--gold-hi);
+}
+.house-name .go {
+  color: var(--gold);
+  font-size: 0.9em;
+}
+
+.court-whole-body {
+  display: grid;
+  gap: 8px 32px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .court-whole-body {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+.lines.static .line-body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label value'
+    'delta delta'
+    'bar bar';
+  gap: 2px 12px;
+  align-items: baseline;
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.lines.static .label-text::after {
+  content: none;
+}
+.delta {
+  grid-area: delta;
+  font-family: var(--caps);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.delta.up {
+  color: var(--gold-hi);
+}
+.delta.down {
+  color: #d88a8a;
+}
+
+/* スマホでは見出しの帯を1行に保つ(パンくずはロゴのリンクで代替) */
+.brand {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .crumb {
+    display: none;
+  }
+}

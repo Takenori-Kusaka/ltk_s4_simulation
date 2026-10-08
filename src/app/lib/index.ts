@@ -134,12 +134,14 @@ export function placeholderAvatar(p: Player): { initial: string; role: Role; rol
   return { initial: [...p.name][0], role: p.role, roleIcon: ROLE_ICON[p.role], color: TEAM_COLOR[p.team] ?? '#888888' };
 }
 
-export type Route = { page: 'home' } | { page: 'player'; id: string };
+export type Route = { page: 'home' } | { page: 'player'; id: string } | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' };
 
 /** ハッシュによる画面の切り替え(GitHub Pages ではサーバー側の経路を持てないため) */
 export function parseRoute(hash: string): Route {
   const m = /^#\/player\/([A-Z]{2}-(?:NEXT|CORE|MASTERS)-(?:TOP|JG|MID|ADC|SUP))$/.exec(hash);
-  return m ? { page: 'player', id: m[1] } : { page: 'home' };
+  if (m) return { page: 'player', id: m[1] };
+  const t = /^#\/team\/(DD|CC|IT|LR)$/.exec(hash);
+  return t ? { page: 'team', team: t[1] as 'DD' | 'CC' | 'IT' | 'LR' } : { page: 'home' };
 }
 
 /** 総合値: データのある軸の平均。全軸データなしなら null */

@@ -27,7 +27,7 @@
       <div class="house-head">
         <Emblem petals={info.petals} color={info.color} />
         <div>
-          <h2 class="house-name">{info.name}</h2>
+          <h2 class="house-name"><a href={`#/team/${team}`}>{info.name} <span class="go">›</span></a></h2>
           <div class="house-motto">{info.flower}の{info.regalia} · {team}</div>
         </div>
       </div>
