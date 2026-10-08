@@ -141,7 +141,36 @@ export type Route =
   | { page: 'home' }
   | { page: 'player'; id: string }
   | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' }
+  | { page: 'compare'; targets: string[] }
   | { page: 'notfound'; hash: string };
+
+/** F-008: 比較の対象の種類。選手 ID・階級チーム(CC-CORE)・チーム全体(CC)。存在しなければ null */
+export function targetKind(id: string): 'player' | 'tier-team' | 'team' | null {
+  if (ROSTER_IDS.has(id)) return 'player';
+  if (/^(DD|CC|IT|LR)-(NEXT|CORE|MASTERS)$/.test(id)) return 'tier-team';
+  if (/^(DD|CC|IT|LR)$/.test(id)) return 'team';
+  return null;
+}
+
+/** F-008 基準18・19: 比較の URL */
+export function compareHref(targets: readonly string[]): string {
+  return `#/compare/${targets.join('/')}`;
+}
+
+/**
+ * F-008 基準18・20・21: 比較の URL の解析。重複は最初に現れた順で残し、2〜4つでなければ「見つからない」。
+ * 存在しない対象と、選手とチーム(階級チーム・チーム全体)の混在も「見つからない」。
+ * 階級チームとチーム全体の混在・階級の違いは比較の画面で案内する(基準12・13)
+ */
+function parseCompare(rest: string): string[] | null {
+  const ids = [...new Set(rest.split('/').filter(Boolean))];
+  if (ids.length < 2 || ids.length > 4) return null;
+  const kinds = ids.map(targetKind);
+  if (kinds.some((k) => k === null)) return null;
+  const players = kinds.filter((k) => k === 'player').length;
+  if (players > 0 && players < ids.length) return null;
+  return ids;
+}
 
 /**
  * ハッシュによる画面の切り替え(GitHub Pages ではサーバー側の経路を持てないため)。
@@ -155,6 +184,9 @@ export function parseRoute(hash: string): Route {
   if (m && ROSTER_IDS.has(m[1])) return { page: 'player', id: m[1] };
   const t = /^\/TEAM\/(DD|CC|IT|LR)$/.exec(upper);
   if (t) return { page: 'team', team: t[1] as 'DD' | 'CC' | 'IT' | 'LR' };
+  const c = /^\/COMPARE(?:\/(.*))?$/.exec(upper);
+  const targets = c ? parseCompare(c[1] ?? '') : null;
+  if (targets) return { page: 'compare', targets };
   return { page: 'notfound', hash };
 }
 
