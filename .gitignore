@@ -27,6 +27,9 @@ evidence/
 *.pem
 *.key
 
+# Riot API の生の応答と収集ログ(F-003。公開しない。公開するのは集計値だけ)
+data/raw/
+
 # エディタ・OS
 .DS_Store
 Thumbs.db
