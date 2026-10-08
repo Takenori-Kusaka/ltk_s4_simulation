@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- | --- |
 | Task-1 | 大会の日程・組み合わせの定数と型、Regular Stage の得点、MASTERS CUP の順位点、合計 pt によるシードと同点処理 | 1, 2, 3, 4, 5 | `src/sim/schedule.ts`、`src/sim/types.ts`、`src/sim/standings.ts`、`tests/sim/standings.test.ts` | — | 可 |
 | Task-2 | Playoffs の特殊 BO4(GAME 3 が 2pt、GAME 4)、階級の割り当て方針、ダブルエリミネーションの進行 | 6, 7, 8 | `src/sim/playoffs.ts`、`tests/sim/playoffs.test.ts` | Task-1 | 不可 |
-| Task-3 | 勝率表と確定済み結果の検証、種つき乱数、ブルーサイド補正、モンテカルロ本体とシード確率・優勝確率の集計 | 9, 10, 11, 12, 13, 14, 15 | `src/sim/validate.ts`、`src/sim/rng.ts`、`src/sim/simulate.ts`、`src/sim/index.ts`、`tests/sim/simulate.test.ts` | Task-1, Task-2 | 不可 |
+| Task-3 | 勝率表と確定済み結果の検証、種つき乱数、ブルーサイド補正、モンテカルロ本体とシード確率・優勝確率の集計 | 9, 10, 11, 12, 13, 14, 15, 16 | `src/sim/validate.ts`、`src/sim/rng.ts`、`src/sim/simulate.ts`、`src/sim/index.ts`、`tests/sim/simulate.test.ts` | Task-1, Task-2 | 不可 |
 
 ## 粒度の確認
 
@@ -31,6 +31,7 @@
 | 12, 13 | 単体(不正な勝率表・日程に無い結果でエラー) | `tests/sim/simulate.test.ts` |
 | 14 | 単体(`src/sim/` が `node:` の import と `window`・`document` を参照しないことの静的な検査) | `tests/sim/simulate.test.ts` |
 | 15 | 単体(補正 0 と補正ありで RS の勝率が変わり、MC・PO は変わらない) | `tests/sim/simulate.test.ts` |
+| 16 | 単体(Playoffs だけ別の勝率表を与えると Playoffs の結果の分布だけが変わる) | `tests/sim/simulate.test.ts` |
 
 ## スタック構成(依存する変更を積み上げる場合のみ)
 
