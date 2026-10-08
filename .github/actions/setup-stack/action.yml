@@ -1,0 +1,40 @@
+name: setup-stack
+description: process.config.json のアダプタに応じて実行環境を用意し、依存関係を取得する
+
+inputs:
+  install:
+    description: 依存関係の取得を行うか
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: アダプタの実行環境を読む
+      id: rt
+      shell: bash
+      run: echo "json=$(node scripts/gate/adapter.mjs runtime)" >> "$GITHUB_OUTPUT"
+
+    - name: Node.js
+      if: fromJSON(steps.rt.outputs.json).runtime == 'node'
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ fromJSON(steps.rt.outputs.json).runtimeVersion }}
+        cache: ${{ (inputs.install == 'true' && hashFiles('**/package-lock.json', '**/npm-shrinkwrap.json', '**/yarn.lock') != '') && 'npm' || '' }}
+
+    - name: Python
+      if: fromJSON(steps.rt.outputs.json).runtime == 'python'
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ fromJSON(steps.rt.outputs.json).runtimeVersion }}
+
+    - name: Go
+      if: fromJSON(steps.rt.outputs.json).runtime == 'go'
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ fromJSON(steps.rt.outputs.json).runtimeVersion }}
+
+    - name: 依存関係の取得
+      if: inputs.install == 'true'
+      shell: bash
+      run: node scripts/gate/adapter.mjs run install

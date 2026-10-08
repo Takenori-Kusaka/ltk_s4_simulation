@@ -1,0 +1,290 @@
+# G-5 自動検証(CI)
+#
+# 必須ステータスチェックの名前は gate-g5 に固定します。個々の検査ジョブではなく、
+# 集約ジョブ1つを必須にすることで、検査を足しても保護設定を変えずに済みます。
+#
+# 実際に走るコマンドは adapters/<stack>.json から差し込みます。
+# プロセスの骨格を言語に依存させないためです。
+
+name: gate-g5
+
+on:
+  pull_request:
+    # edited: PR の本文(トレーラ Spec・リスク区分)を直したときに、pr-rules を再実行する
+    # labeled / unlabeled: 停止の申し立て(ラベル state:stop-requested。標準 第7章 7.11)を付けた時点で保留し、
+    # 外したときにも解除の記録があるかを確かめ直す
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+  # PR を経ない体制でも、構成の書き換え(変化点を経ない書き換え、記録の切り詰め)を出荷までに検出する。
+  # 既定ブランチへの push で契約検査を走らせ、push の直前のコミットの構成と比べる(標準 第3章 3.13.5)。
+  # 既定ブランチの名前が main でない場合は、ここを改める(このファイルは強制層であり、変更は AI維持管理者の承認を要する)
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  # 停止の申し立てのラベルの付け外しの履歴(issue の events)を読む
+  issues: read
+
+jobs:
+  # プロセス構成が未設定のあいだは、検査の中身を判定しない
+  config:
+    name: config
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.read.outputs.configured }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: read
+        run: |
+          v=$(node -e "const c=require('./process.config.json');console.log(c.configured===false?'false':'true')")
+          echo "configured=$v" >> "$GITHUB_OUTPUT"
+          if [ "$v" = "false" ]; then
+            echo "::notice::プロセス構成が未設定です。/process-init を実行するまで G-5 の検査は実施しません"
+          fi
+
+  # 構成と設定の整合。ここが落ちたら以降の合格に意味がない
+  contract:
+    name: gate-contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # 契約検査は、PR では基底ブランチの構成(process.config.json)と比べる。
+      # 変化点の記録を経ない構成の書き換えを検出するためである。基底ブランチは GITHUB_BASE_REF から読む
+      - if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: git fetch --depth=1 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+      - if: github.event_name != 'push'
+        run: node scripts/gate/verify-gate-contract.mjs
+      # 既定ブランチへの push では、push の直前のコミット(github.event.before)の構成と比べる。
+      # ブランチの作成(直前のコミットが無い push)では、比べる相手が無いため、連鎖の検査だけを行う
+      - if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            node scripts/gate/verify-gate-contract.mjs
+          else
+            git fetch --no-tags --depth=1 origin "$BEFORE" || true
+            node scripts/gate/verify-gate-contract.mjs --base "$BEFORE"
+          fi
+      # 委任した変更のマージの経路の判定を、フィクスチャで試験する。
+      # ワークフロー(delegation.yml)が PR の先頭を checkout していないこと、承認を付けていないことも確かめる
+      - run: node scripts/gate/test-check-delegation.mjs
+      # PR 単位の検査(check-pr)を、一時のリポジトリのフィクスチャで試験する
+      - run: node scripts/gate/test-check-pr.mjs
+      # 初期化した直後に G-5 の手元で確かめられる検査が通ることを、テンプレートの全ファイルで試験する(#286)。
+      # 構成が設定済みのリポジトリでは省く(テンプレートの初期の状態が無いため)
+      - run: node scripts/gate/test-init-g5.mjs
+
+  # 基準1 全テスト GREEN / 基準3 カバレッジ
+  test:
+    name: test
+    needs: config
+    if: needs.config.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+      - name: テスト
+        id: test
+        run: node scripts/gate/adapter.mjs run test
+      # G-7 基準1(計画したテストの消化)の入力。テストの実行の結果と、テストのファイルの一覧を記録する(#288)。
+      # ship-evidence が license-scan と同じ経路で取り込み、出荷判定の証跡の集約が「実行して通過した数」を数える
+      - name: テストの実行の記録
+        if: always()
+        run: node scripts/gate/test-results.mjs --outcome "${{ steps.test.outcome }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: evidence/test-results.json
+          if-no-files-found: ignore
+      - name: カバレッジの取得
+        run: node scripts/gate/adapter.mjs run coverage
+      - name: カバレッジの判定
+        run: node scripts/gate/coverage-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-result
+          path: evidence/coverage-result.json
+          if-no-files-found: ignore
+
+  # 基準2 静的解析・脆弱性の重大指摘
+  static-analysis:
+    name: static-analysis
+    needs: config
+    if: needs.config.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+      - name: 静的解析
+        run: node scripts/gate/adapter.mjs run lint
+      - name: 依存の脆弱性
+        run: node scripts/gate/adapter.mjs run audit
+
+  # 基準4 曖昧語チェック。構成に依存しないため常に走らせる。引数なし = 機能仕様の置き場(specs/F-NNN/)だけを見る。
+  # 手元でも引数なしで実行すれば同じ範囲になる(#286)
+  spec-lint:
+    name: spec-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/gate/spec-lint.mjs
+
+  # 基準5 依存関係のライセンス検査(合否条件)
+  #
+  # 生成物と既存著作物の類似検知は合否条件にしません。「検出されなかった」が
+  # 「潔白である」という記録として残ると、依拠性の推認に対する防御になりません。
+  # 判定するのは、定めた検査を実施し記録したことです。
+  ip-clearance:
+    name: ip-clearance
+    needs: config
+    if: needs.config.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+      - name: 依存関係のライセンス
+        id: lic
+        run: node scripts/gate/adapter.mjs run licenses
+      - name: 検査の実施記録
+        if: always()
+        run: |
+          mkdir -p evidence
+          printf '{ "scanRun": true, "result": "%s", "scannedAt": "%s" }\n' \
+            "${{ steps.lic.outcome }}" "$(date -u +%FT%TZ)" > evidence/license-scan.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: license-scan
+          path: evidence/license-scan.json
+
+  # 基準7 秘匿情報の混入検査。台帳記録による通過を認めない唯一の基準
+  secret-scan:
+    name: secret-scan
+    needs: config
+    if: needs.config.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-stack
+        with:
+          install: 'false'
+      - name: 秘匿情報の混入検査
+        run: node scripts/gate/adapter.mjs run secretScan
+
+  # 基準8 依存関係の追加・更新の識別。合否は判定せず一覧を出す
+  dependency-diff:
+    name: dependency-diff
+    # 基底ブランチとの差分を出す。基底を持たない push では実行しない
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git fetch origin "${{ github.base_ref }}" --depth=50 || true
+      - run: node scripts/gate/dependency-diff.mjs --base "origin/${{ github.base_ref }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-diff
+          path: evidence/dependency-diff.json
+          if-no-files-found: ignore
+
+  # PR 単位の検査(#286): トレーラ Spec、変更規模の上限、閾値・除外設定と製品のコードの同時変更(禁止事項6)。
+  # 既存のテストの変更(削除・期待値の変更)は、G-6 の材料として PR へ一覧を出す(失敗にはしない)。
+  # 上限と例外承認は基底ブランチの構成と台帳から読む。同じ PR で足した例外承認の行は数えない。
+  # 停止の申し立て(ラベル state:stop-requested)が付いた PR は、基底ブランチに解除の記録が入るまで失敗させる(#288)。
+  # PR の題名と本文は環境変数で渡す(シェルへ展開しない)
+  pr-rules:
+    name: pr-rules
+    needs: config
+    if: github.event_name == 'pull_request' && needs.config.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - env:
+          BASE_REF: ${{ github.base_ref }}
+        run: git fetch --no-tags origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+      # 停止の申し立て(標準 第7章 7.11)のラベルの付け外しの履歴。ラベルを外しただけで保留が解けないようにする。
+      # 取得に失敗した場合は空にする(現在のラベルだけで判定し、その限界は check-pr.mjs の冒頭に書いてある)
+      - name: ラベルの履歴
+        id: label-events
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          ev=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/events" --paginate \
+            --jq '.[] | select(.event == "labeled" or .event == "unlabeled") | {event, label: .label.name, at: .created_at, actor: .actor.login}' \
+            | jq -s -c . 2>/dev/null) || ev=''
+          { echo 'events<<PIT_IN_EVENTS'; echo "${ev}"; echo 'PIT_IN_EVENTS'; } >> "$GITHUB_OUTPUT"
+      # G-6 の承認者の数(構成 review.reviewerCount。規制業・CL3 は 2 名)。レビューの一覧を渡し、check-pr が
+      # 「G-6 の承認者 N 名 / 要求 M 名」を出す(合否にはしない。理由は check-pr.mjs の冒頭)。取得に失敗した場合は
+      # 空にする(check-pr は「読めない」とその旨を出す)
+      - name: PR のレビュー
+        id: reviews
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          rv=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" --paginate \
+            --jq '.[] | {state, body, submitted_at, author: {login: .user.login, is_bot: (.user.type == "Bot")}}' \
+            | jq -s -c . 2>/dev/null) || rv=''
+          { echo 'reviews<<PIT_IN_REVIEWS'; echo "${rv}"; echo 'PIT_IN_REVIEWS'; } >> "$GITHUB_OUTPUT"
+      - name: PR の検査
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          PR_LABEL_EVENTS: ${{ steps.label-events.outputs.events }}
+          PR_REVIEWS: ${{ steps.reviews.outputs.reviews }}
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/gate/check-pr.mjs --base "origin/${BASE_REF}" --report evidence/pr-checks.md --comment
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-checks
+          path: evidence/pr-checks.md
+          if-no-files-found: ignore
+
+  # 集約。ブランチ保護の必須ステータスチェックはこのジョブ名を指す
+  gate-g5:
+    name: gate-g5
+    runs-on: ubuntu-latest
+    needs: [config, contract, test, static-analysis, spec-lint, ip-clearance, secret-scan, pr-rules]
+    if: always()
+    steps:
+      - name: 全検査の結果を突合する
+        run: |
+          echo "configured:      ${{ needs.config.outputs.configured }}"
+          echo "contract:        ${{ needs.contract.result }}"
+          echo "test:            ${{ needs.test.result }}"
+          echo "static-analysis: ${{ needs.static-analysis.result }}"
+          echo "spec-lint:       ${{ needs.spec-lint.result }}"
+          echo "ip-clearance:    ${{ needs.ip-clearance.result }}"
+          echo "secret-scan:     ${{ needs.secret-scan.result }}"
+          echo "pr-rules:        ${{ needs.pr-rules.result }}"
+          if ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}; then
+            echo "::error::G-5 は通過していません"
+            exit 1
+          fi
+          if [ "${{ needs.config.outputs.configured }}" != "true" ]; then
+            echo "::warning::プロセス構成が未設定のため、検査を実施していません。/process-init を実行してください"
+            exit 0
+          fi
+          echo "::notice::G-5 通過"

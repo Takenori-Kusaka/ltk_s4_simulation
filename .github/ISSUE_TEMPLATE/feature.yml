@@ -1,0 +1,38 @@
+name: 機能の要望
+description: 作りたい機能。受入基準の草案を添えて起票する
+labels: [feature]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        受入基準が確定していない機能は実装へ渡せません。草案でよいので、
+        「条件 + 期待動作」の形で書いてください。曖昧語(適切に / 柔軟に /
+        可能な限り / など / 必要に応じて / 基本的に)は CI で検出されます。
+
+  - type: textarea
+    id: value
+    attributes:
+      label: 誰が、何を、なぜ
+      description: 「(誰)として(何)がほしい。それは(理由)のためだ」
+      placeholder: 管理者として、失効した招待リンクを一覧で見たい。誤って共有した招待を取り消すためだ。
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 受入基準の草案
+      description: 条件 + 期待動作。違反すると失敗するテストが書ける粒度で
+      placeholder: |
+        - 招待の有効期限を過ぎている場合、一覧に「失効」と表示する
+        - 失効した招待に対して取り消しを実行した場合、409 を返す
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: スコープ外
+      description: 書かれていない事項は、実装されるか否かが不定になります
+    validations:
+      required: true

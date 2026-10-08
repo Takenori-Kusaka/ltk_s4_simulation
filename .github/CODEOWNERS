@@ -1,0 +1,25 @@
+# 文脈ファイルの責任者
+#
+# 恒久層コンテキストは成果物と同じ扱いにします。誰が持つかを決めないと、
+# 陳腐化したときに直す人がいなくなります。
+#
+# /process-init はこのファイルを書き換えません。体制に合わせて手で編集してください。
+
+# 既定。まずは全体を1人に置き、役割が分かれたら下の行を有効にする
+*                       @OWNER
+
+# 恒久層コンテキスト
+# /CLAUDE.md            @context-owner
+# /AGENTS.md            @context-owner
+# /context/glossary.md  @domain-expert
+# /context/standards/   @tech-lead
+# /context/decisions/   @tech-lead
+# /context/projects/    @value-owner
+
+# プロセス構成。緩める方向の変更は判断記録を伴う
+# /process.config.json  @tech-lead
+# /PROCESS-PROFILE.md   @tech-lead
+
+# 強制層。エージェント自身の操作で変えられてはならない
+# /.claude/settings.json  @tech-lead
+# /.github/rulesets/      @tech-lead

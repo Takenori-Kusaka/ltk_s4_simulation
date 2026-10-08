@@ -1,0 +1,38 @@
+name: 不具合
+description: 期待した挙動と異なる。観測できた事象で書く
+labels: [bug]
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: 観測した事象
+      description: 画面・ログ・レスポンスなど、観測できたものを書きます
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した挙動
+      description: どの受入基準に反しているか(F-xxx)が分かれば添えてください
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 再現の手順
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 重大度
+      description: 技術的な難しさではなく、利用者から見た帰結で選びます
+      options:
+        - Sev1 主要機能が使えない / データが失われる / 秘匿情報が露出する
+        - Sev2 回避策はあるが主要機能に支障がある
+        - Sev3 限定的な影響にとどまる
+    validations:
+      required: true

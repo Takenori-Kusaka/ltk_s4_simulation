@@ -1,0 +1,26 @@
+{
+  "note": "強制層の設定。エージェントの操作で書き換えられません(guard-write.mjs が protectedPatterns で遮断します)",
+
+  "testPatterns": [
+    "**/test/**",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/spec/**",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*_test.go",
+    "**/test_*.py",
+    "**/*_test.py",
+    "**/conftest.py"
+  ],
+
+  "protectedPatterns": [
+  ],
+
+  "protectedReason": "プロセスの強制層です。変更は人間の操作で行い、判断記録を残してください。エージェントが自分を縛る設定を変えられる構成では、遮断が成立しません",
+
+  "selfHealLockFile": ".claude/.self-heal",
+  "selfHealReason": "自己修正ループの書き込み範囲にテストを含めません。渡された失敗をテスト側の変更で解消する経路が残るためです。テストの修正を要すると判明した場合、ループを終了して受入基準へ戻ってください",
+
+  "denyLog": ".claude/denied.log"
+}

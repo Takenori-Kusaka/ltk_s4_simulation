@@ -1,0 +1,41 @@
+name: 技術判断の検討
+description: あとから変えにくい決定。決定したら ADR を起票する
+labels: [adr]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        この Issue は**決定前の検討**の場です。決定したら `context/decisions/` へ
+        判断記録(ADR)を追加します。**採らなかった選択肢とその理由を必ず含めてください**。
+        後任者が同じ検討を繰り返さないための唯一の手段です。
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 何を決めるのか
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: 選択肢
+      description: 1つ以上の代替案を挙げます。比較のない判断は判断ではありません
+    validations:
+      required: true
+
+  - type: textarea
+    id: reversibility
+    attributes:
+      label: 可逆性
+      description: 後から変えられるか。変えるとしたら何が必要か
+    validations:
+      required: true
+
+  - type: input
+    id: decider
+    attributes:
+      label: 判定者
+      description: 単独で判定します。合議体にしません
+    validations:
+      required: true

@@ -1,0 +1,16 @@
+# ドキュメントのライセンス
+
+本リポジトリのドキュメント(`*.md` および `templates/` 配下)は
+Creative Commons Attribution 4.0 International (CC BY 4.0) で提供します。
+
+Copyright (c) 2026 Takenori Kusaka
+
+全文: https://creativecommons.org/licenses/by/4.0/legalcode.ja
+要約: https://creativecommons.org/licenses/by/4.0/deed.ja
+
+出典表記の例:
+
+> ピットイン方式 準拠テンプレート (c) 2026 Takenori Kusaka / CC BY 4.0
+> https://github.com/Takenori-Kusaka/pit-in-template
+
+コード(`scripts/`、`.github/`、設定ファイル)は MIT License です。LICENSE を参照してください。

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git switch:*)",
+      "Bash(git branch:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(node scripts/gate/:*)",
+      "Bash(node scripts/init/:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 ask:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 grep:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 skeleton:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 callers:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 map:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 blast:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 check:*)",
+      "Bash(npx -y @nanonets/graft@0.12.1 build:*)"
+    ],
+    "deny": [
+    ],
+    "ask": [
+      "Bash(npm publish:*)",
+      "Bash(wget:*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/id_rsa*)",
+      "Read(./**/.aws/**)",
+      "Read(./**/.ssh/**)",
+      "Edit(./.claude/settings.json)",
+      "Edit(./.claude/guard.json)",
+      "Edit(./.claude/hooks/**)",
+      "Edit(./.github/rulesets/**)",
+      "Edit(./.github/workflows/**)",
+      "Edit(./process.config.json)",
+      "Edit(./adapters/**)",
+      "Edit(./scripts/gate/**)",
+      "Edit(./scripts/vendor/**)",
+      "Write(./scripts/vendor/**)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh api repos/*/rulesets:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/gate/next.mjs --brief",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/guard-write.mjs",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

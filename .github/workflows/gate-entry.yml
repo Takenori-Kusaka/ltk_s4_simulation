@@ -1,0 +1,59 @@
+# ゲートの前提条件を検査する
+#
+# D-0(意思決定・エスカレーション体制図)は規模によらず必須で、
+# 企画承認(G-1)の前提条件です。未承認・期限切れでは審議を開始できません。
+#
+# 週次でも走らせるのは、承認が期限で切れる種類の記録だからです。
+# PR のたびだけの検査では、変更が止まっている期間の失効を見逃します。
+
+name: gate-entry
+
+on:
+  pull_request:
+    paths:
+      - 'docs/D-0-governance.md'
+      - 'docs/project-brief.md'
+      - 'process.config.json'
+      - 'CLAUDE.md'
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  d0-check:
+    name: d0-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: node scripts/gate/check-d0.mjs
+
+      # エージェントが起動時に読む文書が構成から乖離していないか(ADR-0035)
+      - name: check-process-rules
+        run: node scripts/gate/check-process-rules.mjs
+
+      - name: 期限切れを Issue で通知する
+        if: failure() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --label d0-review --state open --json number --jq '.[0].number' || true)
+          body="D-0(意思決定・エスカレーション体制図)の検査が失敗しました。承認者・承認日・見直し期限を確認してください。"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body ($(date -u +%F))"
+          else
+            gh label create d0-review --description "D-0 体制図の見直し" --color FBCA04 || true
+            gh issue create --title "D-0 体制図の見直しが必要です" --label d0-review --body "$body"
+          fi
+
+  g1-check:
+    name: g1-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: node scripts/gate/check-g1.mjs

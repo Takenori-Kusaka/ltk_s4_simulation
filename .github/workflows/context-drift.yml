@@ -1,0 +1,58 @@
+# 恒久層コンテキストの陳腐化を検出する
+#
+# **PR の必須チェックにしません。** 乖離の検出は正当な変更と区別が付かず、
+# 合否条件に置くと正当な変更まで止まり、検査の除外が常態化するためです。
+# ここで行うのは記録だけです。
+
+name: context-drift
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    name: context-drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 更新が止まっている文脈ファイルを洗い出す
+        id: scan
+        run: |
+          echo "## 恒久層コンテキストの更新状況" > drift.md
+          echo "" >> drift.md
+          echo "| ファイル | 最終更新 | 経過日数 |" >> drift.md
+          echo "| --- | --- | --- |" >> drift.md
+          stale=0
+          while IFS= read -r f; do
+            last=$(git log -1 --format=%cI -- "$f")
+            [ -z "$last" ] && continue
+            days=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 86400 ))
+            echo "| \`$f\` | ${last%T*} | ${days} |" >> drift.md
+            [ "$days" -gt 180 ] && stale=$((stale+1))
+          done < <(git ls-files 'context/**/*.md' 'CLAUDE.md' 'AGENTS.md' | grep -v '_archive/')
+          echo "" >> drift.md
+          echo "180日以上更新のないファイル: ${stale} 件" >> drift.md
+          echo "stale=$stale" >> "$GITHUB_OUTPUT"
+          cat drift.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 記録を Issue へ残す
+        if: steps.scan.outputs.stale != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --label context-drift --state open --json number --jq '.[0].number' || true)
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file drift.md
+          else
+            gh label create context-drift --description "恒久層コンテキストの陳腐化" --color 0E8A16 || true
+            gh issue create --title "恒久層コンテキストの棚卸し" --label context-drift --body-file drift.md
+          fi
