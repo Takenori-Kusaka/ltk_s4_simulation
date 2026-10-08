@@ -6,6 +6,7 @@ F-009(コール力の軸)と F-010(司令塔・指導・一体感)の材料。AI
 | --- | --- |
 | `evidence-dd-cc.json` / `.md` | DD・CC の30名(根拠 205 件) |
 | `evidence-it-lr.json` / `.md` | IT・LR の30名(根拠 182 件) |
+| `evidence-hetel.json` | hetel のチーム分析配信(https://www.youtube.com/watch?v=xdsbfDbaqRU 、価値責任者が 2026-10-09 に共有)から AI が要約した根拠。コール力 40 件(normalized/shotcalling.json へ統合済み)、選手の特性 52 件、階級チームのマクロ 12 件と戦い方 43 件、コーチ 9 件。原文は転載せず、時刻つきの URL を付ける。selfTeam=true は hetel 自身のチーム(DD)についての発言 |
 
 各根拠: `summary`(自分の言葉の要約)、`url`(出典)、`date`、`type`(記事/本人の発言/チームメイトの発言/視聴者の声/大会での役割)、`direction`(+ コールする / − 任せる)、`strength`(強/中/弱)。DD・CC には `category`(LoL・コーチ・他ゲーム等。機械的に付与し一部を手で修正)。
 

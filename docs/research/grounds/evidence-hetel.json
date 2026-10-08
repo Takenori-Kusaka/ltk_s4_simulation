@@ -1,0 +1,1598 @@
+{
+  "kind": "evidence-hetel",
+  "description": "hetel(DD MASTERS SUP)のチーム分析配信の文字起こしから、AI が自分の言葉で要約した根拠。原文は転載しない。各項目に動画の時刻つきの URL を付ける。selfTeam=true は hetel 自身のチーム(DD)についての発言。unmapped は名前を確定できなかった項目",
+  "source": {
+    "title": "LTK4(League The k4sen Season: Finale)チーム発表を受けた hetel の全チーム分析配信",
+    "url": "https://www.youtube.com/watch?v=xdsbfDbaqRU",
+    "speaker": "hetel",
+    "retrievedAt": "2026-10-09"
+  },
+  "shotcalling": {
+    "DD-MASTERS-SUP": [
+      {
+        "summary": "DD MASTERS のコールは自分(hetel)とわしだいが担い、特に自分がかなりコールする必要があると本人が述べた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2405s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "強",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:05",
+        "selfTeam": true
+      },
+      {
+        "summary": "今回の MASTERS では自分が引っ張る側になると宣言。全体コーチを外れ自分の練習に時間を割く。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2570s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "42:50",
+        "selfTeam": true
+      },
+      {
+        "summary": "DD MASTERS は序盤を JG と SUP(しゃるる・hetel)が喋って組み立てる想定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2854s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "47:34",
+        "selfTeam": true
+      }
+    ],
+    "DD-MASTERS-JG": [
+      {
+        "summary": "hetel は以前しゃるると同チームで、しゃるるもコールしてくれるのでやりやすいと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2418s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:18",
+        "selfTeam": true
+      },
+      {
+        "summary": "序盤のゲーム展開は hetel としゃるるで支える想定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2453s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:53",
+        "selfTeam": true
+      },
+      {
+        "summary": "前回(CC MASTERS)はミッドの Recap が主導し、しゃるるはそれに従う立場だったとの言及。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2429s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:29",
+        "selfTeam": true
+      }
+    ],
+    "DD-MASTERS-TOP": [
+      {
+        "summary": "DD MASTERS のコール役として hetel と並んでわしだいの名を挙げた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2405s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:05",
+        "selfTeam": true
+      },
+      {
+        "summary": "わしだいは後半、TOP が集団戦に関与するフェーズからコールに加わる想定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2453s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:53",
+        "selfTeam": true
+      }
+    ],
+    "DD-MASTERS-MID": [
+      {
+        "summary": "たぬき忍者はあまりコールするタイプではなく、今回のミッドは主導役ではないとの見立て。hetel は彼とチーム戦の経験がない。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2438s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:38",
+        "selfTeam": true
+      }
+    ],
+    "LR-MASTERS-MID": [
+      {
+        "summary": "LR MASTERS のマクロ担当は Recap で、ねすてぃーが Recap のコールに合わせる形になるとの推測。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2131s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "35:31",
+        "selfTeam": false
+      },
+      {
+        "summary": "前回 CC MASTERS ではミッドの Recap が主導役(王)としてチームを従わせていたとの言及。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2429s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "40:29",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS-JG": [
+      {
+        "summary": "ねすてぃーは Recap のコールに合わせる側になるとの推測。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2131s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "35:31",
+        "selfTeam": false
+      },
+      {
+        "summary": "ねすてぃーはよく喋るが日本語・滑舌の問題で意図が伝わりにくいと指摘(コミュニケーション面の懸念)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2001s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "33:21",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-MID": [
+      {
+        "summary": "Ceros はあまりコールするタイプではなく、自分のやることを淡々と伝える型との評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3010s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "50:10",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-TOP": [
+      {
+        "summary": "Yutapon も多くコールするタイプではないとの評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3023s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "50:23",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-ADC": [
+      {
+        "summary": "前回の IT(青)MASTERS では Yuhi が ADC ながらコールしていた。ADC のコールは手元が疎かになり負担が大きいと指摘。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2977s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "49:37",
+        "selfTeam": false
+      },
+      {
+        "summary": "Yuhi はマクロ理解が深く、自由に動けることが強みと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3068s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "51:08",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-SUP": [
+      {
+        "summary": "Nemoh はブランクはあるがキャスター・解説で大会を見てきたため知識は豊富。JG・SUP がコールできれば強く、Nemoh はできると思うと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3030s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "50:30",
+        "selfTeam": false
+      },
+      {
+        "summary": "CC MASTERS は誰がコーラーになるか分からず、Nemoh にはブランクがあるとの懸念。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3001s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "50:01",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE-JG": [
+      {
+        "summary": "CC CORE はレーナー側から提案が出て、最終的に k4sen がまとめて方針を決める形になるとの見立て。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3149s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "強",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "52:29",
+        "selfTeam": false
+      },
+      {
+        "summary": "前回プレイオフで隣の席にいた hetel によれば、k4sen は試合中ずっと喋ってコールし続けていた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3178s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "強",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "52:58",
+        "selfTeam": false
+      }
+    ],
+    "DD-CORE-MID": [
+      {
+        "summary": "スタンミは LoL 歴が長くマクロがありそうで、コールも多くできると思うと評価。チーム戦は未知数。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2658s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "44:18",
+        "selfTeam": true
+      },
+      {
+        "summary": "DD CORE のコールはスタンミと神楽めあが担うのではとの見立て。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2679s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "44:39",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-SUP": [
+      {
+        "summary": "神楽めあも結構コールするタイプと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2679s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "44:39",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-TOP": [
+      {
+        "summary": "酒寄颯馬もコールできるとの言及(聞き取り不明瞭)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2685s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "44:45",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-SUP": [
+      {
+        "summary": "DD NEXT のメインのコールは白波らむねとまざー3 が序盤を担う想定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2814s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "46:54",
+        "selfTeam": true
+      },
+      {
+        "summary": "らむねはハッキリ物を言うタイプで、一緒にやりやすいと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2784s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "46:24",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-JG": [
+      {
+        "summary": "DD NEXT は序盤のコールをまざー3 と白波らむねが担う想定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2814s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "46:54",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-TOP": [
+      {
+        "summary": "SHAKA はかなりコールできるタイプだが、TOP からのコールは難しく、15分以降に介入できる段階から出せると評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2814s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "46:54",
+        "selfTeam": true
+      }
+    ],
+    "IT-MASTERS-MID": [
+      {
+        "summary": "Eugeo は事前に計画を立て、数分前から決めた展開をやり切る型のコーラー。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4258s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "1:10:58",
+        "selfTeam": false
+      },
+      {
+        "summary": "ゆにかは Eugeo のコールに素直に合わせる関係で、相性が良いとの評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4214s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "1:10:14",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-SUP": [
+      {
+        "summary": "Enty は見えた瞬間に突発的なファイトを仕掛ける型のコーラー。Eugeo との方針のすり合わせが課題。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4258s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "1:10:58",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-JG": [
+      {
+        "summary": "ゆにかは Eugeo の言うことに合わせる側になるとの見立て。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4214s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "1:10:14",
+        "selfTeam": false
+      },
+      {
+        "summary": "IT MASTERS は Eugeo・ゆにか・Enty・らいじん皆マクロがあり声を出せる、との評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1512s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "25:12",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-TOP": [
+      {
+        "summary": "らいじんも声を出せるメンバーの1人として挙げられた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1512s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "25:12",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE-MID": [
+      {
+        "summary": "たかやスペシャルもコールできると評価。IT CORE は全体的にコールできる人が多い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1677s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "27:57",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE-JG": [
+      {
+        "summary": "AlphaAzur は戦場を俯瞰して積極的にコールする役が向き、自由度の高い JG はその点で合うとの評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1640s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "27:20",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE-SUP": [
+      {
+        "summary": "千燈ゆうひは LTK2 で SUP としてコールが際立っており、にゅん子のマスター到達も千燈のコールに支えられたとの評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2180s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "強",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "36:20",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT-TOP": [
+      {
+        "summary": "叶は中盤から後半に向けたコールが十分できると評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3398s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "56:38",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT-JG": [
+      {
+        "summary": "ゆふなはコールもでき、仕掛けの形も作れると評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3398s",
+        "date": "2026-10-09",
+        "type": "配信での分析",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "hetel のチーム分析配信(文字起こし)",
+        "timestamp": "56:38",
+        "selfTeam": false
+      }
+    ]
+  },
+  "playerTraits": {
+    "IT-MASTERS-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "ゆにかは強いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=359s",
+        "timestamp": "5:59",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "たかやスペシャルのミッドは普通に上手い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=420s",
+        "timestamp": "7:00",
+        "selfTeam": false
+      },
+      {
+        "trait": "laning",
+        "summary": "今回のミッドで一番強いのはたかやスペシャルだと思うと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3958s",
+        "timestamp": "1:05:58",
+        "selfTeam": false
+      },
+      {
+        "trait": "laning",
+        "summary": "ミッドのレベルが高い中でも、たかやスペシャルが一番強そうとの評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3232s",
+        "timestamp": "53:52",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE-JG": [
+      {
+        "trait": "role",
+        "summary": "AlphaAzur はジャングル初心者。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=415s",
+        "timestamp": "6:55",
+        "selfTeam": false
+      },
+      {
+        "trait": "role",
+        "summary": "AlphaAzur はジャングルをほぼやっていないため、IT CORE は彼次第。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1596s",
+        "timestamp": "26:36",
+        "selfTeam": false
+      },
+      {
+        "trait": "mental",
+        "summary": "AlphaAzur は自分を犠牲にして味方を支える献身的な思考で、ミッドより JG・SUP 向きと周囲から言われていた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1625s",
+        "timestamp": "27:05",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-TOP": [
+      {
+        "trait": "role",
+        "summary": "らいじんはタンク系が上手く、安定型の TOP だろうと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1483s",
+        "timestamp": "24:43",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "Zerost はかなり上手い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1492s",
+        "timestamp": "24:52",
+        "selfTeam": false
+      },
+      {
+        "trait": "synergy",
+        "summary": "Zerost と Enty は元々仲が良く、DL でも一緒に出ていた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1472s",
+        "timestamp": "24:32",
+        "selfTeam": false
+      }
+    ],
+    "IT-MASTERS-MID": [
+      {
+        "trait": "synergy",
+        "summary": "Eugeo とゆにかは V3 で一緒にプレーした仲で相性が良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1474s",
+        "timestamp": "24:34",
+        "selfTeam": false
+      },
+      {
+        "trait": "mental",
+        "summary": "Eugeo 本人は最近 LoL をやれておらず下手になったと不安を漏らしていたという。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1540s",
+        "timestamp": "25:40",
+        "selfTeam": false
+      }
+    ],
+    "IT-NEXT-SUP": [
+      {
+        "trait": "other",
+        "summary": "白那しずくに最初に LoL を教えたのは hetel。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1721s",
+        "timestamp": "28:41",
+        "selfTeam": false
+      },
+      {
+        "trait": "mechanics",
+        "summary": "しずくは非常に強く、固まりがちな NEXT 帯では強力なエンゲージが刺さる。助言をすぐ実践して結果を出す吸収力がある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3813s",
+        "timestamp": "1:03:33",
+        "selfTeam": false
+      },
+      {
+        "trait": "synergy",
+        "summary": "IT NEXT のボット2人は元々一緒にやっていたため相性が良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1769s",
+        "timestamp": "29:29",
+        "selfTeam": false
+      }
+    ],
+    "IT-NEXT-TOP": [
+      {
+        "trait": "laning",
+        "summary": "橘ひなのの TOP は強い。以前個人コーチングも受けていた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1808s",
+        "timestamp": "30:08",
+        "selfTeam": false
+      }
+    ],
+    "IT-NEXT-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "ありけんはジャングルが後半上手くなっており、化けそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1825s",
+        "timestamp": "30:25",
+        "selfTeam": false
+      },
+      {
+        "trait": "mental",
+        "summary": "ありけんは突っ込んで死にながら覚えるタイプ。学べれば強く、1コア目の選択を誤らなければ確実に強いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3526s",
+        "timestamp": "58:46",
+        "selfTeam": false
+      }
+    ],
+    "IT-NEXT-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "まいたけも上手かった。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1834s",
+        "timestamp": "30:34",
+        "selfTeam": false
+      }
+    ],
+    "DD-NEXT-SUP": [
+      {
+        "trait": "pool",
+        "summary": "白波らむねは SUP の潜在力が高く、LTK3 でも上手くプールも広がり、思い切りの良いエンゲージができる。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2767s",
+        "timestamp": "46:07",
+        "selfTeam": true
+      },
+      {
+        "trait": "synergy",
+        "summary": "DD NEXT のボット2人は Vスポでずっと組んでいる。らむねは以前 ADC の頃に hetel が教えたこともある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1787s",
+        "timestamp": "29:47",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "まざー3 も上手いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2767s",
+        "timestamp": "46:07",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-MID": [
+      {
+        "trait": "laning",
+        "summary": "天ノ川ねるのミッドはかなり強く、レーンを押して流す動きができる点が強み。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3634s",
+        "timestamp": "1:00:34",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT-TOP": [
+      {
+        "trait": "role",
+        "summary": "SHAKA の TOP は未知数(TOP のイメージがない)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1840s",
+        "timestamp": "30:40",
+        "selfTeam": true
+      },
+      {
+        "trait": "laning",
+        "summary": "SHAKA は最初は TOP で苦しみそう。耐える型は主導権を持てずゲームが難しくなる。コーチングを吸収して成長すれば変わる。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3639s",
+        "timestamp": "1:00:39",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-ADC": [
+      {
+        "trait": "laning",
+        "summary": "ADC ではじゃすぱーが一番抜けているかもしれない。DD CORE のキャリー役。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2607s",
+        "timestamp": "43:27",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-MID": [
+      {
+        "trait": "experience",
+        "summary": "スタンミのチーム戦での強さは未知数で、DD CORE の見どころでもあり不安点でもある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2631s",
+        "timestamp": "43:51",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "きなこはかなり上手く、ねすてぃーに教わっていた。センス型でチャンプの幅も広い印象。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2736s",
+        "timestamp": "45:36",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-TOP": [
+      {
+        "trait": "laning",
+        "summary": "酒寄颯馬は強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2598s",
+        "timestamp": "43:18",
+        "selfTeam": true
+      }
+    ],
+    "CC-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "龍巻ちせは前回プレイオフで覚醒しており本当に上手い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2609s",
+        "timestamp": "43:29",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE-SUP": [
+      {
+        "trait": "synergy",
+        "summary": "CC CORE のボット2人(ちせ・アリアと推定)は非常に相性が良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3192s",
+        "timestamp": "53:12",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE-MID": [
+      {
+        "trait": "laning",
+        "summary": "葛葉は強いが、今回はミッドのレベルが高く無条件に主導権を取れるかは難しい。ミッドは久々。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3212s",
+        "timestamp": "53:32",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT-TOP": [
+      {
+        "trait": "other",
+        "summary": "叶は頭が良くゲーム全般が上手い印象。レーン有利を他へつなげられれば非常に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3369s",
+        "timestamp": "56:09",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT-JG": [
+      {
+        "trait": "experience",
+        "summary": "ゆふなは優勝経験のあるジャングラーで、CORE から NEXT に戻ってきた。空澄セナとも共にプレー経験あり。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3304s",
+        "timestamp": "55:04",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT-MID": [
+      {
+        "trait": "laning",
+        "summary": "空澄セナのミッドは非常に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2929s",
+        "timestamp": "48:49",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-JG": [
+      {
+        "trait": "experience",
+        "summary": "Rainbrain はジャングルで優勝経験がある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2986s",
+        "timestamp": "49:46",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-SUP": [
+      {
+        "trait": "experience",
+        "summary": "Nemoh は元プロ SUP で、その後キャスター・解説に転身。ブランクがある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2955s",
+        "timestamp": "49:15",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "Yuhi は本当に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3079s",
+        "timestamp": "51:19",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "Ceros は前回 LTK でもかなり上手かった。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3060s",
+        "timestamp": "51:00",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE-SUP": [
+      {
+        "trait": "mechanics",
+        "summary": "千燈ゆうひは LTK2 オフラインで見て驚くほど上手い SUP だった。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2166s",
+        "timestamp": "36:06",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE-ADC": [
+      {
+        "trait": "experience",
+        "summary": "にゅん子は他についていけるかが課題だが、LTK3 でかなり成長した。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2223s",
+        "timestamp": "37:03",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "乾伸一郎はかなり上手い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2183s",
+        "timestamp": "36:23",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "ねすてぃーはジャングル1位を争うかもしれない実力。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2077s",
+        "timestamp": "34:37",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "Recap はミッド1位を争うかもしれない実力。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2085s",
+        "timestamp": "34:45",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS-SUP": [
+      {
+        "trait": "mental",
+        "summary": "てぃんとんとハレっちは寡黙で落ち着いた同タイプ。互いに寄り添う感じでボットは意外と強いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2027s",
+        "timestamp": "33:47",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS-ADC": [
+      {
+        "trait": "synergy",
+        "summary": "ハレっちはてぃんとんと似た落ち着いた性格で、ボットは好相性と評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2027s",
+        "timestamp": "33:47",
+        "selfTeam": false
+      }
+    ],
+    "LR-NEXT-JG": [
+      {
+        "trait": "experience",
+        "summary": "アステル・レダのジャングルは未知数。他ゲームも上手く上達が早いタイプと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3586s",
+        "timestamp": "59:46",
+        "selfTeam": false
+      }
+    ],
+    "LR-NEXT-MID": [
+      {
+        "trait": "experience",
+        "summary": "春茶のミッドは未知数だが、すごく上手い可能性もある。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3874s",
+        "timestamp": "1:04:34",
+        "selfTeam": false
+      }
+    ],
+    "DD-MASTERS-TOP": [
+      {
+        "trait": "mental",
+        "summary": "わしだいは最近心を折られており、まずメンタル回復が課題。立ち直れば TOP では最強格。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2467s",
+        "timestamp": "41:07",
+        "selfTeam": true
+      },
+      {
+        "trait": "laning",
+        "summary": "TOP の強い順は(Yutapon を除けば)わしだいが一番だと hetel は評価。らいじん・apaMEN・Yutapon も強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2486s",
+        "timestamp": "41:26",
+        "selfTeam": true
+      }
+    ],
+    "DD-MASTERS-SUP": [
+      {
+        "trait": "experience",
+        "summary": "DD MASTERS には 2025年 LJL 優勝者が2人(わしだい・hetel、元 QTD)いる。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2535s",
+        "timestamp": "42:15",
+        "selfTeam": true
+      }
+    ],
+    "DD-MASTERS-ADC": [
+      {
+        "trait": "synergy",
+        "summary": "hetel と Day1 のボットは強いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=826s",
+        "timestamp": "13:46",
+        "selfTeam": true
+      }
+    ]
+  },
+  "teamMacro": {
+    "IT-MASTERS": [
+      {
+        "text": "全員がマクロを持ち声を出せるため、序盤は噛み合わずマクロに差が出るかもしれない。すり合わせが必要。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1512s",
+        "timestamp": "25:12",
+        "selfTeam": false
+      },
+      {
+        "text": "Eugeo(事前計画型)と Enty(突発ファイト型)のマクロのすり合わせが鍵。噛み合えば非常に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4252s",
+        "timestamp": "1:10:52",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE": [
+      {
+        "text": "全体的なコールができる人が多い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1668s",
+        "timestamp": "27:48",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS": [
+      {
+        "text": "マクロ担当は Recap で、ねすてぃーがそれに合わせる形と推測。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2131s",
+        "timestamp": "35:31",
+        "selfTeam": false
+      },
+      {
+        "text": "会話を盛り上げる人がいなさそうで、チーム内の意思疎通に不安。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1968s",
+        "timestamp": "32:48",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS": [
+      {
+        "text": "コーラーが誰になるか不明。ただし JG・SUP がコールできれば強く、Nemoh はできると見る。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3001s",
+        "timestamp": "50:01",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE": [
+      {
+        "text": "レーナーが提案を出し k4sen がまとめて決める体制になりそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3149s",
+        "timestamp": "52:29",
+        "selfTeam": false
+      }
+    ],
+    "DD-MASTERS": [
+      {
+        "text": "序盤は JG・SUP(しゃるる・hetel)で支え、後半は TOP わしだいがコールに加わる構造。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2453s",
+        "timestamp": "40:53",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT": [
+      {
+        "text": "序盤はまざー3・らむね、15分以降は SHAKA がコールに加わる構造で、DD MASTERS と似ている。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2839s",
+        "timestamp": "47:19",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE": [
+      {
+        "text": "コールはスタンミと神楽めあが中心か。衝突はあり得るが、hetel は喧嘩も成長につながると肯定。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2679s",
+        "timestamp": "44:39",
+        "selfTeam": true
+      }
+    ],
+    "LR-CORE": [
+      {
+        "text": "千燈・Killin9Hit・焼きパン・乾は LTK2 優勝メンバーで相性が非常に良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2213s",
+        "timestamp": "36:53",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT": [
+      {
+        "text": "コーチやキャスター経験者の知識を背景に、コーチングを通じて大きく伸びそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3333s",
+        "timestamp": "55:33",
+        "selfTeam": false
+      }
+    ]
+  },
+  "teamStyle": {
+    "IT-MASTERS": [
+      {
+        "aspect": "strength",
+        "summary": "シナジーがかなりあり強いと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1461s",
+        "timestamp": "24:21",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "序盤は噛み合わないかもしれないが、プレイオフに向けて非常に強くなりそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1533s",
+        "timestamp": "25:33",
+        "selfTeam": false
+      },
+      {
+        "aspect": "strength",
+        "summary": "JG・ミッドが強く相性も良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4207s",
+        "timestamp": "1:10:07",
+        "selfTeam": false
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "一度ぶつかって仲良くなりそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4247s",
+        "timestamp": "1:10:47",
+        "selfTeam": false
+      }
+    ],
+    "IT-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "mittiii・ごんかね・レグルシュは前回 LR で同チームでシナジーあり。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1576s",
+        "timestamp": "26:16",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "AlphaAzur 次第で、序盤から上手くいけば1位もあり得る。ミッドは最強クラス、TOP・ボットはシナジーあり。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3958s",
+        "timestamp": "1:05:58",
+        "selfTeam": false
+      },
+      {
+        "aspect": "strength",
+        "summary": "ミッドのレベルがかなり高い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=407s",
+        "timestamp": "6:47",
+        "selfTeam": false
+      }
+    ],
+    "IT-NEXT": [
+      {
+        "aspect": "bot",
+        "summary": "ボットが本当に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=470s",
+        "timestamp": "7:50",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "NEXT で一番強いのではないか。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1705s",
+        "timestamp": "28:25",
+        "selfTeam": false
+      },
+      {
+        "aspect": "top",
+        "summary": "NEXT の TOP 全体の中で強い方。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1840s",
+        "timestamp": "30:40",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "NEXT の初週は IT(青)が最も安定して強そう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3723s",
+        "timestamp": "1:02:03",
+        "selfTeam": false
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "ミッド・JG とボットが元々組んでいた組み合わせで、序盤の完成度が高く、上下ともコールが出る。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3730s",
+        "timestamp": "1:02:10",
+        "selfTeam": false
+      }
+    ],
+    "LR-MASTERS": [
+      {
+        "aspect": "weakness",
+        "summary": "LR MASTERS が一番懸念がある(会話を盛り上げる人がいない、社会人2人)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1941s",
+        "timestamp": "32:21",
+        "selfTeam": false
+      },
+      {
+        "aspect": "bot",
+        "summary": "ボットは意外と強いのではと評価。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2047s",
+        "timestamp": "34:07",
+        "selfTeam": false
+      },
+      {
+        "aspect": "strength",
+        "summary": "JG・ミッドの2人の爆発力次第のチーム。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2090s",
+        "timestamp": "34:50",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "JG・ミッドが爆発すれば非常に強く、上手くいかなければ全体が崩れる。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4177s",
+        "timestamp": "1:09:37",
+        "selfTeam": false
+      },
+      {
+        "aspect": "weakness",
+        "summary": "apaMEN とてぃんとんは社会人で練習時間が取りにくそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4167s",
+        "timestamp": "1:09:27",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE": [
+      {
+        "aspect": "strength",
+        "summary": "4人が LTK2 優勝メンバーでシナジーがあり、無難に強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2216s",
+        "timestamp": "36:56",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "CORE の初週の完成度は LR(緑)が一番高そうで1位予想。穴がない。にゅん子は千燈のカバーで補える。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3904s",
+        "timestamp": "1:05:04",
+        "selfTeam": false
+      }
+    ],
+    "LR-NEXT": [
+      {
+        "aspect": "chemistry",
+        "summary": "空気は悪くならなさそう。なぎさっちが精神面の支えになる可能性。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2380s",
+        "timestamp": "39:40",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "JG・ミッドが未知数で評価しにくいが、他のレーンは強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3586s",
+        "timestamp": "59:46",
+        "selfTeam": false
+      }
+    ],
+    "DD-MASTERS": [
+      {
+        "aspect": "prediction",
+        "summary": "MASTERS が頑張れば DD は優勝を狙えると思う。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1321s",
+        "timestamp": "22:01",
+        "selfTeam": true
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "空気は良いと思う。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2565s",
+        "timestamp": "42:45",
+        "selfTeam": true
+      },
+      {
+        "aspect": "weakness",
+        "summary": "プロ経験者がいないのは DD だけ(たぬき忍者はセミプロ程度、しゃるるも無し)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3088s",
+        "timestamp": "51:28",
+        "selfTeam": true
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "チーム内で腹を割った話し合いも起きそう、みんな優しそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4304s",
+        "timestamp": "1:11:44",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE": [
+      {
+        "aspect": "bot",
+        "summary": "ボットが強そう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2598s",
+        "timestamp": "43:18",
+        "selfTeam": true
+      },
+      {
+        "aspect": "bot",
+        "summary": "ボットがレーン戦に勝てばそのままスノーボールして勝てそう。じゃすぱーがキャリー。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2759s",
+        "timestamp": "45:59",
+        "selfTeam": true
+      },
+      {
+        "aspect": "prediction",
+        "summary": "全員強いが一緒にやった経験が少なく初週はまとまりにくそう。プレイオフに向けて非常に強くなり、1位になると思う。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3978s",
+        "timestamp": "1:06:18",
+        "selfTeam": true
+      },
+      {
+        "aspect": "strength",
+        "summary": "DD CORE は本当に強いと思う。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=911s",
+        "timestamp": "15:11",
+        "selfTeam": true
+      }
+    ],
+    "DD-NEXT": [
+      {
+        "aspect": "bot",
+        "summary": "ボットがキャリー役で重要。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2916s",
+        "timestamp": "48:36",
+        "selfTeam": true
+      },
+      {
+        "aspect": "bot",
+        "summary": "このボット2人は前回 LR NEXT 時に一番強いボットだったのでは。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2806s",
+        "timestamp": "46:46",
+        "selfTeam": true
+      },
+      {
+        "aspect": "prediction",
+        "summary": "初週の勝ち上がり候補の一つ。最初は SHAKA の TOP が苦しそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3615s",
+        "timestamp": "1:00:15",
+        "selfTeam": true
+      },
+      {
+        "aspect": "strength",
+        "summary": "ミッドのレーンを押して流せる点が強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3634s",
+        "timestamp": "1:00:34",
+        "selfTeam": true
+      }
+    ],
+    "CC-MASTERS": [
+      {
+        "aspect": "strength",
+        "summary": "全体のバランスが非常に良い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1049s",
+        "timestamp": "17:29",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "MASTERS で一番強いと予想。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1059s",
+        "timestamp": "17:39",
+        "selfTeam": false
+      },
+      {
+        "aspect": "strength",
+        "summary": "弱いところがない。全員プロ経験者。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2929s",
+        "timestamp": "48:49",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "CC(赤)が抜けている。Yutapon と Yuhi がいるのが大きい。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3088s",
+        "timestamp": "51:28",
+        "selfTeam": false
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "Yutapon がいるチームはもめごとが起きにくい。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4346s",
+        "timestamp": "1:12:26",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "過去の CC の主力を詰め込んだドリームチーム。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3109s",
+        "timestamp": "51:49",
+        "selfTeam": false
+      },
+      {
+        "aspect": "prediction",
+        "summary": "序盤は意外と負けそうで、後半に右肩上がりになりプレイオフで仕上げてくる、CC のいつもの流れ。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3239s",
+        "timestamp": "53:59",
+        "selfTeam": false
+      },
+      {
+        "aspect": "weakness",
+        "summary": "多忙なメンバーが多く練習量・個人練習が懸念。前回から間が空いた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4099s",
+        "timestamp": "1:08:19",
+        "selfTeam": false
+      }
+    ],
+    "CC-NEXT": [
+      {
+        "aspect": "prediction",
+        "summary": "最初は苦しみそうだが途中で大きく伸びそう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3324s",
+        "timestamp": "55:24",
+        "selfTeam": false
+      },
+      {
+        "aspect": "top",
+        "summary": "TOP 叶がレーン有利を他へつなげられれば強い。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3398s",
+        "timestamp": "56:38",
+        "selfTeam": false
+      }
+    ]
+  },
+  "coaches": {
+    "IT-MASTERS-SUP": [
+      {
+        "summary": "Enty は今回が初めてのメインコーチ(IT NEXT)で注目。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=491s",
+        "timestamp": "8:11"
+      },
+      {
+        "summary": "IT NEXT は Enty のコーチングもあり強そう。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1712s",
+        "timestamp": "28:32"
+      },
+      {
+        "summary": "Enty は前回らむねを個人コーチングしていた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1760s",
+        "timestamp": "29:20"
+      }
+    ],
+    "LR-MASTERS-JG": [
+      {
+        "summary": "ねすてぃーのコーチング(LR NEXT)が LR NEXT で一番の不安材料。炎上しそうで怖いと冗談交じりに指摘。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2338s",
+        "timestamp": "38:58"
+      },
+      {
+        "summary": "ねすてぃーが女性4人チーム+アステルをどう導くか不安だが楽しみ。日本語面も懸念。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=751s",
+        "timestamp": "12:31"
+      }
+    ],
+    "DD-MASTERS-TOP": [
+      {
+        "summary": "hetel は今回 DD の全体コーチではなく、わしだいが CORE コーチ。ピック・バンはみんなでわしだいを支えると述べた。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=951s",
+        "timestamp": "15:51"
+      },
+      {
+        "summary": "SHAKA はコーチング(わしだいと推定、聞き取り不明瞭)から吸収して成長すれば強くなる。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3699s",
+        "timestamp": "1:01:39"
+      }
+    ],
+    "CC-MASTERS-ADC": [
+      {
+        "summary": "Yuhi のコーチとしての能力を問われ、他者のコーチをあまり見ていないと前置きしつつ上手いと思うと回答(聞き取り不明瞭)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3744s",
+        "timestamp": "1:02:24"
+      }
+    ],
+    "CC-MASTERS-MID": [
+      {
+        "summary": "CC CORE コーチの Ceros について、強力なメンバー構成に冗談でコメントしたのみ(実質的評価なし)。",
+        "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1139s",
+        "timestamp": "18:59"
+      }
+    ]
+  },
+  "overall": [
+    {
+      "summary": "MASTERS は CC(赤)が一番強いと予想。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1059s",
+      "timestamp": "17:39"
+    },
+    {
+      "summary": "MASTERS は個人能力で CC が最強、CC と IT(青)が強そう。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4193s",
+      "timestamp": "1:09:53"
+    },
+    {
+      "summary": "CORE の初週は LR(緑)の完成度が最も高そう。IT は AlphaAzur 次第、DD は後半強く、CC は序盤苦戦し後半伸びる。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3904s",
+      "timestamp": "1:05:04"
+    },
+    {
+      "summary": "NEXT は差が小さく流れを掴んだチームが勝ちそう。初週は IT が安定、DD・CC・IT が勝ち上がりそう。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3723s",
+      "timestamp": "1:02:03"
+    },
+    {
+      "summary": "大会期間が1か月と短く、スタートダッシュ時点の完成度・相性が重要。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3420s",
+      "timestamp": "57:00"
+    },
+    {
+      "summary": "今回は TOP のレーン主導権と TOP からのコールが重要。勝てば先に寄れてドラゴン等をセットしやすい。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3664s",
+      "timestamp": "1:01:04"
+    },
+    {
+      "summary": "今回はミッドのレベルが全体的に高い。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3212s",
+      "timestamp": "53:32"
+    },
+    {
+      "summary": "DD MASTERS 以外の MASTERS は全てプロ経験者を含む。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3088s",
+      "timestamp": "51:28"
+    },
+    {
+      "summary": "MASTERS はピック被りがあるが、皆何でも使えるので影響は限定的。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=4157s",
+      "timestamp": "1:09:17"
+    },
+    {
+      "summary": "結局は始まってみないと分からない部分が多い。",
+      "source": "https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3874s",
+      "timestamp": "1:04:34"
+    }
+  ],
+  "unmapped": [
+    {
+      "heard": "神",
+      "guess": "LR-NEXT-TOP(狐白うる) 中程度の確信",
+      "summary": "NEXT の TOP の中で『神』はあまりコールしないタイプと評価。TOP 比較で SHAKA・叶・ひなのと並んで挙がった。",
+      "timestamp": "1:01:10"
+    },
+    {
+      "heard": "エさん / エビ君",
+      "guess": "不明(大会外の人物の可能性) 低い確信",
+      "summary": "わしだいの心を折った相手として言及。特定できず。",
+      "timestamp": "41:07"
+    },
+    {
+      "heard": "てさん",
+      "guess": "IT-NEXT-ADC(天帝フォルテ) 中程度の確信",
+      "summary": "しずくとの元々のコンビで上手い ADC と評価。",
+      "timestamp": "29:29"
+    },
+    {
+      "heard": "りんゴ",
+      "guess": "DD-NEXT-MID(天ノ川ねる、riotId neringo) 中程度の確信",
+      "summary": "前回優勝メンバーとして SHAKA と並べて言及。ねるとして playerTraits に一部反映済み。",
+      "timestamp": "46:24"
+    },
+    {
+      "heard": "あーちゃん",
+      "guess": "CC-CORE-SUP(昏昏アリア) 中程度の確信",
+      "summary": "ナダル(前回のコーチと推定)の教えを保っていれば強い、ちせとの相性が良いと評価。CC-CORE-SUP として playerTraits に反映済み。",
+      "timestamp": "52:58"
+    },
+    {
+      "heard": "ニコさん / 大御所さん",
+      "guess": "LR-CORE-ADC(大御所にゅん子) 高い確信",
+      "summary": "LR CORE の唯一の LTK2 非優勝メンバーとして言及。LR-CORE-ADC として反映済み。",
+      "timestamp": "37:03"
+    }
+  ]
+}
