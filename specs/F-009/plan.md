@@ -12,9 +12,9 @@
 | Task-2 | 6つのデータの軸(地力・レーン戦・集団戦・連携・安定感・ピックプール)の定義(指標・重み・ロール別の指標)、LTK の経験の項、ピックプールの計算 | 10, 11 | `src/rating/axes.ts`、`src/rating/config.json`、`tests/rating/axes.test.ts` | Task-1 | 不可 |
 | Task-3 | 根拠の軸(コール力・大会経験)、AI 収集の印、否定の根拠の扱い、根拠のスナップショット(LTK 戦績・プロ経歴・他の大会・コールの根拠)の初版 | 12, 13, 14, 15, 16 | `src/rating/evidence.ts`、`data/snapshots/evidence-*.json`、`tests/rating/evidence.test.ts` | Task-1 | 可 |
 | Task-4 | 調子の係数(直近14日の勝率・LP の増減・練習量)と表示の点数 | 17, 18, 19 | `src/rating/form.ts`、`tests/rating/form.test.ts` | Task-1 | 可 |
-| Task-4b | 常識の一覧の検査と、集計のコマンドへの組み込み(反したら公開用のファイルを書かずに失敗)、計算ごとの記録 | 21, 22 | `src/rating/known-facts.ts`、`src/rating/known-facts.json`、`src/collect/aggregate-cli.ts`、`tests/rating/known-facts.test.ts` | Task-2, Task-3 | 不可 |
+| Task-7 | (旧 Task-4b。トレーラの形式 Task-N に合わせて 2026-10-09 に改番)常識の一覧の検査と、集計のコマンドへの組み込み(反したら公開用のファイルを書かずに失敗)、計算ごとの記録 | 21, 22 | `src/rating/known-facts.ts`、`src/rating/known-facts.json`、`src/collect/aggregate-cli.ts`、`tests/rating/known-facts.test.ts` | Task-2, Task-3 | 不可 |
 | Task-5 | 収集の追加: サモナーレベル・熟練度、直近 120 日の試合を最大 60 件 | 26, 27 | `src/collect/riot.ts`、`src/collect/collect.ts`、`tests/collect/collect.test.ts` | — | 可 |
-| Task-6 | 画面: 全軸のレーダー(確度で線を変える、推定の印)と調子、軸の説明(基準・補正・縮小・LTK の項・試合数・指標の位置・根拠・確度の理由)、チームのページの全軸化とチームの指標(視界・オブジェクト・マクロ) | 20, 24, 25 | `src/app/**`、`tests/app/**` | Task-4b | 不可 |
+| Task-6 | 画面: 全軸のレーダー(確度で線を変える、推定の印)と調子、軸の説明(基準・補正・縮小・LTK の項・試合数・指標の位置・根拠・確度の理由)、チームのページの全軸化とチームの指標(視界・オブジェクト・マクロ) | 20, 24, 25 | `src/app/**`、`tests/app/**` | Task-7 | 不可 |
 
 ## 粒度の確認
 
@@ -42,7 +42,7 @@
 | --- | --- | --- | --- |
 | 1 | Task-1・Task-5 | main | 評価の土台 / 収集の追加(並列) |
 | 2 | Task-2・Task-3・Task-4 | 層1 のマージ後の main | データの軸 / 根拠の軸 / 調子(並列) |
-| 3 | Task-4b | 層2 のマージ後の main | 常識の検査 |
+| 3 | Task-7 | 層2 のマージ後の main | 常識の検査 |
 | 4 | Task-6 | 層3 のマージ後の main | 画面 |
 
 ## AI エージェントへ与える分割の指示
