@@ -3,13 +3,14 @@
   import { ROSTER } from '../../data/roster.ts';
   import type { PlayerFile } from '../../data/types.ts';
   import { validatePlayerFile } from '../../data/validate.ts';
-  import { parseRoute, emptyPlayerFile, pageTitle, TEAM_INFO } from '../lib/index.ts';
+  import { parseRoute, pageTitle, TEAM_INFO } from '../lib/index.ts';
   import Home from './Home.svelte';
   import PlayerSheet from './PlayerSheet.svelte';
   import Emblem from './Emblem.svelte';
   import TeamPage from '../team/TeamPage.svelte';
+  import type { RatingsFile } from '../rating/view.ts';
 
-  let { files }: { files: Record<string, PlayerFile> } = $props();
+  let { files, ratings }: { files: Record<string, PlayerFile>; ratings?: RatingsFile } = $props();
   let hash = $state(location.hash);
   let content: HTMLElement | undefined = $state();
 
@@ -80,7 +81,7 @@
       {/key}
     {:else if player}
       {#key player.id}
-        <PlayerSheet {player} file={files[player.id] ?? emptyPlayerFile(player.id)} />
+        <PlayerSheet {player} rating={ratings?.players.find((r) => r.playerId === player.id)} computedAt={ratings?.computedAt} />
       {/key}
     {:else}
       <Home />

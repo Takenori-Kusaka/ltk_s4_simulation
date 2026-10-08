@@ -186,3 +186,16 @@ export function overallScore(scores: (number | null)[]): number | null {
 export function daysUntilOpening(now: Date, opening = '2026-10-15T00:00:00+09:00'): number {
   return Math.max(0, Math.ceil((new Date(opening).getTime() - now.getTime()) / 86400000));
 }
+
+/** F-009 基準24: レーダーの辺。確度「低」の頂点に触れる辺は点線、欠損の頂点は飛ばして隣の点と結ぶ */
+export function radarEdges(
+  points: (Point | null)[],
+  lines: readonly ('solid' | 'dotted' | 'missing')[],
+): { from: Point; to: Point; dotted: boolean }[] {
+  const idx = points.flatMap((p, i) => (p ? [i] : []));
+  if (idx.length < 2) return [];
+  return idx.map((i, k) => {
+    const j = idx[(k + 1) % idx.length];
+    return { from: points[i]!, to: points[j]!, dotted: lines[i] === 'dotted' || lines[j] === 'dotted' };
+  }).filter((_, k) => idx.length > 2 || k === 0);
+}
