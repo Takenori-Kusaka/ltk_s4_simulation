@@ -43,3 +43,9 @@ test('評価設定の既定値を読む', () => {
   assert.equal(c.halfLifeDays, 45);
   assert.equal(c.k, 8);
 });
+
+test('extractGame: 勝敗(真偽値)は 1 と 0 で取り出す(ピックプールの勝率に使う)', () => {
+  const g = extractGame('JP1_2', { ...info, participants: info.participants.map((p) => ({ ...p, win: p.teamId === 100 })) }, 'me')!;
+  assert.equal(g.me.win, 1);
+  assert.equal(g.opp!.win, 0);
+});

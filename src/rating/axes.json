@@ -1,0 +1,75 @@
+{
+  "_comment": "F-009 Task-2 個人のデータの6軸(docs/design/rating-model.md 節2。2026-10-09 に価値責任者が確定)。指標は match-v5 の participant と challenges のキー。mode: diff=自分−対面 / logratio=ln((自分+1)/(対面+1)) / negdiff=−(自分−対面)",
+  "ltkBonusPerSeason": 0.4,
+  "ltkBonusCap": 1.2,
+  "ltkBonusAxes": ["teamfight", "synergy", "stability"],
+  "stability": { "deathsWeight": 0.6, "consistencyWeight": 0.4, "consistencyMinGames": 3 },
+  "pool": { "minGamesPerChampion": 3, "winRatePriorGames": 5, "countWeight": 0.5, "winRateWeight": 0.5, "masteryPriorWeight": 0.5 },
+  "axes": [
+    {
+      "key": "ground",
+      "label": "地力",
+      "rankWeight": 0.8,
+      "roleDependent": false,
+      "metrics": [
+        { "key": "totalDamageDealtToChampions", "weight": 0.4, "mode": "logratio" },
+        { "key": "goldPerMinute", "weight": 0.4, "mode": "diff" },
+        { "key": "soloKills", "weight": 0.2, "mode": "diff" }
+      ]
+    },
+    {
+      "key": "laning",
+      "label": "レーン戦",
+      "rankWeight": 0.5,
+      "roleDependent": true,
+      "metrics": [
+        { "key": "maxCsAdvantageOnLaneOpponent", "weight": 0.4, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
+        { "key": "laningPhaseGoldExpAdvantage", "weight": 0.3, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
+        { "key": "maxLevelLeadLaneOpponent", "weight": 0.3, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
+        { "key": "enemyJungleMonsterKills", "weight": 0.3, "mode": "diff", "positions": ["JUNGLE"] },
+        { "key": "scuttleCrabKills", "weight": 0.2, "mode": "diff", "positions": ["JUNGLE"] },
+        { "key": "takedownsFirstXMinutes", "weight": 0.5, "mode": "diff", "positions": ["JUNGLE", "UTILITY"] },
+        { "key": "visionScorePerMinute", "weight": 0.5, "mode": "diff", "positions": ["UTILITY"] }
+      ]
+    },
+    {
+      "key": "teamfight",
+      "label": "集団戦",
+      "rankWeight": 0.5,
+      "roleDependent": true,
+      "metrics": [
+        { "key": "teamDamagePercentage", "weight": 0.5, "mode": "diff", "positions": ["MIDDLE", "BOTTOM"] },
+        { "key": "damageTakenOnTeamPercentage", "weight": 0.5, "mode": "diff", "positions": ["TOP", "JUNGLE", "UTILITY"] },
+        { "key": "enemyChampionImmobilizations", "weight": 0.3, "mode": "diff" },
+        { "key": "outnumberedKills", "weight": 0.2, "mode": "diff" }
+      ]
+    },
+    {
+      "key": "synergy",
+      "label": "連携",
+      "rankWeight": 0.3,
+      "roleDependent": true,
+      "metrics": [
+        { "key": "killParticipation", "weight": 0.4, "mode": "diff" },
+        { "key": "pickKillWithAlly", "weight": 0.15, "mode": "diff" },
+        { "key": "knockEnemyIntoTeamAndKill", "weight": 0.15, "mode": "diff" },
+        { "key": "saveAllyFromDeath", "weight": 0.15, "mode": "diff" },
+        { "key": "effectiveHealAndShielding", "weight": 0.15, "mode": "logratio" }
+      ]
+    },
+    {
+      "key": "stability",
+      "label": "安定感",
+      "rankWeight": 0.4,
+      "roleDependent": false,
+      "metrics": [{ "key": "deaths", "weight": 1, "mode": "negdiff" }]
+    },
+    {
+      "key": "pool",
+      "label": "ピックプール",
+      "rankWeight": 0.3,
+      "roleDependent": true,
+      "metrics": []
+    }
+  ]
+}
