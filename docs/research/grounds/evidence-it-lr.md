@@ -1,0 +1,586 @@
+# LTK Finale IT・LR 30名 コール・チームプレイ・LoL 歴の根拠(2026-10-08 調査)
+
+- 機械可読の正本: evidence-it-lr.json(根拠ごとに要約・URL・日付・種類・向き・強さ)
+- 強さ: 強=本人/チームメイトの明言や記事が具体的に書く、中=視聴者の声や切り抜き題名が具体的、弱=間接的・自動字幕で話者推定・スニペットのみ
+- 調査中に Tavily が一時回数制限、Leaguepedia(402)・Liquipedia(429)は本文を取得できなかった
+- 注: 乾伸一郎の所属は調査で REJECT と出た(名簿の「にじさんじ」と食い違う。要確認)
+
+## 件数の表
+
+| playerId | 選手 | コール +/− | うち強 | チームプレイ +/− | LoL 開始 |
+|---|---|---|---|---|---|
+| IT-MASTERS-TOP | らいじん | 4/1 | 0 | 3/2 | 2013 |
+| IT-MASTERS-JG | ゆにか / Yunika | 2/2 | 0 | 2/0 | 未確認 |
+| IT-MASTERS-MID | Eugeo | 5/0 | 1 | 4/0 | 2016 |
+| IT-MASTERS-ADC | Zerost | 3/1 | 0 | 4/1 | 遅くとも 2014 |
+| IT-MASTERS-SUP | Enty / えんてぃ | 4/1 | 0 | 3/0 | 2014 |
+| IT-CORE-TOP | mittiii | 0/1 | 0 | 1/2 | 未確認 |
+| IT-CORE-JG | AlphaAzur | 3/2 | 0 | 3/0 | 未確認 |
+| IT-CORE-MID | たかやスペシャル | 5/0 | 1 | 2/2 | 2013 |
+| IT-CORE-ADC | ごんかね | 2/0 | 0 | 3/0 | 未確認 |
+| IT-CORE-SUP | レグルシュ・ライオンハート | 0/1 | 0 | 3/0 | 遅くとも 2022 |
+| IT-NEXT-TOP | 橘ひなの | 1/2 | 0 | 2/0 | 遅くとも 2021 |
+| IT-NEXT-JG | ありけん | 2/1 | 0 | 2/0 | 遅くとも 2024 |
+| IT-NEXT-MID | まいたけ | 0/2 | 0 | 1/2 | 未確認 |
+| IT-NEXT-ADC | 天帝フォルテ | 0/3 | 0 | 4/0 | 遅くとも 2024 |
+| IT-NEXT-SUP | 白那しずく | 2/0 | 0 | 6/0 | 2025 |
+| LR-MASTERS-TOP | apaMEN | 0/2 | 0 | 2/1 | 遅くとも 2014 |
+| LR-MASTERS-JG | ねすてぃー/Nesty | 1/0 | 0 | 2/1 | 未確認 |
+| LR-MASTERS-MID | Recap | 1/0 | 0 | 4/0 | 遅くとも 2017 |
+| LR-MASTERS-ADC | ハレっち / Haretti | 0/1 | 0 | 4/0 | 未確認 |
+| LR-MASTERS-SUP | てぃんとん / ThintoN | 1/1 | 0 | 3/0 | 2013 |
+| LR-CORE-TOP | 焼きパン | 1/0 | 1 | 2/1 | 未確認 |
+| LR-CORE-JG | Killin9Hit(KH) | 3/2 | 0 | 2/2 | 2024 |
+| LR-CORE-MID | 乾伸一郎 | 5/1 | 1 | 2/1 | 2022 |
+| LR-CORE-ADC | 大御所にゅん子 | 1/1 | 0 | 1/1 | 未確認 |
+| LR-CORE-SUP | 千燈ゆうひ | 4/1 | 1 | 2/1 | 2012 |
+| LR-NEXT-TOP | 狐白うる | 1/1 | 0 | 3/0 | 2022 |
+| LR-NEXT-JG | アステル・レダ | 1/1 | 0 | 3/0 | 未確認 |
+| LR-NEXT-MID | 春茶 | 0/0 | 0 | 1/0 | 未確認 |
+| LR-NEXT-ADC | なぎさっち | 2/2 | 2 | 3/0 | 未確認 |
+| LR-NEXT-SUP | No.1005(とおこ) | 0/1 | 0 | 3/0 | 未確認 |
+
+## 選手ごとの根拠
+
+### IT-MASTERS-TOP らいじん
+
+**コール・リーダーシップ**
+
+- (+/中/本人の発言/2026-06-26) S3 で LR NEXT のコーチとして、サポートと JG へのマクロ指導に比重を置いたと本人が語る。コールを優先したため、マクロの一部を犠牲にして簡略化したとも述べる。コーチとしてコールの組み立てを主導していた根拠。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+- (+/中/記事/2025-07-30) S1 DC の練習で、鷹宮リオンが先頭に立ってコールしたことを評価した。そのうえで語気を強めてフィードバックし、記事は指導を「スパルタ」と書く。コーチとしてチームを引っ張る姿の記述。 — https://www.inside-games.jp/article/2025/07/30/170020.html
+- (+/弱/視聴者の声/2025-08-26) 視聴者がコーチ視点 VC を書き起こした投稿。DC×PD CORE 戦の後、らいじんが「コールと組み立ては良かった」とチームを評価している。選手のコールを評価・指導する立場にいた。 — https://x.com/tklgztk2017/status/1960410359258603767
+- (+/中/チームメイトの発言/2026-06-26) S3 LR NEXT の夜よいちは、これまでのコーチより「LoL がどうあるべきか」という根本を教わったと評価した。できない時の指導は厳しいとも語る。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+- (-/弱/本人の発言/2026-06-26) MASTERS の選手とコーチの兼任は「現実的じゃない」と本人が語る。自分は常に勝てる選手ではないので、兼任するなら Haretti・Enty・Nesty の方がよいとも言う。MASTERS の予定は最後に回した。選手としての主導は控えめだったことを示す。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+
+**チームプレイ・連携**
+
+- (-/弱/本人の発言/2026-06-26) チームの雰囲気を問われ「雰囲気を悪くするのは俺」と冗談交じりに答えた。メンバーが雰囲気を壊さないよう努めていたので、雰囲気は悪くなかったとも言う。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+- (-/弱/記事/不明) 紹介記事が、LoL では身内へ失言やノンデリ発言を連発すると書く(toxic な一面)。 — https://gaming-select.com/raijinn-profile-lol
+- (+/弱/チームメイトの発言/2026-06-26) 夜よいちによると、最初はチーム全員がらいじんを怖がっていた。その後「怖そうに見えて意外とノリがいい」と分かり、関わり方が掴めたという。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+- (+/弱/本人の発言/2026-01-07) S2 PD の振り返りで、教え方を要点に絞るよう変えたと本人が語る。以前は全部を説明していたが、容量的に入りきらないと考えた。指導対象の天月の成長も評価した。 — https://fistbump-news.jp/article/2026/01/07/2001.html
+- (+/弱/記事/2025-09-10) 旧 DC CORE の解散時に、コーチのらいじんが「愛あるチクチク」でメンバーを送り出したと報じる見出し。(スニペットで確認) — https://fistbump-news.jp/article/2025/09/10/1554.html
+
+**LoL 歴**: 2013(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。自己紹介動画で、シーズン3から NA サーバーで始めたと本人が語る(字幕で確認)。その後 JP サーバーでチャレンジャー。2018年に 7th heaven の TOP(pc-koubou の LJL 2018 Spring レポート)。プロ時代のコール役の記述は見つからない — https://www.youtube.com/watch?v=rP7cFD2rPws
+
+**探した場所**: tavily: らいじん LoL コーチ LTK コール 指示 / tavily: らいじん LoL 元プロ LJL 経歴 LoLを始めた / tavily: らいじんコーチ ショットコール マクロ 指導 LTK DC 葛葉 / tavily: らいじん 7th heaven TOP 2018 プロ LoL歴 NA / tavily: LTK パンデモニウム LR MASTERS らいじん ... コール / tavily: LTK MASTERS ショットコール 誰が / tavily: SHAKA × Zerost × らいじん インタビュー / fistbump 2605 / 2001 / 2482 / 1554(見出し) / inside-games 2025/07/30 / lol.fandom.com/wiki/Raizin(402で取得不可) / lol.wik1.net らいじん(エラーで取得不可) / YouTube rP7cFD2rPws の字幕
+
+### IT-MASTERS-JG ゆにか / Yunika
+
+**コール・リーダーシップ**
+
+- (+/弱/本人の発言/2026年(5か月前と表示)) 本人の note のマガジンに「チームゲームで JG がやるべき立ち回りとコールの仕方」という記事がある。JG のコールを教える立場で発信している。(スニペットで確認) — https://note.com/lol_yunika/m/m3265b54f2d21/hashtag/18666
+- (+/弱/本人の発言/2026年(3か月前と表示)) LTK Masters Cup Day1 で実践したレベル1の動きを、本人が note で解説した。チームゲームの JG はソロランク以上に「ゲームプラン」が重要だと書く。 — https://note.com/lol_yunika/n/nb81a6e5ebf49
+- (-/弱/チームメイトの発言/2022-08-29) V3 Esports 時代(2022)、MID の Eugeo が「Yunika さん、あと1キャンプ…でガンク来てもらえたら」とガンクの時機を指示していたと語る。ゆにかはコールを受ける側だった例。 — https://lolninja.net/2022/08/29/33705
+- (-/弱/視聴者の声/不明) S3 IT MASTERS を扱う切り抜きの題名が「沈黙のチームから饒舌な最高チームへ」。当初は声が少なかったことを示唆する(チーム全体についての記述)。(題名で確認) — https://www.youtube.com/watch?v=hz75S2AAO5g
+
+**チームプレイ・連携**
+
+- (+/弱/記事/2026-05-26) FISTBUMP の LJL 回顧で「おっとりしたキャラクター」と紹介された。2019年ごろ CGA から V3 へ移った選手。 — https://fistbump-news.jp/article/2026/05/26/2482.html
+- (+/弱/大会での役割/不明) S3 で IT NEXT の JG ありけんを指導した切り抜きがある(「有料級ジャングル講座」)。Finale でも開幕前から CORE の AlphaAzur へ JG コーチングを配信している。(題名・X 投稿で確認) — https://www.youtube.com/watch?v=DA6pYPZlW_8
+
+**LoL 歴**: 未確認
+
+**探した場所**: WebSearch: Yunika ゆにか LoL ジャングル プロ V3 Esports CGA 経歴 / WebSearch: ゆにか LTK IT MASTERS コール ジャングル たぬき忍者 apaMEN / tavily: ゆにか LoL ジャングル LTK コール / tavily: ゆにか LoL 始めたきっかけ シーズン プロ / tavily: IT MASTERS VC ゆにか たぬき忍者 ThintoN Yuhi apaMEN / tavily: Yunika V3 Esports インタビュー ジャングル コール / skilltown プロフィール(LoL歴8年。記載時期が不明なので年は特定できない) / fistbump 2593(IT MASTERS インタビュー。ゆにかの記述なし) / note.com/lol_yunika / x.com/YunikaLoL(2016年2月登録) / lolninja 2022/08/29
+
+### IT-MASTERS-MID Eugeo
+
+**コール・リーダーシップ**
+
+- (+/強/本人の発言/2022-08-29) V3 Esports 時代(2022)、夏から本格的にリーダーを意識したと本人が語る。チームメイトからは「頼りにしている」と言われた。JG へガンクの時機を指示し、レーン主導権のために JG・SUP を動かすと説明している。 — https://lolninja.net/2022/08/29/33705
+- (+/中/チームメイトの発言/2026-06-24) S3 DD NEXT のコーチとして、対戦相手ごとの BAN/PICK をすべて設計した。SHAKA は「練習どおりになぞるだけだった」と語る。 — https://fistbump-news.jp/article/2026/06/24/2594.html
+- (+/中/本人の発言/2026-05) S1・S2 は DC の NEXT と CORE のコーチを歴任した。JG は「コールなどでチームを引っ張っていくロール」という考えを本人が示している。 — https://realsound.jp/tech/2026/05/post-2368493_2.html
+- (+/弱/視聴者の声/不明) 切り抜きの題名が「格上とのスクリムで最も重要なマクロコーチングを施す Eugeo」(DC NEXT)。(題名で確認) — https://www.youtube.com/watch?v=IRj5aGrVzIs
+- (+/弱/大会での役割/不明) S3 DD NEXT の練習 VC で、Eugeo がポジション取りや ADC の役割を具体的に指示している。 — https://www.youtube.com/watch?v=BDpE0X_lMNo
+
+**チームプレイ・連携**
+
+- (+/弱/記事/2026-05-26) FISTBUMP の LJL 回顧で、どのチームでも活躍度と「喋りの上手さ」からインタビューの常連だったと書かれた。 — https://fistbump-news.jp/article/2026/05/26/2482.html
+- (+/中/チームメイトの発言/2026-05) DC NEXT のゆふなは、Eugeo のコーチングを「一切疑わずに全部受け入れてました」と語る。 — https://realsound.jp/tech/2026/05/post-2368493_2.html
+- (+/弱/本人の発言/2022-08-29) V3 の連敗中、選手5人とコーチ2人で話し合った。本人によると「遠慮せずに思っていることを言い合おう」と決めた。 — https://lolninja.net/2022/08/29/33705
+- (+/弱/本人の発言/2026-10-07) Finale の発表後、IT で「念願のたかちゃん(たかやスペシャル)と一緒だ」と X に投稿した。 — https://x.com/AurEugeo
+
+**LoL 歴**: 2016(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。シーズン6、JP サーバーの導入時に始めたと本人が語る(それ以前に NA で一度触ってレベル3でやめた。リクルートの note、2024-09-10)。元は JG メイン(オラフ・エリス)で、Sunsister のアカデミーに誘われて MID へ転向 — https://lolninja.net/2022/08/29/33705
+
+**探した場所**: tavily: Eugeo LoL コーチ DC マクロ LTK 指示 / WebSearch: Eugeo LoL プロ ミッド Burning Core AXIZ CREST 経歴 インタビュー / WebSearch: Eugeoコーチ LTK DC NEXT 指導 コール ta1yo 空澄セナ / WebSearch: Eugeo LTK マスターズ DD コール マクロ / tavily: Eugeo えうげお LoL 始めた きっかけ / realsound 2026/05(2ページ) / fistbump 2594 / 2482 / lolninja 2022/08/29 / note.com/recruit09(リクルートのインタビュー) / inside-games 2025/07/30・2025/09/08(Eugeo の記述なし)
+
+### IT-MASTERS-ADC Zerost
+
+**コール・リーダーシップ**
+
+- (+/中/本人の発言/2026-01-07) S2 PD のコーチとして指導した結果、神楽めあの「コールが圧倒的に増え」、味方の安全を気にかける声掛けも増えたと本人が語る。選手のコールを育てた。 — https://fistbump-news.jp/article/2026/01/07/2001.html
+- (+/弱/記事/2025-08-19) S1 PD CORE のコーチとして、試合後のインタビューで課題を把握していると話した。プレイオフへ向けた「隠しの爆弾」もほのめかした。 — https://fistbump-news.jp/article/2025/08/19/1454.html
+- (+/弱/視聴者の声/不明) PD CORE の再生リストに「Zerost コーチからの厳しいフィードバックを受け」という題の動画がある。(題名で確認) — https://www.youtube.com/playlist?list=PLBmU9HbP8GUV_CgEPy82gB2pv8YwhQPgL
+- (-/弱/記事/2015-05-22) RabbitFive 時代(2015)の紹介では、チームリーダー兼司令塔は Awaker だった。Zerost はチーム最年少で、決める場面で力を出す「お調子者」と書かれた。プロ時代のコール役ではなかったことを示唆する。 — https://akiba-pc.watch.impress.co.jp/docs/eswatch/703196.html
+
+**チームプレイ・連携**
+
+- (+/中/記事/2026-06-07) S3 で CC の龍巻ちせと BOT 練習をし、「兄弟喧嘩のよう」と話題になった。Day5 でも師弟関係のような熱血の指導を続けている。 — https://fistbump-news.jp/article/2026/06/07/2521.html
+- (+/弱/記事/2026-05-26) FISTBUMP の LJL 回顧で、愛嬌のあるキャラクターと書かれた。関わりのある選手が非常に多いとも書かれた。 — https://fistbump-news.jp/article/2026/05/26/2482.html
+- (-/弱/本人の発言/2026-01-07) S2 PD について「ムカつかなかった日はあまりないかも」と本人が語る。辛いことの方が多かったが、勝った瞬間の喜びが全部を吹き飛ばしたとも振り返る。 — https://fistbump-news.jp/article/2026/01/07/2001.html
+- (+/弱/記事/2026-06-19) S3 CC MASTERS について、劣勢からでも試合をひっくり返すチーム力は MASTERS で随一と評された。Zerost のエズリアルが爆発的なキャリー力の例に挙がる。 — https://fistbump-news.jp/article/2026/06/19/2572.html
+- (+/弱/記事/2020-08-09) プロ時代の分析記事では、死なずに安全な位置からダメージを出す「クリーンアップ/ユーティリティ型」の ADC と書かれた。 — https://lolninja.net/2020/08/09/20836
+
+**LoL 歴**: 2014(遅くとも(上限)。開始年の明言ではない)。上限値。2014〜2015年に Detonation RabbitFive でプロのキャリアを始めた。LoL を始めた年そのものは未確認。動画「LoLを始めた頃の話…ゼロストとえんてぃ」(youtube.com/watch?v=-9Gc5JMmP8Y)は内容を取得できなかった — https://lolninja.net/2020/08/09/20836
+
+**探した場所**: tavily: Zerost LoL コーチ PD LTK 指導 / WebSearch: Zerost LoL プロ LJL RabbitFive ADC 経歴 LoLを始めた / WebSearch: Zerost コーチ PD コール 神楽めあ 指示 LTK 切り抜き / tavily: Zerost コール 指示 LTK CC MASTERS / tavily: Zerost ゼロスト LoLを始めた 歴 / fistbump 1454 / 2521 / 2001 / 2482 / 2572 / akiba-pc.watch 2015/05/22 / lolninja 2020/08/09 / liquipedia Zerost(429で取得不可)
+
+### IT-MASTERS-SUP Enty / えんてぃ
+
+**コール・リーダーシップ**
+
+- (+/中/本人の発言/2026-07-24) 7th heaven を抜けた後、自分からメンバーを集めて USG を結成した(最初に apaMEN、ADC は Haretti)。チームを組織する主導力を示す。 — https://fistbump-news.jp/article/2026/07/24/2713.html
+- (+/弱/記事/2017-04-26) 2017年のインタビューで、「サポートとしてチームを導いた人物」と紹介された。本人は、試合後のフィードバックを前シーズンより深めたと語る。 — https://www.gamespark.jp/article/2017/04/26/72989.html
+- (+/弱/大会での役割/2026-10-08) Finale で IT NEXT の全体コーチを務めると X で名乗った。 — https://x.com/enty925
+- (+/弱/チームメイトの発言/2026-06-26) S3 で同じチームのらいじんが、選手兼コーチをやるなら Enty らの方が適任だと述べた。 — https://fistbump-news.jp/article/2026/06/26/2605.html
+- (-/弱/本人の発言/2026-07-24) 本人は「かなり強気なタイプ」と自認し、思ったことをすぐ口にすると語る。一方で理論立てて話すのは苦手とも語る。 — https://fistbump-news.jp/article/2026/07/24/2713.html
+
+**チームプレイ・連携**
+
+- (+/中/記事/2026-05-26) USG で Haretti とボットデュオを組んだ2年間について、FISTBUMP は「二人ともムードメーカー」で人気が高かったと書く。 — https://fistbump-news.jp/article/2026/05/26/2482.html
+- (+/弱/本人の発言/2017-04-26) ゲーム後のフィードバックで「ここで連携が足りてないから今後はこうしよう」と話し合ったと本人が語る(USG 時代)。 — https://www.gamespark.jp/article/2017/04/26/72989.html
+- (+/弱/本人の発言/2026-07-24) USG では「Entyが必要だから」と残留を求められた。SUP として勝ち筋を考え、ADC との相性も語っている。 — https://fistbump-news.jp/article/2026/07/24/2713.html
+
+**LoL 歴**: 2014(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。「2014年です。高校2年生のころ、シーズン4」と本人が語る(最初は NA)。半年でチャレンジャーに到達(FISTBUMP 2713) — https://www.gamespark.jp/article/2017/04/26/72989.html
+
+**探した場所**: tavily: えんてぃ Enty LoL サポート 元プロ コール USG DFM SG 経歴 / tavily: Enty LTK LR MASTERS コール 助けてごらん ニーコ / tavily: Enty ショットコール サポート USG SG コール担当 / fistbump 2713 / 2482 / 2605 / gamespark 2017/04/26 / x.com/enty925 / team-detonation.net Enty
+
+### IT-CORE-TOP mittiii
+
+**コール・リーダーシップ**
+
+- (-/弱/大会での役割/不明) VALORANT プロ時代(DFM 2020年、FENNEL 2021〜22年)はデュエリストとして紹介されている。IGL(司令塔)とする記述は見つからない。役割から見た間接的な根拠。 — https://playerpedia.net/valorant/players/mittiii
+
+**チームプレイ・連携**
+
+- (-/中/チームメイトの発言/2026-01-07) S2 PD CORE について Zerost が語った内容。mittiii と神楽めあは結成早々に喧嘩し、試合中も10分ほど続いた。mittiii はチームで「一番怒るというか、怒らせてる」と評された。 — https://fistbump-news.jp/article/2026/01/07/2001.html
+- (-/弱/視聴者の声/不明) 切り抜きの題名が「神楽めあが撒いたガソリンに一瞬で着火するみっちー」(S2 PD)。(スニペットで確認) — https://www.youtube.com/watch?v=yn3h6s6bD-M
+- (+/弱/記事/2025-08-24) S1 ST CORE(レギュラー首位、優勝)の TOP。ファイターからタンクまで扱うオールラウンダーで、安定した立ち回りが高く評価されていると紹介された。 — https://fistbump-news.jp/article/2025/08/24/1484.html
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: mittiii LoL コール LTK TOP / tavily: mittiii LoL 始めた いつから LoL歴 配信者 / tavily: みっちー ST CORE LTK 優勝 コール / tavily: みっちー LoL歴 年 LoLを始めた / tavily: mittiii VALORANT IGL 元プロ / tavily: みっちー LoL 初心者 始めて 2023 / tavily: LR CORE mittiii ごんかね レグルシュ コール / tavily: mittiii 神楽めあ 喧嘩 LTK PD CORE みっちー コール / tavily: みっちー コール 指示 LTK 切り抜き ST CORE / fistbump 1484 / 2001 / note.com/mittiii4291(受験の体験談。LoL 開始時期の記述なし) / playerpedia mittiii
+
+### IT-CORE-JG AlphaAzur
+
+**コール・リーダーシップ**
+
+- (-/中/チームメイトの発言/2025-07-13) S1 の ST 編成について、しゃるるは AlphaAzur を「お茶目なところがある」ので「締めてくれる人」(mittiii)を入れて組んだと語る。チームを締める役は本人ではなく他者と見られている。 — https://fistbump-news.jp/article/2025/07/13/1287.html
+- (+/弱/記事/2025-07-13) 同じ対談で k4sen は、ST CORE は元プロが多く「試合中の報告がもとから上手い」と述べた。AlphaAzur は元 PUBG プロだが、本人個人のコールへの言及ではない。 — https://fistbump-news.jp/article/2025/07/13/1287.html
+- (+/中/記事/2026-03-29) 育成企画 k4sen学院(カセガク)で COREクラスの講師として NEXT の生徒クラスを指導した。集団戦の削りを「税金徴収」にたとえ、クラスの共通認識をそろえたと評されている(ファンブログ)。 — https://red-ff-gamenews.com/k4segaku-0329-alpha-class
+- (+/弱/本人の発言/2026-02) 本人が「Team AlphaAzur」の発表を告知し、生徒に向けて目標(期末テスト4位回避)を掲げた。講師として率いる立場だった。(スニペットで確認) — https://x.com/AzurAlpha/status/2025917281247842399
+- (-/弱/記事/2026-04-04) カセガク第1期の期末大会で Team AlphaAzur は退学決定戦に敗れ、退学となった。講師としての指導の成果は結果につながらなかった。 — https://fistbump-news.jp/article/2026/04/04/2294.html
+
+**チームプレイ・連携**
+
+- (+/中/記事/2026-06-10) S3 Day6 で CC CORE が初勝利し、AlphaAzur が MVP。記事は「集団戦の要として活躍」と評した。 — https://fistbump-news.jp/article/2026/06/10/2540.html
+- (+/弱/記事/2026-06-07) S3 の CC CORE は 6/4 の練習日から、メンバー同士で反省点を話し合うフィードバック方式に変え、コーチのしゃるるは手応えを語った。ただしそれまでは全敗で、AlphaAzur には2大会連続の 0勝6敗の可能性があった。 — https://fistbump-news.jp/article/2026/06/07/2521.html
+- (+/弱/チームメイトの発言/2025-07-13) しゃるるは、締め役と組ませると「良いシナジーを発揮しすぎて」強くなることが多いと評価した。組み合わせ次第で連携が活きるという見方。 — https://fistbump-news.jp/article/2025/07/13/1287.html
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: AlphaAzur LoL コール 指示 / tavily: アルファアジュール LoL 始めた / WebSearch: AlphaAzur LTK ショットコール / tavily: AlphaAzur LoL歴 The k4sen 初心者 ブロンズ / tavily(fistbump-news.jp): AlphaAzur LTK MID / tavily: AlphaAzur リーダー 声出し チーム / tavily: AlphaAzur 指示出し/コール役/オーダー / tavily: AlphaAzur PUBG プロ IGL オーダー / tavily: AlphaAzur LoL いつから 2023 The k4sen / WebSearch: AlphaAzur LoL 始めたきっかけ / tavily: アルファ LTK 切り抜き 指示 コール しゃるる杯 / tavily(lol.fandom.com): The k4sen Tournament AlphaAzur 2022 / extract: fistbump 2026/06/10/2540, 2026/06/07/2521, 2026/04/04/2294, red-ff カセガク, x.com/AzurAlpha/status/1838522406966603988 / X 2024-09-24 の本人投稿「俺以外初心者Thek4sen出身」から、初心者企画の出身ではないことは確認できた。開始年は未確認(PUBG プロは2018年11月まで)
+
+### IT-CORE-MID たかやスペシャル
+
+**コール・リーダーシップ**
+
+- (+/強/記事/2026-01-01) FISTBUMP のインタビューは、LTK で「チームリーダーを務める」と紹介した。S1 オフラインの敗戦後の「負けさせちゃいました」という発言が、キャプテンとしての責任感として取り上げられている。 — https://fistbump-news.jp/article/2026/01/01/1981.html
+- (+/中/本人の発言/2026-01-01) 2025年の「初心者 The k4sen」でコーチを務め、相手役のリスナーに動き方を指示して練習試合を組んだ。本人は「元々はコーチが1番やりたかった」と話している。 — https://fistbump-news.jp/article/2026/01/01/1981.html
+- (+/中/大会での役割/2026-01) VSPO! SHOWDOWN 2026 の LoL DAY1 で、ぶいすぽっ！チームのコーチを たぬき忍者と務めた。 — https://kai-you.net/article/94431/page/2
+- (+/中/大会での役割/2024-08) しゃるる杯 LoL甲子園(2024年8月)で、チーム「二子ザゲ川学園高校」の監督を務めた。 — https://esports-world.jp/tournament/41617
+- (+/弱/視聴者の声/不明) 本人チャンネルの切り抜きに「大局を見てJGをチェスの駒のように動かし続ける『ザ・エンペラー』」という題名がある(ソロランクの場面とみられる)。(スニペットで確認) — https://www.youtube.com/watch?v=pU9wjcU6420
+
+**チームプレイ・連携**
+
+- (-/中/本人の発言/2026-01-01) 本人によると、LTK でリスナーから「自分でやろうとしすぎで、チームメイトを信用してない」と言われることがある。本人は、ランクが一番高い自分が頑張るべきだと考えている。 — https://fistbump-news.jp/article/2026/01/01/1981.html
+- (+/中/記事/2026-05) S3 の IT CORE の試合で、中盤以降は たかやスペシャル・乾伸一郎・天月が機動力を活かして連携し、試合の主導権を握ったと報じられた。 — https://kai-you.net/article/95391
+- (+/弱/本人の発言/2026-01-01) 同じインタビューで本人は、チームメンバーの頑張りを強く感じており、特に橘ひなのを評価していると話した。 — https://fistbump-news.jp/article/2026/01/01/1981.html
+- (-/弱/視聴者の声/不明) 本人チャンネルの切り抜きに「超絶キャリーしてるはずがチームを不安にさせることばかりチャットする」という題名がある(ソロランク)。(スニペットで確認) — https://www.youtube.com/watch?v=ttSM89g0490
+
+**LoL 歴**: 2013(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。取材(2025年12月中旬)の時点で「もう12年前」と発言。ゲーム友達に誘われて始めた。年は逆算による推定 — https://fistbump-news.jp/article/2026/01/01/1981.html
+
+**探した場所**: fetch/extract: fistbump-news.jp 2026/01/01/1981 インタビュー / tavily: たかやスペシャル コール 指示 LoL / WebSearch: たかやスペシャル コール LoL 指示 LTK / WebSearch: たかやスペシャル キャプテン チームリーダー LTK / WebSearch(youtube/x/fistbump): たかやスペシャル LoL コール / tavily: 大局を見てJGをチェスの駒… ザ・エンペラー / tavily: IT CORE パンデモニウム たかや 酒寄 天月 焼きパン コール / tavily: たかやスペシャル ぶいすぽ SHOWDOWN コーチ / wikiwiki.jp/loljpdata たかやスペシャル(スニペット) / note.com/haruka_gg 語録解説(スニペット) / Bing/DuckDuckGo の直接取得は失敗
+
+### IT-CORE-ADC ごんかね
+
+**コール・リーダーシップ**
+
+- (+/弱/視聴者の声/不明) 本人チャンネルの切り抜きに「コールもこなすADCで完璧な試合をした結果、味方に怖がられる」という題名がある。(スニペットで確認) — https://www.youtube.com/watch?v=fR13JZA6VJI
+- (+/弱/視聴者の声/2026-05-11) S3 LTK 初戦の本人視点の切り抜きの書き起こしに、「4人で押そう」「ライン合わせよ」など進行を指示する声が多い。ただし自動字幕で、話者は特定できない。 — https://www.youtube.com/watch?v=fR13JZA6VJI
+
+**チームプレイ・連携**
+
+- (+/中/記事/2026-05-11) S3 で初出場ながら、ADC として LTK 史上初の MVP を獲得した。29分ごろのドラゴン前の集団戦では、チームが ADC のごんかねを守り切って4キルを取った。 — https://fistbump-news.jp/article/2026/05/11/2419.html
+- (+/中/視聴者の声/不明) S3 の切り抜きの題名は「ごんかねと初BOTで見事な連携を見せ皆から褒められ照れるレグ」。レグルシュとのボット連携が評価された。 — https://www.youtube.com/watch?v=KF01norZQxU
+- (+/弱/記事/2026-05) S3 の分析記事(個人の note)によると、14分時点のキル関与率は 64%(2位)、分間ダメージは1位。一方で LR CORE の勝ち筋はごんかねのボットキャリーに集約され、ボット不利時の勝率は 6.3% だった。 — https://note.com/futugu/n/n262793321cfd
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: ごんかね LoL コール 指示 / tavily: "コールもこなすADC" ごんかね / tavily: ごんかね LoL歴 始めた ホウオウ 限界 / tavily: ごんかね LoL 何年 やってる プレイ歴 / tavily: ごんかね レグルシュ BOT デュオ LTK 連携 / extract: wikiwiki.jp/genkai/gonkane(LoL 開始の記載なし。初期のアカウント名「ホウオウ」の記載のみ) / fetch: fistbump-news.jp 2026/05/11/2419 / fetch: wikiwiki.jp/loljpdata ごんかね(404) / fetch: youtube.com/@qonkane/videos(一覧を取得できず)
+
+### IT-CORE-SUP レグルシュ・ライオンハート
+
+**コール・リーダーシップ**
+
+- (-/弱/チームメイトの発言/不明) S3 のボット連携を扱った切り抜き(コーチの Enty が登場)の書き起こしで、指導役が「ここVCで言えるとよかった」「フリーズするよってぐらいを言えてたら」と声出しを改善点に挙げている。自動字幕で、話者の特定は推定。 — https://www.youtube.com/watch?v=KF01norZQxU
+
+**チームプレイ・連携**
+
+- (+/中/視聴者の声/不明) S3 の切り抜きの題名は「ごんかねと初BOTで見事な連携を見せ皆から褒められ照れるレグ」。 — https://www.youtube.com/watch?v=KF01norZQxU
+- (+/弱/視聴者の声/不明) 同じ切り抜きチャンネルに「前回ボロ負けした原因を克服して完璧なマクロで勝利したレグ達」という題名がある(チームとしての修正)。(スニペットで確認) — https://www.youtube.com/watch?v=pQvJiHyXymk
+- (+/弱/記事/2026-05-11) S3 の LR CORE の初戦で、チームが ADC のごんかねを守り切って集団戦に勝った(レグルシュは SUP)。 — https://fistbump-news.jp/article/2026/05/11/2419.html
+
+**LoL 歴**: 2022(遅くとも(上限)。開始年の明言ではない)。本人の LoL 再生リストに約4年前の配信がある。活動開始は 2022-01-28(4Gamer)。遅くとも2022年という意味で、開始年の明言は未確認(スニペットで確認) — https://www.youtube.com/playlist?list=PLzOPJFf0a50hhiga_FE3V8ZRPSh1OzW4K
+
+**探した場所**: tavily: レグルシュ・ライオンハート LoL コール 指示 LTK / tavily: レグルシュ LoL 始めた 初心者 のりプロ / extract: 4gamer 週刊VTuberファイル File.057(スニペットに「一番好きなゲームは LoL」)、virtualyoutuber.fandom / tavily: レグルシュ しゃるる杯 LoL サポート コール 報告 / tavily: レグ LTK 切り抜き サポート 視界 エンゲージ 褒められ / esports-world しゃるる杯LoL甲子園(2024、SUP として出場の記載のみ)
+
+### IT-NEXT-TOP 橘ひなの
+
+**コール・リーダーシップ**
+
+- (+/中/大会での役割/2026-01) VSPO! SHOWDOWN 2026 の LoL DAY1 で、ぶいすぽっ！チームのリーダーに指名された。 — https://kai-you.net/article/94431/page/2
+- (-/中/本人の発言/2026-03-31) 同大会後のインタビューで本人は、コールは JG の銀城サイネと ADC の白波らむねが担ってくれたと評価した。リーダーではあったが、コールの主体は他のメンバーだった。 — https://fistbump-news.jp/article/2026/03/31/2276.html
+- (-/弱/本人の発言/2026-03-31) TOP は序盤に関われない場面が多く、他の4人に「頑張ってくれ」としか言えないのが苦しかったと語った。 — https://fistbump-news.jp/article/2026/03/31/2276.html
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/2026-03-31) 同じインタビューで、チームで話し合ったことを本番で実行でき、メンバーそれぞれが役割を自覚してチームゲームができたと振り返った。 — https://fistbump-news.jp/article/2026/03/31/2276.html
+- (+/中/チームメイトの発言/2026-01-01) S2 ST CORE のチームメイトのたかやスペシャルが、ゴールド〜プラチナ帯ながら「本当にすごい」と評価した。 — https://fistbump-news.jp/article/2026/01/01/1981.html
+
+**LoL 歴**: 2021(遅くとも(上限)。開始年の明言ではない)。本人の LoL 再生リストに約5年前の配信がある。遅くとも2021年という意味で、開始年の明言は未確認(スニペットで確認)。TOP の練習は SHOWDOWN 2026 の約3か月前から — https://www.youtube.com/playlist?list=PLzzYMrfmt7TAyxtEDuCeBSGKVoCQ55wG_
+
+**探した場所**: tavily: 橘ひなの LoL コール 指示 / extract: wikiwiki.jp/vspo 橘ひなの(大会歴) / tavily(fistbump/esports-world/kai-you): VSPO! SHOWDOWN 2026 リーグ・オブ・レジェンド 橘ひなの 率いる / fetch: fistbump-news.jp 2026/03/31/2276 インタビュー / tavily: 橘ひなの LoL 始めた いつから / tavily: ひなーの LTK コール 切り抜き(本人に関する結果なし) / LTK S1 ST NEXT でのコールの記述は見つからず
+
+### IT-NEXT-JG ありけん
+
+**コール・リーダーシップ**
+
+- (+/中/本人の発言/2026-05-04) S3 の IT NEXT の顔合わせで、本人が「リーダー俺になってます」と名乗った(「1番ランク低い人間がリーダーでいいのか」とも自嘲)。 — https://www.youtube.com/watch?v=P1UGR6IfDqg
+- (+/弱/本人の発言/不明) S3 初勝利の試合前の掛け声で、「リーダーがやれよ」と振られ、ジャングルが動けるように支えろという趣旨の号令をかけた。自動字幕のため、話者は推定。 — https://www.youtube.com/watch?v=OS5KadGr6r8
+- (-/弱/チームメイトの発言/不明) IT NEXT 向けの JG コーチングの切り抜きで、指導者が「何をしたいのかを伝えることが大事」「目標を決めることが一番必要」と、意図を伝える力を課題に挙げた。 — https://www.youtube.com/watch?v=DA6pYPZlW_8
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/不明) S3 で IT NEXT が CC NEXT に勝ったあとのインタビューで、「みんなで声出せて」短期間で仕上げて勝てたと語った。 — https://www.youtube.com/watch?v=OS5KadGr6r8
+- (+/弱/視聴者の声/不明) 2024年2月の The k4sen の切り抜きの視聴者コメントに、「3日間空気を良くし続けてくれたありけんとラプ様」とある。(スニペットで確認) — https://www.youtube.com/watch?v=dvGCgqNrsE8
+
+**LoL 歴**: 2024(遅くとも(上限)。開始年の明言ではない)。2024年2月5〜7日の The k4sen(第10回)に TOP で出場したのが確認できる最も古い記録。2026年2月の補習企画の記事では「過去の初心者LoLイベント参加者」とされる(https://esportsnewsjapan.jp/thek4sen-lol-260225)。開始年の明言は未確認 — https://esports-world.jp/tournament/36089
+
+**探した場所**: tavily: ありけん LoL LTK ジャングル / tavily: ありけん LoL 始めた スト6 配信者 初心者 The k4sen / fetch: esports-world 36089、famitsu 202402/05333533(初心者向けかの記載なし) / tavily: 初心者LoL The k4sen 2024年2月 出場者 ありけん / fetch: fistbump-news.jp 2026/06/17/2563(IT NEXT 個人への言及なし) / note.com/another_crown(「最高駄作」の記述は実力の話で、コール・連携の根拠ではないため不採用)
+
+### IT-NEXT-MID まいたけ
+
+**コール・リーダーシップ**
+
+- (-/弱/チームメイトの発言/2026-05-08) S3 IT NEXT の初戦後の振り返りで、チームは助っ人 TOP の太陽(ta1yo)のコールを称え、「次の試合はあのコールがない」と危機感を示した。3日で声を出せるようにする必要があると話しており、まいたけを含む正規メンバーにコール役がいなかったことを示す(チーム単位の間接的な根拠)。 — https://www.youtube.com/watch?v=5DeT0NAmAws
+- (-/弱/チームメイトの発言/不明) S3 の IT NEXT 試合ダイジェストで、チームメイトが緊張しているまいたけに「声出せ」と声をかける場面がある。試合中に指示を出す側ではなかったことを示唆する。 — https://www.youtube.com/watch?v=6cUq6njtOdE
+
+**チームプレイ・連携**
+
+- (+/中/チームメイトの発言/2026-05-08) S3 初戦前のインタビューで、ありけんが「ずっとまいたけと一緒に LoL をやってきた」と語った。JG とのデュオ経験が長い。 — https://www.youtube.com/watch?v=5DeT0NAmAws
+- (-/弱/大会での役割/2026-05-08) S3 Day1 の実況が、まいたけはソロランクの感覚で、敵が普段なら帰還する場面で LTK 特有の寄りを受けたと解説した。チームの動きへの慣れが課題とされた。 — https://www.youtube.com/watch?v=I0VsypCJFw0
+- (-/弱/チームメイトの発言/2026-05-08) 初戦後の振り返りで、チームが「まいたけはまず CS に慣れる必要がある」「LoL のマクロに慣れる必要がある」と指摘した。 — https://www.youtube.com/watch?v=5DeT0NAmAws
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: まいたけ LoL ストリーマー LTK ミッド / tavily: "まいたけ" "_kinotake_" LoL / tavily: まいたけ ちょこらび LoL 始めた ろる / tavily: まいたけ ありけん LTK IT NEXT ビクター コール / tavily: ありけん まいたけ LoL 初心者 一緒に始めた / note.com/futugu の NEXT 分析(GD@14 の数値だけで、コールの記述なし) / fistbump 2026/05/13/2428(まいたけの記述なし) / YouTube 5DeT0NAmAws・P1UGR6IfDqg・6cUq6njtOdE の字幕 / VPL のプロフィール(麻雀。LoL の記述なし)
+
+### IT-NEXT-ADC 天帝フォルテ
+
+**コール・リーダーシップ**
+
+- (-/弱/本人の発言/2026-05-12) S3 で MVP を取った後のインタビューで、本人は勝因を「みんな火力が出て、コールも良かった」と述べた。コールを担ったのは自分ではなく味方だという認識。 — https://www.youtube.com/watch?v=6cUq6njtOdE
+- (-/弱/チームメイトの発言/不明) 同じダイジェスト動画で、チームメイトが「てんて(フォルテ)は喋ってない」とからかう場面がある。試合前後に口数が少ない様子がうかがえる。 — https://www.youtube.com/watch?v=6cUq6njtOdE
+- (-/弱/チームメイトの発言/2026-05-08) S3 の初戦後、IT NEXT は助っ人の ta1yo のコールが無くなることに危機感を示した。正規メンバーにコール役がいなかったことを示す(チーム単位の間接的な根拠)。 — https://www.youtube.com/watch?v=5DeT0NAmAws
+
+**チームプレイ・連携**
+
+- (+/中/視聴者の声/2026-05-28) S3 IT NEXT の分析で、フォルテはキル関与率と KDA がチーム内で最も高く、「ADC が中心となってゲームを展開するチーム」と評された。 — https://note.com/futugu/n/nb4e7591c38e8
+- (+/中/記事/2025-09-30) S2 でシーズン初のペンタキルを取った。本人は、味方が自分の自由に動ける状況を作ってくれたおかげだと語った。 — https://fistbump-news.jp/article/2025/09/30/1649.html
+- (+/弱/記事/2026-06-11) S3 DD 戦の記事によると、集団戦で狙われたフォルテのゼリがノクターンをタワー下へ誘い込み、2キルにつなげた。 — https://fistbump-news.jp/article/2026/06/11/2544.html
+- (+/弱/視聴者の声/不明) S2 のチーム予想で、事務所が同じ昏昏アリアとの BOT 連携に期待が寄せられた。ダメージを出し切る姿勢が評価され、CORE に昇格したと書かれている。 — https://note.com/lolana/n/n20517e55326c
+
+**LoL 歴**: 2024(遅くとも(上限)。開始年の明言ではない)。遅くとも 2024年2月の The k4sen(初心者向けのイベント)に ADC で出場していた。op.gg の履歴は S2024S1 Iron 2。開始時期を本人が明言したものは見つからず、この年は上限の目安 — https://esports-world.jp/tournament/36089
+
+**探した場所**: tavily: 天帝フォルテ LoL コール / tavily: "天帝フォルテ" LoL 始めた きっかけ / tavily: 天帝フォルテ LTK DC コール 指示 切り抜き / tavily: 天帝フォルテ LTK 振り返り チーム 連携 アリア ボットレーン DC CORE / tavily: "天帝フォルテ" LoL 始めたのは 年 ロル歴 / WebSearch: 天帝フォルテ LoL 歴 始めた ADC LTK / fistbump 2025/09/30/1649・2026/05/13/2428・2026/06/11/2544 / note.com/futugu・note.com/lolana / YouTube 6cUq6njtOdE・5DeT0NAmAws の字幕 / esports-world.jp の The k4sen 2024 出場者
+
+### IT-NEXT-SUP 白那しずく
+
+**コール・リーダーシップ**
+
+- (+/中/本人の発言/2026-06-23) S3 の振り返り配信で、本人が試合の場面を見ながら「コールはバックだったので、みんなで統一するのが大事だと思った」「もっと強くバック、バックと言えばよかった」と話した。撤退のコールに自分も関わっていた様子がうかがえる。 — https://www.youtube.com/watch?v=m3ILrq8fULM
+- (+/弱/本人の発言/2026-06-23) 同じ振り返り配信で、「相手の復活までの時間が20秒なら試合を終わらせられる」という判断を DC NEXT の頃から教わっていたと説明した。エンドのコールの基準を持っている。 — https://www.youtube.com/watch?v=m3ILrq8fULM
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/不明) S2 の振り返り配信で、本人は「自分がファーストエンゲージできなくなった瞬間に崩れるチームだと気づいた」と語った。チームの仕掛けの起点を担っていた。 — https://www.youtube.com/watch?v=jcGfyzOY0FA
+- (+/中/記事/2025-09-30) S2 の Day3 で2週連続の MVP を取った。スクリムを重ねるうちに、行動できるターンとエンゲージのタイミングが分かるようになったと語った。 — https://fistbump-news.jp/article/2025/09/30/1648.html
+- (+/中/記事/2025-11-22) FISTBUMP が S2 の DC の振り返りで「NEXT 最強 SUP」と見出しを立てた。DC NEXT は大会史上初のレギュラーステージ全勝を果たしている。 — https://fistbump-news.jp/article/2025/11/22/1853.html
+- (+/弱/記事/不明) LTK 公式 X が、ゆふなが耐えた後の白那しずくの反転エンゲージを「完璧」と紹介した。 — https://x.com/lolthek4sen/status/1975916478588477526
+- (+/弱/記事/2026-06-11) S3 の DD NEXT で MVP を取り、記事の題に本人の言葉「もう私はレルだけじゃない」が使われた。DD NEXT は5連勝でレギュラーステージを終えた。 — https://fistbump-news.jp/article/2026/06/11/2544.html
+- (+/弱/視聴者の声/不明) S2 のチーム予想で「攻撃的な白那しずく」と評され、ADC のとおこと息が合うかが勝敗の分かれ目とされた。 — https://note.com/lolana/n/n20517e55326c
+
+**LoL 歴**: 2025(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。本人の発言では、LTK への出場が決まった時(S1、2025年6月頃)に LoL を再び始めた。それ以前に触っていた時期は不明。デビューは 2024-01-14。S1 では大会前日まで Faelight を知らなかったという — https://www.youtube.com/watch?v=m3ILrq8fULM
+
+**探した場所**: tavily: 白那しずく LoL コール 指示 / tavily: 白那しずく ショットコール LTK DC NEXT / tavily: 白那しずく コール LoL 視聴者 エンゲージ 判断 LTK DD NEXT 優勝 / tavily: "白那しずく" LoL 始めた / tavily: 白那しずく ろる歴 LoL歴 何年 初めて触った / tavily: 白那しずく LoL 初心者 始めて 2024 ネオポルテ 5期生 デビュー / WebSearch: 白那しずく LoL 始めたきっかけ ネオポルテ LTK サポート / YouTube m3ILrq8fULM(S3 の振り返り)の字幕の抽出 / fistbump 2025/09/30/1648・2025/11/22/1853・2026/06/11/2544 / note.com/futugu(しずくの記述なし)
+
+### LR-MASTERS-TOP apaMEN
+
+**コール・リーダーシップ**
+
+- (-/弱/チームメイトの発言/2026-06-12) S3 の IT MASTERS について、チームメイトの Yuhi が配信で、コールは自分(ADC)が担い、勝った試合ではユニカがよくコールしたと振り返った。apaMEN が主にコールしたという言及はない(間接的な根拠)。 — https://www.youtube.com/watch?v=imitglMqIC0
+- (-/弱/記事/2026-06-18) KAI-YOU の S3 プレイオフの展望記事は、IT MASTERS で「司令塔を担当してきた」のは Yuhi らだと書いている。apaMEN は本文に登場しない。 — https://kai-you.net/article/95710/page/3
+
+**チームプレイ・連携**
+
+- (+/弱/本人の発言/2025-04-07) VARREL YOUTH のコーチとして受けたインタビューで、インゲームのエースがいないためにコールがぶれる問題を指摘し、コミュニケーションを重視する考えを語った(コーチの視点であり、自分のプレイについての発言ではない)。 — https://fistbump-news.jp/article/2025/04/07/931.html
+- (+/弱/本人の発言/2023-10-12) Worlds 2023 の DFM の初戦後のインタビューで、ロスターは6人で話し合って決めたと語り、次に向けて「みんなで話し合って改善したい」と述べた。 — https://news.mynavi.jp/article/20231012-2791128
+- (-/弱/大会での役割/2026-05-26) S3 マスターズカップ Day2 の実況によると、apaMEN は TOP から離れ、直前まで別のレーンを練習していたとインタビューで話していた。チームでの役割への適応が課題として挙げられた。 — https://www.youtube.com/watch?v=fZcpmhbxmWI
+
+**LoL 歴**: 2014(遅くとも(上限)。開始年の明言ではない)。遅くとも 2014年3月には LJL で Rascal Jester の選手としてインタビューを受けている(RJ は 2014 Winter で優勝)。自動字幕では開始1年未満を示唆する発言が読めるが判読できないため、開始年は確定できない。プロ歴は約8年(本人) — https://www.youtube.com/watch?v=3IqhA7iLvOg
+
+**探した場所**: tavily: apaMEN LoL ショットコール キャプテン / tavily: apaMEN コール LTK アイリスティアラ マスターズ / tavily: アイリスティアラ マスターズ コール ユニカ アパメン たぬき忍者 LTK3 振り返り / tavily: あぱめん apaMEN コール 指示 カスタム 切り抜き LoL 葛葉杯 にじさんじ コーチ / tavily: apaMEN アパメン LoL始めた 何年 2012 インタビュー 元プロ / tavily: Rascal Jester LJL 2014 優勝 apaMEN メンバー / fistbump 2025/04/07/931(本文を WebFetch で取得) / news.mynavi.jp 20231012-2791128 / kai-you.net 95710/page/3 / lol.fandom.com と liquipedia(402 と 429 で取得できず) / YouTube imitglMqIC0 の字幕
+
+### LR-MASTERS-JG ねすてぃー/Nesty
+
+**コール・リーダーシップ**
+
+- (+/中/大会での役割/2026-05-13) S3 マスターズカップ Day1 の実況が、プロを目指す選手の発掘イベントの頃から、ネスティはコールと知識を高く評価されてきたと紹介した。練られた戦略を実行するのが上手いジャングラーという評価(文脈から LR の JG であるネスティを指す)。 — https://www.youtube.com/watch?v=6uSyBBqLpaE
+
+**チームプレイ・連携**
+
+- (+/中/チームメイトの発言/2026-06-09) S3 で LR NEXT の JG(夜よいち)がインタビューで、ウーコンは「個人コーチのネスティさん」に多くを教わって形にできたと語った。 — https://www.youtube.com/watch?v=NZkY17NnAes
+- (+/弱/チームメイトの発言/2026-05-19) LR NEXT の JG が、個人コーチのネスティが嫌がるので、イブリンではなく別のピックを選んだと話した。NEXT の JG を個別に指導していた(ネスティの YouTube の動画に収録)。 — https://www.youtube.com/watch?v=ygi82T9D9lI
+- (-/弱/本人の発言/不明) S3 マスターズの序盤に連敗した時期の動画では、ピックの決定を巡ってチームメイトと言い合う場面が収められている(タイトルは「不安しかない MASTERS チーム」)。 — https://www.youtube.com/watch?v=-sHBb4520Y0
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: Nesty ねすてぃー LoL ジャングル インタビュー / tavily: ねすてぃー コール ジャングル LTK ローレルレガリア / tavily: ネスティ ねすてぃー LTK コーチ NEXT 教えてもらった 個人コーチ / WebSearch: ねすてぃー Nesty LoL 始めた 経歴 SG ジャングル(Leaguepedia によれば 2020 年に DFM の補欠という要約が出たが、ページ本体が 402 で確認できず不採用) / lol.fandom.com/wiki/Nesty(402)、liquipedia(429) / YouTube 6uSyBBqLpaE・ygi82T9D9lI・-sHBb4520Y0・4Xl9iF9zyJg の字幕
+
+### LR-MASTERS-MID Recap
+
+**コール・リーダーシップ**
+
+- (+/中/大会での役割/2026-05-13) S3 マスターズカップ Day1 の実況が、CC MASTERS の試合前インタビューを受けて、Recap はレーンから戦ううえに、コールの面でもチームを引っ張っていると伝えた。 — https://www.youtube.com/watch?v=6uSyBBqLpaE
+
+**チームプレイ・連携**
+
+- (+/中/記事/2026-05-13) S3 マスターズカップ Day1 で CC が優勝し、Recap は準決勝の MVP に選ばれた。 — https://fistbump-news.jp/article/2026/05/13/2429.html
+- (+/中/記事/2025-04-04) REJECT の紹介記事で、劣勢の試合でも大崩れしない安定感が最大の武器とされ、幅広いピックプールで柔軟なドラフトに対応できると評された。チームメイトに鋭いコメントをすることもあると書かれている。 — https://fistbump-news.jp/article/2025/04/04/924.html
+- (+/弱/記事/2026-06-18) KAI-YOU の S3 プレイオフの展望記事で、CC MASTERS の長所の一つとして「Recap さんの落ち着き」が挙げられた。 — https://kai-you.net/article/95710/page/3
+- (+/弱/本人の発言/2026-05-02) S3 の参加告知の X 投稿で、Zerost と7年ぶりに同じチームでプレイすると述べた。 — https://x.com/Recaplol1/status/2050511310883045768
+
+**LoL 歴**: 2017(遅くとも(上限)。開始年の明言ではない)。サブ選手として LJL に登録されたのが 2017 年(MID として 2023 年まで出場、1年空けて 2025 年に REJECT)。LoL を始めた年は未確認で、2017 年は遅くともの目安 — https://fistbump-news.jp/article/2025/04/04/924.html
+
+**探した場所**: tavily: Recap LoL REJECT ミッド インタビュー コール / tavily: Recap りきゃっぷ コール LTK カメリアクラウン マスターズ / tavily: りきゃっぷ Recap コール 上手い 指示 カスタム 配信 切り抜き(無関係な結果のみ) / tavily: Recap 山崎 LoL プロ 経歴 V3 RJ 引退 2023 MID インタビュー FISTBUMP / tavily: REJECT Recap 選手紹介 2017年から活躍 / WebSearch: Recap LoL REJECT インタビュー ミッド コール 引退 復帰 / fistbump 2025/04/04/924・2026/05/13/2429 / reject.jp の部門設立のお知らせ / kai-you.net 95710/page/3 / lol.fandom.com と liquipedia(402 と 429) / YouTube 6uSyBBqLpaE の字幕
+
+### LR-MASTERS-ADC ハレっち / Haretti
+
+**コール・リーダーシップ**
+
+- (-/弱/チームメイトの発言/2026-05-13) S3 LR MASTERS のスクリム初日、コーチ役の mittiii が「コールに重要度に応じた声の大きさ・パッションが無く危機感が伝わらない」と指摘した。BOT(ハレっち・Enty)を含むチーム全体への指摘で、ハレっち個人を名指ししたものではない。 — https://www.youtube.com/watch?v=D7rm01zOljo
+
+**チームプレイ・連携**
+
+- (+/中/チームメイトの発言/2026-07-24) USG で組んだ Enty は、ハレっちを「ゆっくりファームする安定型で、集団戦で輝くタイプ」と評した。 — https://fistbump-news.jp/article/2026/07/24/2713.html
+- (+/中/チームメイトの発言/2026-06-24) ThintoN は、他チームの ADC のうち Haretti は元チームメイトで、一緒に BOT を組んだと述べた。今回の SUP ThintoN とは過去にデュオを組んだ経験がある。 — https://fistbump-news.jp/article/2026/06/24/2593.html
+- (+/弱/記事/2026-06-09) 2018 年の 7th heaven に ThintoN・Haretti・らいじんが所属していたと記事が紹介している。 — https://fistbump-news.jp/article/2026/06/09/2530.html
+- (+/弱/チームメイトの発言/2026-05-03) Enty はメンバー紹介動画で、ハレっちを「すごい優しいプレイヤー」と呼び、ソロランクで暴言を吐いた相手がハレっちだった時も気づかないふりをしてくれたと語った。 — https://www.youtube.com/watch?v=9SflwrPyI7Q
+
+**LoL 歴**: 未確認
+
+**探した場所**: YouTube 検索: ハレっち LoL / Haretti LoL / ハレっち LTK / ハレっち コール / ハレっち えんてぃ LTK MASTERS / Leaguepedia: Haretti(Helter Skelter → USG。開始年の記載なし。Tournament Results は 402 で取得不可) / fistbump-news.jp: tavily include_domains「Haretti ハレっち ADC LTK」(0件)、Enty インタビュー(2026-07-24)、レジェンド特集(2026-06-09)、IT MASTERS インタビュー(2026-06-24) / LoL を始めた年: 見つからず(2015 年の USG 加入より前からプレイ。年は未確認)
+
+### LR-MASTERS-SUP てぃんとん / ThintoN
+
+**コール・リーダーシップ**
+
+- (+/弱/本人の発言/2026-06-24) S3 IT MASTERS の振り返りで、苦戦の原因をチームの戦力バランスとバンピックの問題だと分析した。IT NEXT の鷹宮リオンのコーチングも担当した。試合中のコールについての記述はない。 — https://fistbump-news.jp/article/2026/06/24/2593.html
+- (-/弱/視聴者の声/2025-06-23) Clash(LTK 外)の切り抜き動画の題名が「ゼロスト×てぃんとん 主張ぶつかり Bot崩壊の兆し」と表現している。題名は切り抜き作者によるもの。 — https://www.youtube.com/watch?v=ApP_DpSSYP8
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/2026-06-24) LJL 時代に Haretti・Zerost・Day1 と BOT を組んだ経験があると本人が述べた。Finale の ADC ハレっちとは元デュオ。 — https://fistbump-news.jp/article/2026/06/24/2593.html
+- (+/弱/視聴者の声/2026-05-21) S3 で たかやスペシャルの代打として IT CORE の SUP に入った回の切り抜き題名が「本職サポートに驚愕するITcoreメンバー」となっている。 — https://www.youtube.com/watch?v=L2FMocdCXSE
+- (+/弱/視聴者の声/2026-05-16) 同じ代打の後のたかやスペシャル視点の切り抜き題名が「Mastersサポのてぃんとんの味を知ってしまったメンバー」で、IT CORE のメンバーが組みやすさを感じていたことを示している。 — https://www.youtube.com/watch?v=flkb8UPqZn4
+
+**LoL 歴**: 2013(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。2015 年の LJL 公式インタビューで「シーズン3(2013)はひたすらソロキューをしていた」と発言。開始年そのものの明言はない。TOP から SUP へ転向 — https://www.youtube.com/watch?v=0-gCW9VpPs8
+
+**探した場所**: YouTube 検索: てぃんとん LoL / ThintoN LoL / てぃんとん LTK コール / てぃんとん たかやスペシャル LTK / LJL 公式「Player Interview 7h ThintoN」(2015-03-03)の書き起こし / fistbump-news.jp: tavily include_domains「ThintoN てぃんとん LTK サポート」、IT MASTERS インタビュー(2026-06-24)、レジェンド特集(2026-06-09)、Enty インタビュー / Leaguepedia: ThintoN(TOP→Support。Tournament Results は 402) / 試合中のショットコールを直接述べた資料: 見つからず
+
+### LR-CORE-TOP 焼きパン
+
+**コール・リーダーシップ**
+
+- (+/強/チームメイトの発言/2025-10-04) S2 前半終了後、乾伸一郎が「パンの一番成長した部分はコール」「口数は多くないがめちゃくちゃいいコールを出す」「負けていても声を絶やさない」と評した。CC が上がるまでの秒数を伝えるコールを例に挙げた。 — https://www.youtube.com/watch?v=zWbUv2x8tyw
+
+**チームプレイ・連携**
+
+- (+/強/チームメイトの発言/2025-10-01) S2 Day3 の勝利インタビューで KH は、焼きパンはガンクを受けても味方を責めず、自分が死ぬと謝るトップだと褒めた。「4デスしても大丈夫」と声をかけたと述べ、トップとジャングルの信頼関係を語った。 — https://www.youtube.com/watch?v=zCcGNwZVses
+- (-/弱/チームメイトの発言/2025-08-29) S1 の振り返りで乾伸一郎は、各チームがピックやジャングルの動線で焼きパンを狙い撃ちにし、焼きパンは初日の終わり頃から自信を失っていた(「しなパン」)と述べた。 — https://www.youtube.com/watch?v=zMiPs0FAxhk
+- (+/弱/視聴者の声/不明) ファン Wiki によれば、LoL では負けず嫌いの完璧主義で、他人に暴言を吐かない。LTK 公式の夜更カスの切り抜きにも「優しすぎる焼きパンさん」という題名がある。 — https://wikiwiki.jp/genkai/yakipan
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: 焼きパン ZETA LoL コール / YouTube 検索: 焼きパン コール LoL / 焼きパン LTK コール 声 / 焼きパン ショットコール / 焼きパン KZHCUP / WebSearch: 焼きパン LoL歴 osu! 始めた ZETA インタビュー / 焼きパン LoL コール RR しゃるる / wikiwiki.jp/genkai/yakipan(LoL は osu! と配信の開始より前から、PUBG 流行期にもプレイと記載。年は不明) / dic.pixiv.net/a/焼きパン(LoL 開始の記載なし) / zetadivision.com のプロフィール(「League of Legends で育った」のみ) / Twitch クリップ「パンのコールの話」(題名のみで内容未確認のため不採用)
+
+### LR-CORE-JG Killin9Hit(KH)
+
+**コール・リーダーシップ**
+
+- (+/中/チームメイトの発言/2025-10-04) S2 前半終了後、乾伸一郎が、序盤に崩れても「ケイさんも励ますコールをしていた」「成熟した大人」と評価した。 — https://www.youtube.com/watch?v=zWbUv2x8tyw
+- (+/中/本人の発言/2026-06-24) S3 の FISTBUMP インタビューで、フィードバックでは自分が強く言う場面があり、その後メンバーから謝罪の長文 DM が届いたと語った。チーム内で発言力のある立場にいることがわかる。 — https://fistbump-news.jp/article/2026/06/24/2595.html
+- (-/中/本人の発言/2025-12-24) S2 優勝後の振り返りで、「誰が決める?」と聞いたら Ceros コーチに「あなたでしょ」と言われたと明かした。ジャングラーである自分の仕事なのに、理解が足りず味方に判断を任せてしまう心配があったと述べた。 — https://www.youtube.com/watch?v=N-54g-OsF7k
+- (+/弱/本人の発言/2025-12-24) S2 プレイオフの直前から、敵ジャングルの位置・レーン状況・オブジェクトの時間を同時に把握できるようになったと述べ、Ceros の指導のおかげとした。 — https://www.youtube.com/watch?v=N-54g-OsF7k
+- (-/弱/本人の発言/2025-09-19) 試合中の日本語でのコミュニケーションを課題にしていた。本番で緊張すると「うひ」ではなく「千燈さん」と呼んでしまうので早く直したいと話した(S2 開幕直後)。 — https://www.youtube.com/watch?v=EMad3J7DPa0
+
+**チームプレイ・連携**
+
+- (+/強/本人の発言/2025-10-01) S2 Day3 の勝利インタビューで、焼きパンへの信頼を公言した。ガンクで死んでも「4デスまで大丈夫」と声をかけたと述べた。 — https://www.youtube.com/watch?v=zCcGNwZVses
+- (+/中/本人の発言/2026-06-24) S1 でしゃるるコーチから立ち回りの土台を、S2 で Ceros コーチからマクロとチーム連携を教わり、優勝できたと述べた。 — https://fistbump-news.jp/article/2026/06/24/2595.html
+- (-/弱/チームメイトの発言/2025-10-12) RR の練習で、乾伸一郎のコールの後に KH の J4 の R(エンゲージ)が入り、コールが上書きされて戦うことになった場面があったと、味方が説明している。 — https://www.youtube.com/watch?v=_KMklNve5AU
+- (-/弱/本人の発言/2025-12-24) S1・S2 とも「負ける原因のほぼ9割が俺だった」と自己評価している。 — https://www.youtube.com/watch?v=N-54g-OsF7k
+
+**LoL 歴**: 2024(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。2024-12-17 の配信で「LoLを真面目にやってみるのは初めて」と発言。韓国で遊んだ経験はある(時期不明。FISTBUMP では「流行っていたがあまりやらなかった」と発言)。元 DeToNator の PUBG 選手兼コーチ — https://www.youtube.com/watch?v=ojv1eJpvlO0
+
+**探した場所**: tavily: Killin9Hit LoL コール 指示 / WebSearch: Killin9Hit LoL 始めた 元プロ / KH Killin9Hit コール LTK RR 切り抜き / YouTube 検索: KH コール LoL LTK / Killin9Hit ジャングル コール / KH LoL 始めた / Killin9Hit LTK S3 LR CORE / dic.pixiv.net/a/Killin9Hit / fistbump-news.jp の KH インタビュー(2026-06-24) / KH 公式切り抜き: N-54g-OsF7k, EMad3J7DPa0, ojv1eJpvlO0, z0Lxav_cJo4, Q82jWNkYlFI, sWCrwsAYwI0, NDsqsJ0XWOI(発言者を特定できず不採用)
+
+### LR-CORE-MID 乾伸一郎
+
+**コール・リーダーシップ**
+
+- (+/強/本人の発言/2025-10-04) S2 前半終了後、「落ち着こう、ここは無理だから次で戦おう」という自分のコールを最近はみんなが尊重してくれると語った。以前は声が通らないこともあった。千燈ゆうひが聞き取って KH へ伝えてくれるとも述べた。 — https://www.youtube.com/watch?v=zWbUv2x8tyw
+- (+/中/チームメイトの発言/2025-10-01) S2 Day3 の勝利インタビューで KH が「体調不良なのに本番でめっちゃ声を出してくれた」と述べ、実況も乾の「熱血系のコール」に触れた。 — https://www.youtube.com/watch?v=zCcGNwZVses
+- (+/中/本人の発言/2025-11-12) S2 Day6 の後、本番では自分がめっちゃ声を出すタイプで、KH からもよく言われると振り返った。 — https://www.youtube.com/watch?v=BPtYJCVlA9M
+- (+/中/本人の発言/2026-01-01) 自己分析として、チームゲームで自分よりコミュニケーションを取れている人はいないと思うほどだと述べた。聞く力と話す力が高く、いっぱいいっぱいにならないのが強みだという。 — https://www.youtube.com/watch?v=S7WBGR4c-uw
+- (-/弱/本人の発言/2025-10-12) RR の練習中に「どうしたら自分のコールが通るようになるのか」と嘆いた(切り抜きの題名も「コールが通らない事を嘆く乾殿」)。味方は、通っていないのではなく J4 のエンゲージで上書きされただけだと応じた。 — https://www.youtube.com/watch?v=_KMklNve5AU
+- (+/中/記事/2021-12-30) VTuber 最協決定戦 ver.APEX の S2(2021-01)で IGL を担当した。S3 では情報担当とサブオーダーを務めたと、ファンの note が記録している。LoL 以外での実績。 — https://note.com/aiaidadada_/n/n09f8894a1407
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/2025-10-04) S2 前半終了後、RR はお互いを信用できる関係を築けたのが今は大きく、チーム力の向上を感じると語った。 — https://www.youtube.com/watch?v=zWbUv2x8tyw
+- (-/弱/本人の発言/2025-11-12) S2 Day6 の後、ガンクを受けても他レーンが有利になればよいという考えをやめたと語った。「キャリーするから来てほしい」とジャングル・サポートに求めるエゴイスト路線に切り替え、エンゲージ中にフォーカス先を変えた味方に苛立ったとも述べた。 — https://www.youtube.com/watch?v=BPtYJCVlA9M
+- (+/弱/記事/2026-06) KAI-YOU の S3 プレイオフ展望記事は、IT CORE の勝ち筋の一つとして乾伸一郎の落ち着きを挙げた。 — https://kai-you.net/article/95710/page/3
+
+**LoL 歴**: 2022(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。Twitch 時代(2022年3月〜)に、葛葉に誘われたカスタムをきっかけに k4sen の夜更カスへ参加と記載。所属は REJECT(にじさんじではない) — https://dic.pixiv.net/a/%E4%B9%BE%E4%BC%B8%E4%B8%80%E9%83%8E
+
+**探した場所**: tavily: 乾伸一郎 LoL コール / 乾伸一郎 にじさんじ杯 LoL IGL 指示 まとめ役 / 乾伸一郎 LoL 始めた 歴 / 乾伸一郎 LTK コール 評価 インタビュー RR CORE / 初心者IGL企画 おぼ 乾伸一郎(題名のみで役割が不明なため不採用) / YouTube 検索: 乾伸一郎 コール LoL / 乾殿 指示 LTK / 乾殿 コール RR / KZHCUP 乾伸一郎 / VCR 乾伸一郎 LoL / dic.pixiv.net(curl で本文を取得)、dic.nicovideo.jp(LoL 開始の記載なし) / note.com/aiaidadada_(APEX 最協の IGL) / fistbump-news.jp 2025-10-01 の S2 Day3 記事 / 既存調査の「S1 実況がコール面を評価」は出典を再確認できず不採用 / にじさんじ杯・KZHCUP・VCR の LoL での役割を示す資料: 見つからず
+
+### LR-CORE-ADC 大御所にゅん子
+
+**コール・リーダーシップ**
+
+- (-/中/チームメイトの発言/2026-06-17) LTK3 DD CORE の練習フィードバックで、「BOT をプッシュしたい」などの自分の意図をコールしていないと指摘され、「自分でやりたいことを言う」よう求められた(動画題名は「次は声が出る！？」)。 — https://www.youtube.com/watch?v=PiupneyuDZI
+- (+/弱/チームメイトの発言/2026-06-18) LTK3 DD CORE の練習ハイライトに、味方が「にゅんこいい、引っ張るコール」と褒める場面がある。 — https://www.youtube.com/watch?v=qNoALmFWXlE
+
+**チームプレイ・連携**
+
+- (-/中/チームメイトの発言/2026-06-17) 同じフィードバックで、自分から「戻る」と言わないと味方に引っ張られて損をしており、ADC としてキャリーらしくない動きだと指摘された。 — https://www.youtube.com/watch?v=PiupneyuDZI
+- (+/弱/視聴者の声/2026-01-10) k4sen とのデュオランクやカスタムの切り抜きが 2023 年から多数あり(2023-06-30、2025-05、2026-01-10 など)、BOT デュオとして長く一緒にプレイしている。 — https://www.youtube.com/watch?v=oHZcC4vMXCw
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: 大御所にゅん子 LoL 始めた きっかけ QT DIG / 大御所にゅん子 LTK DD CORE コール ADC / YouTube 検索: 大御所にゅん子 コール / 大御所にゅん子 LoL / にゅん子 DD CORE LTK3 / 大御所にゅん子 LoL 始めた / qtdig.com のプロフィール(ダイヤ到達の記載のみ) / v-mag.jp/articles/9909(2024-07-05。Sengoku Gaming 加入は3月。LoL 開始の記載なし) / note.com/futugu の LTK3 データ分析(DD CORE のチャンピオンプールが狭いという内容で、コールとは無関係のため不採用) / LoL を始めた年: 見つからず(確認できた最古は 2023-06-30 の k4sen とのプレイ動画)
+
+### LR-CORE-SUP 千燈ゆうひ
+
+**コール・リーダーシップ**
+
+- (+/強/本人の発言/2026-04-13) VSPO! SHOWDOWN 2026 Day2 の LoL チームで JG 兼チームリーダーを務めた。本人は「自分がファームするから待って」とコールしたと語り、LTK S1 で「チームとしてのコールや戦い方の基礎ができ」、S2 でそれが強化されたと振り返った。 — https://fistbump-news.jp/article/2026/04/13/2323.html
+- (+/中/大会での役割/2026-03-22) 非公式 Wiki によると、SHOWDOWN 2026 の公式練習では IGL を務め、その指示の出し方をめぐってコーチ同士が議論した。 — https://wikiwiki.jp/vspo/%E5%8D%83%E7%87%88%E3%82%86%E3%81%86%E3%81%B2
+- (+/中/視聴者の声/不明) LTK S2 の RR 予想記事。ロールが変わっても「前回同様コール担当になるであろう」と書いており、S1 PD CORE でもコール役だったと見ている。 — https://note.com/lolana/n/ndfd1662eb2ca
+- (+/弱/視聴者の声/不明) 切り抜きの題名が「決勝で覚醒しコールが神がかる千燈ゆうひ」(LEAGUE OF LEON カスタム)で、決勝でのコールを評価している。 — https://www.youtube.com/watch?v=brolgUHK3r4
+- (-/弱/本人の発言/2026-04-13) S2 の SUP 時代はレーンに集中しすぎて序盤のタイマーを見られなかったと本人が認めている。SHOWDOWN では意識して声に出すようにしたという。 — https://fistbump-news.jp/article/2026/04/13/2323.html
+
+**チームプレイ・連携**
+
+- (+/弱/視聴者の声/2025-12-22) LTK S2 RR CORE の決勝(2025-12-22)での動きを、視聴者が「完璧すぎるサポート」で MVP 級だと評価している。 — https://x.com/ta1pon21/status/2003372288620822655
+- (+/中/本人の発言/2026-04-13) S2 の RR は S1 の PD より仲が良く、練習後も一緒に遊び、LTK 後も交流が続いていると本人が語った。S1 PD については、冗談として「殺伐としていた」と言っている。 — https://fistbump-news.jp/article/2026/04/13/2323.html
+- (-/弱/チームメイトの発言/2026-04-13) コーチのしゃるるから「千燈さんのJGは絶望癖がある」と言われていた。レーナーが不利になると立ち止まる癖があったが、本番では矯正できたと本人が語った。 — https://fistbump-news.jp/article/2026/04/13/2323.html
+
+**LoL 歴**: 2012(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。自己紹介ではザイラ登場時(2012年7月)に開始(スニペットで確認)。FISTBUMP 2025-07-29 でも「13年プレイ」と一致する(https://fistbump-news.jp/article/2025/07/29/1371.html) — https://kai-you.net/article/89571/page/2
+
+**探した場所**: tavily: 千燈ゆうひ LoL コール 指示 / tavily: 千燈ゆうひ LoL 始めた きっかけ / tavily: 千燈ゆうひ LTK サポート MVP RR / tavily: 千燈ゆうひ ショットコール/コール力/指示出し 切り抜き / fistbump 2026-04-13 SHOWDOWN インタビュー / fistbump 2025-07-29 マスター到達記事 / wikiwiki.jp/vspo 千燈ゆうひ / note LoLana LTKチーム予想 RR / 既存 docs/research/players-it-lr.md を手がかりとして参照
+
+### LR-NEXT-TOP 狐白うる
+
+**コール・リーダーシップ**
+
+- (+/中/視聴者の声/不明) LTK S2 RR NEXT(夜よいち・日向まると同じチーム)の試合の切り抜き題名が「最高のレーン戦&コールでマクロ勝ちを導く神」。中身でも本人がバロンやリコール禁止などを指示している。 — https://www.youtube.com/watch?v=pBItGewatLg
+- (-/弱/記事/2025-12-16) S2 の RR NEXT では、JG の夜よいちが「チームのメインコーラー」と書かれていた。メインのコール役はうるではなかったことになる。 — https://fistbump-news.jp/article/2025/12/16/1940.html
+
+**チームプレイ・連携**
+
+- (+/中/記事/2025-12-16) S2 RR NEXT で、ヨリックでのキャリーやエイトロックス、モルデカイザーを使い「安定したレーン戦とチームの軸となる好プレー」を見せたと評された。 — https://fistbump-news.jp/article/2025/12/16/1940.html
+- (+/中/本人の発言/2025-10-01) S2 Day3 で MVP。オブジェクトを取られても別の有利を作るカウンタープレイをスクリムで学び、本番で出せたと試合後に語った。 — https://fistbump-news.jp/article/2025/10/01/1653.html
+- (+/弱/視聴者の声/不明) S2 の RR NEXT は、TOP と JG(うる・夜よいち)が前シーズンも安定していたので不安はないとする予想があった。 — https://note.com/lolana/n/ndfd1662eb2ca
+
+**LoL 歴**: 2022(本人の発言・記事による開始時期(逆算や再開を含む。note を参照))。増アカ放送部の 2022-10-13 投稿で「LoLを始めて間もない配信者」として、らいじんからコーチングを受けている。4Gamer の紹介でも「LoLを始めた頃」のコーチング動画とされる(スニペットで確認)。開始の月は未確認 — https://www.youtube.com/watch?v=D9AC1QfS930
+
+**探した場所**: tavily: 狐白うる LoL コール 指示 LTK / tavily: 狐白うる LoL 始めた LoL歴 / tavily: 狐白うる らいじん士官学校 LoL 初心者 コーチング / tavily: 狐白うる LTK S2 RR NEXT MVP ヨリック チームの軸 / 4gamer 週刊VTuberファイル File.030 / note 狐白うるについて語りたい / kai-you UltraLMTM 加入記事
+
+### LR-NEXT-JG アステル・レダ
+
+**コール・リーダーシップ**
+
+- (-/弱/視聴者の声/不明) S3 DD NEXT の配信の関連動画に、切り抜きの題名「コールが出るおしず、キャリーのアステルに感動」が出ていた。コール役は白那しずく、アステルはキャリー役として扱われている。 — https://www.youtube.com/watch?v=BDpE0X_lMNo
+- (+/弱/チームメイトの発言/2026-06) S3 DD NEXT Day5 前の打ち合わせで、「アステルさんのあれ聞けば」とアステルの声を合図にする場面があった。部分的に合図役を担っていた可能性がある(スニペットで確認)。 — https://www.youtube.com/watch?v=BDpE0X_lMNo
+
+**チームプレイ・連携**
+
+- (+/中/本人の発言/2026-05) S3 の勝利インタビューで、ヴェインは「みんながやれって言ってくれた」から選び、「みんなが戦いやすい形を完全に作ってくれた」と仲間への感謝を語った。 — https://www.youtube.com/watch?v=FqsBUknaOjM
+- (+/中/記事/2026-05-14) S3 で、TOP ヴェインはコーチの Eugeo が用意した構成どおりに機能した。フロントはマルファイトに任せる構成で、KDA 12/2/7 を記録した。 — https://fistbump-news.jp/article/2026/05/14/2433.html
+- (+/弱/記事/2026-06-22) S3 決勝では、集団戦でカウンターを取れるセトを託された。DD は「息の合ったプレイを披露し続けた」と評され、優勝した。 — https://fistbump-news.jp/article/2026/06/22/2576.html
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: アステル・レダ LoL コール LTK / tavily: アステル・レダ LTK DD NEXT 優勝 インタビュー / tavily: アステル・レダ LTK コール 指示 練習 ジャングル / WebSearch: アステル LoL ホロスターズ 初心者 始めて / WebSearch: アステル・レダ LoL 始めた にじさんじ杯 OR VCR / fistbump 2026-05-14 / 2026-06-22 / esportsnewsjapan playoffs day2 / note futugu NEXT 攻略データ / seesaawiki ホロスターズ非公式wiki(LoL の記述なし) / X @astelleda 2023-03-04「新たなLoLプレイヤーが現れました / アステル イヅル 教えていくか」はスニペットのみで確認した。本人が教わる側か教える側かを確定できないため、lolSince は null にした / JG 経験のコール根拠は見つからない(LTK では MID・TOP だけ)
+
+### LR-NEXT-MID 春茶
+
+**コール・リーダーシップ**
+
+- 見つからない
+
+**チームプレイ・連携**
+
+- (+/弱/チームメイトの発言/2024-06-06) 2024年6月の空澄セナのランク企画にデュオで出演した。セナは、ヴェックスを見て MID を任せられると決めたと話している。 — https://www.youtube.com/watch?v=j9SualqGB78
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: 春茶 LoL リーグオブレジェンド カスタム REJECT / tavily: 春茶 LoL 空澄セナ プラチナを目指す話 / tavily: 春茶 ミッド LTK Laurel Regalia NEXT 初参加 / tavily: 春茶 HARUTYA1226 LoL 始めた/ランク(茶葉の結果ばかり) / tavily: 春茶 k4sen カスタム LoL OR しゃるる杯 OR VCR / WebSearch: 春茶 歌い手 LoL ミッド アーリ / REJECT 公式プロフィール、eSports World の加入記事(LoL の記述なし) / kai-you 96775(初参加を確認) / LoL 開始時期: 2024-06 にはプレイしていたことだけ確認。開始年は未確認
+
+### LR-NEXT-ADC なぎさっち
+
+**コール・リーダーシップ**
+
+- (+/強/チームメイトの発言/2026-05) S3 CC NEXT のスクリムで、コーチ(hetel)が「ナギにゃんのコール量がすごい」と繰り返し褒めていた。 — https://www.youtube.com/watch?v=IQJZ1ZQunQg
+- (+/強/チームメイトの発言/2026-03-25) VSPO! SHOWDOWN 2026 で同じチームだった SHAKA によると、終盤に「みんな落ち着いて」「スモルダー守れば勝てるから帰ってきて」と呼びかけていた。ただし、チームは従わなかったという。 — https://fistbump-news.jp/article/2026/03/25/2262.html
+- (-/弱/本人の発言/2026-06-20) S3 プレイオフで NEXT が負けた日、本人が「いっぱいコールしようと喋る」が、緊張で互いの話を聞けていなかったと振り返った。 — https://www.youtube.com/watch?v=sOsgz0IC4Eo
+- (-/弱/本人の発言/2025-06-25) S1 ST CORE の初戦後、「うるかが全部指示してくれて」と語っていた。S1 ではうるかの指示を受ける側だった。 — https://www.youtube.com/watch?v=BecZk7YiV04
+
+**チームプレイ・連携**
+
+- (+/強/チームメイトの発言/2026-03-25) SHAKA は「なぎさっちだけはずっと俺を見てくれてた」と語った。キャッチされた場面のカバーが多く、相性が悪くても最後まで守ろうとしていたという。 — https://fistbump-news.jp/article/2026/03/25/2262.html
+- (+/中/記事/不明) S1 ST CORE の強みを、なぎさっちを含む「パフォーマンスの平均値の高さ」としている。『LoL』配信者として長年活動してきたとも書かれている。 — https://kai-you.net/article/93149/page/2
+- (+/中/記事/2026-05-11) S3 Day1 で MF を使い KDA 7/0/12 で MVP。「キャリーラインのMIDとADCが0デスなのは練習の成果」と語った。 — https://fistbump-news.jp/article/2026/05/11/2420.html
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: なぎさっち LoL コール ADC LTK 指示 / tavily: なぎさっち LoL歴 始めた QT DIG / tavily: なぎさっち インタビュー LTK 優勝 ST CORE うるか コール / WebSearch(extended): なぎさっち LoL 何年 プレイ 歴 / fistbump 2026-03-25 SHAKA インタビュー / fistbump 2026-05-11 / streamer-reviewer.com(配信の本格化は2020年。LoL 開始時期の記載なし) / ja.wikipedia QT DIG∞(2022-08 にストリーマー部門へ加入と記載) / LoL 開始年は未確認。しゃるるが「MFは1000レベル分やってる」と発言(fistbump 2025-07-13)しており、長期のプレイ歴は確か
+
+### LR-NEXT-SUP No.1005(とおこ)
+
+**コール・リーダーシップ**
+
+- (-/弱/大会での役割/2025-09-09) S1 RR CORE で k4sen がキャプテンに指名したのはたかやスペシャルだった(とおこのチャンネルの切り抜き)。とおこはリーダー役ではなかった。 — https://www.youtube.com/watch?v=VLYTVGmuf8g
+
+**チームプレイ・連携**
+
+- (+/中/記事/2025-11-22) S2 の DC NEXT(全勝)について、エース2人を支える MID 空澄セナと BOT とおこの「息のあったチームプレー」と評された。 — https://fistbump-news.jp/article/2025/11/22/1853.html
+- (+/弱/本人の発言/2026-05) S3 CC NEXT の顔合わせで、メインは ADC だがランクの半分以上は SUP だと自己紹介し、「皆さんを支えられるように頑張りたい」と話した。 — https://www.youtube.com/watch?v=IQJZ1ZQunQg
+- (+/弱/視聴者の声/2025-09-09) S1 の切り抜きの題名が「最強サポート降臨!とおこxたかやLTK最強DUOBOT!」で、たかやとのボットの連携を評価している(スニペットで確認)。 — https://vtuber-post.com/database_detail.html?id=UCg8-ZOExFxonnHTaK9aYznQ
+
+**LoL 歴**: 未確認
+
+**探した場所**: tavily: とおこ URS-No.1005 LoL サポート コール / tavily: とおこ VTuber LoL 始めた LoL歴 REJECT 加入 The k4sen 優勝 / tavily: とおこ リーダー LTK Resolve Regalia CORE キャプテン / tavily: とおこ切り抜き LTK キャプテン OR リーダー / tavily: とおこ シンリャクシャ LoL 始めたきっかけ / tavily: とおこ LTK DC NEXT コール / tavily: とおこ LTK コール 声出し CC NEXT(無関係の結果のみ) / fistbump 2024-05-24 REJECT 加入(2024-02 The k4sen BE COOL のボットで優勝、しゃるる杯出場) / pixiv百科事典、REJECT 公式、X @No1005_W(2026-03-05 に「久しぶりのLOL配信」と投稿) / とおこ名義・No.1005 名義のどちらでも、本人がコールする根拠は見つからない / LoL 開始年は未確認(2024-02 時点で熟練と紹介)
