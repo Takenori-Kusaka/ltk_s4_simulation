@@ -110,3 +110,13 @@
 - **AlphaAzur・大御所にゅん子**: srtr は改名前のIDを持ったまま(ランクは更新されている)。本人の配信画面、X のプロフィール、op.gg で現在のIDを確かめる必要がある。
 - **鷹宮リオン**: 配信外のサブアカウント(本人の X @takamiyarion_2 で言及)を主に使っているとみられるが、そのIDは公開情報で確認できなかった。
 - **レグルシュ・ライオンハート**: 今季のソロのランクが無い。別アカウントでソロをしているかは未確認。
+
+## 追記(2026-10-08): 未特定だった3名
+
+価値責任者が op.gg・DEEPLOL で特定し、Riot API(account-v1・league-v4)で実在とランクを確認した。`riot-ids.json` と `src/data/roster.ts` に反映済み。
+
+| チーム | 階級 | ロール | 選手 | Riot ID | API のランク(2026-10-08) | 確度 | 根拠 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| IT | CORE | JG | AlphaAzur | Alpha Azur#アくん | ソロ Platinum I 55LP | 高 | op.gg(https://op.gg/ja/lol/summoners/jp/Alpha%20Azur-%E3%82%A2%E3%81%8F%E3%82%93)。srtr の追跡値(ソロ 55LP)と一致。旧名「ギリしゃるるの味方#アくん」から改名 |
+| LR | CORE | ADC | 大御所にゅん子 | moonshine#密造酒 | ソロ Diamond I 28LP / フレックス Emerald I / 5v5 Master | 高 | op.gg(https://op.gg/ja/lol/summoners/jp/moonshine-%E5%AF%86%E9%80%A0%E9%85%92)。srtr の追跡値(フレックス Emerald I・5v5 Master)と一致。旧名「触るな俺のウェーブに#どっかいけ」から改名 |
+| CC | NEXT | SUP | 鷹宮リオン | 名誉0の人#JP1 | 今季ソロ未ランク | 低 | DEEPLOL の掲載(鷹宮リオンと紐付け)と本人のサブ X の言及。ランクの照合ができないため確度は低 |
