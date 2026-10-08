@@ -1,0 +1,138 @@
+/* F-002 基準10: 幅 360px のスマホと 1280px の PC で横スクロールを起こさない */
+:root {
+  --bg: #f7f6f2;
+  --fg: #1d1d1f;
+  --muted: #6b6b70;
+  --card: #ffffff;
+  --line: #e2e0d8;
+  --accent: #6c4ad6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15151a;
+    --fg: #ececf0;
+    --muted: #9a9aa3;
+    --card: #1f1f26;
+    --line: #2e2e38;
+    --accent: #a48cff;
+    color-scheme: dark;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+}
+main {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+}
+@media (min-width: 900px) {
+  main {
+    max-width: 1100px;
+  }
+}
+a {
+  color: var(--accent);
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+.sheet {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .sheet {
+    grid-template-columns: 280px 1fr;
+  }
+}
+.avatar {
+  aspect-ratio: 3 / 4;
+  width: 160px;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 4rem;
+  font-weight: 700;
+}
+.avatar small {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+.radar svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .avatar {
+    width: 100%;
+  }
+  .radar svg {
+    max-width: 460px;
+  }
+}
+.axes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.axes button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.missing {
+  color: var(--muted);
+  font-weight: 400;
+}
+.evidence {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.evidence table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.evidence td,
+.evidence th {
+  border-bottom: 1px solid var(--line);
+  padding: 4px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.roster {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
