@@ -1,0 +1,48 @@
+{
+  "_comment": "F-002 採点規則(初期値は AI の起案)。各要素は指標を [min, max] で 0〜10 へ線形に換算し、重み付き平均で軸の点数にする。kind=qualitative は定性の評価の点数をそのまま使う",
+  "axes": [
+    {
+      "key": "skill",
+      "label": "個人技量",
+      "components": [
+        { "metric": "soloRank", "kind": "rank", "weight": 0.5 },
+        { "metric": "peakRank", "kind": "rank", "weight": 0.2 },
+        { "metric": "kda", "kind": "linear", "min": 1.5, "max": 5, "weight": 0.3 }
+      ]
+    },
+    {
+      "key": "laning",
+      "label": "レーン戦",
+      "components": [
+        { "metric": "csPerMin", "kind": "linear", "min": 4, "max": 9, "byRole": { "SUP": { "min": 0.5, "max": 2 }, "JG": { "min": 4, "max": 7 } }, "weight": 0.5 },
+        { "metric": "laning", "kind": "qualitative", "weight": 0.5 }
+      ]
+    },
+    {
+      "key": "teamfight",
+      "label": "チームファイト",
+      "components": [
+        { "metric": "killParticipation", "kind": "linear", "min": 0.35, "max": 0.75, "weight": 0.4 },
+        { "metric": "damageShare", "kind": "linear", "min": 0.1, "max": 0.35, "byRole": { "SUP": { "min": 0.03, "max": 0.15 } }, "weight": 0.3 },
+        { "metric": "teamfight", "kind": "qualitative", "weight": 0.3 }
+      ]
+    },
+    {
+      "key": "shotcalling",
+      "label": "コール・大会経験",
+      "components": [
+        { "metric": "shotcalling", "kind": "qualitative", "weight": 0.5 },
+        { "metric": "ltkGames", "kind": "linear", "min": 0, "max": 40, "weight": 0.3 },
+        { "metric": "ltkWinRate", "kind": "linear", "min": 0.2, "max": 0.8, "weight": 0.2 }
+      ]
+    },
+    {
+      "key": "pool",
+      "label": "プールとメタ適合",
+      "components": [
+        { "metric": "championPoolSize", "kind": "linear", "min": 3, "max": 20, "weight": 0.4 },
+        { "metric": "metaFit", "kind": "qualitative", "weight": 0.6 }
+      ]
+    }
+  ]
+}
