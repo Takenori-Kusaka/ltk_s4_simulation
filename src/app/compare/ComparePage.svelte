@@ -1,0 +1,91 @@
+<script lang="ts">
+  import { compareHref } from '../lib/index.ts';
+  import type { RatingsFile } from '../rating/view.ts';
+  import { compareView, addTarget } from './view.ts';
+  import { legendItems, tableRows, markerPath, candidateTargets } from './render.ts';
+  import CompareRadar from './CompareRadar.svelte';
+
+  let { targets, ratings }: { targets: string[]; ratings: RatingsFile | undefined } = $props();
+  const v = $derived(compareView(targets, ratings));
+  const candidates = $derived(candidateTargets(targets));
+  let pick = $state('');
+  let message = $state('');
+  const add = () => {
+    if (!pick) return;
+    const r = addTarget(targets, pick);
+    message = r.message ?? '';
+    if (!r.message) location.hash = compareHref(r.targets);
+  };
+  const removeHref = (id: string) => compareHref(targets.filter((t) => t !== id));
+</script>
+
+<article class="compare">
+  <header class="frame compare-head">
+    <p class="eyebrow">Compare</p>
+    <h1 tabindex="-1">重ねて比べる</h1>
+    {#if v.ok}
+      <!-- F-008 基準5・9: 凡例(色・点の形・名前、除外の注記) -->
+      <ul class="legend-list">
+        {#each legendItems(v.series) as it}
+          <li>
+            <svg class="legend-mark" viewBox="0 0 20 20" aria-hidden="true"><path d={markerPath(it.shape, 10, 10, 6)} fill={it.color} /></svg>
+            <span class="legend-name" style={`color:${it.color}`}>{it.label}</span>
+            {#if it.note}<span class="legend-note">{it.note}</span>{/if}
+            {#if targets.length > 2}<a class="legend-remove" href={removeHref(it.id)} aria-label={`${it.label} を外す`}>×</a>{/if}
+          </li>
+        {/each}
+      </ul>
+    {/if}
+  </header>
+
+  {#if !v.ok}
+    <section class="frame alert" role="alert"><p>{v.message}</p></section>
+  {:else}
+    <section class="frame compare-body">
+      <div class="radar"><CompareRadar series={v.series} labels={v.axisLabels} file={ratings} /></div>
+
+      <!-- F-008 基準6〜8: 軸ごとの点数・確度・1つ目との差 -->
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>軸</th>
+              {#each v.series as s, i}
+                <th style={`color:${s.color}`}>{s.label}</th>
+                {#if i > 0}<th>差</th>{/if}
+              {/each}
+            </tr>
+          </thead>
+          <tbody>
+            {#each tableRows(v, ratings) as r}
+              <tr>
+                <th scope="row">{r.axis}</th>
+                {#each r.cells as c, i}
+                  <td class="num">{c.display}<small class="conf" class:low={c.confidence === '低'}>{c.confidence}</small></td>
+                  {#if i > 0}<td class="diff">{r.diffs[i]}</td>{/if}
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {/if}
+
+  <!-- F-008 基準1・14: 同じ種類の対象を加える(4つまで) -->
+  <section class="frame compare-add">
+    {#if candidates.length}
+      <label>
+        <span class="eyebrow">Add</span>
+        <select bind:value={pick}>
+          <option value="">加える対象を選ぶ</option>
+          {#each candidates as c}<option value={c.id}>{c.label}({c.id})</option>{/each}
+        </select>
+      </label>
+      <button class="chip" onclick={add} disabled={!pick}>重ねる</button>
+    {:else}
+      <p class="missing-note">重ねられるのは4つまでです</p>
+    {/if}
+    {#if message}<p class="missing-note" role="status">{message}</p>{/if}
+  </section>
+</article>
