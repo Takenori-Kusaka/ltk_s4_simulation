@@ -1,0 +1,602 @@
+[
+  {
+    "team": "DD",
+    "tier": "MASTERS",
+    "role": "TOP",
+    "player": "わしだい",
+    "riotId": "鉄砲玉#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E9%89%84%E7%A0%B2%E7%8E%89-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "MASTERS",
+    "role": "JG",
+    "player": "しゃるる",
+    "riotId": "syaruru#0323",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/syaruru-0323 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "MASTERS",
+    "role": "MID",
+    "player": "たぬき忍者",
+    "riotId": "Ninja of Ninjas#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Ninja%20of%20Ninjas-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "MASTERS",
+    "role": "ADC",
+    "player": "Day1",
+    "riotId": "Day1week#Day1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Day1week-Day1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "MASTERS",
+    "role": "SUP",
+    "player": "hetel",
+    "riotId": "hetel#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/hetel-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "CORE",
+    "role": "TOP",
+    "player": "酒寄颯馬",
+    "riotId": "Sakayori Soma#003",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Sakayori%20Soma-003 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "CORE",
+    "role": "JG",
+    "player": "きなこ",
+    "riotId": "kinako#hmm",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/kinako-hmm / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "CORE",
+    "role": "MID",
+    "player": "スタンミじゃぱん",
+    "riotId": "スタンミジャパン#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E3%82%B9%E3%82%BF%E3%83%B3%E3%83%9F%E3%82%B8%E3%83%A3%E3%83%91%E3%83%B3-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "CORE",
+    "role": "ADC",
+    "player": "じゃすぱー",
+    "riotId": "Jasper7se#CR1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Jasper7se-CR1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "CORE",
+    "role": "SUP",
+    "player": "神楽めあ",
+    "riotId": "rnea#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/rnea-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "NEXT",
+    "role": "TOP",
+    "player": "SHAKA",
+    "riotId": "shakach#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/shakach-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "NEXT",
+    "role": "JG",
+    "player": "まざー3",
+    "riotId": "Toy Story2#JP2",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Toy%20Story2-JP2 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "NEXT",
+    "role": "MID",
+    "player": "天ノ川ねる",
+    "riotId": "neringojp#666",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/neringojp-666 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "NEXT",
+    "role": "ADC",
+    "player": "夢野あかり",
+    "riotId": "Akaringgg#555",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Akaringgg-555 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "DD",
+    "tier": "NEXT",
+    "role": "SUP",
+    "player": "白波らむね",
+    "riotId": "ramuchi#えぐち",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/ramuchi-%E3%81%88%E3%81%90%E3%81%A1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "MASTERS",
+    "role": "TOP",
+    "player": "Yutapon",
+    "riotId": "ytzz#2426",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/ytzz-2426 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "MASTERS",
+    "role": "JG",
+    "player": "Rainbrain",
+    "riotId": "Rainbrain#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Rainbrain-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "MASTERS",
+    "role": "MID",
+    "player": "Ceros",
+    "riotId": "Ceros#111",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Ceros-111 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "MASTERS",
+    "role": "ADC",
+    "player": "Yuhi",
+    "riotId": "Yuhi#045",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Yuhi-045 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "MASTERS",
+    "role": "SUP",
+    "player": "Nemoh",
+    "riotId": "弱者ネ申#Nemoh",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E5%BC%B1%E8%80%85%E3%83%8D%E7%94%B3-Nemoh / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "CORE",
+    "role": "TOP",
+    "player": "YUKIO",
+    "riotId": "岡野やうじ#5567",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E5%B2%A1%E9%87%8E%E3%82%84%E3%81%86%E3%81%98-5567 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "CORE",
+    "role": "JG",
+    "player": "k4sen",
+    "riotId": "若干ワース#k4sen",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E8%8B%A5%E5%B9%B2%E3%83%AF%E3%83%BC%E3%82%B9-k4sen / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "CORE",
+    "role": "MID",
+    "player": "葛葉",
+    "riotId": "Lagusa#JP1",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/Lagusa-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "CORE",
+    "role": "ADC",
+    "player": "龍巻ちせ",
+    "riotId": "tornado3#JP0",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/tornado3-JP0 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "CORE",
+    "role": "SUP",
+    "player": "昏昏アリア",
+    "riotId": "教 祖#666",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E6%95%99%20%E7%A5%96-666 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "NEXT",
+    "role": "TOP",
+    "player": "叶",
+    "riotId": "とうもろこし#かなえ",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E3%81%A8%E3%81%86%E3%82%82%E3%82%8D%E3%81%93%E3%81%97-%E3%81%8B%E3%81%AA%E3%81%88 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "NEXT",
+    "role": "JG",
+    "player": "ゆふな",
+    "riotId": "YufuNa#DDwin",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/YufuNa-DDwin / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "NEXT",
+    "role": "MID",
+    "player": "空澄セナ",
+    "riotId": "あしゅ公#0118",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/%E3%81%82%E3%81%97%E3%82%85%E5%85%AC-0118 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "NEXT",
+    "role": "ADC",
+    "player": "獅子堂あかり",
+    "riotId": "uouo#4410",
+    "source": "調査の op.gg https://op.gg/lol/summoners/jp/uouo-4410 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "CC",
+    "tier": "NEXT",
+    "role": "SUP",
+    "player": "鷹宮リオン",
+    "riotId": null,
+    "source": "調査の op.gg https://op.gg/ja/lol/summoners/jp/%E9%B7%B9%E5%AE%AELee%20Ornn-JP1 / LoL情報まとめ Wiki https://wikiwiki.jp/loljpdata/%E4%B8%80%E8%A6%A7%E8%A1%A8 / サブ垢 X https://x.com/takamiyarion_2/status/2033443938460369232",
+    "verified": false,
+    "confidence": "低"
+  },
+  {
+    "team": "IT",
+    "tier": "MASTERS",
+    "role": "TOP",
+    "player": "らいじん",
+    "riotId": "らいじん#JP1",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%82%89%E3%81%84%E3%81%98%E3%82%93-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "MASTERS",
+    "role": "JG",
+    "player": "ゆにか",
+    "riotId": "ゆにか#1122",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%82%86%E3%81%AB%E3%81%8B-1122 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "MASTERS",
+    "role": "MID",
+    "player": "Eugeo",
+    "riotId": "Eugeo#DDWIN",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/Eugeo-DDWIN / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "MASTERS",
+    "role": "ADC",
+    "player": "Zerost",
+    "riotId": "Zeroyusi#zzz",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/Zeroyusi-zzz / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "MASTERS",
+    "role": "SUP",
+    "player": "Enty",
+    "riotId": "えんてぃ#ENTP",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%88%E3%82%93%E3%81%A6%E3%81%83-ENTP / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "CORE",
+    "role": "TOP",
+    "player": "mittiii",
+    "riotId": "SBJ mittiii#000",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/SBJ%20mittiii-000 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "CORE",
+    "role": "JG",
+    "player": "AlphaAzur",
+    "riotId": null,
+    "source": "srtr 詳細 https://srtr.site/streamer/Alpha%20Azur/ / LoL情報まとめ Wiki https://wikiwiki.jp/loljpdata/%E4%B8%80%E8%A6%A7%E8%A1%A8",
+    "verified": false,
+    "confidence": "低"
+  },
+  {
+    "team": "IT",
+    "tier": "CORE",
+    "role": "MID",
+    "player": "たかやスペシャル",
+    "riotId": "たかスペ#JP2",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%9F%E3%81%8B%E3%82%B9%E3%83%9A-JP2 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "CORE",
+    "role": "ADC",
+    "player": "ごんかね",
+    "riotId": "豚トロ#umai",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E8%B1%9A%E3%83%88%E3%83%AD-umai / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "CORE",
+    "role": "SUP",
+    "player": "レグルシュ・ライオンハート",
+    "riotId": "ReglushLionheart#JP1",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/ReglushLionheart-JP1 / LoL情報まとめ Wiki https://wikiwiki.jp/loljpdata/%E4%B8%80%E8%A6%A7%E8%A1%A8",
+    "verified": true,
+    "confidence": "中"
+  },
+  {
+    "team": "IT",
+    "tier": "NEXT",
+    "role": "TOP",
+    "player": "橘ひなの",
+    "riotId": "hinano#4777",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/hinano-4777 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "NEXT",
+    "role": "JG",
+    "player": "ありけん",
+    "riotId": "米炊き小坊主#ツツツ",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E7%B1%B3%E7%82%8A%E3%81%8D%E5%B0%8F%E5%9D%8A%E4%B8%BB-%E3%83%84%E3%83%84%E3%83%84 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "NEXT",
+    "role": "MID",
+    "player": "まいたけ",
+    "riotId": "まいちゃけ#きのこ",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%BE%E3%81%84%E3%81%A1%E3%82%83%E3%81%91-%E3%81%8D%E3%81%AE%E3%81%93 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "NEXT",
+    "role": "ADC",
+    "player": "天帝フォルテ",
+    "riotId": "100000tap#4002",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/100000tap-4002 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "IT",
+    "tier": "NEXT",
+    "role": "SUP",
+    "player": "白那しずく",
+    "riotId": "467#429",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/467-429 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "MASTERS",
+    "role": "TOP",
+    "player": "apaMEN",
+    "riotId": "もちあき#イルボン",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%82%82%E3%81%A1%E3%81%82%E3%81%8D-%E3%82%A4%E3%83%AB%E3%83%9C%E3%83%B3 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "MASTERS",
+    "role": "JG",
+    "player": "ねすてぃー",
+    "riotId": "ねすてぃー#7777",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%AD%E3%81%99%E3%81%A6%E3%81%83%E3%83%BC-7777 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "MASTERS",
+    "role": "MID",
+    "player": "Recap",
+    "riotId": "Recap#125",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/Recap-125 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "MASTERS",
+    "role": "ADC",
+    "player": "ハレっち",
+    "riotId": "Haretti#hare",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/Haretti-hare / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "MASTERS",
+    "role": "SUP",
+    "player": "てぃんとん",
+    "riotId": "てぃんとん#1017",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%A6%E3%81%83%E3%82%93%E3%81%A8%E3%82%93-1017 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "CORE",
+    "role": "TOP",
+    "player": "焼きパン",
+    "riotId": "Varvalian#sfr",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/Varvalian-sfr / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "CORE",
+    "role": "JG",
+    "player": "Killin9Hit",
+    "riotId": "チョゴチュジャン#7777",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%83%81%E3%83%A7%E3%82%B4%E3%83%81%E3%83%A5%E3%82%B8%E3%83%A3%E3%83%B3-7777 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "CORE",
+    "role": "MID",
+    "player": "乾伸一郎",
+    "riotId": "乾伸一郎#JP1",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E4%B9%BE%E4%BC%B8%E4%B8%80%E9%83%8E-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "CORE",
+    "role": "ADC",
+    "player": "大御所にゅん子",
+    "riotId": null,
+    "source": "srtr 詳細 https://srtr.site/streamer/%E5%A4%A7%E5%BE%A1%E6%89%80%E3%81%AB%E3%82%85%E3%82%93%E5%AD%90/ / LoLランクボード X https://x.com/lol_rank_s/status/2091450651742294024",
+    "verified": false,
+    "confidence": "低"
+  },
+  {
+    "team": "LR",
+    "tier": "CORE",
+    "role": "SUP",
+    "player": "千燈ゆうひ",
+    "riotId": "千 燈#1010",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E5%8D%83%20%E7%87%88-1010 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "NEXT",
+    "role": "TOP",
+    "player": "狐白うる",
+    "riotId": "狐白うる#6122",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E7%8B%90%E7%99%BD%E3%81%86%E3%82%8B-6122 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "NEXT",
+    "role": "JG",
+    "player": "アステル・レダ",
+    "riotId": "横揺れしテルレダ#ODORE",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E6%A8%AA%E6%8F%BA%E3%82%8C%E3%81%97%E3%83%86%E3%83%AB%E3%83%AC%E3%83%80-ODORE / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "NEXT",
+    "role": "MID",
+    "player": "春茶",
+    "riotId": "BBIBBI#010",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/BBIBBI-010 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "NEXT",
+    "role": "ADC",
+    "player": "なぎさっち",
+    "riotId": "なぎさっち#JP1",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%AA%E3%81%8E%E3%81%95%E3%81%A3%E3%81%A1-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  },
+  {
+    "team": "LR",
+    "tier": "NEXT",
+    "role": "SUP",
+    "player": "No.1005",
+    "riotId": "とおこ#JP1",
+    "source": "調査(op.gg 取得) https://op.gg/lol/summoners/jp/%E3%81%A8%E3%81%8A%E3%81%93-JP1 / srtr 登録 https://srtr.site/lol/solo/rank/",
+    "verified": true,
+    "confidence": "高"
+  }
+]
