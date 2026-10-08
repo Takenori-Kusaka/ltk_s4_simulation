@@ -53,5 +53,6 @@ test('AC5: チームのページは各階級の5選手へのリンクを持つ',
 
 test('AC5: ハッシュ #/team/<チーム> でチームのページを開く', () => {
   assert.deepEqual(parseRoute('#/team/DD'), { page: 'team', team: 'DD' });
-  assert.deepEqual(parseRoute('#/team/XX'), { page: 'home' });
+  // 不正なチームは「見つからない」を案内する(QA 指摘 M4)
+  assert.deepEqual(parseRoute('#/team/XX'), { page: 'notfound', hash: '#/team/XX' });
 });

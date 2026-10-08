@@ -11,7 +11,7 @@
 
 <section class="hero">
   <p class="eyebrow">League The k4sen · 2026.10.15 — 11.22</p>
-  <h1><span class="foil">Season Finale</span></h1>
+  <h1 tabindex="-1"><span class="foil">Season Finale</span></h1>
   <p class="sub">四つの花の王家、六十の名。最後の玉座を占う予言の書。</p>
   {#if days > 0}
     <p class="countdown">開幕まで <strong>{days}</strong> 日</p>

@@ -24,12 +24,21 @@ const TIER_BASE: Record<string, number> = {
 };
 const DIVISION: Record<string, number> = { IV: 0, III: 1, II: 2, I: 3 };
 
-/** 'DIAMOND II 50' を 0〜10 へ換算する。Master 以上は LP で伸ばし、Master 0LP=8.0、1500LP 以上=10.0 */
-export function rankToScore(rank: string): number {
-  const [tier, div = 'IV', lpText = '0'] = rank.trim().toUpperCase().split(/\s+/);
+/**
+ * 'DIAMOND II 50' を 0〜10 へ換算する。Master 以上は LP で伸ばし、Master 0LP=8.0、1500LP 以上=10.0。
+ * 未ランク(UNRANKED)と解釈できない文字列は null(その指標が無いものとして扱う。QA 指摘 H2)
+ */
+export function rankToScore(rank: string): number | null {
+  const parts = rank.trim().toUpperCase().split(/\s+/);
+  const tier = parts[0];
+  const base = TIER_BASE[tier];
+  if (base === undefined) return null;
+  if (base >= 28) {
+    const lp = Number(parts[parts.length - 1]);
+    return Number.isFinite(lp) ? Math.min(10, 8 + (2 * lp) / 1500) : null;
+  }
+  const [, div = 'IV', lpText = '0'] = parts;
   const lp = Number(lpText) || 0;
-  const base = TIER_BASE[tier] ?? 0;
-  if (base >= 28) return Math.min(10, 8 + (2 * lp) / 1500);
   const steps = base + (DIVISION[div] ?? 0) + Math.min(lp, 100) / 100;
   return Math.min(8, (steps / 28) * 8);
 }
@@ -67,17 +76,20 @@ export function scorePlayer(p: Player, f: PlayerFile): PlayerScore {
       if (c.kind === 'qualitative') {
         const q = f.qualitative[c.metric];
         if (!q) { missing.push(c.metric); continue; }
-        components.push({ metric: c.metric, weight: c.weight, raw: q.score, score: clamp10(q.score), source: q.sources.join(' / '), retrievedAt: '', rationale: q.rationale });
+        components.push({ metric: c.metric, weight: c.weight, raw: q.score, score: clamp10(q.score), source: q.sources.join(' / '), retrievedAt: q.retrievedAt ?? '', rationale: q.rationale });
         continue;
       }
       const m = f.metrics[c.metric];
       if (!m) { missing.push(c.metric); continue; }
-      let score: number;
+      let score: number | null;
       if (c.kind === 'rank') score = rankToScore(String(m.value));
       else {
         const range = c.byRole?.[p.role] ?? { min: c.min!, max: c.max! };
-        score = clamp10(((Number(m.value) - range.min) / (range.max - range.min)) * 10);
+        const v = Number(m.value);
+        score = Number.isFinite(v) ? clamp10(((v - range.min) / (range.max - range.min)) * 10) : null;
       }
+      // 未ランク・数値でない値は 0 点にせず、その指標が無いものとして扱う(QA 指摘 H1・H2)
+      if (score === null) { missing.push(c.metric); continue; }
       components.push({ metric: c.metric, weight: c.weight, raw: m.value, score, source: m.source, retrievedAt: m.retrievedAt });
     }
     const w = components.reduce((s, c) => s + c.weight, 0);

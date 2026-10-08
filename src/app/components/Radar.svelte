@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { radarGeometry } from '../lib/index.ts';
+  import { radarGeometry, radarLabelAnchor } from '../lib/index.ts';
 
   let { scores, labels, color = '#c9a24a' }: { scores: (number | null)[]; labels: string[]; color?: string } = $props();
   const size = 150;
@@ -9,7 +9,7 @@
 </script>
 
 <!-- 基準4: 欠損の軸は破線の軸と「?」で示し、0 点(中心)とは区別する -->
-<svg viewBox="-70 -24 440 344" role="img" aria-label="5軸レーダーチャート">
+<svg viewBox="-96 -24 492 344" role="img" aria-label="5軸レーダーチャート">
   <defs>
     <radialGradient id={gid}>
       <stop offset="0%" stop-color={color} stop-opacity="0.75" />
@@ -25,7 +25,7 @@
     <line x1={size} y1={size} x2={p.x} y2={p.y} stroke="#c9a24a" stroke-opacity={na ? 0.5 : 0.25}
       stroke-dasharray={na ? '3 4' : undefined} />
     <circle cx={p.x} cy={p.y} r="2.2" fill="#c9a24a" />
-    <text class="label" class:na x={size + (p.x - size) * 1.2} y={size + (p.y - size) * 1.2} text-anchor="middle"
+    <text class="label" class:na x={size + (p.x - size) * 1.1 + Math.sign(Math.round(p.x - size)) * 8} y={size + (p.y - size) * 1.14} text-anchor={radarLabelAnchor(p.x - size)}
       dominant-baseline="middle">{labels[i]}{na ? ' ?' : ''}</text>
   {/each}
   {#if g.polygon}
