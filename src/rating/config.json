@@ -8,5 +8,20 @@
     "perfScale": 1.5,
     "zClip": 3,
     "confidence": { "high": 15, "mid": 6 }
+  },
+  "form": {
+    "windowDays": 14,
+    "minGames": 3,
+    "queues": [420, 440],
+    "minMinutes": 10,
+    "shrinkGames": 5,
+    "winRateScale": 0.15,
+    "lpScale": 150,
+    "practiceCap": 30,
+    "weights": { "winRate": 0.5, "lp": 0.3, "practice": 0.2 },
+    "swing": 0.1,
+    "min": 0.9,
+    "max": 1.1,
+    "labels": { "best": 0.6, "good": 0.2, "bad": -0.2, "worst": -0.6 }
   }
 }
