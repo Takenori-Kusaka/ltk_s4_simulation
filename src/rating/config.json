@@ -1,0 +1,12 @@
+{
+  "_comment": "F-009 評価設定(ADR-0004・docs/design/rating-model.md)。値は 2026-10-09 に価値責任者が確定した設計書の初期値",
+  "engine": {
+    "windowDays": 120,
+    "minMinutes": 10,
+    "halfLifeDays": 45,
+    "k": 8,
+    "perfScale": 1.5,
+    "zClip": 3,
+    "confidence": { "high": 15, "mid": 6 }
+  }
+}
