@@ -10,6 +10,8 @@ export interface RadarView {
   label: 'チーム全体' | Tier;
   scores: (number | null)[];
   displays: string[];
+  /** 指標ファイルが無く、計算から除いた選手の数(QA 指摘 L1) */
+  excluded: number;
 }
 
 export interface TeamView {
@@ -35,20 +37,23 @@ function relativeByTier(files: Record<string, PlayerFile>): Record<Tier, Record<
   return out;
 }
 
-const view = (label: RadarView['label'], scores: (number | null)[]): RadarView => ({
+const view = (label: RadarView['label'], scores: (number | null)[], excluded: number): RadarView => ({
   label,
   scores,
   displays: scores.map(formatScore),
+  excluded,
 });
 
 export function teamView(team: TeamId, files: Record<string, PlayerFile>): TeamView {
   const byTier = relativeByTier(files);
+  const missing = (tier?: Tier) =>
+    ROSTER.filter((p) => p.team === team && (!tier || p.tier === tier) && !files[p.id]).length;
   return {
     team,
     axisLabels: AXES.map((a) => a.label),
     radars: [
-      view('チーム全体', teamRadar(byTier, team)),
-      ...TIERS.map((tier) => view(tier, byTier[tier][team])),
+      view('チーム全体', teamRadar(byTier, team), missing()),
+      ...TIERS.map((tier) => view(tier, byTier[tier][team], missing(tier))),
     ],
     members: ROSTER.filter((p) => p.team === team).map((p) => ({
       id: p.id,

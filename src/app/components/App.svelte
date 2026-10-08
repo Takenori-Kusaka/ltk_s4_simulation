@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { ROSTER } from '../../data/roster.ts';
   import type { PlayerFile } from '../../data/types.ts';
   import { validatePlayerFile } from '../../data/validate.ts';
-  import { parseRoute, emptyPlayerFile, TEAM_INFO } from '../lib/index.ts';
+  import { parseRoute, emptyPlayerFile, pageTitle, TEAM_INFO } from '../lib/index.ts';
   import Home from './Home.svelte';
   import PlayerSheet from './PlayerSheet.svelte';
   import Emblem from './Emblem.svelte';
@@ -10,10 +11,18 @@
 
   let { files }: { files: Record<string, PlayerFile> } = $props();
   let hash = $state(location.hash);
+  let content: HTMLElement | undefined = $state();
+
+  // 画面ごとのスクロール位置を覚え、戻ったときに元の位置へ戻す(QA 指摘 M2)
+  const positions = new Map<string, number>();
   $effect(() => {
-    const on = () => {
+    const on = async () => {
+      positions.set(hash, scrollY);
       hash = location.hash;
-      scrollTo({ top: 0 });
+      await tick();
+      scrollTo({ top: positions.get(hash) ?? 0 });
+      // 画面の遷移をスクリーンリーダーへ伝える(QA 指摘 L2)
+      content?.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
     };
     addEventListener('hashchange', on);
     return () => removeEventListener('hashchange', on);
@@ -22,39 +31,59 @@
   const errors = $derived(Object.values(files).flatMap((f) => validatePlayerFile(f)));
   const route = $derived(parseRoute(hash));
   const player = $derived(route.page === 'player' ? ROSTER.find((p) => p.id === route.id) : undefined);
+  const teamOfPage = $derived(player?.team ?? (route.page === 'team' ? route.team : undefined));
+  $effect(() => {
+    document.title = pageTitle(route);
+  });
 </script>
 
 <main>
   <header class="masthead">
     <a class="brand" href="#/">
       <span class="brand-mark"><Emblem petals={14} color="#c9a24a" /></span>
-      LTK · SEASON FINALE
+      <span>LTK · SEASON FINALE</span>
     </a>
-    {#if player}
-      <nav class="crumb">
-        <a href="#/">ALL HOUSES</a> · <a href={`#/team/${player.team}`}>{TEAM_INFO[player.team].name.toUpperCase()}</a>
+    {#if teamOfPage}
+      <!-- スマホでも戻り道を残す(QA 指摘 M3)。選手のページではチームへ、チームのページでは一覧へ -->
+      <nav class="crumb" aria-label="現在の位置">
+        <a href="#/">ALL HOUSES</a>
+        {#if player}
+          <span aria-hidden="true">·</span>
+          <a href={`#/team/${player.team}`}>‹ {TEAM_INFO[player.team].name.toUpperCase()}</a>
+        {:else}
+          <span aria-hidden="true">·</span>
+          <span>{TEAM_INFO[teamOfPage].name.toUpperCase()}</span>
+        {/if}
       </nav>
-    {:else if route.page === 'team'}
-      <nav class="crumb"><a href="#/">ALL HOUSES</a> · {TEAM_INFO[route.team].name.toUpperCase()}</nav>
     {/if}
   </header>
-  {#if errors.length}
-    <section class="frame alert" role="alert">
-      <p class="eyebrow">Data error</p>
-      <h2>指標ファイルのエラー</h2>
-      <ul>
-        {#each errors as e}<li>{e}</li>{/each}
-      </ul>
-    </section>
-  {:else if route.page === 'team'}
-    {#key route.team}
-      <TeamPage team={route.team} {files} />
-    {/key}
-  {:else if player}
-    {#key player.id}
-      <PlayerSheet {player} file={files[player.id] ?? emptyPlayerFile(player.id)} />
-    {/key}
-  {:else}
-    <Home />
-  {/if}
+  <div bind:this={content}>
+    {#if errors.length}
+      <section class="frame alert" role="alert">
+        <p class="eyebrow">Data error</p>
+        <h1 tabindex="-1">指標ファイルのエラー</h1>
+        <ul>
+          {#each errors as e}<li>{e}</li>{/each}
+        </ul>
+      </section>
+    {:else if route.page === 'notfound'}
+      <!-- 不正な経路は黙って一覧に戻さず案内する(QA 指摘 M4) -->
+      <section class="frame alert notfound">
+        <p class="eyebrow">Not found</p>
+        <h1 tabindex="-1">この頁は予言の書にありません</h1>
+        <p>「{route.hash}」に当たる選手やチームは見つかりませんでした。</p>
+        <p><a class="chip" href="#/">四つの王家の一覧へ戻る</a></p>
+      </section>
+    {:else if route.page === 'team'}
+      {#key route.team}
+        <TeamPage team={route.team} {files} />
+      {/key}
+    {:else if player}
+      {#key player.id}
+        <PlayerSheet {player} file={files[player.id] ?? emptyPlayerFile(player.id)} />
+      {/key}
+    {:else}
+      <Home />
+    {/if}
+  </div>
 </main>

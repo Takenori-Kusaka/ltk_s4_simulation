@@ -19,7 +19,7 @@
   --team: var(--gold);
   --serif-jp: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
   --serif-latin: 'Bodoni Moda', 'Didot', 'Times New Roman', serif;
-  --caps: 'Marcellus SC', 'Cormorant Garamond', serif;
+  --caps: 'Marcellus SC', 'Times New Roman', serif;
   --sans-jp: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   color-scheme: dark;
 }
@@ -294,12 +294,15 @@ a {
   transform: translateY(-1px);
 }
 .chip .role {
-  font-family: var(--caps);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
   color: var(--ivory-dim);
-  width: 30px;
+  width: 20px;
+  height: 20px;
   flex: none;
+}
+.chip .role :global(svg),
+.chip .role svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* ---------- 選手のキャラクターシート ---------- */
@@ -390,6 +393,12 @@ a {
   text-align: center;
   margin-top: 18px;
 }
+.nameplate h1,
+.chip,
+.court-name {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
 .nameplate h1 {
   margin: 4px 0 2px;
   font-family: var(--serif-jp);
@@ -459,7 +468,6 @@ a {
 }
 .radar .label.na {
   fill: var(--muted);
-  font-style: italic;
 }
 
 .lines {
@@ -518,8 +526,8 @@ a {
 .value.na {
   font-family: var(--serif-jp);
   font-weight: 400;
-  font-size: 0.82rem;
-  color: var(--muted);
+  font-size: 0.9rem;
+  color: var(--ivory-dim);
 }
 .bar {
   grid-area: bar;
@@ -793,7 +801,7 @@ a {
 .delta {
   grid-area: delta;
   font-family: var(--caps);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   letter-spacing: 0.12em;
   color: var(--muted);
 }
@@ -804,12 +812,39 @@ a {
   color: #d88a8a;
 }
 
-/* スマホでは見出しの帯を1行に保つ(パンくずはロゴのリンクで代替) */
-.brand {
-  white-space: nowrap;
+/* 見出しの帯: スマホではパンくずを2行目に回す(QA 指摘 M3・M6) */
+.masthead {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 @media (max-width: 600px) {
   .crumb {
-    display: none;
+    width: 100%;
   }
+}
+
+/* 見出しへ移したフォーカス(画面の遷移の通知用)は枠を出さない */
+h1[tabindex='-1']:focus {
+  outline: none;
+}
+.excluded-note {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--ivory-dim);
+}
+.notfound {
+  text-align: center;
+  padding: 40px 22px;
+}
+.notfound h1 {
+  font-family: var(--serif-jp);
+  font-size: 1.6rem;
+}
+.notfound .chip {
+  display: inline-flex;
 }

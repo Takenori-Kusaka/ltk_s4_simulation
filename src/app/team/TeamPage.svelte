@@ -20,7 +20,7 @@
     <div class="court-emblem"><Emblem petals={info.petals} color={info.color} /></div>
     <div>
       <p class="eyebrow">House of {info.flower}</p>
-      <h1 class="court-name">{info.name}</h1>
+      <h1 class="court-name" tabindex="-1">{info.name}</h1>
       <p class="house-motto">{info.flower}の{info.regalia} · {team} · 同じ階級の4チームの中での相対評価(5.0 が平均)</p>
     </div>
     <div class="court-overall">
@@ -31,6 +31,9 @@
 
   <section class="frame court-whole">
     <p class="eyebrow">チーム全体 · 3階級の平均</p>
+    {#if whole.excluded > 0}
+      <p class="excluded-note">データの無い {whole.excluded} 名を除いて計算しています</p>
+    {/if}
     <div class="court-whole-body">
       <div class="radar"><Radar scores={whole.scores} labels={v.axisLabels} color={info.color} /></div>
       <ul class="lines static">
@@ -61,6 +64,9 @@
           <span class="num">{formatScore(overallScore(r.scores))}</span>
         </div>
         <div class="radar"><Radar scores={r.scores} labels={v.axisLabels} color={info.color} /></div>
+        {#if r.excluded > 0}
+          <p class="excluded-note">データの無い {r.excluded} 名を除いて計算しています</p>
+        {/if}
         <ul class="court-members">
           {#each v.members.filter((m) => m.tier === r.label) as m}
             <li>

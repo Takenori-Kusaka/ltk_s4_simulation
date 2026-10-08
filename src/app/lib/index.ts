@@ -1,11 +1,14 @@
 // F-002 基準1・3・4・8: 画面の論理部分(DOM に依存しない)
+import { ROSTER } from '../../data/roster.ts';
 import type { Player, Role } from '../../data/roster.ts';
+
+const ROSTER_IDS = new Set(ROSTER.map((p) => p.id));
 import type { PlayerFile } from '../../data/types.ts';
 import { scorePlayer } from '../../score/index.ts';
 
 /** 基準1: 0.0〜10.0 に切り詰め、小数第一位で表示する。null は「データなし」 */
 export function formatScore(v: number | null): string {
-  if (v === null) return 'データなし';
+  if (v === null || !Number.isFinite(v)) return 'データなし';
   return Math.max(0, Math.min(10, v)).toFixed(1);
 }
 
@@ -134,14 +137,43 @@ export function placeholderAvatar(p: Player): { initial: string; role: Role; rol
   return { initial: [...p.name][0], role: p.role, roleIcon: ROLE_ICON[p.role], color: TEAM_COLOR[p.team] ?? '#888888' };
 }
 
-export type Route = { page: 'home' } | { page: 'player'; id: string } | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' };
+export type Route =
+  | { page: 'home' }
+  | { page: 'player'; id: string }
+  | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' }
+  | { page: 'notfound'; hash: string };
 
-/** ハッシュによる画面の切り替え(GitHub Pages ではサーバー側の経路を持てないため) */
+/**
+ * ハッシュによる画面の切り替え(GitHub Pages ではサーバー側の経路を持てないため)。
+ * 大文字・小文字を区別せず、末尾の / と ?… は無視する。不正な経路は「見つからない」(QA 指摘 M4)
+ */
 export function parseRoute(hash: string): Route {
-  const m = /^#\/player\/([A-Z]{2}-(?:NEXT|CORE|MASTERS)-(?:TOP|JG|MID|ADC|SUP))$/.exec(hash);
-  if (m) return { page: 'player', id: m[1] };
-  const t = /^#\/team\/(DD|CC|IT|LR)$/.exec(hash);
-  return t ? { page: 'team', team: t[1] as 'DD' | 'CC' | 'IT' | 'LR' } : { page: 'home' };
+  const path = hash.replace(/^#/, '').replace(/[?].*$/, '').replace(/\/+$/, '');
+  if (path === '' || path === '/') return { page: 'home' };
+  const upper = path.toUpperCase();
+  const m = /^\/PLAYER\/([A-Z]{2}-(?:NEXT|CORE|MASTERS)-(?:TOP|JG|MID|ADC|SUP))$/.exec(upper);
+  if (m && ROSTER_IDS.has(m[1])) return { page: 'player', id: m[1] };
+  const t = /^\/TEAM\/(DD|CC|IT|LR)$/.exec(upper);
+  if (t) return { page: 'team', team: t[1] as 'DD' | 'CC' | 'IT' | 'LR' };
+  return { page: 'notfound', hash };
+}
+
+/** レーダーのラベルの寄せ方。左右の軸は外側へ寄せて頂点の点と重ねない(QA 指摘 M1) */
+export function radarLabelAnchor(dx: number): 'start' | 'middle' | 'end' {
+  if (Math.abs(dx) < 8) return 'middle';
+  return dx > 0 ? 'start' : 'end';
+}
+
+/** 文書の題名(画面の遷移をスクリーンリーダーとタブに伝える。QA 指摘 L2) */
+export function pageTitle(r: Route): string {
+  const site = 'LTK Season Finale — 予言の書';
+  if (r.page === 'player') {
+    const p = ROSTER.find((x) => x.id === r.id);
+    return p ? `${p.name}(${p.team} ${p.tier} ${p.role})| ${site}` : site;
+  }
+  if (r.page === 'team') return `${TEAM_INFO[r.team].name} | ${site}`;
+  if (r.page === 'notfound') return `ページが見つかりません | ${site}`;
+  return site;
 }
 
 /** 総合値: データのある軸の平均。全軸データなしなら null */

@@ -96,7 +96,8 @@ test('AC8: リポジトリの配信物の元(src・public・index.html)に立ち
 test('AC1: ハッシュから画面を選ぶ(選手のページと一覧)', () => {
   assert.deepEqual(parseRoute('#/player/CC-CORE-ADC'), { page: 'player', id: 'CC-CORE-ADC' });
   assert.deepEqual(parseRoute(''), { page: 'home' });
-  assert.deepEqual(parseRoute('#/unknown'), { page: 'home' });
+  // 不正な経路は「見つからない」を案内する(QA 指摘 M4。2026-10-08 に価値責任者が保留を解いて変更を承認)
+  assert.deepEqual(parseRoute('#/unknown'), { page: 'notfound', hash: '#/unknown' });
 });
 
 test('AC10: スマホ幅で横スクロールを起こす固定幅を CSS に置かない', () => {
