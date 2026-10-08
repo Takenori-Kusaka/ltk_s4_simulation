@@ -107,3 +107,26 @@ test('AC10: スマホ幅で横スクロールを起こす固定幅を CSS に置
   for (const m of rules.matchAll(/(?<!max-)(?:min-)?width:\s*(\d+)px/g)) assert.ok(Number(m[1]) <= 360, m[0]);
   assert.match(css, /max-width:\s*100%/);
 });
+
+test('総合値はデータのある軸の平均で、全軸データなしなら null', async () => {
+  const { overallScore } = await import('../../src/app/lib/index.ts');
+  assert.equal(overallScore([4, null, 8, null, 6]), 6);
+  assert.equal(overallScore([null, null]), null);
+});
+
+test('開幕までの日数(2026-10-15 JST)', async () => {
+  const { daysUntilOpening } = await import('../../src/app/lib/index.ts');
+  assert.equal(daysUntilOpening(new Date('2026-10-08T12:00:00+09:00')), 7);
+  assert.equal(daysUntilOpening(new Date('2026-10-20T00:00:00+09:00')), 0);
+});
+
+test('AC3: 根拠の指標は日本語の名前で表示する', () => {
+  const skill = playerView(p, file()).axes.find((a) => a.label === '個人技量')!;
+  assert.equal(skill.components.find((c) => c.metric === 'soloRank')!.label, '現在ランク(ソロ)');
+});
+
+test('4チームの意匠(名前・花・色)を持つ', async () => {
+  const { TEAM_INFO } = await import('../../src/app/lib/index.ts');
+  assert.deepEqual(Object.keys(TEAM_INFO), ['DD', 'CC', 'IT', 'LR']);
+  assert.equal(TEAM_INFO.IT.name, 'Iris Tiara');
+});

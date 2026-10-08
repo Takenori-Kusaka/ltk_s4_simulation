@@ -68,6 +68,23 @@ export interface PlayerView {
   axes: AxisView[];
 }
 
+/** 指標の日本語の名前(採点規則 scoring.json のキー) */
+export const METRIC_LABEL: Record<string, string> = {
+  soloRank: '現在ランク(ソロ)',
+  peakRank: '最高ランク',
+  kda: 'KDA',
+  csPerMin: '分あたり CS',
+  killParticipation: 'キル関与率',
+  damageShare: 'ダメージ割合',
+  ltkGames: 'LTK 出場試合数',
+  ltkWinRate: 'LTK 勝率',
+  championPoolSize: '使用チャンピオン数',
+  laning: 'レーン戦の評価',
+  teamfight: '集団戦の評価',
+  shotcalling: 'コール力の評価',
+  metaFit: 'メタ適合の評価',
+};
+
 /** 基準1・3: 選手のページの表示内容 */
 export function playerView(p: Player, f: PlayerFile): PlayerView {
   const s = scorePlayer(p, f);
@@ -84,6 +101,7 @@ export function playerView(p: Player, f: PlayerFile): PlayerView {
       missing: a.missing,
       components: a.components.map((c) => ({
         metric: c.metric,
+        label: METRIC_LABEL[c.metric] ?? c.metric,
         raw: c.raw,
         weight: c.weight,
         display: formatScore(c.score),
@@ -100,8 +118,16 @@ export function emptyPlayerFile(playerId: string): PlayerFile {
   return { playerId, metrics: {}, qualitative: {}, recentMatches: [] };
 }
 
-const ROLE_ICON: Record<Role, string> = { TOP: '⛰', JG: '🌲', MID: '✦', ADC: '🏹', SUP: '🛡' };
-const TEAM_COLOR: Record<string, string> = { DD: '#e8a33d', CC: '#d9475b', IT: '#4a7fd6', LR: '#3fa66b' };
+const ROLE_ICON: Record<Role, string> = { TOP: '◆', JG: '◈', MID: '✦', ADC: '➶', SUP: '✚' };
+
+/** チームの意匠。色は公式発表の各チームの色(🟧🟥🟦🟩)を深めた値 */
+export const TEAM_INFO: Record<string, { name: string; flower: string; regalia: string; color: string; petals: number }> = {
+  DD: { name: 'Dahlia Diadem', flower: 'ダリア', regalia: 'ダイアデム', color: '#e0892b', petals: 14 },
+  CC: { name: 'Camellia Crown', flower: '椿', regalia: '王冠', color: '#c8324a', petals: 5 },
+  IT: { name: 'Iris Tiara', flower: 'アイリス', regalia: 'ティアラ', color: '#4a6fe0', petals: 3 },
+  LR: { name: 'Laurel Regalia', flower: '月桂樹', regalia: 'レガリア', color: '#3f9b5c', petals: 8 },
+};
+const TEAM_COLOR: Record<string, string> = Object.fromEntries(Object.entries(TEAM_INFO).map(([k, v]) => [k, v.color]));
 
 /** 基準8: 公開版の立ち絵の代替表示(画像を使わない) */
 export function placeholderAvatar(p: Player): { initial: string; role: Role; roleIcon: string; color: string } {
@@ -114,4 +140,15 @@ export type Route = { page: 'home' } | { page: 'player'; id: string };
 export function parseRoute(hash: string): Route {
   const m = /^#\/player\/([A-Z]{2}-(?:NEXT|CORE|MASTERS)-(?:TOP|JG|MID|ADC|SUP))$/.exec(hash);
   return m ? { page: 'player', id: m[1] } : { page: 'home' };
+}
+
+/** 総合値: データのある軸の平均。全軸データなしなら null */
+export function overallScore(scores: (number | null)[]): number | null {
+  const v = scores.filter((s): s is number => s !== null);
+  return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+}
+
+/** 開幕(2026-10-15 JST)までの日数。開幕日以降は 0 */
+export function daysUntilOpening(now: Date, opening = '2026-10-15T00:00:00+09:00'): number {
+  return Math.max(0, Math.ceil((new Date(opening).getTime() - now.getTime()) / 86400000));
 }
