@@ -77,7 +77,7 @@
       </section>
     {:else if route.page === 'team'}
       {#key route.team}
-        <TeamPage team={route.team} {files} />
+        <TeamPage team={route.team} {ratings} />
       {/key}
     {:else if player}
       {#key player.id}

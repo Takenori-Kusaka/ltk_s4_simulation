@@ -1,7 +1,11 @@
-// F-009 Task-6: 評価(ratings.json)の選手のページの論理。受入基準 20・24(DOM に依存しない)
+// F-009 Task-6・Task-9: 評価(ratings.json)の画面の論理。受入基準 20・24・25(DOM に依存しない)
 import type { PlayerRating, AxisRating } from '../../rating/build.ts';
+import type { TierTeamIndicators, TeamIndicator } from '../../rating/team-indicators.ts';
 import type { Confidence } from '../../rating/types.ts';
 import { loadEngineConfig } from '../../rating/engine.ts';
+import { ROSTER } from '../../data/roster.ts';
+import { TEAMS, TIERS } from '../../sim/types.ts';
+import type { TeamId, Tier } from '../../sim/types.ts';
 import { formatScore } from '../lib/index.ts';
 
 /** aggregate-cli が書く評価のファイル(data/public/ratings.json) */
@@ -11,6 +15,7 @@ export interface RatingsFile {
   configVersion: string;
   checks: { id: string; status: string; note?: string }[];
   players: PlayerRating[];
+  teams?: TierTeamIndicators[];
 }
 
 /** 8軸の順(レーダーの1軸目は真上から時計回り) */
@@ -186,5 +191,75 @@ export function formView(rating: PlayerRating | undefined): { label: string; coe
     coefficient: f.coefficient.toFixed(2),
     effect: `各軸 ${signed((f.coefficient - 1) * 5, 2)}`,
     reason: f.reason,
+  };
+}
+
+// ---- 基準25: チームのページ ----
+
+export interface TeamRadarView {
+  label: 'チーム全体' | Tier;
+  scores: (number | null)[];
+  displays: string[];
+  /** 評価の無い選手の数 */
+  excluded: number;
+}
+export interface TeamRatingView {
+  axisLabels: string[];
+  radars: TeamRadarView[];
+  /** 階級ごとのチームの指標(視界・オブジェクト・マクロ) */
+  indicators: { tier: Tier; items: (TeamIndicator & { display: string; line: AxisLine })[] }[];
+}
+
+const NO_INDICATORS: TeamIndicator[] = (['vision', 'objectives', 'macro'] as const).map((key) => ({
+  key,
+  label: { vision: '視界', objectives: 'オブジェクト', macro: 'マクロ' }[key],
+  score: null,
+  confidence: null,
+  reason: '評価のファイルにチームの指標が無い',
+  players: [],
+  evidence: [],
+}));
+
+const mean = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
+
+/** F-002 基準6・7 の計算を8軸へ: 階級の4チームの中での相対評価(5.0 + 2.0 × 標準化)と、3階級の平均 */
+export function teamRatingView(team: TeamId, file: RatingsFile | undefined): TeamRatingView {
+  const byId = new Map((file?.players ?? []).map((p) => [p.playerId, p]));
+  const avg = (t: TeamId, tier: Tier) =>
+    AXIS_ORDER.map(({ key }) => {
+      const xs = ROSTER.filter((p) => p.team === t && p.tier === tier)
+        .map((p) => byId.get(p.id)?.axes.find((a) => a.key === key)?.display)
+        .filter((x): x is number => typeof x === 'number');
+      return xs.length ? mean(xs) : null;
+    });
+  const relative: Record<Tier, (number | null)[]> = {} as Record<Tier, (number | null)[]>;
+  for (const tier of TIERS) {
+    const all = Object.fromEntries(TEAMS.map((t) => [t, avg(t, tier)])) as Record<TeamId, (number | null)[]>;
+    relative[tier] = AXIS_ORDER.map((_, i) => {
+      const own = all[team][i];
+      const vals = TEAMS.map((t) => all[t][i]).filter((x): x is number => x !== null);
+      if (own === null || !vals.length) return null;
+      const m = mean(vals);
+      const sd = Math.sqrt(mean(vals.map((v) => (v - m) ** 2)));
+      return Math.max(0, Math.min(10, 5 + 2 * (sd > 0 ? (own - m) / sd : 0)));
+    });
+  }
+  const whole = AXIS_ORDER.map((_, i) => {
+    const xs = TIERS.map((t) => relative[t][i]).filter((x): x is number => x !== null);
+    return xs.length ? mean(xs) : null;
+  });
+  const missing = (tier?: Tier) => ROSTER.filter((p) => p.team === team && (!tier || p.tier === tier) && !byId.has(p.id)).length;
+  const radar = (label: TeamRadarView['label'], scores: (number | null)[], excluded: number): TeamRadarView => ({
+    label, scores, displays: scores.map(formatScore), excluded,
+  });
+  return {
+    axisLabels: AXIS_ORDER.map((a) => a.label),
+    radars: [radar('チーム全体', whole, missing()), ...TIERS.map((t) => radar(t, relative[t], missing(t)))],
+    indicators: TIERS.map((tier) => {
+      const found = file?.teams?.find((x) => x.team === team && x.tier === tier);
+      const list: TeamIndicator[] = found?.indicators ?? NO_INDICATORS;
+      const items = list.map((i) => ({ ...i, display: formatScore(i.score), line: lineOf(i.confidence) }));
+      return { tier, items };
+    }),
   };
 }

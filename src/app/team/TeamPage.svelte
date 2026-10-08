@@ -1,16 +1,18 @@
 <script lang="ts">
-  import type { PlayerFile } from '../../data/types.ts';
   import type { TeamId } from '../../sim/types.ts';
   import { TEAM_INFO, overallScore, formatScore } from '../lib/index.ts';
-  import { teamView } from './view.ts';
+  import { ROSTER } from '../../data/roster.ts';
+  import { teamRatingView, type RatingsFile } from '../rating/view.ts';
   import Radar from '../components/Radar.svelte';
   import Emblem from '../components/Emblem.svelte';
   import RoleGlyph from '../components/RoleGlyph.svelte';
   import type { Role } from '../../data/roster.ts';
 
-  let { team, files }: { team: TeamId; files: Record<string, PlayerFile> } = $props();
+  let { team, ratings }: { team: TeamId; ratings: RatingsFile | undefined } = $props();
   const info = $derived(TEAM_INFO[team]);
-  const v = $derived(teamView(team, files));
+  const v = $derived(teamRatingView(team, ratings));
+  const members = $derived(ROSTER.filter((p) => p.team === team));
+  const nameOf = (id: string) => ROSTER.find((p) => p.id === id)?.name ?? id;
   const whole = $derived(v.radars[0]);
   const tiers = $derived(v.radars.slice(1).reverse());
 </script>
@@ -68,15 +70,43 @@
           <p class="excluded-note">データの無い {r.excluded} 名を除いて計算しています</p>
         {/if}
         <ul class="court-members">
-          {#each v.members.filter((m) => m.tier === r.label) as m}
+          {#each members.filter((m) => m.tier === r.label) as m}
             <li>
-              <a class="chip" href={m.href}>
+              <a class="chip" href={`#/player/${m.id}`}>
                 <span class="role"><RoleGlyph role={m.role as Role} /></span>
                 <span>{m.name}</span>
               </a>
             </li>
           {/each}
         </ul>
+        <!-- F-009 基準25: チームの指標(視界・オブジェクト・マクロ) -->
+        {#each v.indicators.filter((x) => x.tier === r.label) as ind}
+          <div class="indicators">
+            <p class="eyebrow">Team indicators</p>
+            {#each ind.items as it}
+              <details class="indicator">
+                <summary>
+                  <span class="label-text">{it.label}</span>
+                  <span class="value" class:na={it.score === null}>
+                    {it.display}
+                    {#if it.confidence}<small class="conf" class:low={it.confidence === '低'}>確度 {it.confidence}</small>{/if}
+                  </span>
+                </summary>
+                <p class="missing-note">{it.reason}</p>
+                {#if it.players.length}
+                  <ul class="ind-players">
+                    {#each it.players as pl}<li>{nameOf(pl.playerId)} <b>{pl.score.toFixed(1)}</b> <span>({pl.gamesUsed} 試合・確度 {pl.confidence})</span></li>{/each}
+                  </ul>
+                {/if}
+                {#if it.evidence.length}
+                  <ul class="grounds">
+                    {#each it.evidence as e}<li><span class="ground-text">{e.text}</span> <span class="ground-meta">{e.source}</span></li>{/each}
+                  </ul>
+                {/if}
+              </details>
+            {/each}
+          </div>
+        {/each}
       </section>
     {/each}
   </div>
