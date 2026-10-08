@@ -294,9 +294,9 @@
     "tier": "NEXT",
     "role": "SUP",
     "player": "鷹宮リオン",
-    "riotId": null,
-    "source": "調査の op.gg https://op.gg/ja/lol/summoners/jp/%E9%B7%B9%E5%AE%AELee%20Ornn-JP1 / LoL情報まとめ Wiki https://wikiwiki.jp/loljpdata/%E4%B8%80%E8%A6%A7%E8%A1%A8 / サブ垢 X https://x.com/takamiyarion_2/status/2033443938460369232",
-    "verified": false,
+    "riotId": "名誉0の人#JP1",
+    "source": "価値責任者が DEEPLOL の掲載(鷹宮リオンと紐付け)と本人のサブ X の言及から特定。Riot API で実在を確認したが今季ソロ未ランク(2026-10-08)",
+    "verified": true,
     "confidence": "低"
   },
   {
@@ -364,10 +364,10 @@
     "tier": "CORE",
     "role": "JG",
     "player": "AlphaAzur",
-    "riotId": null,
-    "source": "srtr 詳細 https://srtr.site/streamer/Alpha%20Azur/ / LoL情報まとめ Wiki https://wikiwiki.jp/loljpdata/%E4%B8%80%E8%A6%A7%E8%A1%A8",
-    "verified": false,
-    "confidence": "低"
+    "riotId": "Alpha Azur#アくん",
+    "source": "価値責任者が op.gg で特定 https://op.gg/ja/lol/summoners/jp/Alpha%20Azur-%E3%82%A2%E3%81%8F%E3%82%93 / srtr の追跡値(ソロ 55LP)と Riot API のランクが一致(2026-10-08)",
+    "verified": true,
+    "confidence": "高"
   },
   {
     "team": "IT",
@@ -534,10 +534,10 @@
     "tier": "CORE",
     "role": "ADC",
     "player": "大御所にゅん子",
-    "riotId": null,
-    "source": "srtr 詳細 https://srtr.site/streamer/%E5%A4%A7%E5%BE%A1%E6%89%80%E3%81%AB%E3%82%85%E3%82%93%E5%AD%90/ / LoLランクボード X https://x.com/lol_rank_s/status/2091450651742294024",
-    "verified": false,
-    "confidence": "低"
+    "riotId": "moonshine#密造酒",
+    "source": "価値責任者が op.gg で特定 https://op.gg/ja/lol/summoners/jp/moonshine-%E5%AF%86%E9%80%A0%E9%85%92 / srtr の追跡値(フレックス Emerald I・5v5 Master)と Riot API のランクが一致(2026-10-08)",
+    "verified": true,
+    "confidence": "高"
   },
   {
     "team": "LR",
