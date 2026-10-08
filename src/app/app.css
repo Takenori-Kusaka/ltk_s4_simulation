@@ -848,3 +848,147 @@ h1[tabindex='-1']:focus {
 .notfound .chip {
   display: inline-flex;
 }
+
+/* ---------- F-009 Task-6: 8軸・確度・調子・軸の説明・チームの指標 ---------- */
+.form-badge {
+  display: grid;
+  gap: 2px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--team) 60%, transparent);
+  background: color-mix(in srgb, var(--team) 10%, transparent);
+}
+.form-badge.none {
+  border-style: dashed;
+  border-color: var(--line);
+  background: transparent;
+}
+.form-label {
+  font-family: var(--serif-jp);
+  font-size: 1.15rem;
+  color: var(--gold-hi);
+}
+.form-coef {
+  font-family: var(--serif-latin);
+  font-variant-numeric: tabular-nums;
+  color: var(--ivory);
+}
+.form-why {
+  font-size: 0.74rem;
+  color: var(--ivory-dim);
+  overflow-wrap: anywhere;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--ivory-dim);
+}
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lg {
+  display: inline-block;
+  width: 22px;
+  border-top: 2px solid var(--team);
+}
+.lg.dotted {
+  border-top-style: dotted;
+}
+.lg.missing {
+  border-top: 1px dashed var(--muted);
+}
+.conf {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--sans-jp);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--ivory-dim);
+  text-align: right;
+}
+.conf.low {
+  color: #d9a066;
+}
+.bar.low i {
+  background: repeating-linear-gradient(90deg, var(--gold-hi) 0 3px, transparent 3px 7px);
+  box-shadow: none;
+}
+.details {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 12px;
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+}
+.details dt {
+  color: var(--gold);
+  font-family: var(--serif-jp);
+}
+.details dd {
+  margin: 0;
+  color: var(--ivory);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 520px) {
+  .details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .details dd {
+    margin-bottom: 6px;
+  }
+}
+.marks {
+  margin: 0 0 8px;
+}
+.mark {
+  display: inline-block;
+  padding: 1px 6px;
+  margin-right: 6px;
+  border: 1px solid #d9a066;
+  color: #d9a066;
+  font-size: 0.68rem;
+}
+.mark.ok {
+  border-color: var(--gold);
+  color: var(--gold-hi);
+}
+.grounds {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+.grounds li {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+  overflow-wrap: anywhere;
+}
+.grounds li.unused {
+  opacity: 0.6;
+}
+.ground-text {
+  display: block;
+  color: var(--ivory);
+}
+.ground-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 4px;
+  color: var(--ivory-dim);
+  font-size: 0.72rem;
+}
+.ground-meta a {
+  color: var(--gold-hi);
+}
+.radar .label.low {
+  fill: #d9a066;
+}
