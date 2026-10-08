@@ -3,7 +3,7 @@ export const QUEUE_SOLO = 420;
 export const QUEUE_FLEX = 440;
 
 const REGION = 'https://asia.api.riotgames.com'; // account-v1・match-v5 の地域ルーティング
-const PLATFORM = 'https://jp1.api.riotgames.com'; // league-v4 のプラットフォーム
+const PLATFORM = 'https://jp1.api.riotgames.com'; // league-v4・summoner-v4・champion-mastery-v4 のプラットフォーム
 
 /** Retry-After が無い 429 で待つ秒数 */
 const DEFAULT_RETRY_SECONDS = 1;
@@ -24,6 +24,10 @@ export interface RiotResponse<T> {
 
 export interface Account { puuid: string; gameName?: string; tagLine?: string }
 export interface LeagueEntry { queueType: string; tier?: string; rank?: string; leaguePoints?: number; wins?: number; losses?: number }
+/** summoner-v4 の応答(F-009 基準26 で使うのは summonerLevel) */
+export interface Summoner { summonerLevel: number; profileIconId?: number; revisionDate?: number }
+/** champion-mastery-v4 の1体ぶん */
+export interface ChampionMastery { championId: number; championLevel?: number; championPoints: number }
 
 export class RiotHttpError extends Error {
   readonly status: number;
@@ -56,6 +60,11 @@ export interface RiotClient {
   leagueEntriesByPuuid(puuid: string): Promise<RiotResponse<LeagueEntry[]>>;
   matchIdsByPuuid(puuid: string, q: { queue: number; count: number; startTime?: number }): Promise<RiotResponse<string[]>>;
   match(matchId: string): Promise<RiotResponse<unknown>>;
+  summonerByPuuid(puuid: string): Promise<RiotResponse<Summoner>>;
+  /** 熟練度の高い順に count 体 */
+  championMasteryTop(puuid: string, count: number): Promise<RiotResponse<ChampionMastery[]>>;
+  /** 熟練度の合計(全チャンピオンのレベルの和) */
+  championMasteryScore(puuid: string): Promise<RiotResponse<number>>;
   /** 文中のキーを伏せる(保存・ログの前の多重の防御) */
   redact(text: string): string;
 }
@@ -93,6 +102,10 @@ export function createRiotClient(opts: RiotClientOptions): RiotClient {
       return get(`${REGION}/lol/match/v5/matches/by-puuid/${enc(puuid)}/ids?${p}`);
     },
     match: (matchId) => get(`${REGION}/lol/match/v5/matches/${enc(matchId)}`),
+    summonerByPuuid: (puuid) => get(`${PLATFORM}/lol/summoner/v4/summoners/by-puuid/${enc(puuid)}`),
+    championMasteryTop: (puuid, count) =>
+      get(`${PLATFORM}/lol/champion-mastery/v4/champion-masteries/by-puuid/${enc(puuid)}/top?count=${count}`),
+    championMasteryScore: (puuid) => get(`${PLATFORM}/lol/champion-mastery/v4/scores/by-puuid/${enc(puuid)}`),
     redact: (text) => text.split(key).join('***'),
   };
 }

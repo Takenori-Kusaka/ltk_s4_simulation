@@ -1,7 +1,8 @@
+// F-009 Task-5: 受入基準 26(サモナーレベル・熟練度)・27(直近 120 日の試合を最大 60 件)
 // F-003 Task-1: 受入基準 1(ランクと差分の試合を取得日時つきで保存)・4(未取得)・5(キーを書かない)、二重起動の防止、収集ログ
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, readdirSync, existsSync, writeFileSync, statSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, existsSync, writeFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRiotClient } from '../../src/collect/riot.ts';
@@ -16,7 +17,9 @@ interface FakeMatch { id: string; puuid: string; queue: 420 | 440; startMs: numb
 
 /** Riot API の振る舞いを真似る fetch。要求の URL と見出しを記録する */
 function fakeRiot() {
-  const accounts: Record<string, string> = { 'Alice#JP1': 'PUUID-A', 'Dan#JP1': 'PUUID-D', 'Eve#JP1': 'PUUID-E', 'Fay#JP1': 'PUUID-F' };
+  const accounts: Record<string, string> = {
+    'Alice#JP1': 'PUUID-A', 'Dan#JP1': 'PUUID-D', 'Eve#JP1': 'PUUID-E', 'Fay#JP1': 'PUUID-F', 'Gin#JP1': 'PUUID-G',
+  };
   const matches: FakeMatch[] = [];
   const add = (n: number, puuid: string, queue: 420 | 440, startMs: number) =>
     matches.push({ id: `JP1_${n}`, puuid, queue, startMs });
@@ -24,6 +27,9 @@ function fakeRiot() {
   for (let n = 100; n <= 136; n++) add(n, 'PUUID-A', n <= 120 ? 420 : 440, T0 - 2 * DAY + n * 60_000);
   for (let n = 300; n <= 302; n++) add(n, 'PUUID-D', 420, T0 - 2 * DAY + n * 60_000);
   add(400, 'PUUID-F', 420, T0 - DAY);
+  // Gin: 直近 120 日にソロ 1000〜1049・フレックス 1050〜1079(合計80)、120 日より前にソロ 900〜904
+  for (let n = 1000; n <= 1079; n++) add(n, 'PUUID-G', n <= 1049 ? 420 : 440, T0 - 10 * DAY + (n - 1000) * 60_000);
+  for (let n = 900; n <= 904; n++) add(n, 'PUUID-G', 420, T0 - 130 * DAY + n * 60_000);
   const failMatch = new Set<string>();
   const calls: { url: string; token: string | null }[] = [];
   const reply = (body: unknown, status = 200, token: string | null = null) =>
@@ -66,6 +72,16 @@ function fakeRiot() {
       if (!x || failMatch.has(x.id)) return reply(null, failMatch.has(m[1]) ? 500 : 404, token);
       return reply({ metadata: { matchId: x.id, participants: [x.puuid] }, info: { queueId: x.queue, gameStartTimestamp: x.startMs } });
     }
+    m = path.match(/^\/lol\/summoner\/v4\/summoners\/by-puuid\/(.+)$/);
+    if (m) return reply({ puuid: m[1], profileIconId: 1, revisionDate: T0, summonerLevel: 321 });
+    m = path.match(/^\/lol\/champion-mastery\/v4\/champion-masteries\/by-puuid\/(.+)\/top$/);
+    if (m) {
+      const count = Number(u.searchParams.get('count') ?? 3);
+      const all = Array.from({ length: 15 }, (_, i) => ({ puuid: m![1], championId: i + 1, championLevel: 7, championPoints: 100_000 - i * 1000 }));
+      return reply(all.slice(0, count));
+    }
+    m = path.match(/^\/lol\/champion-mastery\/v4\/scores\/by-puuid\/(.+)$/);
+    if (m) return reply(987);
     return reply(null, 404, token);
   };
   return { fetch, calls, add, failMatch };
@@ -93,7 +109,7 @@ function clientFor(api: ReturnType<typeof fakeRiot>, at: number) {
   return createRiotClient({ apiKey: KEY, fetch: api.fetch, sleep: async () => {}, now: () => new Date(at) });
 }
 
-test('基準1: 初回は選手ごとに現在のランク(ソロ・フレックス)と直近30試合の詳細を、取得日時つきで保存する', async () => {
+test('基準1(F-009 基準27 で置き換え): 初回は選手ごとに現在のランク(ソロ・フレックス)と直近 120 日の試合(60 件以内なら全件)の詳細を、取得日時つきで保存する', async () => {
   const dir = tmp();
   const api = fakeRiot();
   const summary = await runCollection({ players: PLAYERS, client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
@@ -108,17 +124,16 @@ test('基準1: 初回は選手ごとに現在のランク(ソロ・フレック�
   const idQueues = api.calls.map((c) => new URL(c.url)).filter((u) => u.pathname.endsWith('/PUUID-A/ids')).map((u) => u.searchParams.get('queue'));
   assert.deepEqual(idQueues.sort(), ['420', '440']);
 
-  // 直近30試合(JP1_107〜JP1_136)だけを取り、それぞれ取得日時つきで保存する
+  // 直近 120 日の 37 試合(JP1_100〜JP1_136)を取り、それぞれ取得日時つきで保存する
   const aliceDetails = detailCalls(api.calls).filter((id) => Number(id!.slice(4)) < 300);
-  assert.equal(aliceDetails.length, 30);
-  for (let n = 107; n <= 136; n++) {
+  assert.equal(aliceDetails.length, 37);
+  for (let n = 100; n <= 136; n++) {
     const saved = readJson(join(dir, 'matches', `JP1_${n}.json`));
     assert.equal(saved.retrievedAt, new Date(T0).toISOString());
     assert.equal(saved.data.metadata.matchId, `JP1_${n}`);
   }
-  assert.equal(existsSync(join(dir, 'matches', 'JP1_106.json')), false);
-  assert.equal(a.matchIds.length, 30);
-  assert.equal(summary.players.find((p) => p.playerId === 'A')!.newMatches, 30);
+  assert.equal(a.matchIds.length, 37);
+  assert.equal(summary.players.find((p) => p.playerId === 'A')!.newMatches, 37);
   assert.equal(summary.players.find((p) => p.playerId === 'D')!.newMatches, 3);
 });
 
@@ -194,7 +209,7 @@ test('収集ログ: 開始・終了・選手ごとの件数・エラーをファ
   const text = readFileSync(join(dir, 'logs', logs[0]), 'utf8');
   assert.match(text, /開始/);
   assert.match(text, /終了/);
-  assert.match(text, /A .*30/);
+  assert.match(text, /A .*37/);
   assert.match(text, /D .*3/);
   assert.match(text, /C .*未取得.*404/);
   assert.match(text, /B .*未取得/);
@@ -248,6 +263,115 @@ test('コマンド: 環境変数のキーで収集し、成功の終了コード
   assert.ok(existsSync(join(dir, 'players', 'A.json')));
   assert.ok(api.calls.every((c) => c.token === KEY));
   assert.ok(!out.join('\n').includes(KEY));
+});
+
+const GIN = [{ id: 'G', riotId: 'Gin#JP1' }];
+const WINDOW_SEC = 120 * 86_400;
+const idRequests = (calls: { url: string }[]) => calls.map((c) => new URL(c.url)).filter((u) => u.pathname.endsWith('/ids'));
+const range = (from: number, to: number) => Array.from({ length: to - from + 1 }, (_, i) => `JP1_${from + i}`);
+
+test('F-009 基準26: 選手ごとにサモナーレベルと熟練度の上位(10件)・合計を、取得日時つきで選手の記録へ保存する', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  await runCollection({ players: PLAYERS, client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
+  const at = new Date(T0).toISOString();
+  for (const id of ['A', 'D']) {
+    const rec = readJson(join(dir, 'players', `${id}.json`));
+    assert.equal(rec.summoner.data.summonerLevel, 321);
+    assert.equal(rec.summoner.retrievedAt, at);
+    assert.equal(rec.masteryTop.data.length, 10);
+    assert.equal(rec.masteryTop.data[0].championPoints, 100_000);
+    assert.equal(rec.masteryTop.retrievedAt, at);
+    assert.equal(rec.masteryScore.data, 987);
+    assert.equal(rec.masteryScore.retrievedAt, at);
+  }
+  const top = api.calls.map((c) => new URL(c.url)).filter((u) => u.pathname.endsWith('/top'));
+  assert.ok(top.length >= 2 && top.every((u) => u.searchParams.get('count') === '10' && u.host === 'jp1.api.riotgames.com'));
+});
+
+test('F-009 基準27: 初回は直近 120 日のソロ・フレックスの試合を、新しい順に最大 60 件だけ取得する', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  const summary = await runCollection({ players: GIN, client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
+  const reqs = idRequests(api.calls);
+  assert.deepEqual(reqs.map((u) => u.searchParams.get('queue')).sort(), ['420', '440']);
+  for (const u of reqs) {
+    assert.equal(Number(u.searchParams.get('startTime')), T0 / 1000 - WINDOW_SEC);
+    assert.ok(Number(u.searchParams.get('count')) >= 60);
+  }
+  assert.deepEqual(detailCalls(api.calls).sort(), range(1020, 1079).sort());
+  const g = readJson(join(dir, 'players', 'G.json'));
+  assert.equal(g.matchIds.length, 60);
+  assert.ok(!g.matchIds.some((id: string) => Number(id.slice(4)) < 1000));
+  assert.equal(existsSync(join(dir, 'matches', 'JP1_904.json')), false);
+  assert.equal(summary.players[0].newMatches, 60);
+});
+
+test('F-009 基準27: 2回目以降は保存済みでない試合だけを取り、要求の起点は直近 120 日より前にならない', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  await runCollection({ players: GIN, client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
+
+  api.add(1080, 'PUUID-G', 420, T0 + DAY / 2);
+  api.calls.length = 0;
+  const T1 = T0 + DAY;
+  await runCollection({ players: GIN, client: clientFor(api, T1), dataDir: dir, now: () => new Date(T1) });
+  assert.deepEqual(detailCalls(api.calls), ['JP1_1080']);
+  for (const u of idRequests(api.calls)) {
+    const st = Number(u.searchParams.get('startTime'));
+    assert.ok(st >= T1 / 1000 - WINDOW_SEC && st <= T0 / 1000);
+  }
+
+  // 前回の収集が 120 日より前でも、起点は直近 120 日の始まり
+  const T2 = T0 + 130 * DAY;
+  api.add(1081, 'PUUID-G', 440, T2 - DAY);
+  api.calls.length = 0;
+  const summary = await runCollection({ players: GIN, client: clientFor(api, T2), dataDir: dir, now: () => new Date(T2) });
+  const reqs = idRequests(api.calls);
+  assert.equal(reqs.length, 2);
+  for (const u of reqs) assert.equal(Number(u.searchParams.get('startTime')), T2 / 1000 - WINDOW_SEC);
+  assert.deepEqual(detailCalls(api.calls), ['JP1_1081']);
+  assert.equal(summary.players[0].newMatches, 1);
+});
+
+test('F-009 基準27: 2回目以降も、新しい試合が 60 件を超えるときは新しい順に 60 件だけ取得する', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  await runCollection({ players: GIN, client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
+  for (let n = 2000; n <= 2069; n++) api.add(n, 'PUUID-G', n % 2 ? 420 : 440, T0 + n * 1000);
+  api.calls.length = 0;
+  const T1 = T0 + DAY;
+  await runCollection({ players: GIN, client: clientFor(api, T1), dataDir: dir, now: () => new Date(T1) });
+  assert.deepEqual(detailCalls(api.calls).sort(), range(2010, 2069).sort());
+});
+
+test('F-009 基準27: F-003 の初回 30 試合で作った記録は、次の収集で直近 120 日を取り直し、保存済みの試合は取り直さない', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  // F-003 の形の記録: lastCollectedAt はあるが、120 日の窓で集めた印が無い
+  mkdirSync(join(dir, 'players'), { recursive: true });
+  mkdirSync(join(dir, 'matches'), { recursive: true });
+  const old = range(107, 136);
+  writeFileSync(join(dir, 'players', 'A.json'), JSON.stringify({
+    playerId: 'A', riotId: 'Alice#JP1', status: '取得済み', collectedAt: new Date(T0 - 3600_000).toISOString(),
+    lastCollectedAt: T0 / 1000 - 3600, matchIds: old,
+  }));
+  for (const id of old) writeFileSync(join(dir, 'matches', `${id}.json`), '{}');
+  await runCollection({ players: [{ id: 'A', riotId: 'Alice#JP1' }], client: clientFor(api, T0), dataDir: dir, now: () => new Date(T0) });
+  for (const u of idRequests(api.calls)) assert.equal(Number(u.searchParams.get('startTime')), T0 / 1000 - WINDOW_SEC);
+  assert.deepEqual(detailCalls(api.calls).sort(), range(100, 106).sort());
+  assert.equal(readJson(join(dir, 'players', 'A.json')).matchIds.length, 37);
+});
+
+test('F-009 基準27: コマンドは注入した時計で直近 120 日の起点を決める', async () => {
+  const dir = tmp();
+  const api = fakeRiot();
+  const code = await main({
+    env: { RIOT_API_KEY: KEY }, dataDir: dir, players: GIN, fetch: api.fetch, sleep: async () => {}, out: () => {}, now: () => new Date(T0),
+  });
+  assert.equal(code, 0);
+  for (const u of idRequests(api.calls)) assert.equal(Number(u.searchParams.get('startTime')), T0 / 1000 - WINDOW_SEC);
+  assert.equal(readJson(join(dir, 'players', 'G.json')).summoner.retrievedAt, new Date(T0).toISOString());
 });
 
 test('コマンド: 収集中のロックがあれば失敗の終了コードを返す', async () => {

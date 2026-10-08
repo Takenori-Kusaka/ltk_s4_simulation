@@ -117,6 +117,32 @@ test('呼び出し先: account-v1 は asia、league-v4 は jp1、match-v5 は as
   assert.equal(new URL(calls[3].url).pathname, '/lol/match/v5/matches/JP1_2');
 });
 
+test('F-009 基準26: summoner-v4 と champion-mastery-v4(上位・合計)は jp1 へ、キーを見出しでだけ送って取得日時つきで返す', async () => {
+  const { fetch, calls } = scripted([
+    json({ puuid: 'P1', summonerLevel: 321 }),
+    json([{ championId: 1, championPoints: 1000 }]),
+    json(4321),
+  ]);
+  const now = () => new Date('2026-10-09T00:00:00.000Z');
+  const client = createRiotClient({ apiKey: KEY, fetch, sleep: fakeSleep().sleep, now });
+  const s = await client.summonerByPuuid('P/1');
+  const top = await client.championMasteryTop('P/1', 10);
+  const score = await client.championMasteryScore('P/1');
+  assert.equal(s.data.summonerLevel, 321);
+  assert.equal(s.retrievedAt, '2026-10-09T00:00:00.000Z');
+  assert.equal(top.data[0].championPoints, 1000);
+  assert.equal(top.retrievedAt, '2026-10-09T00:00:00.000Z');
+  assert.equal(score.data, 4321);
+  assert.equal(score.retrievedAt, '2026-10-09T00:00:00.000Z');
+  const [u0, u1, u2] = calls.map((c) => new URL(c.url));
+  for (const u of [u0, u1, u2]) assert.equal(u.host, 'jp1.api.riotgames.com');
+  assert.equal(u0.pathname, '/lol/summoner/v4/summoners/by-puuid/P%2F1');
+  assert.equal(u1.pathname, '/lol/champion-mastery/v4/champion-masteries/by-puuid/P%2F1/top');
+  assert.equal(u1.searchParams.get('count'), '10');
+  assert.equal(u2.pathname, '/lol/champion-mastery/v4/scores/by-puuid/P%2F1');
+  assert.ok(calls.every((c) => c.token === KEY && !c.url.includes(KEY)));
+});
+
 test('キーの読み込み: 環境変数 RIOT_API_KEY から読み、無ければキーを含まない文で失敗する', () => {
   assert.equal(loadApiKey({ RIOT_API_KEY: ` ${KEY}\n` }), KEY);
   assert.throws(() => loadApiKey({}), /RIOT_API_KEY/);
