@@ -3,7 +3,7 @@
   "configured": true,
   "profileName": null,
   "projectId": "P-001",
-  "generatedAt": "2026-10-08T19:38:20+09:00",
+  "generatedAt": "2026-10-08T21:19:07+09:00",
   "answers": {
     "q-team-size": "size-1-2",
     "q-biz-phase": "poc",
@@ -577,7 +577,7 @@
     "requiredCheck": false
   },
   "task": {
-    "maxChangedLines": 400,
+    "maxChangedLines": 800,
     "maxChangedFiles": 15,
     "selfHealMaxIterations": 3
   },
@@ -714,6 +714,35 @@
       "notice": null,
       "prevHash": "a273e9e6a8f2cc52683c84384f8a4150e67fbc6e1850a68d884af7c5e44abe00",
       "stateHash": "c050b40784fc589ff4cd6e715ca8fada378fbb7aaef88627087a08b283de4b4e"
+    },
+    {
+      "date": "2026-10-08",
+      "at": "2026-10-08T21:19:07+09:00",
+      "kind": "settings",
+      "changePoint": null,
+      "summary": "変更規模の上限を 400行から 800行へ引き上げる",
+      "result": "changed",
+      "direction": "loosen",
+      "d0Before": "1.1",
+      "d0After": "1.1",
+      "diff": [
+        "変更行数の上限: 400 → 800"
+      ],
+      "arising": [],
+      "separationRecheck": "兼務禁止への抵触 0 件 / 代償措置つきの例外 0 件 / 逸脱として記録した兼務 2 件 / 同一人物のため独立が成立しない組 1 件 / 責任者が未記入の席 0 席",
+      "invalidatedChecks": [],
+      "expired": [],
+      "recheckDue": null,
+      "decidedBy": "takenori-kusaka",
+      "reason": "1名体制では PR の例外承認(承認者が作成者と別人であること)が成立せず、テスト込みの行数が 400行を超えるタスク(F-003 Task-1 の 696行)を通す経路が無いため(2026-10-08 に takenori-kusaka が会話で選択)",
+      "ruleApprovedBy": null,
+      "ruleApproval": null,
+      "nameOverrides": [],
+      "sgRecord": null,
+      "outage": null,
+      "notice": null,
+      "prevHash": "0a7a8f8fae805ac252f52da62d992257af2a61039767387d0230022633bfb7eb",
+      "stateHash": "f15aedfe1ce7cca292d69d5d2e6c4717c806b8757edee6a1cae759cdc9e28934"
     }
   ]
 }
