@@ -161,25 +161,24 @@ test('基準17: 理由の文に試合数と勝率を書く', () => {
   assert.match(r.reason, /70%/);
 });
 
-test('基準19: 表示の点数 = 5.0 + (基礎 − 5.0) × 係数、0〜10 に切り詰め', () => {
-  assert.equal(applyForm(5, 1.1), 5);
-  assert.equal(applyForm(5, 0.9), 5);
-  assert.ok(Math.abs(applyForm(8, 1.1) - 8.3) < 1e-9); // 基礎 × 係数(8.8)ではない
-  assert.ok(Math.abs(applyForm(8, 0.9) - 7.7) < 1e-9);
-  assert.ok(Math.abs(applyForm(3, 1.1) - 2.8) < 1e-9);
-  assert.ok(Math.abs(applyForm(3, 0.9) - 3.2) < 1e-9);
+test('基準19: 表示の点数 = 基礎 + (係数 − 1) × 5(±0.5 点まで)、0〜10 に切り詰め', () => {
+  assert.ok(Math.abs(applyForm(5, 1.1) - 5.5) < 1e-9);
+  assert.ok(Math.abs(applyForm(5, 0.9) - 4.5) < 1e-9);
+  assert.ok(Math.abs(applyForm(8, 1.1) - 8.5) < 1e-9);
+  assert.ok(Math.abs(applyForm(3, 1.04) - 3.2) < 1e-9);
   assert.equal(applyForm(7, 1), 7);
-  assert.equal(applyForm(10, 1.1), 10);
-  assert.equal(applyForm(0, 1.1), 0);
+  assert.equal(applyForm(9.8, 1.1), 10);
+  assert.equal(applyForm(0.2, 0.9), 0);
   assert.equal(applyForm(12, 1), 10);
   assert.equal(applyForm(-1, 1), 0);
 });
 
-test('基準19: 中心を 5.0 に置くため、調子の効きは基礎の点数の大きさに比例しない', () => {
-  // 基礎 × 係数 なら 8 点の選手は ±0.8、2 点の選手は ±0.2 動く。中心化では 5 からの距離に比例する
-  const high = applyForm(8, 1.1) - 8;
-  const low = applyForm(2, 1.1) - 2;
-  assert.ok(Math.abs(Math.abs(high) - Math.abs(low)) < 1e-9);
+test('基準19: 好調なら実力帯に依らず必ず上がり、不調なら必ず下がる(同じ幅)', () => {
+  for (const base of [1, 3, 5, 7, 9]) {
+    assert.ok(applyForm(base, 1.06) > base, `好調 ${base}`);
+    assert.ok(applyForm(base, 0.94) < base, `不調 ${base}`);
+    assert.ok(Math.abs(applyForm(base, 1.06) - base - 0.3) < 1e-9);
+  }
 });
 
 test('基準19: 軸の説明のために基礎の点数と係数を返す', () => {

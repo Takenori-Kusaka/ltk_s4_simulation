@@ -169,7 +169,8 @@ export function formFactor(
 
 /** 基準19: 表示の点数 = clamp( 5.0 + (基礎 − 5.0) × 係数, 0, 10 ) */
 export function applyForm(base: number, coefficient: number): number {
-  return clamp(5 + (base - 5) * coefficient, 0, 10);
+  // 加算で ±0.5 点まで(係数 0.90〜1.10)。好調なら実力帯に依らず上がる(2026-10-09 価値責任者が確定)
+  return clamp(base + (coefficient - 1) * 5, 0, 10);
 }
 
 /** 基準19: 軸の説明に使う、基礎の点数・係数・表示の点数の組 */
