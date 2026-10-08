@@ -6,6 +6,7 @@
   import Home from './Home.svelte';
   import PlayerSheet from './PlayerSheet.svelte';
   import Emblem from './Emblem.svelte';
+  import TeamPage from '../team/TeamPage.svelte';
 
   let { files }: { files: Record<string, PlayerFile> } = $props();
   let hash = $state(location.hash);
@@ -30,7 +31,11 @@
       LTK · SEASON FINALE
     </a>
     {#if player}
-      <nav class="crumb"><a href="#/">ALL HOUSES</a> · {TEAM_INFO[player.team].name.toUpperCase()}</nav>
+      <nav class="crumb">
+        <a href="#/">ALL HOUSES</a> · <a href={`#/team/${player.team}`}>{TEAM_INFO[player.team].name.toUpperCase()}</a>
+      </nav>
+    {:else if route.page === 'team'}
+      <nav class="crumb"><a href="#/">ALL HOUSES</a> · {TEAM_INFO[route.team].name.toUpperCase()}</nav>
     {/if}
   </header>
   {#if errors.length}
@@ -41,6 +46,10 @@
         {#each errors as e}<li>{e}</li>{/each}
       </ul>
     </section>
+  {:else if route.page === 'team'}
+    {#key route.team}
+      <TeamPage team={route.team} {files} />
+    {/key}
   {:else if player}
     {#key player.id}
       <PlayerSheet {player} file={files[player.id] ?? emptyPlayerFile(player.id)} />
