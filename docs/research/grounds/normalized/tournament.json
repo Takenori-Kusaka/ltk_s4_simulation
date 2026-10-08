@@ -1,0 +1,687 @@
+{
+  "kind": "evidence-tournament",
+  "retrievedAt": "2026-10-08",
+  "description": "F-009 大会経験の材料(ADR-0004 決定5・7)。ltk は選手としての LTK の出場(format-history.md 節6。勝敗は記録として残すが点数には使わない)、coach は選手として出ていないシーズンのコーチ、pro はプロの経歴(years は調査の記述から数えた最小の年数)、other は他の大会・他ゲームのプロ。記載の無い項目は書かない。すべて AI の調査の記録",
+  "players": {
+    "DD-MASTERS-TOP": {
+      "name": "Washidai",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"MASTERS","role":"TOP","wins":8,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"V3 Esports","years":1,"note":"在籍年の記載なし(1年として数える)。出典は個人ブログで確度は低い","source":"docs/research/players-dd-cc.md","url":"https://note.com/moral_snipe1375/n/n9059102aa679"},
+        {"league":"LJL","team":"QT DIG∞","years":1,"note":"LJL 2025 優勝","source":"docs/research/players-dd-cc.md","url":"https://saiganak.com/ja/event/qtdig-ljl-2025-result"}
+      ],
+      "other": [
+        {"name":"LCP 入れ替え戦 2025(QT DIG∞)","source":"docs/research/players-dd-cc.md","url":"https://saiganak.com/ja/event/qtdig-ljl-2025-result"}
+      ]
+    },
+    "DD-MASTERS-JG": {
+      "name": "しゃるる",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"MASTERS","role":"JG","wins":9,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"RR","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [],
+      "other": [
+        {"name":"JCG の大会(プロ経験はない)","source":"docs/research/grounds/evidence-dd-cc.md","url":"https://fistbump-news.jp/article/2025/07/13/1287.html"}
+      ]
+    },
+    "DD-MASTERS-MID": {
+      "name": "たぬき忍者",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"MASTERS","role":"MID","wins":1,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"ST","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"LJL CS","team":"記載なし","years":1,"note":"LJL CS のチームのスタメン。LJL の1部の出場はない(調査の訂正)。年の記載なし","source":"docs/research/grounds/evidence-dd-cc.md","url":"https://lolninja.net/2019/03/24/11018"}
+      ],
+      "other": []
+    },
+    "DD-MASTERS-ADC": {
+      "name": "Day1",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"MASTERS","role":"ADC","wins":8,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"RR","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"その他のプロ","team":"Salvage Javelin","years":1,"note":"2015 年に所属。リーグの記載なし。成績不振で早期に引退","source":"docs/research/players-dd-cc.md","url":"https://lol.fandom.com/wiki/Day1"},
+        {"league":"LJL","team":"AXIZ","years":1,"note":"2019 年に ADC として復帰。リーグ名は調査に無く、AXIZ が LJL のチームであることから付けた","source":"docs/research/players-dd-cc.md","url":"https://game.watch.impress.co.jp/docs/news/1164559.html"}
+      ],
+      "other": []
+    },
+    "DD-MASTERS-SUP": {
+      "name": "hetel",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"MASTERS","role":"SUP","wins":9,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"V3 Esports","years":1,"note":"PCS 期。在籍年の記載なし(1年として数える)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"},
+        {"league":"LJL","team":"QT DIG∞","years":1,"note":"LJL 2025 優勝","source":"docs/research/players-dd-cc.md","url":"https://saiganak.com/ja/event/qtdig-ljl-2025-result"}
+      ],
+      "other": [
+        {"name":"LCP 入れ替え戦 2025(QT DIG∞)","source":"docs/research/players-dd-cc.md","url":"https://saiganak.com/ja/event/qtdig-ljl-2025-result"}
+      ]
+    },
+    "DD-CORE-TOP": {
+      "name": "酒寄颯馬",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"CORE","role":"TOP","wins":5,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-CORE-JG": {
+      "name": "きなこ",
+      "ltk": [
+        {"season":"S1","team":"ST","tier":"CORE","role":"JG","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","tier":"CORE","role":"JG","wins":0,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": [
+        {"name":"別ゲームのプロ経験(ゲーム名は未確認)","source":"docs/research/players-dd-cc.md","url":"https://kai-you.net/article/93149/page/2"}
+      ]
+    },
+    "DD-CORE-MID": {
+      "name": "スタンミじゃぱん",
+      "ltk": [],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-CORE-ADC": {
+      "name": "じゃすぱー",
+      "ltk": [],
+      "coach": [],
+      "pro": [],
+      "other": [
+        {"name":"Overwatch のプロ(USG Supreme・Libalent Supreme、2016 年〜)","source":"docs/research/players-dd-cc.md","url":"https://gamernokakurega.com/streamer/jasper"},
+        {"name":"Overwatch World Cup 2017 日本代表","source":"docs/research/grounds/evidence-dd-cc.md","url":"https://kai-you.net/article/89774"},
+        {"name":"Riot Games ONE 2025(CR のチーム)","source":"docs/research/players-dd-cc.md","url":"https://gamernokakurega.com/streamer/jasper"}
+      ]
+    },
+    "DD-CORE-SUP": {
+      "name": "神楽めあ",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"CORE","role":"SUP","wins":null,"losses":null,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb","note":"勝敗の記載なし(S1 PD CORE の細部は未確認)"},
+        {"season":"S2","team":"PD","tier":"CORE","role":"SUP","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"CORE","role":"SUP","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-NEXT-TOP": {
+      "name": "SHAKA",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"CORE","role":"ADC","wins":3,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","tier":"CORE","role":"ADC","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"NEXT","role":"ADC","wins":7,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-NEXT-JG": {
+      "name": "MOTHER3",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"NEXT","role":"TOP","wins":3,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","tier":"NEXT","role":"TOP","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-NEXT-MID": {
+      "name": "天ノ川ねる",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"NEXT","role":"MID","wins":7,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-NEXT-ADC": {
+      "name": "夢野あかり",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"NEXT","role":"MID","wins":3,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","tier":"NEXT","role":"ADC","wins":3,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"LR","tier":"NEXT","role":"ADC","wins":3,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "DD-NEXT-SUP": {
+      "name": "白波らむね",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"NEXT","role":"ADC","wins":6,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","tier":"NEXT","role":"ADC","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"LR","tier":"NEXT","role":"SUP","wins":3,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-MASTERS-TOP": {
+      "name": "Yutapon",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"MASTERS","role":"TOP","wins":9,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"DetonatioN FocusMe","years":10,"note":"2014 年の LJL 開幕から 2023 年まで在籍(LJL 6 連覇)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": [
+        {"name":"Worlds 2021(DFM、ベスト16)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"},
+        {"name":"Worlds 2023(DFM)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ]
+    },
+    "CC-MASTERS-JG": {
+      "name": "Rainbrain",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"MASTERS","role":"JG","wins":8,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"Rascal Jester","years":1,"note":"LJL 2014 優勝。翌年に引退","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ],
+      "other": [
+        {"name":"IWCA Melbourne 2015 日本代表(ファン投票)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ]
+    },
+    "CC-MASTERS-MID": {
+      "name": "Ceros",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"MASTERS","role":"MID","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"PD","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"LJL","team":"DetonatioN FocusMe","years":8,"note":"2013 年から DFM、2022 年2月に選手からコーチへ(LJL 開幕の 2014 年から 2021 年までを数える)","source":"docs/research/players-dd-cc.md、docs/research/grounds/evidence-dd-cc.md","url":"https://lol.fandom.com/wiki/Ceros"}
+      ],
+      "other": [
+        {"name":"Worlds 2018(DFM)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ]
+    },
+    "CC-MASTERS-ADC": {
+      "name": "Yuhi",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"MASTERS","role":"ADC","wins":1,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"Burning Core","years":5,"note":"2019 年からスターター、2024 年に移籍(2019〜2023 年を数える)。リーグ名はチームから付けた","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"Sengoku Gaming","years":1,"note":"2024 年","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"QT DIG∞","years":1,"note":"LJL 2025 優勝・GF の MVP","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ],
+      "other": [
+        {"name":"LCP 昇格戦 2025(QT DIG∞)","source":"docs/research/players-dd-cc.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ]
+    },
+    "CC-MASTERS-SUP": {
+      "name": "NEMOH",
+      "ltk": [],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"CGA・AXIZ","years":2,"note":"LJL では 2021〜2022 年頃に活動","source":"docs/research/players-dd-cc.md","url":"https://esports-world.jp/interview/29469"}
+      ],
+      "other": []
+    },
+    "CC-CORE-TOP": {
+      "name": "YUKIO",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"CORE","role":"TOP","wins":3,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"CORE","role":"TOP","wins":6,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"CORE","role":"TOP","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-CORE-JG": {
+      "name": "k4sen",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"CORE","role":"MID","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"CORE","role":"MID","wins":6,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"CORE","role":"JG","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-CORE-MID": {
+      "name": "葛葉",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"CORE","role":"JG","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"CORE","role":"JG","wins":6,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-CORE-ADC": {
+      "name": "龍巻ちせ",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"CORE","role":"ADC","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-CORE-SUP": {
+      "name": "昏昏アリア",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"CORE","role":"SUP","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"CORE","role":"SUP","wins":6,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"CORE","role":"SUP","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-NEXT-TOP": {
+      "name": "叶",
+      "ltk": [],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-NEXT-JG": {
+      "name": "ゆふな",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"NEXT","role":"JG","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"NEXT","role":"JG","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"CORE","role":"JG","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-NEXT-MID": {
+      "name": "空澄セナ",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"NEXT","role":"MID","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"NEXT","role":"MID","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-NEXT-ADC": {
+      "name": "獅子堂あかり",
+      "ltk": [],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "CC-NEXT-SUP": {
+      "name": "鷹宮リオン",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"CORE","role":"ADC","wins":2,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"NEXT","role":"ADC","wins":3,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"NEXT","role":"SUP","wins":3,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-MASTERS-TOP": {
+      "name": "らいじん",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"MASTERS","role":"TOP","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"DC","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"LJL","team":"7th Heaven","years":1,"note":"LJL 2018 Spring","source":"docs/research/players-it-lr.md、docs/research/grounds/evidence-it-lr.md","url":"https://www.youtube.com/watch?v=rP7cFD2rPws"}
+      ],
+      "other": []
+    },
+    "IT-MASTERS-JG": {
+      "name": "Yunika",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"MASTERS","role":"JG","wins":1,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"CGA","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"V3 Esports","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"AXIZ","years":1,"note":"在籍歴の記載あり。在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": []
+    },
+    "IT-MASTERS-MID": {
+      "name": "Eugeo",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"MASTERS","role":"MID","wins":8,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"DC","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"LJL","team":"Burning Core","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"CGA","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"},
+        {"league":"LJL","team":"V3 Esports","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ],
+      "other": []
+    },
+    "IT-MASTERS-ADC": {
+      "name": "Zerost",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"MASTERS","role":"ADC","wins":9,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [
+        {"season":"S1","team":"PD","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "pro": [
+        {"league":"LJL","team":"RabbitFive・FocusMe ほか","years":5,"note":"2015〜2019 年。リーグ名はチームから付けた","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ],
+      "other": [
+        {"name":"VALORANT のプロ","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/05/26/2482.html"}
+      ]
+    },
+    "IT-MASTERS-SUP": {
+      "name": "Enty",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"MASTERS","role":"SUP","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"USG","years":2,"note":"Haretti と2年間ボットデュオ","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"},
+        {"league":"LJL","team":"DetonatioN FocusMe","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"},
+        {"league":"LJL","team":"Sengoku Gaming","years":1,"note":"在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": []
+    },
+    "IT-CORE-TOP": {
+      "name": "mittiii",
+      "ltk": [
+        {"season":"S1","team":"ST","tier":"CORE","role":"TOP","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"PD","tier":"CORE","role":"TOP","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"LR","tier":"CORE","role":"TOP","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": [
+        {"name":"VALORANT のプロ(DFM 2020 年、FENNEL 2021〜22 年)","source":"docs/research/grounds/evidence-it-lr.md","url":"https://playerpedia.net/valorant/players/mittiii"}
+      ]
+    },
+    "IT-CORE-JG": {
+      "name": "AlphaAzur",
+      "ltk": [
+        {"season":"S1","team":"ST","tier":"CORE","role":"MID","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","tier":"CORE","role":"MID","wins":0,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"CORE","role":"MID","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": [
+        {"name":"PUBG のプロ(DeToNator の選手兼コーチ)","source":"docs/research/grounds/evidence-it-lr.md","url":"https://www.youtube.com/watch?v=ojv1eJpvlO0"}
+      ]
+    },
+    "IT-CORE-MID": {
+      "name": "たかやスペシャル",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"CORE","role":"SUP","wins":4,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","tier":"CORE","role":"SUP","wins":0,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"CORE","role":"SUP","wins":5,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": [
+        {"name":"スカウティング・グラウンズ 2019(35人中34位)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/01/01/1981.html"}
+      ]
+    },
+    "IT-CORE-ADC": {
+      "name": "ごんかね",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"CORE","role":"ADC","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-CORE-SUP": {
+      "name": "レグルシュ・ライオンハート",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"CORE","role":"SUP","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-NEXT-TOP": {
+      "name": "橘ひなの",
+      "ltk": [
+        {"season":"S1","team":"ST","tier":"NEXT","role":"ADC","wins":5,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"ST","tier":"CORE","role":"ADC","wins":0,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-NEXT-JG": {
+      "name": "ありけん",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"NEXT","role":"JG","wins":3,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-NEXT-MID": {
+      "name": "まいたけ",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"NEXT","role":"MID","wins":3,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-NEXT-ADC": {
+      "name": "天帝フォルテ",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"NEXT","role":"ADC","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"CORE","role":"ADC","wins":6,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"NEXT","role":"ADC","wins":3,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "IT-NEXT-SUP": {
+      "name": "白那しずく",
+      "ltk": [
+        {"season":"S1","team":"DC","tier":"NEXT","role":"SUP","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"NEXT","role":"SUP","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"NEXT","role":"SUP","wins":7,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-MASTERS-TOP": {
+      "name": "apaMEN",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"MASTERS","role":"TOP","wins":1,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"Rascal Jester・USG ほか","years":8,"note":"プロ歴は約8年(本人)。LJL 2014 優勝","source":"docs/research/players-it-lr.md、docs/research/grounds/evidence-it-lr.md","url":"https://www.youtube.com/watch?v=3IqhA7iLvOg"}
+      ],
+      "other": [
+        {"name":"Worlds 2023(DFM の代理メンバー)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ]
+    },
+    "LR-MASTERS-JG": {
+      "name": "Nesty",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"MASTERS","role":"JG","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"Sengoku Gaming","years":1,"note":"コロナ禍以降。在籍年の記載なし(1年として数える)","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": []
+    },
+    "LR-MASTERS-MID": {
+      "name": "Recap",
+      "ltk": [
+        {"season":"S3","team":"CC","tier":"MASTERS","role":"MID","wins":9,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"V3 Esports・RJ","years":7,"note":"2017〜2023 年","source":"docs/research/grounds/evidence-it-lr.md","url":"https://fistbump-news.jp/article/2025/04/04/924.html"},
+        {"league":"LJL","team":"REJECT","years":1,"note":"2025 年","source":"docs/research/grounds/evidence-it-lr.md","url":"https://fistbump-news.jp/article/2025/04/04/924.html"}
+      ],
+      "other": [
+        {"name":"アジア大会 杭州(X のプロフィールの記載)","source":"docs/research/players-it-lr.md","url":"https://x.com/Recaplol1"}
+      ]
+    },
+    "LR-MASTERS-ADC": {
+      "name": "Haretti",
+      "ltk": [
+        {"season":"S3","team":"LR","tier":"MASTERS","role":"ADC","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"USG","years":2,"note":"Enty と2年間ボットデュオ","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"},
+        {"league":"LJL","team":"7th Heaven","years":1,"note":"2018 年","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": []
+    },
+    "LR-MASTERS-SUP": {
+      "name": "ThintoN",
+      "ltk": [
+        {"season":"S3","team":"IT","tier":"MASTERS","role":"SUP","wins":1,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [
+        {"league":"LJL","team":"7th Heaven","years":1,"note":"2015 年頃","source":"docs/research/players-it-lr.md","url":"https://fistbump-news.jp/article/2026/06/09/2530.html"}
+      ],
+      "other": []
+    },
+    "LR-CORE-TOP": {
+      "name": "焼きパン",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"CORE","role":"TOP","wins":4,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","role":"TOP","wins":7,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"CORE","role":"ADC","wins":5,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-CORE-JG": {
+      "name": "Killin9Hit",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"CORE","role":"JG","wins":4,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","role":"JG","wins":7,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"LR","tier":"CORE","role":"JG","wins":4,"losses":4,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-CORE-MID": {
+      "name": "乾伸一郎",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"CORE","role":"MID","wins":4,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","role":"MID","wins":7,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"CORE","role":"MID","wins":5,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-CORE-ADC": {
+      "name": "大御所にゅん子",
+      "ltk": [
+        {"season":"S3","team":"DD","tier":"CORE","role":"ADC","wins":5,"losses":3,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-CORE-SUP": {
+      "name": "千燈ゆうひ",
+      "ltk": [
+        {"season":"S1","team":"PD","tier":"CORE","role":"JG","wins":3,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","role":"SUP","wins":7,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-NEXT-TOP": {
+      "name": "狐白うる",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"NEXT","role":"TOP","wins":6,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"NEXT","role":"TOP","wins":3,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"CORE","role":"TOP","wins":2,"losses":7,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-NEXT-JG": {
+      "name": "アステル・レダ",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"NEXT","role":"MID","wins":6,"losses":5,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S3","team":"DD","tier":"NEXT","role":"TOP","wins":7,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-NEXT-MID": {
+      "name": "春茶",
+      "ltk": [],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-NEXT-ADC": {
+      "name": "なぎさっち",
+      "ltk": [
+        {"season":"S1","team":"ST","tier":"CORE","role":"ADC","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","role":"ADC","wins":7,"losses":2,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"NEXT","role":"ADC","wins":3,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    },
+    "LR-NEXT-SUP": {
+      "name": "No.1005(とおこ)",
+      "ltk": [
+        {"season":"S1","team":"RR","tier":"CORE","role":"ADC","wins":4,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","tier":"NEXT","role":"ADC","wins":9,"losses":1,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"CC","tier":"NEXT","role":"SUP","wins":3,"losses":6,"source":"docs/research/format-history.md 節6","url":"https://gamernokakurega.com/ltk-pandemonium"}
+      ],
+      "coach": [],
+      "pro": [],
+      "other": []
+    }
+  }
+}

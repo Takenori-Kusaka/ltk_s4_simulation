@@ -1,0 +1,497 @@
+{
+  "kind": "evidence-shotcalling",
+  "retrievedAt": "2026-10-08",
+  "description": "F-009 コール力の根拠(ADR-0004 決定5)。collectedBy=ai は AI の調査エージェントが集めた未確認の根拠(「AI 収集」と表示)、human は価値責任者の確認。kindBy=機械で推定 は IT・LR の根拠の種類を要約の語から機械で付けたもの",
+  "players": {
+    "DD-MASTERS-TOP": {
+      "name": "わしだい",
+      "evidence": [
+        {"summary":"S3 で DD MASTERS の TOP を務めながら DD CORE のコーチも兼ねた。選手としてのコールではなく、コーチとして指示した根拠。","source":"https://zetadivision.com/news/2026/04/28/43610","date":"2026-04-28","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の DD CORE のスクリムで、コーチとしてゲーム中に具体的な指示を出し、「入っていいよ」という合図のコールを出すよう選手に教えている(YouTube の字幕で確認)。選手としてのコールではない。","source":"https://www.youtube.com/watch?v=ISOjh-u61Do","date":"2026-05","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Finale でも MASTERS と CORE コーチを兼任すると本人が投稿している。","source":"https://x.com/Washidai_","date":"2026-10-07","type":"本人の発言","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"切り抜きの題名で「B/P負けと言われた」とされ、コーチとしてのドラフトが批判された。指示の質に対する否定的な視聴者の評価。","source":"https://www.youtube.com/watch?v=Q2w8VY-7JYw","date":"2026-05","type":"視聴者の声","direction":"-","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LJL 2025 で優勝した QT DIG∞ の記事は、チームリーダーを Yuhi として紹介している。わしだいがプロ時代にコール役だったという記述は見つからなかった。","source":"https://esports-world.jp/interview/53728","date":"2025-09","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-MASTERS-JG": {
+      "name": "しゃるる",
+      "evidence": [
+        {"summary":"S3 のコーチとして CC CORE の問題点を指摘し、k4sen が的確だと納得したと切り抜きの題名にある。コーチとしての指示で、選手としてのコールではない。","source":"https://www.youtube.com/watch?v=AiZ4NOQPHyM","date":"2026-05-17","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 では RR のコーチ、S3 では CC MASTERS の JG と CC CORE のコーチを兼任した。コーチとしての指示役。","source":"https://zetadivision.com/news/2025/06/18/35373","date":"2025-06-18","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"コーチとしては、チームをまとめるためにあえて自分が悪者になると話している。NEXT では強く言いすぎないよう加減したとも述べた。","source":"https://fistbump-news.jp/article/2026/01/08/2009.html","date":"2026-01-08","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"声の大きい人に流される問題は、コーチが「みんな声出そう」と直すしかないと述べた。チーム内のコミュニケーションを整える方針を語っている。","source":"https://fistbump-news.jp/article/2025/07/13/1287.html","date":"2025-07-13","type":"本人の発言","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の CC MASTERS のスクリムでコールが問題になった。hetel 側の切り抜きでは、章の題名に「しゃるるの沈黙」とある。MASTERS では、選手としてコールを担う形ではなかったことを示す(章の題名で確認)。","source":"https://www.youtube.com/watch?v=Jsfsz9SATTA","date":"2026-05","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-MASTERS-MID": {
+      "name": "たぬき忍者",
+      "evidence": [
+        {"summary":"S3 の IT MASTERS のスクリムで、劣勢になると言葉が出なくなると本人のチャンネルの題名にある。選手としてのコールの弱さを示す。","source":"https://www.youtube.com/watch?v=MtiPUfhNlGs","date":"2026-05","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 では、IT MASTERS で勝ち筋が見えない中、Yuhi がたぬき忍者に「改造計画」を提案した。指示を受ける側だった。Yuhi は後に謝罪している。","source":"https://fistbump-news.jp/article/2026/06/24/2593.html","date":"2026-06-24","type":"チームメイトの発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 では ST のコーチ(ST は優勝)、S2 では DC のコーチ、S3 では IT NEXT のコーチを務めた。コーチとしての指示役。","source":"https://zetadivision.com/news/2025/06/18/35373","date":"2025-06-18","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S2 のプレイオフで、DC NEXT の空澄セナが、たぬき(コーチ)が信じてくれたおかげで勝てたと述べた(配信の字幕で確認)。","source":"https://www.youtube.com/watch?v=-Ha5zvbm_iA","date":"2025-12","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の Day1 の試合前に、IT NEXT コーチとして選手の吸収が早く、自信があると語った(配信の字幕で確認)。","source":"https://www.youtube.com/watch?v=I0VsypCJFw0","date":"2026-05-08","type":"大会での役割","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-MASTERS-ADC": {
+      "name": "Day1",
+      "evidence": [
+        {"summary":"S1 と S2 で RR のコーチを務めた(S2 は優勝)。コーチとしての指示役で、選手としてのコールではない。","source":"https://fistbump-news.jp/article/2025/09/08/1546.html","date":"2025-09-08","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LJL CS の解説者だった(選手出身の解説者)。試合を言語化する経験はあるが、コールした証拠ではない。","source":"https://wikiwiki.jp/lolesportsjp/Day1","date":"不明","type":"記事","direction":"+","strength":"弱","kind":"other","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-MASTERS-SUP": {
+      "name": "hetel",
+      "evidence": [
+        {"summary":"わしだいが振り返り配信で、hetel の本番のコールがかっこよく、オフラインでは声が大きくなると述べた。去年(QT DIG∞ でのプロ時代)も同じだったという(YouTube の字幕で確認)。","source":"https://www.youtube.com/watch?v=KZFqd4OGq7k","date":"2026-06","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 では CC NEXT のコーチを兼任し、「絶対勝たせます」と投稿した。コーチとしての指示役。","source":"https://x.com/heteel/status/2050472544579551289","date":"2026-05-02","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の CC MASTERS のスクリムで「そのコールは本当に大丈夫?」という切り抜きを出しており、チーム内でコールを検討していた(題名で確認)。","source":"https://www.youtube.com/watch?v=Jsfsz9SATTA","date":"2026-05","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"QT DIG∞ の記事は、チームリーダーを Yuhi として紹介している。hetel がプロ時代にショットコーラーだったという明記は見つからなかった。","source":"https://esports-world.jp/interview/53728","date":"2025-09","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-CORE-TOP": {
+      "name": "酒寄颯馬",
+      "evidence": [
+        {"summary":"にじさんじ Wiki の名言欄に、LTK 本番やスクリムでのコールとして「集団戦やったら俺らが勝つから」が載る。チームメイトから試合中のコールは頼りになると言われた旨の記述もある。","source":"https://wikiwiki.jp/nijisanji/%E9%85%92%E5%AF%84%E9%A2%AF%E9%A6%AC/%E8%A9%B3%E3%81%97%E3%81%8F%E7%9F%A5%E3%82%8A%E3%81%9F%E3%81%84","date":"不明","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の vs DD 戦の後のインタビューで、IT CORE の選手が「インゲームの VC やコールでいいことをずっと話してくれる」「チームを支えているのはそまさんのコールと動き」と述べた。試合直後の VC でも「プレイのコールも良かった」の声がある。話者は未特定(スニペットで確認)","source":"https://www.youtube.com/watch?v=L_zcjKA5pVg","date":"不明","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 IT では、個人コーチの apaMEN が忙しい時期に NEXT の白熊つららへ TOP の 1on1 と試合のフィードバックを行い、Yuhi からコーチングが上手いと評されたと Wiki にある。","source":"https://wikiwiki.jp/nijisanji/%E9%85%92%E5%AF%84%E9%A2%AF%E9%A6%AC","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"本人は LTK 出場報告の配信で、チームゲームの経験は多くないと自己評価した(KAI-YOU)。","source":"https://kai-you.net/article/95391","date":"不明","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-CORE-JG": {
+      "name": "きなこ",
+      "evidence": [
+        {"summary":"The k4sen(初心者企画)の切り抜きの題名が「ジャングル適性が高すぎて…名IGLで味方を勝利へ導くきなこ」。","source":"https://www.youtube.com/watch?v=D3Ae4bg6zZ0","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Crazy Raccoon Wiki によると、公式紹介でゲーム IQ が高く、IGL を務めることが多いとされる(主に Apex)。","source":"https://wikiwiki.jp/crazyraccoon/kinako","date":"不明","type":"記事","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 の FISTBUMP 記事は、正確なエンゲージと相手の仕掛けを潰すプレイを評価した。コールについての記述はない。","source":"https://fistbump-news.jp/article/2025/07/30/1384.html","date":"2025-07-30","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-CORE-MID": {
+      "name": "スタンミじゃぱん",
+      "evidence": [
+        {"summary":"2018年の Game Watch のインタビューで、GGTV では経験者として初心者を引っ張る立場だったと語った。","source":"https://game.watch.impress.co.jp/docs/series/lolforyou/1145210.html","date":"2018-09-28","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-CORE-ADC": {
+      "name": "じゃすぱー",
+      "evidence": [
+        {"summary":"VALORANT の CR カップの切り抜きの題名が「上から全てを指示するフレキシブルIGLじゃすぱー誕生」(GON の切り抜き、約4年前)。","source":"https://www.youtube.com/watch?v=Sj0Q9ReJavw","date":"不明","type":"視聴者の声","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"第2回 CR カップ VALORANT(2022年2月)では、ドラフトでチームを組むリーダー枠8人の1人だった。コーチは GON。IGL の記述はない。","source":"https://www.inside-games.jp/article/2022/02/11/136760.html","date":"2022-02-11","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LTK S1 プレイオフのショーマッチで「じゃすぱー率いる」TEAM THE JAS の BOT として出場した。","source":"https://fistbump-news.jp/article/2025/08/09/1422.html","date":"2025-08-09","type":"大会での役割","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Overwatch のプロ時代のロールは Liquipedia で Flex。IGL・ショットコーラーだった記述は見つからない(Liquipedia はスニペットで確認)。","source":"https://liquipedia.net/overwatch/Jasper","date":"不明","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-CORE-SUP": {
+      "name": "神楽めあ",
+      "evidence": [
+        {"summary":"S2 の PD コーチの Zerost が、めあはコールが圧倒的に増え、味方の安全を気にかける声掛けも増えたと評した。SHAKA は「キレなくなった」と述べた。","source":"https://fistbump-news.jp/article/2026/01/07/2001.html","date":"2026-01-07","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 優勝後の YUKIO の話では、めあは味方へ強く当たり、「なんでスマイト負けたの」のような理不尽な指摘もした。ザクレイとゆふなが場をなだめて話し合いへ持っていった。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"-","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 の PD CORE では、めあを中心とした苛烈なコミュニケーションが注目され、マネージャーが「チームメイトにフォローの負担をかけた」として反省のバンジーを企画した(KAI-YOU)。","source":"https://kai-you.net/article/93243","date":"不明","type":"記事","direction":"-","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の切り抜きの題名に「爆育ちしてアイテムに悩む大御所にめあ語でアドバイスする神楽めあ」がある。","source":"https://www.youtube.com/watch?v=B7WRG6B2XuA","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-NEXT-TOP": {
+      "name": "SHAKA",
+      "evidence": [
+        {"summary":"S3 DD NEXT で「死んだら負けるよ」と言い続けたと本人が語る。こく兄へは期待を込めて厳しく言っていると発言。声出し役の根拠。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"VSPO! SHOWDOWN 2026 DAY1 の LoL ライバルチームで「リーダー」を務めた(記事の見出しと本文)。ただしコールの内容は、まざー3・なぎさっち・ゆふなが出していたと本人が説明しており、自身は「フリーで殴らせてくれたら勝てる」と言っていた程度。","source":"https://fistbump-news.jp/article/2026/03/25/2262.html","date":"2026-03-25","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"同じインタビューで、試合中の判断は「みんなで相談しながら決めていた」と述べ、決定的なコールの担い手としてまざー3となぎさっちを挙げた。メインのショットコーラーは自分ではないことを示す。","source":"https://fistbump-news.jp/article/2026/03/25/2262.html","date":"2026-03-25","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の BAN/PICK はコーチ Eugeo が事前に組み、実戦でもそのとおりになぞったとこく兄が語る。戦略の決定はコーチ主導だった。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-NEXT-JG": {
+      "name": "まざー3",
+      "evidence": [
+        {"summary":"VSPO! SHOWDOWN 2026 で、ピンチの場面での決定的なコールや、ミスを事前に防ぐ注意喚起が多く「チームを引っ張ってくれた」と SHAKA が評価した。","source":"https://fistbump-news.jp/article/2026/03/25/2262.html","date":"2026-03-25","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LTK S1 の PD NEXT のスクリム後、チームメイトが「まざーさん今回コールめっちゃすごかった」「集団戦やりやすかった」「足並みがそろって助かった」と称賛。チャプター名も「まざーのコール」。","source":"https://www.youtube.com/watch?v=6dtbUWVuEnw","date":"2025-06-24","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"同じ場面で本人は「負けてるときのコールは難しい」と語る。劣勢のときのコールには課題があると自覚している。","source":"https://www.youtube.com/watch?v=6dtbUWVuEnw","date":"2025-06-24","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LTK S2 の初戦の本人視点の動画(英訳題「…leads Unsinkable to vi…」)で、ヘラルド・ドラゴン・ファイトの判断を声に出し続けている(TOP から全体へ指示)。話者の一部は推定。","source":"https://www.youtube.com/watch?v=EciccrZs43Q","date":"不明","type":"大会での役割","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-NEXT-MID": {
+      "name": "天ノ川ねる",
+      "evidence": [
+        {"summary":"S3 で、SHAKA が襲われたとき BOT 側から「誰か助けろよ！」と怒り、こく兄も「SHAKA見ろって言ってんだろ！」と叱られたと語る。それまで言わなかったが、ついに言うようになったと評される。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"本人のチャンネルの切り抜きの題名が「コールを無視してフラッシュインで敵に突っ込む天ノ川ねる」(カスタム)。コールに従わない場面がある。","source":"https://www.youtube.com/watch?v=czahN03y3wM","date":"2025-06-20","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-NEXT-ADC": {
+      "name": "夢野あかり",
+      "evidence": [
+        {"summary":"VTuber最協決定戦 VALORANT Act.1 でリーダー枠を務め、VSPO! SHOWDOWN 2025 でも VALORANT のリーダーとして出場した。LoL ではなく VALORANT での実績。","source":"https://xn--eckwa2aa3a9c8j8bve9d.gamewith.jp/article/show/423036","date":"2023-11","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Twitch のクリップの題名が「らいじんにコールを求められるあかりん」。LTK でコーチからコールを出すよう求められている。自発的に出していなかったことを示す可能性がある(スニペットで確認)。","source":"https://www.twitch.tv/akarindao/clip/CourageousKawaiiPheasantPoooound-pxhG44-Ec2h6VKuV","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"ぶいすぽ LoL カスタムの切り抜きの題名が「意味のない作戦を立てるあかりんを笑う らむち」。作戦を口に出すが、評価は冗談の扱い。","source":"https://www.youtube.com/watch?v=RFiplJ4CAdA","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 LR Day5 の切り抜きで、らいじんがチームのコミュニケーションの不足を指摘。ミュートのままで伝わらなかった場面もある(「あかりミュートだったわ」)。","source":"https://www.youtube.com/watch?v=zhLQ6FL-lek","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "DD-NEXT-SUP": {
+      "name": "白波らむね",
+      "evidence": [
+        {"summary":"S3 Day3(2026/5/18)で「安定したコール」とレオナのエンゲージでチームを勝利に導き、初の MVP を獲得したと wiki に記載。","source":"https://wikiwiki.jp/vspo/%E7%99%BD%E6%B3%A2%E3%82%89%E3%82%80%E3%81%AD/League%20of%20Legends","date":"2026-05-18","type":"記事","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 LR NEXT の切り抜きの題名「コールでチームを引っ張るらむち!!」(8.5万回再生)。","source":"https://www.youtube.com/watch?v=UQY6PyIAjeA","date":"2026-05-11","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"切り抜きの題名「敗北から学びコールに伸びしろが見える らむち」。コールを担い成長中と見られている。","source":"https://www.youtube.com/watch?v=BfqsHUosGGU","date":"2026-05-13","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"切り抜き「らむち達のコールの問題点を指摘するらいじん」で、コーチがチームのコミュニケーションが改善していないと指摘した。","source":"https://www.youtube.com/watch?v=zhLQ6FL-lek","date":"不明","type":"視聴者の声","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"2024年2月の The k4sen で、対面の圧に負けてコールに応じず逃げた場面を、X で「一番イライラした」と言われたと wiki に記載。","source":"https://wikiwiki.jp/vspo/%E7%99%BD%E6%B3%A2%E3%82%89%E3%82%80%E3%81%AD/League%20of%20Legends","date":"2024-02","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"VTuber最協決定戦 VALORANT Act.1 でリーダー枠を務めた(VALORANT での実績)。","source":"https://xn--eckwa2aa3a9c8j8bve9d.gamewith.jp/article/show/423036","date":"2023-11","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-MASTERS-TOP": {
+      "name": "Yutapon",
+      "evidence": [
+        {"summary":"DFM時代について、同世代の日本人メンバーが多く『先輩としてやらなきゃという感覚は全然なかった』と本人が語っている。プロ時代に自分がチームを引っ張る役だったとは述べていない。","source":"https://fistbump-news.jp/article/2026/07/17/2684.html","date":"2026-07-17","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(コーチ。選手のコールではない)】LTK S1でBOTとTOPのレーンコーチを務めた。本人はコーチングを『向いてない方』と評価し、BAN&PICKは『マジでやりたくない』と述べている。ドラフトの主導役は避ける傾向。","source":"https://fistbump-news.jp/article/2026/07/17/2684.html","date":"2026-07-17","type":"大会での役割","direction":"-","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 IT MASTERSのYuhiが『ポンさん(Yutapon)のファンボ』『ロル(ロール理解)がうまい』と評価している。コール役としての評価ではなく、プレイ理解への敬意。","source":"https://www.youtube.com/watch?v=imitglMqIC0","date":"不明","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-MASTERS-JG": {
+      "name": "Rainbrain",
+      "evidence": [
+        {"summary":"切り抜き動画の題名が『コールも上手いRainbrain』。本人が味方に『下がって』と20秒ほど言い続けた場面を扱っている(2023年のカスタム。らいじん・しゃるる・たぬき忍者と同席)。","source":"https://www.youtube.com/watch?v=KfN0qIlXCb0","date":"2023-09-10","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"しゃるる杯(ノクサスの狼たち)のチームDで、SUPのEntyとRainbrainの2人でコールするようになって一体感が出てきた、とブログが評している。","source":"https://akira-lol.com/charles-scrim-day1","date":"2025-03-03","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"同じしゃるる杯のチームDについて、切り抜きの題名は『元トッププロえんてぃのガチコールで優勝に導いた』で、主なコールはEntyとされている(スニペットで確認)。","source":"https://www.youtube.com/watch?v=QV7qLh5R7gA","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(コーチ。選手のコールではない)】S3ではDD MASTERS JGを務めながら、DD COREのJG(ゆふな)の個人コーチも担当した(わしだいの動画の説明欄)。","source":"https://www.youtube.com/watch?v=qOj6QmOS4dw","date":"不明","type":"大会での役割","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-MASTERS-MID": {
+      "name": "Ceros",
+      "evidence": [
+        {"summary":"【大会での役割(コーチ)】LTK S2でRR COREのコーチを務め、RRは優勝した。プレイオフ前の記事が『Cerosの戦略』を注目点に挙げ、レイトの集団戦構成かポーク構成かを話題にしている。","source":"https://fistbump-news.jp/article/2025/12/16/1940.html","date":"2025-12-16","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(コーチ)】RR COREの練習配信で、コーチが試合後に『2つ食べなくていいというコールだった』と状況を振り返り、次に同じ場面ではこう寄る、と具体的に指導している。自動字幕のため話者はCerosと推定。","source":"https://www.youtube.com/watch?v=1RL3lCE26aA","date":"2025-09-10","type":"大会での役割","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(コーチ。LTK外)】DFMのコーチ時代(2023年)に、新人TOPのtol2へ『コールをしっかり行う』ことをチームへの貢献として求め、試合直後に落ち着くよう指示したと語っている。","source":"https://lolninja.net/2023/04/24/37630","date":"2023-04-24","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"コーチ転向時のインタビューで、最も大切なのは『チームとして正しい選択肢を取れていたか』だと述べている。選択肢をチーム全体で考えて共有することを重視している。","source":"https://www.gamespark.jp/article/2022/04/16/117824.html","date":"2022-04-16","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Finaleのロスター発表を受けて、X に『チームを優勝に導きます』と投稿した(スニペットで確認)。","source":"https://x.com/trollceros","date":"2026-10-08","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"選手時代(DFM MID)に試合中のショットコーラーだったと明記した資料は見つからなかった。Leaguepediaの選手時代の記述は、オフメタピックと受賞歴が中心。","source":"https://lol.fandom.com/wiki/Ceros","date":"不明","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-MASTERS-ADC": {
+      "name": "Yuhi",
+      "evidence": [
+        {"summary":"S3 IT MASTERSの配信で、本人が『正直今ルーラーよりコールしてると思う』と話している。ADCでのコールはリソースを取られて負担が大きく、コールを代わってくれる人がほしいとも述べた。チームのコールを担っていた(勝った試合ではYunikaがよくコールしたとも言及)。","source":"https://www.youtube.com/watch?v=imitglMqIC0","date":"不明","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"LJL 2025優勝の記事で、QT DIG∞の『チームリーダーのYuhi選手』と書かれている。","source":"https://esports-world.jp/interview/53728","date":"2025-09-16","type":"記事","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Burning Coreで若手スターターとして始まり、『気づけばチームリーダー的存在にまで成長』と書かれている(LTK Masters特集)。","source":"https://fistbump-news.jp/article/2026/05/26/2482.html","date":"2026-05-26","type":"記事","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(コーチ)】S3でIT COREのメインコーチを務めた。IT COREの試合後インタビューで選手が、ビルドを『コーチからこの順番で』と言われたとおりに買ったと話している。IT COREは5勝1敗で首位通過。","source":"https://www.youtube.com/watch?v=jDvse45YFi4","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"【大会での役割(MASTERS内の方針づくり)】S3 IT MASTERSで、たぬき忍者へMIDの『改造計画』(役割とピックの変更)を伝える動画がある。本人は後に『たぬき忍者さんには申し訳ない』と述べ、勝ちパターンを最後まで見つけられなかったと振り返った。","source":"https://fistbump-news.jp/article/2026/06/24/2593.html","date":"2026-06-24","type":"大会での役割","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-MASTERS-SUP": {
+      "name": "Nemoh",
+      "evidence": [
+        {"summary":"AXIZ時代(LJL 2021)のインタビュー記事で『チームリーダーであるサポートのNemoh選手』と紹介されている。","source":"https://lolninja.net/2021/10/01/29718","date":"2021-10-01","type":"記事","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"CGAにTOPのサブで入った当初から、コーチに『マップを見る力とコールする力』がサポートで活きると言われ、SUPへ転向したと本人が語っている。","source":"https://lolninja.net/2021/10/01/29718","date":"2021-10-01","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"2023年からLJLの解説者(Riotのキャスター)として活動している。試合全体を言語化する経験はあるが、試合中のコールの根拠ではない。","source":"https://esports-world.jp/interview/29469","date":"2023-06","type":"記事","direction":"+","strength":"弱","kind":"other","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-CORE-TOP": {
+      "name": "YUKIO",
+      "evidence": [
+        {"summary":"Apex Legends のプロ時代(456/RIDDLE ORDER)、Year3 までは「フラッガーIGL」、以降はアンカーとしてサブコールを担ったとされる。LoL 以外での指揮経験。","source":"https://playerpedia.net/apex/players/yukio","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"本人の YouTube の切り抜き題名「あの頃を彷彿とさせる神IGL」。2026年10月の CR カップ(Apex)で k4sen・Biju・Axis と組み、IGL として初戦チャンピオンを取った。","source":"https://www.youtube.com/watch?v=4wRRvrkOtVw","date":"2026-10-05","type":"本人の発言","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S3 の DD CORE では、最近は「マクロ的な部分を主にフィードバック」して考えるようにしたと本人が述べた。試合後の振り返りでマクロを担う姿勢が見えるが、試合中のコールかは書かれていない。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-CORE-JG": {
+      "name": "k4sen",
+      "evidence": [
+        {"summary":"S3 の Playoffs について、チームメイトの龍巻ちせが振り返った。かせっち(k4sen)は勝てると思っていなかったと言ったが、それならあの熱量のコールは出ないと述べた。自動字幕のため精度は低い。","source":"https://www.youtube.com/watch?v=CZVxciVMzpo","date":"不明(S3 終了後の配信)","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"葛葉の公式チャンネルの切り抜き題名「天才軍師k4senが降臨したDC COREまとめ」。S2 の RR 戦で k4sen が作戦を主導した場面をまとめたもの。","source":"https://www.youtube.com/watch?v=uJkYNMKMWPY","date":"2025-10-12","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"Wikipedia の LTK 戦績表で、k4sen は S1・S2 の Domination Crown のリーダー(◯印)とされている。FISTBUMP も「k4senさん率いるDomination Crown」と書いた。","source":"https://ja.wikipedia.org/wiki/K4sen","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"FISTBUMP の見出し「k4sen率いるCamellia Crown COREが悲願の初勝利」。本文にコールの記述は無く、主催者として名前が出ている面もある。","source":"https://fistbump-news.jp/article/2026/06/09/2534.html","date":"2026-06-09","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 の最後のフィードバックで、コーチのらいじんが k4sen に「声をいっぱい出せるといい、もうちょい」と課題を挙げた(と読める)。自動字幕のため、対象が誰かはやや不確か。","source":"https://www.youtube.com/watch?v=FlWxg1rgktM","date":"2025-09-08","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"CoD 時代(2007年頃〜)にクランを立ち上げ、リーダーとして活動していた。LoL 以外での統率経験。","source":"https://ja.wikipedia.org/wiki/K4sen","date":"不明","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-CORE-MID": {
+      "name": "葛葉",
+      "evidence": [
+        {"summary":"葛葉の公式チャンネルの切り抜き題名「圧倒的に成長した葛葉のコール！」。S2 の DC CORE で、JG としてオブジェクトや集団戦を指示する音声が収められている。","source":"https://www.youtube.com/watch?v=EA1-OrcVv7E","date":"2025-09-26","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"k4sen の Twitch クリップの題名「葛葉 魂のコール」。チームメイト側のチャンネルが、葛葉のコールを切り出している。","source":"https://www.twitch.tv/k4sen/clip/EnthusiasticRacyAlfalfaJebaited-dz7IQlpXPULsZeaF","date":"不明","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"葛葉の公式チャンネルの切り抜き題名「響き渡る熱いコール！」。S1 Regular の最終日の DC CORE をまとめたもの。","source":"https://www.youtube.com/watch?v=jBOOX-qfh-g","date":"2025-08-11","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"VTuber 最協決定戦(Apex)Season6 でクリプトを使い、IGL を担当して優勝したとされる。VALORANT の大会でもリーダーや IGL を務めたとある。二次情報のまとめで、LoL 以外の経験。","source":"https://karan-room.com/kuzuha-game-skill","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-CORE-ADC": {
+      "name": "龍巻ちせ",
+      "evidence": [
+        {"summary":"S3 の Playoffs を振り返り、「みんなのあのコールでめちゃめちゃ強気に出れた」と語った。チームのコールを受けて動く側だったことがうかがえる(自動字幕)。","source":"https://www.youtube.com/watch?v=CZVxciVMzpo","date":"不明(S3 終了後の配信)","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"インタビューで「あんまり喋るのが得意じゃない」と述べた。ただし先輩との交流についての発言で、試合中のコールの話ではない。KAI-YOU は、人見知りに見られがちだが実際はよく喋るタイプだと本人が紹介したと書いている。","source":"https://fistbump-news.jp/article/2026/03/20/2249.html","date":"2026-03-20","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"価値責任者が「龍巻ちせはコールしない側」と確認した","source":"価値責任者の確認(2026-10-08 の会話)","date":"2026-10-08","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"context/decisions/0004-evidence-anchored-rating-model.md(決定5)"}
+      ]
+    },
+    "CC-CORE-SUP": {
+      "name": "昏昏アリア",
+      "evidence": [
+        {"summary":"S1 の最後のフィードバックで、コーチのらいじんが「オブジェクトコールとかもしっかり出るようになって、喋れるようになった」と成長を認めた(自動字幕)。","source":"https://www.youtube.com/watch?v=FlWxg1rgktM","date":"2025-09-08","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"同じフィードバックで、らいじんは「でもまだちょっと足んないね。喋る量に関しては」とも述べた。発話の量は課題とされた(自動字幕)。","source":"https://www.youtube.com/watch?v=FlWxg1rgktM","date":"2025-09-08","type":"チームメイトの発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"k4sen 主催の学習企画「カセガク」で、1期の CORE として入学し、のちに NEXT の担任を務めた(非公式 Wiki)。教える側の役割。","source":"https://wikiwiki.jp/neo-porte/%E6%98%8F%E6%98%8F%E3%82%A2%E3%83%AA%E3%82%A2","date":"不明","type":"大会での役割","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-NEXT-TOP": {
+      "name": "叶",
+      "evidence": [
+        {"summary":"価値責任者が「叶はコールしない側」と確認した","source":"価値責任者の確認(2026-10-08 の会話)","date":"2026-10-08","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"context/decisions/0004-evidence-anchored-rating-model.md(決定5)"}
+      ]
+    },
+    "CC-NEXT-JG": {
+      "name": "ゆふな",
+      "evidence": [
+        {"summary":"S3 決勝日のレポートが、表彰式で「リーダーのゆふな氏」が玉座に座ったと書く。DD のリーダー役と扱われているが、試合中のコールの記述は無い。","source":"https://esportsnewsjapan.jp/ltk-season-pandemonium-playoffs-day2","date":"2026-06-22","type":"記事","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"S1 のコーチ Eugeo はジャングルを「コールなどでチームを引っ張るロール」と説明したが、ゆふな自身がコールしていたとは述べていない。対談でコールが多かったと名指しされたのは夜よいち。","source":"https://realsound.jp/tech/2026/05/post-2368493_2.html","date":"2026-05-09","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "CC-NEXT-MID": {
+      "name": "空澄セナ",
+      "evidence": [
+        {"summary":"VSPO! SHOWDOWN(2025/3)の LoL チームについて、視聴者の note はチームの意思決定と集団戦の判断を JG の千燈ゆうひ(リーダー)が担うと書く。セナはコーラーとして書かれていない。","source":"https://note.com/mituya505/n/ne40b70c819f8","date":"2025-03-22","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"価値責任者が「空澄セナはコールしない側」と確認した","source":"価値責任者の確認(2026-10-08 の会話)","date":"2026-10-08","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"context/decisions/0004-evidence-anchored-rating-model.md(決定5)"}
+      ]
+    },
+    "CC-NEXT-ADC": {
+      "name": "獅子堂あかり",
+      "evidence": [
+        {"summary":"にじさんじ Wiki によると、メインの IGL は担わないが、報告や戦術提案を積極的にコールする。ただし FPS(VALORANT 等)の文脈で、LoL についての記述ではない。","source":"https://wikiwiki.jp/nijisanji/%E7%8D%85%E5%AD%90%E5%A0%82%E3%81%82%E3%81%8B%E3%82%8A","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"価値責任者が「獅子堂あかりはコールしない側」と確認した","source":"価値責任者の確認(2026-10-08 の会話)","date":"2026-10-08","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"context/decisions/0004-evidence-anchored-rating-model.md(決定5)"}
+      ]
+    },
+    "CC-NEXT-SUP": {
+      "name": "鷹宮リオン",
+      "evidence": [
+        {"summary":"S1 の DC CORE で、DAY5 後の合同練習では「今までよりも先陣を切ってコール」する鷹宮の活躍が目立ったと記事が書く。","source":"https://www.inside-games.jp/article/2025/07/30/170020.html","date":"2025-07-30","type":"記事","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
+        {"summary":"視聴者の note は、LTK を半年経験して「明らかにコール力も増えて」成長したと評する(S2 優勝後の評価)。","source":"https://note.com/himasapo1129/n/n50883718603a","date":"2026-01-03","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
+      ]
+    },
+    "IT-MASTERS-TOP": {
+      "name": "らいじん",
+      "evidence": [
+        {"summary":"S3 で LR NEXT のコーチとして、サポートと JG へのマクロ指導に比重を置いたと本人が語る。コールを優先したため、マクロの一部を犠牲にして簡略化したとも述べる。コーチとしてコールの組み立てを主導していた根拠。","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","date":"2026-06-26","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S1 DC の練習で、鷹宮リオンが先頭に立ってコールしたことを評価した。そのうえで語気を強めてフィードバックし、記事は指導を「スパルタ」と書く。コーチとしてチームを引っ張る姿の記述。","source":"https://www.inside-games.jp/article/2025/07/30/170020.html","date":"2025-07-30","type":"記事","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"視聴者がコーチ視点 VC を書き起こした投稿。DC×PD CORE 戦の後、らいじんが「コールと組み立ては良かった」とチームを評価している。選手のコールを評価・指導する立場にいた。","source":"https://x.com/tklgztk2017/status/1960410359258603767","date":"2025-08-26","type":"視聴者の声","direction":"+","strength":"弱","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 LR NEXT の夜よいちは、これまでのコーチより「LoL がどうあるべきか」という根本を教わったと評価した。できない時の指導は厳しいとも語る。","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","date":"2026-06-26","type":"チームメイトの発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"MASTERS の選手とコーチの兼任は「現実的じゃない」と本人が語る。自分は常に勝てる選手ではないので、兼任するなら Haretti・Enty・Nesty の方がよいとも言う。MASTERS の予定は最後に回した。選手としての主導は控えめだったことを示す。","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","date":"2026-06-26","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-MASTERS-JG": {
+      "name": "ゆにか / Yunika",
+      "evidence": [
+        {"summary":"本人の note のマガジンに「チームゲームで JG がやるべき立ち回りとコールの仕方」という記事がある。JG のコールを教える立場で発信している。(スニペットで確認)","source":"https://note.com/lol_yunika/m/m3265b54f2d21/hashtag/18666","date":"2026年(5か月前と表示)","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"LTK Masters Cup Day1 で実践したレベル1の動きを、本人が note で解説した。チームゲームの JG はソロランク以上に「ゲームプラン」が重要だと書く。","source":"https://note.com/lol_yunika/n/nb81a6e5ebf49","date":"2026年(3か月前と表示)","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"V3 Esports 時代(2022)、MID の Eugeo が「Yunika さん、あと1キャンプ…でガンク来てもらえたら」とガンクの時機を指示していたと語る。ゆにかはコールを受ける側だった例。","source":"https://lolninja.net/2022/08/29/33705","date":"2022-08-29","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 IT MASTERS を扱う切り抜きの題名が「沈黙のチームから饒舌な最高チームへ」。当初は声が少なかったことを示唆する(チーム全体についての記述)。(題名で確認)","source":"https://www.youtube.com/watch?v=hz75S2AAO5g","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-MASTERS-MID": {
+      "name": "Eugeo",
+      "evidence": [
+        {"summary":"V3 Esports 時代(2022)、夏から本格的にリーダーを意識したと本人が語る。チームメイトからは「頼りにしている」と言われた。JG へガンクの時機を指示し、レーン主導権のために JG・SUP を動かすと説明している。","source":"https://lolninja.net/2022/08/29/33705","date":"2022-08-29","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 DD NEXT のコーチとして、対戦相手ごとの BAN/PICK をすべて設計した。SHAKA は「練習どおりになぞるだけだった」と語る。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S1・S2 は DC の NEXT と CORE のコーチを歴任した。JG は「コールなどでチームを引っ張っていくロール」という考えを本人が示している。","source":"https://realsound.jp/tech/2026/05/post-2368493_2.html","date":"2026-05","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"切り抜きの題名が「格上とのスクリムで最も重要なマクロコーチングを施す Eugeo」(DC NEXT)。(題名で確認)","source":"https://www.youtube.com/watch?v=IRj5aGrVzIs","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 DD NEXT の練習 VC で、Eugeo がポジション取りや ADC の役割を具体的に指示している。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"不明","type":"大会での役割","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-MASTERS-ADC": {
+      "name": "Zerost",
+      "evidence": [
+        {"summary":"S2 PD のコーチとして指導した結果、神楽めあの「コールが圧倒的に増え」、味方の安全を気にかける声掛けも増えたと本人が語る。選手のコールを育てた。","source":"https://fistbump-news.jp/article/2026/01/07/2001.html","date":"2026-01-07","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S1 PD CORE のコーチとして、試合後のインタビューで課題を把握していると話した。プレイオフへ向けた「隠しの爆弾」もほのめかした。","source":"https://fistbump-news.jp/article/2025/08/19/1454.html","date":"2025-08-19","type":"記事","direction":"+","strength":"弱","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"PD CORE の再生リストに「Zerost コーチからの厳しいフィードバックを受け」という題の動画がある。(題名で確認)","source":"https://www.youtube.com/playlist?list=PLBmU9HbP8GUV_CgEPy82gB2pv8YwhQPgL","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"RabbitFive 時代(2015)の紹介では、チームリーダー兼司令塔は Awaker だった。Zerost はチーム最年少で、決める場面で力を出す「お調子者」と書かれた。プロ時代のコール役ではなかったことを示唆する。","source":"https://akiba-pc.watch.impress.co.jp/docs/eswatch/703196.html","date":"2015-05-22","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-MASTERS-SUP": {
+      "name": "Enty / えんてぃ",
+      "evidence": [
+        {"summary":"7th heaven を抜けた後、自分からメンバーを集めて USG を結成した(最初に apaMEN、ADC は Haretti)。チームを組織する主導力を示す。","source":"https://fistbump-news.jp/article/2026/07/24/2713.html","date":"2026-07-24","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"2017年のインタビューで、「サポートとしてチームを導いた人物」と紹介された。本人は、試合後のフィードバックを前シーズンより深めたと語る。","source":"https://www.gamespark.jp/article/2017/04/26/72989.html","date":"2017-04-26","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"Finale で IT NEXT の全体コーチを務めると X で名乗った。","source":"https://x.com/enty925","date":"2026-10-08","type":"大会での役割","direction":"+","strength":"弱","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 で同じチームのらいじんが、選手兼コーチをやるなら Enty らの方が適任だと述べた。","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","date":"2026-06-26","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"本人は「かなり強気なタイプ」と自認し、思ったことをすぐ口にすると語る。一方で理論立てて話すのは苦手とも語る。","source":"https://fistbump-news.jp/article/2026/07/24/2713.html","date":"2026-07-24","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-CORE-TOP": {
+      "name": "mittiii",
+      "evidence": [
+        {"summary":"VALORANT プロ時代(DFM 2020年、FENNEL 2021〜22年)はデュエリストとして紹介されている。IGL(司令塔)とする記述は見つからない。役割から見た間接的な根拠。","source":"https://playerpedia.net/valorant/players/mittiii","date":"不明","type":"大会での役割","direction":"-","strength":"弱","kind":"other-game","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-CORE-JG": {
+      "name": "AlphaAzur",
+      "evidence": [
+        {"summary":"S1 の ST 編成について、しゃるるは AlphaAzur を「お茶目なところがある」ので「締めてくれる人」(mittiii)を入れて組んだと語る。チームを締める役は本人ではなく他者と見られている。","source":"https://fistbump-news.jp/article/2025/07/13/1287.html","date":"2025-07-13","type":"チームメイトの発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"同じ対談で k4sen は、ST CORE は元プロが多く「試合中の報告がもとから上手い」と述べた。AlphaAzur は元 PUBG プロだが、本人個人のコールへの言及ではない。","source":"https://fistbump-news.jp/article/2025/07/13/1287.html","date":"2025-07-13","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"育成企画 k4sen学院(カセガク)で COREクラスの講師として NEXT の生徒クラスを指導した。集団戦の削りを「税金徴収」にたとえ、クラスの共通認識をそろえたと評されている(ファンブログ)。","source":"https://red-ff-gamenews.com/k4segaku-0329-alpha-class","date":"2026-03-29","type":"記事","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"本人が「Team AlphaAzur」の発表を告知し、生徒に向けて目標(期末テスト4位回避)を掲げた。講師として率いる立場だった。(スニペットで確認)","source":"https://x.com/AzurAlpha/status/2025917281247842399","date":"2026-02","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"カセガク第1期の期末大会で Team AlphaAzur は退学決定戦に敗れ、退学となった。講師としての指導の成果は結果につながらなかった。","source":"https://fistbump-news.jp/article/2026/04/04/2294.html","date":"2026-04-04","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-CORE-MID": {
+      "name": "たかやスペシャル",
+      "evidence": [
+        {"summary":"FISTBUMP のインタビューは、LTK で「チームリーダーを務める」と紹介した。S1 オフラインの敗戦後の「負けさせちゃいました」という発言が、キャプテンとしての責任感として取り上げられている。","source":"https://fistbump-news.jp/article/2026/01/01/1981.html","date":"2026-01-01","type":"記事","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"2025年の「初心者 The k4sen」でコーチを務め、相手役のリスナーに動き方を指示して練習試合を組んだ。本人は「元々はコーチが1番やりたかった」と話している。","source":"https://fistbump-news.jp/article/2026/01/01/1981.html","date":"2026-01-01","type":"本人の発言","direction":"+","strength":"中","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"VSPO! SHOWDOWN 2026 の LoL DAY1 で、ぶいすぽっ！チームのコーチを たぬき忍者と務めた。","source":"https://kai-you.net/article/94431/page/2","date":"2026-01","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"しゃるる杯 LoL甲子園(2024年8月)で、チーム「二子ザゲ川学園高校」の監督を務めた。","source":"https://esports-world.jp/tournament/41617","date":"2024-08","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"本人チャンネルの切り抜きに「大局を見てJGをチェスの駒のように動かし続ける『ザ・エンペラー』」という題名がある(ソロランクの場面とみられる)。(スニペットで確認)","source":"https://www.youtube.com/watch?v=pU9wjcU6420","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-CORE-ADC": {
+      "name": "ごんかね",
+      "evidence": [
+        {"summary":"本人チャンネルの切り抜きに「コールもこなすADCで完璧な試合をした結果、味方に怖がられる」という題名がある。(スニペットで確認)","source":"https://www.youtube.com/watch?v=fR13JZA6VJI","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 LTK 初戦の本人視点の切り抜きの書き起こしに、「4人で押そう」「ライン合わせよ」など進行を指示する声が多い。ただし自動字幕で、話者は特定できない。","source":"https://www.youtube.com/watch?v=fR13JZA6VJI","date":"2026-05-11","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-CORE-SUP": {
+      "name": "レグルシュ・ライオンハート",
+      "evidence": [
+        {"summary":"S3 のボット連携を扱った切り抜き(コーチの Enty が登場)の書き起こしで、指導役が「ここVCで言えるとよかった」「フリーズするよってぐらいを言えてたら」と声出しを改善点に挙げている。自動字幕で、話者の特定は推定。","source":"https://www.youtube.com/watch?v=KF01norZQxU","date":"不明","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-NEXT-TOP": {
+      "name": "橘ひなの",
+      "evidence": [
+        {"summary":"VSPO! SHOWDOWN 2026 の LoL DAY1 で、ぶいすぽっ！チームのリーダーに指名された。","source":"https://kai-you.net/article/94431/page/2","date":"2026-01","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"同大会後のインタビューで本人は、コールは JG の銀城サイネと ADC の白波らむねが担ってくれたと評価した。リーダーではあったが、コールの主体は他のメンバーだった。","source":"https://fistbump-news.jp/article/2026/03/31/2276.html","date":"2026-03-31","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"TOP は序盤に関われない場面が多く、他の4人に「頑張ってくれ」としか言えないのが苦しかったと語った。","source":"https://fistbump-news.jp/article/2026/03/31/2276.html","date":"2026-03-31","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-NEXT-JG": {
+      "name": "ありけん",
+      "evidence": [
+        {"summary":"S3 の IT NEXT の顔合わせで、本人が「リーダー俺になってます」と名乗った(「1番ランク低い人間がリーダーでいいのか」とも自嘲)。","source":"https://www.youtube.com/watch?v=P1UGR6IfDqg","date":"2026-05-04","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 初勝利の試合前の掛け声で、「リーダーがやれよ」と振られ、ジャングルが動けるように支えろという趣旨の号令をかけた。自動字幕のため、話者は推定。","source":"https://www.youtube.com/watch?v=OS5KadGr6r8","date":"不明","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"IT NEXT 向けの JG コーチングの切り抜きで、指導者が「何をしたいのかを伝えることが大事」「目標を決めることが一番必要」と、意図を伝える力を課題に挙げた。","source":"https://www.youtube.com/watch?v=DA6pYPZlW_8","date":"不明","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-NEXT-MID": {
+      "name": "まいたけ",
+      "evidence": [
+        {"summary":"S3 IT NEXT の初戦後の振り返りで、チームは助っ人 TOP の太陽(ta1yo)のコールを称え、「次の試合はあのコールがない」と危機感を示した。3日で声を出せるようにする必要があると話しており、まいたけを含む正規メンバーにコール役がいなかったことを示す(チーム単位の間接的な根拠)。","source":"https://www.youtube.com/watch?v=5DeT0NAmAws","date":"2026-05-08","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 の IT NEXT 試合ダイジェストで、チームメイトが緊張しているまいたけに「声出せ」と声をかける場面がある。試合中に指示を出す側ではなかったことを示唆する。","source":"https://www.youtube.com/watch?v=6cUq6njtOdE","date":"不明","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-NEXT-ADC": {
+      "name": "天帝フォルテ",
+      "evidence": [
+        {"summary":"S3 で MVP を取った後のインタビューで、本人は勝因を「みんな火力が出て、コールも良かった」と述べた。コールを担ったのは自分ではなく味方だという認識。","source":"https://www.youtube.com/watch?v=6cUq6njtOdE","date":"2026-05-12","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"同じダイジェスト動画で、チームメイトが「てんて(フォルテ)は喋ってない」とからかう場面がある。試合前後に口数が少ない様子がうかがえる。","source":"https://www.youtube.com/watch?v=6cUq6njtOdE","date":"不明","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 の初戦後、IT NEXT は助っ人の ta1yo のコールが無くなることに危機感を示した。正規メンバーにコール役がいなかったことを示す(チーム単位の間接的な根拠)。","source":"https://www.youtube.com/watch?v=5DeT0NAmAws","date":"2026-05-08","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "IT-NEXT-SUP": {
+      "name": "白那しずく",
+      "evidence": [
+        {"summary":"S3 の振り返り配信で、本人が試合の場面を見ながら「コールはバックだったので、みんなで統一するのが大事だと思った」「もっと強くバック、バックと言えばよかった」と話した。撤退のコールに自分も関わっていた様子がうかがえる。","source":"https://www.youtube.com/watch?v=m3ILrq8fULM","date":"2026-06-23","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"同じ振り返り配信で、「相手の復活までの時間が20秒なら試合を終わらせられる」という判断を DC NEXT の頃から教わっていたと説明した。エンドのコールの基準を持っている。","source":"https://www.youtube.com/watch?v=m3ILrq8fULM","date":"2026-06-23","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-MASTERS-TOP": {
+      "name": "apaMEN",
+      "evidence": [
+        {"summary":"S3 の IT MASTERS について、チームメイトの Yuhi が配信で、コールは自分(ADC)が担い、勝った試合ではユニカがよくコールしたと振り返った。apaMEN が主にコールしたという言及はない(間接的な根拠)。","source":"https://www.youtube.com/watch?v=imitglMqIC0","date":"2026-06-12","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"KAI-YOU の S3 プレイオフの展望記事は、IT MASTERS で「司令塔を担当してきた」のは Yuhi らだと書いている。apaMEN は本文に登場しない。","source":"https://kai-you.net/article/95710/page/3","date":"2026-06-18","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-MASTERS-JG": {
+      "name": "ねすてぃー/Nesty",
+      "evidence": [
+        {"summary":"S3 マスターズカップ Day1 の実況が、プロを目指す選手の発掘イベントの頃から、ネスティはコールと知識を高く評価されてきたと紹介した。練られた戦略を実行するのが上手いジャングラーという評価(文脈から LR の JG であるネスティを指す)。","source":"https://www.youtube.com/watch?v=6uSyBBqLpaE","date":"2026-05-13","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-MASTERS-MID": {
+      "name": "Recap",
+      "evidence": [
+        {"summary":"S3 マスターズカップ Day1 の実況が、CC MASTERS の試合前インタビューを受けて、Recap はレーンから戦ううえに、コールの面でもチームを引っ張っていると伝えた。","source":"https://www.youtube.com/watch?v=6uSyBBqLpaE","date":"2026-05-13","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-MASTERS-ADC": {
+      "name": "ハレっち / Haretti",
+      "evidence": [
+        {"summary":"S3 LR MASTERS のスクリム初日、コーチ役の mittiii が「コールに重要度に応じた声の大きさ・パッションが無く危機感が伝わらない」と指摘した。BOT(ハレっち・Enty)を含むチーム全体への指摘で、ハレっち個人を名指ししたものではない。","source":"https://www.youtube.com/watch?v=D7rm01zOljo","date":"2026-05-13","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-MASTERS-SUP": {
+      "name": "てぃんとん / ThintoN",
+      "evidence": [
+        {"summary":"S3 IT MASTERS の振り返りで、苦戦の原因をチームの戦力バランスとバンピックの問題だと分析した。IT NEXT の鷹宮リオンのコーチングも担当した。試合中のコールについての記述はない。","source":"https://fistbump-news.jp/article/2026/06/24/2593.html","date":"2026-06-24","type":"本人の発言","direction":"+","strength":"弱","kind":"coach","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"Clash(LTK 外)の切り抜き動画の題名が「ゼロスト×てぃんとん 主張ぶつかり Bot崩壊の兆し」と表現している。題名は切り抜き作者によるもの。","source":"https://www.youtube.com/watch?v=ApP_DpSSYP8","date":"2025-06-23","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-CORE-TOP": {
+      "name": "焼きパン",
+      "evidence": [
+        {"summary":"S2 前半終了後、乾伸一郎が「パンの一番成長した部分はコール」「口数は多くないがめちゃくちゃいいコールを出す」「負けていても声を絶やさない」と評した。CC が上がるまでの秒数を伝えるコールを例に挙げた。","source":"https://www.youtube.com/watch?v=zWbUv2x8tyw","date":"2025-10-04","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-CORE-JG": {
+      "name": "Killin9Hit(KH)",
+      "evidence": [
+        {"summary":"S2 前半終了後、乾伸一郎が、序盤に崩れても「ケイさんも励ますコールをしていた」「成熟した大人」と評価した。","source":"https://www.youtube.com/watch?v=zWbUv2x8tyw","date":"2025-10-04","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 の FISTBUMP インタビューで、フィードバックでは自分が強く言う場面があり、その後メンバーから謝罪の長文 DM が届いたと語った。チーム内で発言力のある立場にいることがわかる。","source":"https://fistbump-news.jp/article/2026/06/24/2595.html","date":"2026-06-24","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 優勝後の振り返りで、「誰が決める?」と聞いたら Ceros コーチに「あなたでしょ」と言われたと明かした。ジャングラーである自分の仕事なのに、理解が足りず味方に判断を任せてしまう心配があったと述べた。","source":"https://www.youtube.com/watch?v=N-54g-OsF7k","date":"2025-12-24","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 プレイオフの直前から、敵ジャングルの位置・レーン状況・オブジェクトの時間を同時に把握できるようになったと述べ、Ceros の指導のおかげとした。","source":"https://www.youtube.com/watch?v=N-54g-OsF7k","date":"2025-12-24","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"試合中の日本語でのコミュニケーションを課題にしていた。本番で緊張すると「うひ」ではなく「千燈さん」と呼んでしまうので早く直したいと話した(S2 開幕直後)。","source":"https://www.youtube.com/watch?v=EMad3J7DPa0","date":"2025-09-19","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-CORE-MID": {
+      "name": "乾伸一郎",
+      "evidence": [
+        {"summary":"S2 前半終了後、「落ち着こう、ここは無理だから次で戦おう」という自分のコールを最近はみんなが尊重してくれると語った。以前は声が通らないこともあった。千燈ゆうひが聞き取って KH へ伝えてくれるとも述べた。","source":"https://www.youtube.com/watch?v=zWbUv2x8tyw","date":"2025-10-04","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 Day3 の勝利インタビューで KH が「体調不良なのに本番でめっちゃ声を出してくれた」と述べ、実況も乾の「熱血系のコール」に触れた。","source":"https://www.youtube.com/watch?v=zCcGNwZVses","date":"2025-10-01","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 Day6 の後、本番では自分がめっちゃ声を出すタイプで、KH からもよく言われると振り返った。","source":"https://www.youtube.com/watch?v=BPtYJCVlA9M","date":"2025-11-12","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"自己分析として、チームゲームで自分よりコミュニケーションを取れている人はいないと思うほどだと述べた。聞く力と話す力が高く、いっぱいいっぱいにならないのが強みだという。","source":"https://www.youtube.com/watch?v=S7WBGR4c-uw","date":"2026-01-01","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"RR の練習中に「どうしたら自分のコールが通るようになるのか」と嘆いた(切り抜きの題名も「コールが通らない事を嘆く乾殿」)。味方は、通っていないのではなく J4 のエンゲージで上書きされただけだと応じた。","source":"https://www.youtube.com/watch?v=_KMklNve5AU","date":"2025-10-12","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"VTuber 最協決定戦 ver.APEX の S2(2021-01)で IGL を担当した。S3 では情報担当とサブオーダーを務めたと、ファンの note が記録している。LoL 以外での実績。","source":"https://note.com/aiaidadada_/n/n09f8894a1407","date":"2021-12-30","type":"記事","direction":"+","strength":"中","kind":"other-game","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-CORE-ADC": {
+      "name": "大御所にゅん子",
+      "evidence": [
+        {"summary":"LTK3 DD CORE の練習フィードバックで、「BOT をプッシュしたい」などの自分の意図をコールしていないと指摘され、「自分でやりたいことを言う」よう求められた(動画題名は「次は声が出る！？」)。","source":"https://www.youtube.com/watch?v=PiupneyuDZI","date":"2026-06-17","type":"チームメイトの発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"LTK3 DD CORE の練習ハイライトに、味方が「にゅんこいい、引っ張るコール」と褒める場面がある。","source":"https://www.youtube.com/watch?v=qNoALmFWXlE","date":"2026-06-18","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-CORE-SUP": {
+      "name": "千燈ゆうひ",
+      "evidence": [
+        {"summary":"VSPO! SHOWDOWN 2026 Day2 の LoL チームで JG 兼チームリーダーを務めた。本人は「自分がファームするから待って」とコールしたと語り、LTK S1 で「チームとしてのコールや戦い方の基礎ができ」、S2 でそれが強化されたと振り返った。","source":"https://fistbump-news.jp/article/2026/04/13/2323.html","date":"2026-04-13","type":"本人の発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"非公式 Wiki によると、SHOWDOWN 2026 の公式練習では IGL を務め、その指示の出し方をめぐってコーチ同士が議論した。","source":"https://wikiwiki.jp/vspo/%E5%8D%83%E7%87%88%E3%82%86%E3%81%86%E3%81%B2","date":"2026-03-22","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"LTK S2 の RR 予想記事。ロールが変わっても「前回同様コール担当になるであろう」と書いており、S1 PD CORE でもコール役だったと見ている。","source":"https://note.com/lolana/n/ndfd1662eb2ca","date":"不明","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"切り抜きの題名が「決勝で覚醒しコールが神がかる千燈ゆうひ」(LEAGUE OF LEON カスタム)で、決勝でのコールを評価している。","source":"https://www.youtube.com/watch?v=brolgUHK3r4","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 の SUP 時代はレーンに集中しすぎて序盤のタイマーを見られなかったと本人が認めている。SHOWDOWN では意識して声に出すようにしたという。","source":"https://fistbump-news.jp/article/2026/04/13/2323.html","date":"2026-04-13","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-NEXT-TOP": {
+      "name": "狐白うる",
+      "evidence": [
+        {"summary":"LTK S2 RR NEXT(夜よいち・日向まると同じチーム)の試合の切り抜き題名が「最高のレーン戦&コールでマクロ勝ちを導く神」。中身でも本人がバロンやリコール禁止などを指示している。","source":"https://www.youtube.com/watch?v=pBItGewatLg","date":"不明","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S2 の RR NEXT では、JG の夜よいちが「チームのメインコーラー」と書かれていた。メインのコール役はうるではなかったことになる。","source":"https://fistbump-news.jp/article/2025/12/16/1940.html","date":"2025-12-16","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-NEXT-JG": {
+      "name": "アステル・レダ",
+      "evidence": [
+        {"summary":"S3 DD NEXT の配信の関連動画に、切り抜きの題名「コールが出るおしず、キャリーのアステルに感動」が出ていた。コール役は白那しずく、アステルはキャリー役として扱われている。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 DD NEXT Day5 前の打ち合わせで、「アステルさんのあれ聞けば」とアステルの声を合図にする場面があった。部分的に合図役を担っていた可能性がある(スニペットで確認)。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"2026-06","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-NEXT-MID": {
+      "name": "春茶",
+      "evidence": []
+    },
+    "LR-NEXT-ADC": {
+      "name": "なぎさっち",
+      "evidence": [
+        {"summary":"S3 CC NEXT のスクリムで、コーチ(hetel)が「ナギにゃんのコール量がすごい」と繰り返し褒めていた。","source":"https://www.youtube.com/watch?v=IQJZ1ZQunQg","date":"2026-05","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"VSPO! SHOWDOWN 2026 で同じチームだった SHAKA によると、終盤に「みんな落ち着いて」「スモルダー守れば勝てるから帰ってきて」と呼びかけていた。ただし、チームは従わなかったという。","source":"https://fistbump-news.jp/article/2026/03/25/2262.html","date":"2026-03-25","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S3 プレイオフで NEXT が負けた日、本人が「いっぱいコールしようと喋る」が、緊張で互いの話を聞けていなかったと振り返った。","source":"https://www.youtube.com/watch?v=sOsgz0IC4Eo","date":"2026-06-20","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"S1 ST CORE の初戦後、「うるかが全部指示してくれて」と語っていた。S1 ではうるかの指示を受ける側だった。","source":"https://www.youtube.com/watch?v=BecZk7YiV04","date":"2025-06-25","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    },
+    "LR-NEXT-SUP": {
+      "name": "No.1005(とおこ)",
+      "evidence": [
+        {"summary":"S1 RR CORE で k4sen がキャプテンに指名したのはたかやスペシャルだった(とおこのチャンネルの切り抜き)。とおこはリーダー役ではなかった。","source":"https://www.youtube.com/watch?v=VLYTVGmuf8g","date":"2025-09-09","type":"大会での役割","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+      ]
+    }
+  }
+}
