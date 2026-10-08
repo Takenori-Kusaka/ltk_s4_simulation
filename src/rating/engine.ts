@@ -215,7 +215,10 @@ interface RawInfo {
 /** participant の数値と challenges の数値を1つの表に平らにする */
 function flatten(p: RawParticipant): Record<string, number> {
   const out: Record<string, number> = {};
-  for (const [k, v] of Object.entries(p)) if (typeof v === 'number' && Number.isFinite(v)) out[k] = v;
+  for (const [k, v] of Object.entries(p)) {
+    if (typeof v === 'number' && Number.isFinite(v)) out[k] = v;
+    else if (typeof v === 'boolean') out[k] = v ? 1 : 0; // 勝敗などの真偽値は 1 と 0
+  }
   for (const [k, v] of Object.entries(p.challenges ?? {})) if (typeof v === 'number' && Number.isFinite(v)) out[k] = v;
   return out;
 }
