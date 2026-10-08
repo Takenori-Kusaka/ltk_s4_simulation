@@ -44,3 +44,5 @@ tmp/
 
 # 自己修正ループのロック(scripts/gate/self-heal.mjs が作る。端末ごとの状態)
 .claude/.self-heal
+
+actions-runner/
