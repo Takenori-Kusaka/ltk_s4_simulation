@@ -1,0 +1,58 @@
+# 実装計画
+
+対象の機能仕様: `specs/F-009/spec.md`。式と初期値は `docs/design/rating-model.md`。
+
+評価の計算は `src/rating/`(DOM と Node 固有の API に依存しない純粋な TypeScript)。収集の追加は `src/collect/`。画面は `src/app/`。
+
+## タスク
+
+| ID | 内容 | 対応する受入基準 | 変更の対象パス | 依存 | 並列可 |
+| --- | --- | --- | --- | --- | --- |
+| Task-1 | 評価の土台: 評価設定の型と読み込み、評価の試合の選び方(期間・長さ・ロール)、新しさの重み、ランクの基準、対面との差の標準化(母集団の分布)、縮小、確度、事前値への置き換え | 1, 2, 3, 4, 5, 6, 7, 8, 9, 19 | `src/rating/engine.ts`、`src/rating/types.ts`、`src/rating/config.json`、`tests/rating/engine.test.ts` | — | 可 |
+| Task-2 | 6つのデータの軸の定義(指標・重み・ロール別の指標)、オブジェクトの上限、チャンピオンプールの計算 | 10, 11 | `src/rating/axes.ts`、`src/rating/config.json`、`tests/rating/axes.test.ts` | Task-1 | 不可 |
+| Task-3 | 根拠の軸(大会経験・コール)、AI の下書きの印、根拠のスナップショット(LTK 戦績・プロ経歴・コールの根拠)の初版 | 12, 13, 14, 15 | `src/rating/evidence.ts`、`data/snapshots/evidence-*.json`、`tests/rating/evidence.test.ts` | Task-1 | 可 |
+| Task-4 | 常識の一覧の検査と、集計のコマンドへの組み込み(反したら公開用のファイルを書かずに失敗)、計算ごとの記録 | 17, 18 | `src/rating/known-facts.ts`、`src/rating/known-facts.json`、`src/collect/aggregate-cli.ts`、`tests/rating/known-facts.test.ts` | Task-2, Task-3 | 不可 |
+| Task-5 | 収集の追加: サモナーレベル・熟練度、直近 120 日の試合を最大 60 件 | 22, 23 | `src/collect/riot.ts`、`src/collect/collect.ts`、`tests/collect/collect.test.ts` | — | 可 |
+| Task-6 | 画面: 評価設定の全軸のレーダー(確度で線を変える、推定の印)、軸の説明(基準・補正・縮小・試合数・指標の位置・確度の理由)、チームと階級のレーダーの全軸化 | 16, 20, 21 | `src/app/**`、`tests/app/**` | Task-4 | 不可 |
+
+## 粒度の確認
+
+| 項目 | 上限 | 見込み |
+| --- | --- | --- |
+| 変更行数 | 800 | Task-1 約600 / Task-2 約400 / Task-3 約400(データの初版を除く)/ Task-4 約300 / Task-5 約300 / Task-6 約600 |
+| 変更ファイル数 | 15 | 各 3〜10 |
+| レビュー所要時間 | 30分 | 各 20〜30 分 |
+
+## テストの方針
+
+| 受入基準 | テストの種類 | どこに置くか |
+| --- | --- | --- |
+| 1〜9, 19 | 単体(固定の試合の組で、期間外・短い試合の除外、ロールの絞り込み、重み、基準、標準化、縮小、確度、事前値) | `tests/rating/engine.test.ts` |
+| 10, 11 | 単体(上限、プールの計算がチャンピオンの総数に依らない) | `tests/rating/axes.test.ts` |
+| 12〜15 | 単体(根拠の無いコールはデータなし、AI の下書きの印と確度) | `tests/rating/evidence.test.ts` |
+| 17, 18 | 単体(条件に反するとファイルを書かずに失敗) | `tests/rating/known-facts.test.ts` |
+| 22, 23 | 単体(差し替えた fetch) | `tests/collect/collect.test.ts` |
+| 16, 20, 21 | 画面の論理の単体と、Chrome・Playwright での確認 | `tests/app/**` |
+
+## スタック構成(依存する変更を積み上げる場合のみ)
+
+| 層 | 対応タスク | ベース | 扱う関心事 |
+| --- | --- | --- | --- |
+| 1 | Task-1・Task-5 | main | 評価の土台 / 収集の追加(並列) |
+| 2 | Task-2・Task-3 | 層1 のマージ後の main | データの軸 / 根拠の軸(並列) |
+| 3 | Task-4 | 層2 のマージ後の main | 常識の検査 |
+| 4 | Task-6 | 層3 のマージ後の main | 画面 |
+
+## AI エージェントへ与える分割の指示
+
+- 1つの変更単位で1つの関心事のみを扱う
+- 変更単位ごとに単独でビルドと自動検証が通る状態にする
+- 依存の順序は上表の層番号に従う
+
+## 承認(G-4)
+
+| 項目 | 値 |
+| --- | --- |
+| 判定者 | 価値責任者(takenori-kusaka) |
+| 判定日 | |
+| 結果 | |
