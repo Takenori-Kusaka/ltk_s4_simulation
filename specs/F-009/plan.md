@@ -14,7 +14,9 @@
 | Task-4 | 調子の係数(直近14日の勝率・LP の増減・練習量)と表示の点数 | 17, 18, 19 | `src/rating/form.ts`、`tests/rating/form.test.ts` | Task-1 | 可 |
 | Task-7 | (旧 Task-4b。トレーラの形式 Task-N に合わせて 2026-10-09 に改番)常識の一覧の検査と、集計のコマンドへの組み込み(反したら公開用のファイルを書かずに失敗)、計算ごとの記録 | 21, 22 | `src/rating/known-facts.ts`、`src/rating/known-facts.json`、`src/collect/aggregate-cli.ts`、`tests/rating/known-facts.test.ts` | Task-2, Task-3 | 不可 |
 | Task-5 | 収集の追加: サモナーレベル・熟練度、直近 120 日の試合を最大 60 件 | 26, 27 | `src/collect/riot.ts`、`src/collect/collect.ts`、`tests/collect/collect.test.ts` | — | 可 |
-| Task-6 | 画面: 全軸のレーダー(確度で線を変える、推定の印)と調子、軸の説明(基準・補正・縮小・LTK の項・試合数・指標の位置・根拠・確度の理由)、チームのページの全軸化とチームの指標(視界・オブジェクト・マクロ) | 20, 24, 25 | `src/app/**`、`tests/app/**` | Task-7 | 不可 |
+| Task-6 | 画面(選手のページ): 全軸のレーダー(確度で線を変える、推定の印)と調子、軸の説明(基準・補正・縮小・LTK の項・試合数・指標の位置・根拠・確度の理由) | 20, 24 | `src/app/**`、`tests/app/**` | Task-7 | 不可 |
+| Task-8 | (2026-10-09 に旧 Task-6 から分割。変更行数が上限 800 を超えたため関心事で分けた)チームの指標(視界・オブジェクト・マクロ)の計算と、評価のファイルへの書き出し | 25 | `src/rating/team-indicators.ts`、`src/rating/axes.json`、`src/collect/aggregate-cli.ts`、`tests/rating/team-indicators.test.ts` | Task-7 | 可 |
+| Task-9 | (2026-10-09 に旧 Task-6 から分割)画面(チームのページ): 全軸の相対評価のレーダーとチームの指標の表示 | 25 | `src/app/team/**`、`src/app/**`、`tests/app/**` | Task-6, Task-8 | 不可 |
 
 ## 粒度の確認
 
@@ -43,7 +45,8 @@
 | 1 | Task-1・Task-5 | main | 評価の土台 / 収集の追加(並列) |
 | 2 | Task-2・Task-3・Task-4 | 層1 のマージ後の main | データの軸 / 根拠の軸 / 調子(並列) |
 | 3 | Task-7 | 層2 のマージ後の main | 常識の検査 |
-| 4 | Task-6 | 層3 のマージ後の main | 画面 |
+| 4 | Task-6・Task-8 | 層3 のマージ後の main | 選手のページ / チームの指標の計算(並列) |
+| 5 | Task-9 | 層4 のマージ後の main | チームのページ |
 
 ## AI エージェントへ与える分割の指示
 

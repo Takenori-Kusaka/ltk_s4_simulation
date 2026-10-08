@@ -8,6 +8,8 @@ import { saveDataDragon } from './ddragon.ts';
 import type { FetchLike } from './riot.ts';
 import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.ts';
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
+import { teamIndicators } from '../rating/team-indicators.ts';
+import { ROSTER } from '../data/roster.ts';
 
 export interface AggregateMainOptions {
   rawDir?: string;
@@ -59,10 +61,12 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
     out(`常識の一覧に ${report.violations.length} 件反したため、評価のファイルを書かない`);
     return 2;
   }
+  const teamOf = new Map(ROSTER.map((r) => [r.id, r.team]));
+  const teams = teamIndicators(inputs.players.map((p) => ({ ...p, team: teamOf.get(p.playerId) ?? '' })), inputs.matches, now.getTime());
   const path = join(publicDir, 'ratings.json');
   mkdirSync(publicDir, { recursive: true });
   const checks = report.results.map(({ id, status, note }) => ({ id, status, ...(note ? { note } : {}) }));
-  const file = { kind: 'ratings', computedAt: now.toISOString(), configVersion: configVersion(), matches: inputs.matches.length, checks, players: ratings };
+  const file = { kind: 'ratings', computedAt: now.toISOString(), configVersion: configVersion(), matches: inputs.matches.length, checks, players: ratings, teams };
   writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
   out(`評価のファイルを書いた: ${path}(評価設定の版 ${file.configVersion})`);
   return errors.length ? 1 : 0;

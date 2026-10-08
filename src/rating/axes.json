@@ -5,6 +5,31 @@
   "ltkBonusAxes": ["teamfight", "synergy", "stability"],
   "stability": { "deathsWeight": 0.6, "consistencyWeight": 0.4, "consistencyMinGames": 3 },
   "pool": { "minGamesPerChampion": 3, "winRatePriorGames": 5, "countWeight": 0.5, "winRateWeight": 0.5, "masteryPriorWeight": 0.5 },
+  "teamIndicators": [
+    {
+      "key": "vision",
+      "label": "視界",
+      "rankWeight": 0,
+      "roleDependent": true,
+      "metrics": [
+        { "key": "visionScorePerMinute", "weight": 0.5, "mode": "diff" },
+        { "key": "controlWardsPlaced", "weight": 0.25, "mode": "diff" },
+        { "key": "wardsKilled", "weight": 0.25, "mode": "diff" }
+      ]
+    },
+    {
+      "key": "objectives",
+      "label": "オブジェクト",
+      "rankWeight": 0,
+      "roleDependent": true,
+      "metrics": [
+        { "key": "dragonTakedowns", "weight": 0.3, "mode": "diff" },
+        { "key": "baronTakedowns", "weight": 0.2, "mode": "diff" },
+        { "key": "riftHeraldTakedowns", "weight": 0.2, "mode": "diff" },
+        { "key": "turretTakedowns", "weight": 0.3, "mode": "diff" }
+      ]
+    }
+  ],
   "axes": [
     {
       "key": "ground",
