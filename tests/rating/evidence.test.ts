@@ -47,8 +47,8 @@ const S = (season: string, wins: number | null, losses: number | null) => ({
   season, team: 'DD', tier: 'CORE', role: 'TOP', wins, losses, source: 'docs/research/format-history.md 節6', url: 'https://example.invalid/s',
 });
 
-const shotSnap = readShotcallingSnapshot(JSON.parse(readFileSync('data/snapshots/evidence-shotcalling.json', 'utf8')));
-const tourSnap = readTournamentSnapshot(JSON.parse(readFileSync('data/snapshots/evidence-tournament.json', 'utf8')));
+const shotSnap = readShotcallingSnapshot(JSON.parse(readFileSync('docs/research/grounds/normalized/shotcalling.json', 'utf8')));
+const tourSnap = readTournamentSnapshot(JSON.parse(readFileSync('docs/research/grounds/normalized/tournament.json', 'utf8')));
 const idOf = (name: string) => ROSTER.find((p) => p.name === name)!.id;
 
 // --- 基準14: 肯定の根拠が無い ---
@@ -119,17 +119,37 @@ test('基準13: 形の違うスナップショットは全体を拒否する', (
   assert.ok(readTournamentSnapshot(null).errors.length > 0);
 });
 
-// --- 基準16: 否定の根拠があれば上限 4.0 ---
-test('基準16: 否定の根拠が1件でもあれば、肯定の根拠の件数に依らず 4.0 以下', () => {
-  const many = [...Array.from({ length: 5 }, () => ev({ strength: '強' })), ev({ direction: '-', strength: '弱' })];
-  const r = shotcallingAxis(many, sc);
-  assert.ok(r.score <= 4.0);
-  assert.equal(r.score, 4.0);
+// --- 基準16(2026-10-09 改訂): 肯定と否定の強さの差で決める ---
+test('基準16: 差が正なら 5.0 + 差(弱い否定1件で強い肯定を打ち消さない)', () => {
+  // 強 1.5 − 弱 0.5 = 1.0 → 6.0
+  const r = shotcallingAxis([ev({ strength: '強' }), ev({ direction: '-', strength: '弱' })], sc);
+  assert.equal(r.score, 6.0);
   assert.match(r.reason, /否定/);
+  // 強い肯定が多い選手は弱い否定1件があっても高い
+  const many = [...Array.from({ length: 3 }, () => ev({ strength: '強' })), ev({ strength: '中' }), ev({ direction: '-', strength: '弱' })];
+  assert.equal(shotcallingAxis(many, sc).score, 9.5);
 });
 
-test('基準16: 上限の値は評価設定から読む', () => {
-  const r = shotcallingAxis([ev({ strength: '強' }), ev({ direction: '-' })], { ...sc, negativeCap: 3.5 });
+test('基準16: 差が 0 以下なら 4.0 + 差 × 0.5(2.5〜4.0)', () => {
+  // 中 1.0 − 強 1.5 = −0.5 → 3.75
+  assert.equal(shotcallingAxis([ev({ strength: '中' }), ev({ direction: '-', strength: '強' })], sc).score, 3.75);
+  // 差 0 → 4.0
+  assert.equal(shotcallingAxis([ev({ strength: '中' }), ev({ direction: '-', strength: '中' })], sc).score, 4.0);
+  // 大きく負 → 下限 2.5
+  const r = shotcallingAxis([ev({ strength: '弱' }), ...Array.from({ length: 3 }, () => ev({ direction: '-', strength: '強' }))], sc);
+  assert.equal(r.score, 2.5);
+});
+
+test('基準16: 価値責任者が「コールしない側」と確認した選手は、肯定の根拠に依らず 4.0 以下', () => {
+  const r = shotcallingAxis(
+    [...Array.from({ length: 3 }, () => ev({ strength: '強' })), ev({ direction: '-', strength: '強', kind: 'owner-confirmation', collectedBy: 'human' })],
+    sc,
+  );
+  assert.ok(r.score <= 4.0, `${r.score}`);
+});
+
+test('基準16: 否定が上回るときの上限は評価設定から読む', () => {
+  const r = shotcallingAxis([ev({ strength: '中' }), ev({ direction: '-', strength: '中' })], { ...sc, negativeCap: 3.5 });
   assert.equal(r.score, 3.5);
 });
 
@@ -179,13 +199,15 @@ test('K-04: 価値責任者が「コールしない側」と確認した4名の�
   }
 });
 
-test('K-03: 肯定の根拠が無い選手は 2.5 以下、否定の根拠がある選手は 4.0 以下(全 60 名)', () => {
+test('K-03: 肯定の根拠が無い選手は 2.5 以下、否定が肯定を上回る選手は 4.0 以下(全 60 名)', () => {
   const cfg = loadEvidenceConfig().shotcalling;
+  const pts = (list: ShotcallingEvidence[], dir: string) =>
+    list.filter((e) => e.direction === dir).reduce((s, e) => s + cfg.strengthPoints[e.strength] * (cfg.kindWeights[e.kind] ?? 0), 0);
   for (const [id, list] of Object.entries(shotSnap.players)) {
     const r = shotcallingAxis(list, cfg);
     const pos = list.some((e) => e.direction === '+' && cfg.kindWeights[e.kind] > 0);
     if (!pos) assert.ok(r.score <= 2.5, `${id} ${r.score}`);
-    if (list.some((e) => e.direction === '-')) assert.ok(r.score <= 4.0, `${id} ${r.score}`);
+    if (pts(list, '-') >= pts(list, '+')) assert.ok(r.score <= 4.0, `${id} ${r.score}`);
     assert.ok(r.score >= 0 && r.score <= 10);
   }
 });

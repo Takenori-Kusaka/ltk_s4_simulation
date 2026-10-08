@@ -102,19 +102,29 @@ export function shotcallingAxis(entries: readonly ShotcallingEvidence[], cfg: Sh
   const pos = used.filter((e) => e.direction === '+');
   const neg = used.filter((e) => e.direction === '-');
 
+  // 基準16(2026-10-09 改訂): 肯定と否定の強さの差で決める
   let score: number;
   const why: string[] = [];
+  const points = (list: ShotcallingEvidence[]) => list.reduce((s, e) => s + cfg.strengthPoints[e.strength] * weight(e), 0);
+  const posSum = points(pos);
+  const negSum = points(neg);
   if (pos.length === 0) {
     score = cfg.noPositive;
     why.push(`コール役の実績が見当たらない(肯定の根拠 0 件)ため ${cfg.noPositive}`);
+    if (neg.length > 0) why.push(`否定の根拠 ${neg.length} 件(コールを任せる・指示を聞く側)`);
   } else {
-    const sum = pos.reduce((s, e) => s + cfg.strengthPoints[e.strength] * weight(e), 0);
-    score = Math.min(cfg.max, cfg.base + sum);
-    why.push(`肯定の根拠 ${pos.length} 件(${summarizeKinds(pos)})で ${cfg.base} + ${round(sum)}(上限 ${cfg.max})`);
+    const net = posSum - negSum;
+    if (net > 0) {
+      score = Math.min(cfg.max, cfg.base + net);
+      why.push(`肯定 ${pos.length} 件(${summarizeKinds(pos)}、強さ ${round(posSum)})− 否定 ${neg.length} 件(強さ ${round(negSum)})= ${round(net)} で ${cfg.base} + ${round(net)}(上限 ${cfg.max})`);
+    } else {
+      score = clamp(cfg.negativeCap + net * 0.5, cfg.noPositive, cfg.negativeCap);
+      why.push(`否定の根拠(強さ ${round(negSum)})が肯定(強さ ${round(posSum)})以上のため ${cfg.negativeCap} + ${round(net)} × 0.5(${cfg.noPositive}〜${cfg.negativeCap})`);
+    }
   }
-  if (neg.length > 0) {
-    score = Math.min(score, cfg.negativeCap);
-    why.push(`否定の根拠 ${neg.length} 件(コールを任せる・指示を聞く側)があるため上限 ${cfg.negativeCap}`);
+  if (neg.some((e) => e.kind === 'owner-confirmation') && score > cfg.negativeCap) {
+    score = cfg.negativeCap;
+    why.push(`価値責任者が「コールしない側」と確認したため上限 ${cfg.negativeCap}`);
   }
 
   const human = used.filter((e) => e.collectedBy === 'human').length;
@@ -198,7 +208,7 @@ export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig =
   };
 }
 
-// --- スナップショットの読み込み(data/snapshots/evidence-*.json) ---
+// --- 根拠の記録の読み込み(docs/research/grounds/normalized/*.json。調査の根拠を正規化した記録) ---
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const str = (v: unknown) => typeof v === 'string' && v.trim().length > 0;
