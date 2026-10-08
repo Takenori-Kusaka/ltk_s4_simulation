@@ -1,24 +1,40 @@
 <script lang="ts">
   import { radarGeometry } from '../lib/index.ts';
 
-  let { scores, labels, color = '#6c4ad6' }: { scores: (number | null)[]; labels: string[]; color?: string } = $props();
+  let { scores, labels, color = '#c9a24a' }: { scores: (number | null)[]; labels: string[]; color?: string } = $props();
   const size = 150;
   const g = $derived(radarGeometry(scores, size));
-  const rings = [2, 4, 6, 8, 10].map((v) => radarGeometry(scores.map(() => v), size).points as { x: number; y: number }[]);
+  const rings = $derived([2, 4, 6, 8, 10].map((v) => radarGeometry(scores.map(() => v), size).points as { x: number; y: number }[]));
+  const gid = `glow-${Math.random().toString(36).slice(2, 8)}`;
 </script>
 
 <!-- 基準4: 欠損の軸は破線の軸と「?」で示し、0 点(中心)とは区別する -->
-<svg viewBox="-60 -20 420 340" role="img" aria-label="5軸レーダーチャート">
-  {#each rings as ring}
-    <polygon points={ring.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke="currentColor" stroke-opacity="0.15" />
+<svg viewBox="-70 -24 440 344" role="img" aria-label="5軸レーダーチャート">
+  <defs>
+    <radialGradient id={gid}>
+      <stop offset="0%" stop-color={color} stop-opacity="0.75" />
+      <stop offset="100%" stop-color={color} stop-opacity="0.25" />
+    </radialGradient>
+  </defs>
+  {#each rings as ring, i}
+    <polygon points={ring.map((p) => `${p.x},${p.y}`).join(' ')} fill={i === 4 ? 'rgba(201,162,74,0.04)' : 'none'}
+      stroke="#c9a24a" stroke-opacity={i === 4 ? 0.7 : 0.18} stroke-width={i === 4 ? 1.2 : 0.8} />
   {/each}
   {#each g.outline as p, i}
-    <line x1={size} y1={size} x2={p.x} y2={p.y} stroke="currentColor" stroke-opacity="0.3"
-      stroke-dasharray={g.missing.includes(i) ? '4 4' : undefined} />
-    <text x={size + (p.x - size) * 1.17} y={size + (p.y - size) * 1.17} font-size="15" text-anchor="middle"
-      dominant-baseline="middle" fill="currentColor">{labels[i]}{g.missing.includes(i) ? ' ?' : ''}</text>
+    {@const na = g.missing.includes(i)}
+    <line x1={size} y1={size} x2={p.x} y2={p.y} stroke="#c9a24a" stroke-opacity={na ? 0.5 : 0.25}
+      stroke-dasharray={na ? '3 4' : undefined} />
+    <circle cx={p.x} cy={p.y} r="2.2" fill="#c9a24a" />
+    <text class="label" class:na x={size + (p.x - size) * 1.2} y={size + (p.y - size) * 1.2} text-anchor="middle"
+      dominant-baseline="middle">{labels[i]}{na ? ' ?' : ''}</text>
   {/each}
   {#if g.polygon}
-    <polygon points={g.polygon} fill={color} fill-opacity="0.35" stroke={color} stroke-width="2" />
+    <g class="shape">
+      <polygon points={g.polygon} fill={`url(#${gid})`} stroke={color} stroke-width="2"
+        style={`filter: drop-shadow(0 0 10px ${color})`} />
+      {#each g.points as p}
+        {#if p}<circle cx={p.x} cy={p.y} r="3.4" fill="#f0d896" stroke={color} stroke-width="1.5" />{/if}
+      {/each}
+    </g>
   {/if}
 </svg>

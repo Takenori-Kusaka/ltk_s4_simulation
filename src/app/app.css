@@ -1,77 +1,438 @@
-/* F-002 基準10: 幅 360px のスマホと 1280px の PC で横スクロールを起こさない */
+/*
+ * F-002 見た目: 「王家の紋章入りトレーディングカード」
+ * 4チームの名は花 × 王冠(Dahlia Diadem / Camellia Crown / Iris Tiara / Laurel Regalia)。
+ * 夜のビロードの地に金の箔、チームの色は紋章の差し色として使う。
+ * 基準10: 幅 360px のスマホと 1280px の PC で横スクロールを起こさない(固定幅は 360px 以下だけ)
+ */
 :root {
-  --bg: #f7f6f2;
-  --fg: #1d1d1f;
-  --muted: #6b6b70;
-  --card: #ffffff;
-  --line: #e2e0d8;
-  --accent: #6c4ad6;
-  color-scheme: light;
+  --velvet: #0d0a12;
+  --velvet-2: #171222;
+  --velvet-3: #221b30;
+  --ivory: #f1e9d8;
+  --ivory-dim: #b9ae99;
+  --muted: #8a8173;
+  --gold: #c9a24a;
+  --gold-hi: #f0d896;
+  --gold-lo: #7d6123;
+  --line: rgba(201, 162, 74, 0.28);
+  --line-soft: rgba(201, 162, 74, 0.12);
+  --team: var(--gold);
+  --serif-jp: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --serif-latin: 'Bodoni Moda', 'Didot', 'Times New Roman', serif;
+  --caps: 'Marcellus SC', 'Cormorant Garamond', serif;
+  --sans-jp: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #15151a;
-    --fg: #ececf0;
-    --muted: #9a9aa3;
-    --card: #1f1f26;
-    --line: #2e2e38;
-    --accent: #a48cff;
-    color-scheme: dark;
-  }
-}
+
 * {
   box-sizing: border-box;
 }
+
+html {
+  background: var(--velvet);
+}
+
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: system-ui, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-variant-numeric: lining-nums;
+  min-height: 100vh;
+  color: var(--ivory);
+  font-family: var(--sans-jp);
+  font-size: 15px;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  background:
+    radial-gradient(1200px 700px at 12% -10%, rgba(224, 137, 43, 0.13), transparent 60%),
+    radial-gradient(900px 600px at 95% 5%, rgba(74, 111, 224, 0.12), transparent 60%),
+    radial-gradient(900px 700px at 80% 100%, rgba(63, 155, 92, 0.1), transparent 60%),
+    radial-gradient(800px 600px at 0% 90%, rgba(200, 50, 74, 0.11), transparent 60%),
+    var(--velvet);
+  background-attachment: fixed;
 }
+
+/* 粒子の質感(SVG のノイズ) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* 金の菱形の地紋 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><path d='M24 2 46 24 24 46 2 24Z' fill='none' stroke='%23c9a24a' stroke-width='.8'/><circle cx='24' cy='24' r='1.6' fill='%23c9a24a'/></svg>");
+}
+
 main {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   margin: 0 auto;
-  padding: 16px;
+  padding: 20px 16px 64px;
 }
 @media (min-width: 900px) {
   main {
-    max-width: 1100px;
+    max-width: 1180px;
+    padding: 28px 32px 96px;
   }
 }
+
 a {
-  color: var(--accent);
+  color: inherit;
+  text-decoration: none;
 }
-.card {
-  background: var(--card);
+
+/* ---------- 見出しの帯 ---------- */
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: var(--caps);
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  color: var(--gold-hi);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  width: 22px;
+  height: 22px;
+}
+.crumb {
+  font-family: var(--caps);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--ivory-dim);
+}
+.crumb a:hover {
+  color: var(--gold-hi);
+}
+
+/* ---------- 共通の部品 ---------- */
+.eyebrow {
+  font-family: var(--caps);
+  letter-spacing: 0.3em;
+  font-size: 0.7rem;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 18px 0;
+  background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold-hi) 50%, var(--gold) 80%, transparent);
+  opacity: 0.6;
+}
+.foil {
+  background: linear-gradient(100deg, var(--gold-lo), var(--gold-hi) 35%, var(--gold) 55%, var(--gold-hi) 75%, var(--gold-lo));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 金の二重の額縁と四隅の飾り */
+.frame {
+  position: relative;
+  background: linear-gradient(180deg, rgba(34, 27, 48, 0.92), rgba(18, 14, 26, 0.94));
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 5px var(--velvet-2),
+    inset 0 0 0 6px var(--line-soft),
+    0 24px 60px -30px rgba(0, 0, 0, 0.9);
 }
-.sheet {
+.frame::before,
+.frame::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--gold);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.frame::before {
+  top: 9px;
+  left: 9px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.frame::after {
+  right: 9px;
+  bottom: 9px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ---------- 一覧(トップ) ---------- */
+.hero {
+  text-align: center;
+  padding: 18px 0 30px;
+}
+.hero h1 {
+  margin: 8px 0 6px;
+  font-family: var(--caps);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  line-height: 1.15;
+  font-size: clamp(2rem, 7vw, 4.2rem);
+}
+.hero .sub {
+  font-family: var(--serif-jp);
+  color: var(--ivory-dim);
+  margin: 0;
+}
+.countdown {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 8px 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--serif-jp);
+  color: var(--ivory-dim);
+}
+.countdown strong {
+  font-family: var(--serif-latin);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold-hi);
+  line-height: 1;
+}
+
+.houses {
   display: grid;
+  gap: 22px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .houses {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.house {
+  --team: var(--gold);
+  padding: 26px 22px 22px;
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.house-head {
+  display: flex;
+  align-items: center;
   gap: 16px;
+}
+.house-head .emblem {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--team) 55%, transparent));
+}
+.house-name {
+  font-family: var(--caps);
+  font-size: 1.45rem;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  margin: 0;
+}
+.house-motto {
+  font-family: var(--serif-jp);
+  font-size: 0.82rem;
+  color: var(--ivory-dim);
+}
+.tier-row {
+  margin-top: 16px;
+}
+.tier-row .eyebrow {
+  display: block;
+  margin-bottom: 8px;
+}
+.chips {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+}
+@media (min-width: 900px) {
+  .chips {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--line-soft);
+  border-left: 2px solid var(--team);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.02);
+  font-family: var(--serif-jp);
+  font-size: 0.86rem;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+.chip:hover {
+  background: color-mix(in srgb, var(--team) 14%, transparent);
+  border-color: var(--line);
+  transform: translateY(-1px);
+}
+.chip .role {
+  font-family: var(--caps);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--ivory-dim);
+  width: 30px;
+  flex: none;
+}
+
+/* ---------- 選手のキャラクターシート ---------- */
+.sheet {
+  --team: var(--gold);
+  display: grid;
+  gap: 22px;
   grid-template-columns: 1fr;
 }
 @media (min-width: 900px) {
   .sheet {
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 340px 1fr;
+    align-items: start;
   }
 }
-.avatar {
+
+/* グリッドの子が中身(根拠の表)の幅で広がらないようにする */
+.sheet > *,
+.houses > * {
+  min-width: 0;
+}
+.portrait {
+  padding: 22px;
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.portrait-art {
+  position: relative;
   aspect-ratio: 3 / 4;
-  width: 160px;
+  width: 220px;
   max-width: 100%;
   margin: 0 auto;
-  border-radius: 12px;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--team) 55%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--team) 28%, var(--velvet-3)), var(--velvet));
+}
+@media (min-width: 900px) {
+  .portrait-art {
+    width: 100%;
+  }
+}
+.portrait-art .emblem {
+  position: absolute;
+  width: 135%;
+  height: 135%;
+  left: -17.5%;
+  top: -8%;
+  opacity: 0.22;
+  animation: spin 90s linear infinite;
+}
+.portrait-art .initial {
+  position: absolute;
+  inset: 0;
   display: grid;
   place-items: center;
-  color: #fff;
-  font-size: 4rem;
-  font-weight: 700;
+  font-family: var(--serif-jp);
+  font-weight: 800;
+  font-size: clamp(5rem, 22vw, 8rem);
+  color: var(--ivory);
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.35),
+    0 0 40px color-mix(in srgb, var(--team) 70%, transparent);
 }
-.avatar small {
-  font-size: 1rem;
-  opacity: 0.85;
+.portrait-art .badge {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: rgba(13, 10, 18, 0.72);
+  font-family: var(--caps);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-hi);
+}
+.portrait-art .badge svg {
+  width: 14px;
+  height: 14px;
+}
+.nameplate {
+  text-align: center;
+  margin-top: 18px;
+}
+.nameplate h1 {
+  margin: 4px 0 2px;
+  font-family: var(--serif-jp);
+  font-weight: 700;
+  font-size: 1.9rem;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+}
+.nameplate .house-line {
+  font-family: var(--caps);
+  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  color: var(--ivory-dim);
+}
+.nameplate .house-line b {
+  color: var(--team);
+  font-weight: 400;
+}
+.overall {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+}
+.overall .num {
+  font-family: var(--serif-latin);
+  font-weight: 600;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.stats {
+  padding: 22px 18px;
+  animation: rise 0.6s 0.12s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@media (min-width: 900px) {
+  .stats {
+    padding: 28px 30px;
+  }
+}
+.radar {
+  max-width: 100%;
 }
 .radar svg {
   display: block;
@@ -79,60 +440,233 @@ a {
   max-width: 100%;
   height: auto;
   margin: 0 auto;
+  overflow: visible;
 }
 @media (min-width: 900px) {
-  .avatar {
-    width: 100%;
-  }
   .radar svg {
-    max-width: 460px;
+    max-width: 470px;
   }
 }
-.axes {
+.radar .shape {
+  transform-origin: center;
+  transform-box: view-box;
+  animation: bloom 0.9s 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.radar .label {
+  font-family: var(--serif-jp);
+  font-size: 16px;
+  fill: var(--ivory-dim);
+}
+.radar .label.na {
+  fill: var(--muted);
+  font-style: italic;
+}
+
+.lines {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 18px 0 0;
   display: grid;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
 }
-.axes button {
+.line {
+  min-width: 0;
+  animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.line > button {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label value'
+    'bar bar';
+  gap: 6px 12px;
+  align-items: baseline;
+  padding: 12px 6px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
   background: transparent;
   color: inherit;
   font: inherit;
+  text-align: left;
   cursor: pointer;
 }
-.score {
+.line > button:hover .label-text,
+.line > button[aria-expanded='true'] .label-text {
+  color: var(--gold-hi);
+}
+.label-text {
+  grid-area: label;
+  font-family: var(--serif-jp);
+  font-size: 1.02rem;
+  transition: color 0.2s;
+}
+.label-text::after {
+  content: ' ›';
+  color: var(--gold);
+  opacity: 0.6;
+}
+.value {
+  grid-area: value;
+  font-family: var(--serif-latin);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  font-weight: 700;
 }
-.missing {
-  color: var(--muted);
+.value.na {
+  font-family: var(--serif-jp);
   font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--muted);
 }
+.bar {
+  grid-area: bar;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-lo), var(--gold-hi));
+  box-shadow: 0 0 10px rgba(240, 216, 150, 0.5);
+  transform-origin: left;
+  animation: fill 0.9s 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.bar.na {
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0 4px, transparent 4px 8px);
+}
+
 .evidence {
-  overflow-x: auto;
   max-width: 100%;
+  overflow-x: auto;
+  margin: 4px 0 12px;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  background: rgba(0, 0, 0, 0.25);
+  animation: rise 0.3s ease both;
 }
 .evidence table {
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  min-width: 100%;
 }
-.evidence td,
 .evidence th {
-  border-bottom: 1px solid var(--line);
-  padding: 4px 8px;
+  font-family: var(--caps);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  font-size: 0.66rem;
+  color: var(--gold);
   text-align: left;
-  vertical-align: top;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
 }
-.roster {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+.evidence td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+  color: var(--ivory-dim);
+}
+.evidence td.num {
+  font-family: var(--serif-latin);
+  font-size: 1rem;
+  color: var(--ivory);
+  white-space: nowrap;
+}
+.evidence .why {
+  display: block;
+  color: var(--ivory);
+  font-family: var(--serif-jp);
+  margin-top: 2px;
+}
+.evidence .missing-note {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* スマホでは根拠の表を1行ずつのカードにする */
+@media (max-width: 899px) {
+  .evidence thead {
+    display: none;
+  }
+  .evidence table,
+  .evidence tbody,
+  .evidence tr,
+  .evidence td {
+    display: block;
+    min-width: 0;
+  }
+  .evidence tr {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .evidence td {
+    border: 0;
+    padding: 2px 0;
+  }
+  .evidence td.metric {
+    font-family: var(--serif-jp);
+    color: var(--gold-hi);
+  }
+  .evidence td:not(.metric)::before {
+    content: attr(data-k);
+    display: inline-block;
+    width: 4.2em;
+    font-family: var(--caps);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+}
+.alert {
+  padding: 20px 22px;
+  border-color: rgba(200, 50, 74, 0.6);
+}
+
+/* ---------- 動き ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.2) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
