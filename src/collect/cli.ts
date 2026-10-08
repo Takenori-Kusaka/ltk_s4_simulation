@@ -13,6 +13,8 @@ export interface MainOptions {
   players?: readonly CollectPlayer[];
   fetch?: FetchLike;
   sleep?: (ms: number) => Promise<void>;
+  /** 時計(試験で注入する。既定は現在時刻) */
+  now?: () => Date;
   out?: (line: string) => void;
 }
 
@@ -26,10 +28,10 @@ export async function main(opts: MainOptions): Promise<number> {
     out((e as Error).message);
     return 1;
   }
-  const client = createRiotClient({ apiKey, fetch: opts.fetch, sleep: opts.sleep });
+  const client = createRiotClient({ apiKey, fetch: opts.fetch, sleep: opts.sleep, now: opts.now });
   try {
     const summary = await runCollection({
-      players: opts.players ?? ROSTER, client, dataDir: opts.dataDir ?? 'data/raw', out,
+      players: opts.players ?? ROSTER, client, dataDir: opts.dataDir ?? 'data/raw', now: opts.now, out,
     });
     const missing = summary.players.filter((p) => p.status === '未取得').map((p) => p.playerId);
     out(`未取得: ${missing.length ? missing.join(', ') : 'なし'}`);
