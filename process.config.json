@@ -1,31 +1,690 @@
 {
-  "schemaVersion": 0,
-  "configured": false,
-  "note": "未設定です。Claude Code で /process-init を実行すると、このファイルと PROCESS-PROFILE.md が生成されます。",
-  "projectId": "P-000",
-  "adapters": { "stack": "none" },
+  "schemaVersion": 1,
+  "configured": true,
+  "profileName": null,
+  "projectId": "P-001",
+  "generatedAt": "2026-10-08T18:27:22+09:00",
+  "answers": {
+    "q-team-size": "size-1-2",
+    "q-biz-phase": "poc",
+    "q-quality": "quality-standard",
+    "q-criticality": "cl0",
+    "q-dev-form": "inhouse",
+    "q-external-reviewer": "reviewer-no",
+    "q-existing-gates": "gates-none",
+    "q-ai-constraint": "ai-free"
+  },
+  "answerLabels": {
+    "q-team-size": "1〜2名",
+    "q-biz-phase": "検証中(PoC)",
+    "q-quality": "一般的なWebサービス",
+    "q-criticality": "経済的な損失や業務の中断にとどまる",
+    "q-dev-form": "自社開発",
+    "q-external-reviewer": "いない",
+    "q-existing-gates": "ない",
+    "q-ai-constraint": "制約なし"
+  },
+  "adapters": {
+    "stack": "undetermined"
+  },
   "platform": {
     "host": "local-markdown",
     "hostUrl": null
   },
+  "ruleset": null,
   "gates": {
-    "g1": { "label": "G-1 企画承認", "state": "required", "params": {}, "why": [] },
-    "g2": { "label": "G-2 要件合意", "state": "required", "params": {}, "why": [] },
-    "g3": { "label": "G-3 技術設計判断", "state": "required", "params": {}, "why": [] },
-    "g4": { "label": "G-4 機能仕様承認", "state": "required", "params": {}, "why": [] },
-    "g5": { "label": "G-5 自動検証(CI)", "state": "required", "params": {}, "why": [] },
-    "g6": { "label": "G-6 独立レビュー", "state": "required", "params": {}, "why": [] },
-    "g7": { "label": "G-7 出荷判定", "state": "required", "params": {}, "why": [] },
-    "g8": { "label": "G-8 リリース決裁", "state": "required", "params": {}, "why": [] }
+    "g1": {
+      "label": "G-1 企画承認",
+      "approver": "事業決裁者(決裁権限規程どおりの職位)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-1-企画承認事業決裁者既存規程どおり",
+      "state": "simplified",
+      "params": {},
+      "why": [
+        "企画承認は1枚企画書に簡略化する"
+      ]
+    },
+    "g2": {
+      "label": "G-2 要件合意",
+      "approver": "価値責任者(単独。目安48時間以内に判定)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-2-要件合意価値責任者48時間",
+      "state": "merged-into-g4",
+      "params": {},
+      "why": [
+        "要件合意は省略し、仕様承認に統合する"
+      ]
+    },
+    "g3": {
+      "label": "G-3 技術設計判断",
+      "approver": "技術判断者(単独。目安48時間以内に判定)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-3-技術設計判断技術判断者48時間",
+      "state": "required",
+      "params": {},
+      "why": []
+    },
+    "g4": {
+      "label": "G-4 機能仕様承認(反復内)",
+      "approver": "価値責任者(または明示的に委譲された機能責任者。委譲しても結果責任は価値責任者に残る)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-4-機能仕様承認価値責任者または委譲先24時間",
+      "state": "required",
+      "params": {},
+      "why": []
+    },
+    "g5": {
+      "label": "G-5 自動検証(CI)",
+      "approver": "CI(機械判定)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-5-自動検証-ci機械判定即時",
+      "state": "required",
+      "params": {},
+      "why": [
+        "代償措置としてCI基準を厳格化する(カバレッジ+静的解析の基準を引き上げ)。未達の解消にも、独立レビューの代替にも数えない"
+      ]
+    },
+    "g6": {
+      "label": "G-6 独立レビュー",
+      "approver": "独立レビュア(作成指示者本人の承認は数えない。ブランチ保護と出荷の証跡の集約の2つの層で止める)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-6-独立レビュー独立レビュア応答1営業日--判定2営業日",
+      "state": "unmet",
+      "params": {},
+      "why": [
+        "作成を指示した本人以外の確認者を置けない。省略ではなく未達として表示する(ADR-0028)"
+      ]
+    },
+    "g7": {
+      "label": "G-7 出荷判定",
+      "approver": "品質保証(開発ラインの外の人。署名する)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-7-出荷判定qa3営業日",
+      "state": "omitted",
+      "params": {},
+      "why": [
+        "出荷判定は省略する"
+      ]
+    },
+    "g8": {
+      "label": "G-8 リリース決裁",
+      "approver": "事業決裁者",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/gate-criteria/#g-8-リリース決裁事業決裁者48時間",
+      "state": "required",
+      "params": {},
+      "why": []
+    }
   },
-  "unmet": [],
+  "roles": [
+    {
+      "id": "value-owner",
+      "name": "価値責任者(Value Owner)",
+      "responsibility": "What/Why の決定と価値の説明責任を単独で持つ。要件合意・仕様承認の判定者。委譲しても結果責任は残る",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [
+        "g2",
+        "g4"
+      ],
+      "gatesUnmet": [],
+      "mustNotAlso": [],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "tech-lead",
+      "name": "技術判断者(Tech Lead)",
+      "responsibility": "アーキテクチャ・技術選定・技術的トレードオフの判定を単独で持つ。技術設計ゲートの判定者",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [
+        "g3"
+      ],
+      "gatesUnmet": [],
+      "mustNotAlso": [],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "dev-verifier",
+      "name": "開発者(検証者)",
+      "responsibility": "AI生成物の検証、挙動の理解、実装の細部判断。コア機能では設計レベルまで読み解き判断記録を残す",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-author-reviewer",
+          "role": "independent-reviewer",
+          "scope": "same-work-product",
+          "reason": "作成を指示した本人が見ても、作成時の思い込みは検出できない",
+          "exception": "none"
+        },
+        {
+          "separationId": "sep-dev-shipping",
+          "role": "qa-gatekeeper",
+          "scope": "same-project",
+          "reason": "開発ラインの外の人による判定が成立しなくなる",
+          "exception": "3名未満に限り、代償措置つきで兼務を認める(第3章 3.5.2 / ADR-0029)"
+        }
+      ],
+      "mustNotJudge": [
+        "g6",
+        "g7"
+      ],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "ai-agent",
+      "name": "AIエージェント",
+      "responsibility": "仕様の起案支援、実装、テスト生成、ドキュメント生成、負債候補の検出。席の担い手として実行(R)を担う。提案はするが、判定と承認はしない",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/human-ai-boundary/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [],
+      "mustNotJudge": [
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7",
+        "g8"
+      ],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "independent-reviewer",
+      "name": "独立レビュア",
+      "responsibility": "作成を指示した本人とは別の人間として PR をレビューし、仕様との一致と理解可能性を確認する",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [
+        "g6"
+      ],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-author-reviewer",
+          "role": "dev-verifier",
+          "scope": "same-work-product",
+          "reason": "作成を指示した本人が見ても、作成時の思い込みは検出できない",
+          "exception": "none"
+        }
+      ],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "qa-gatekeeper",
+      "name": "品質保証(出荷判定者)",
+      "responsibility": "開発ラインの外の人として出荷判定を行い署名する。プロセス実行記録と品質エビデンスの確認が任務(再テストではない)",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-dev-shipping",
+          "role": "dev-verifier",
+          "scope": "same-project",
+          "reason": "開発ラインの外の人による判定が成立しなくなる",
+          "exception": "3名未満に限り、代償措置つきで兼務を認める(第3章 3.5.2 / ADR-0029)"
+        },
+        {
+          "separationId": "sep-shipping-business",
+          "role": "biz-approver",
+          "scope": "same-project",
+          "reason": "出荷判定者が書く異議を、事業決裁者が読んで残存リスクを受容する。同じ人が兼ねると、受容が自己完結する(ADR-0056 決定5)",
+          "exception": "3名未満に限り、逸脱として D-0 体制図へ記録し、保証の開示の項目1 へ「異議を書く者と、残存リスクを受容する者が同一である」と表示する。3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)"
+        }
+      ],
+      "mustNotJudge": [
+        "g8"
+      ],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "biz-approver",
+      "name": "事業決裁者",
+      "responsibility": "予算・スコープ・リリース可否という事業判断のみを行う。技術判断には関与しない",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [
+        "g1",
+        "g8"
+      ],
+      "gatesUnmet": [],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-shipping-business",
+          "role": "qa-gatekeeper",
+          "scope": "same-project",
+          "reason": "出荷判定者が書く異議を、事業決裁者が読んで残存リスクを受容する。同じ人が兼ねると、受容が自己完結する(ADR-0056 決定5)",
+          "exception": "3名未満に限り、逸脱として D-0 体制図へ記録し、保証の開示の項目1 へ「異議を書く者と、残存リスクを受容する者が同一である」と表示する。3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)"
+        }
+      ],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "context-owner",
+      "name": "コンテキストオーナー",
+      "responsibility": "恒久層コンテキスト(規約・用語・判断基準・判断記録)の保守と正しさに責任を持つ",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "ai-maintainer",
+      "name": "AI維持管理者(AI Maintainer)",
+      "responsibility": "エージェント指示資産の一貫性と鮮度に責任を持つ。矛盾の除去・統合・削除の権限を単独で持ち、エージェントが用いる外部ツールの採用可否を承認する",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-maintainer-ops",
+          "role": "ai-ops",
+          "scope": "always",
+          "reason": "案件の都合で全社の統制を緩める経路ができる",
+          "exception": "1〜2名体制で兼務禁止が成立しない場合に限り、逸脱として D-0 体制図へ記録し、表示し続ける。兼務を認める例外ではなく、3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)"
+        }
+      ],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    },
+    {
+      "id": "ai-ops",
+      "name": "AI運用担当者(AIOps)",
+      "responsibility": "全社のAI実行基盤(モデル接続・実行予算・セキュリティ統制)の可用性と適合性に責任を持つ。開発ラインへは規程ではなく実行環境として統制を届ける",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/",
+      "gatesOwned": [],
+      "gatesUnmet": [],
+      "mustNotAlso": [
+        {
+          "separationId": "sep-maintainer-ops",
+          "role": "ai-maintainer",
+          "scope": "always",
+          "reason": "案件の都合で全社の統制を緩める経路ができる",
+          "exception": "1〜2名体制で兼務禁止が成立しない場合に限り、逸脱として D-0 体制図へ記録し、表示し続ける。兼務を認める例外ではなく、3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)"
+        }
+      ],
+      "mustNotJudge": [],
+      "selfApproval": "forbidden",
+      "notes": []
+    }
+  ],
+  "separations": [
+    {
+      "id": "sep-self-approval",
+      "roles": null,
+      "scope": "same-work-product",
+      "reason": "起案した主体が判定すれば、判定は自己申告になる。役割の組み合わせによらず成立しない",
+      "exception": "none",
+      "gate": null,
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    },
+    {
+      "id": "sep-author-reviewer",
+      "roles": [
+        "dev-verifier",
+        "independent-reviewer"
+      ],
+      "scope": "same-work-product",
+      "reason": "作成を指示した本人が見ても、作成時の思い込みは検出できない",
+      "exception": "none",
+      "gate": "g-indep-review",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    },
+    {
+      "id": "sep-dev-shipping",
+      "roles": [
+        "dev-verifier",
+        "qa-gatekeeper"
+      ],
+      "scope": "same-project",
+      "reason": "開発ラインの外の人による判定が成立しなくなる",
+      "exception": "3名未満に限り、代償措置つきで兼務を認める(第3章 3.5.2 / ADR-0029)",
+      "gate": "g-ship",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    },
+    {
+      "id": "sep-shipping-business",
+      "roles": [
+        "qa-gatekeeper",
+        "biz-approver"
+      ],
+      "scope": "same-project",
+      "reason": "出荷判定者が書く異議を、事業決裁者が読んで残存リスクを受容する。同じ人が兼ねると、受容が自己完結する(ADR-0056 決定5)",
+      "exception": "3名未満に限り、逸脱として D-0 体制図へ記録し、保証の開示の項目1 へ「異議を書く者と、残存リスクを受容する者が同一である」と表示する。3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)",
+      "gate": "g-release",
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    },
+    {
+      "id": "sep-maintainer-ops",
+      "roles": [
+        "ai-maintainer",
+        "ai-ops"
+      ],
+      "scope": "always",
+      "reason": "案件の都合で全社の統制を緩める経路ができる",
+      "exception": "1〜2名体制で兼務禁止が成立しない場合に限り、逸脱として D-0 体制図へ記録し、表示し続ける。兼務を認める例外ではなく、3.5.2 の例外(代償措置つきの許容)は適用しない(第3章 3.5)",
+      "gate": null,
+      "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    }
+  ],
+  "governance": {
+    "structureDecider": "biz-approver",
+    "catalogRegistrar": "biz-approver"
+  },
+  "d0Version": "1.1",
+  "unmet": [
+    {
+      "gate": "g6",
+      "label": "G-6 独立レビュー",
+      "reason": "作成を指示した本人以外が挙動を確認する条件を満たす構成が存在しない(最小体制3名未満、かつ作成を指示した本人以外の確認者がいない)",
+      "whyNotAi": "独立は責任者(人)の単位で定義する。責任者が同一人物なら、AI を何体に分けても、モデルの系統を変えても独立は成立しない。AI の確認は検出の層であり、判定に数えない。生成物の確認を生成器へ委ねる構成は自動化バイアスによって見落としを増やす",
+      "compensation": [
+        "ci-strict",
+        "post-release-audit"
+      ],
+      "reviewSourcing": null,
+      "source": "ADR-0028(未達と省略の区別)",
+      "sourceUrl": "https://takenori-kusaka.github.io/process-compass/adr/0028-unmet-gate-distinct-from-omitted/",
+      "howToResolve": [
+        "2名体制では、作成を指示していない側の人が確認する(相手も作成の指示に関与した変更は除く)",
+        "リポジトリを公開し、コミュニティのレビューを受ける",
+        "他の個人開発者と相互レビューの取り決めをする",
+        "有償のコードレビューを利用する",
+        "確認者を置けたら、/process-change で変化点として反映する(確認者は人の名簿 people[] へ記入する)"
+      ]
+    }
+  ],
+  "deviations": [
+    {
+      "gate": null,
+      "separationId": "sep-shipping-business",
+      "label": "品質保証(出荷判定者) × 事業決裁者 の兼務",
+      "rule": "品質保証(出荷判定者) × 事業決裁者 の兼務の禁止(第3章 3.5)",
+      "reason": "1〜2名の体制で、同じ人(takenori-kusaka)が両方の席の責任者になっている。異議を書く者と、残存リスクを受容する者が同一である。出荷判定者が書く異議を、事業決裁者が読んで残存リスクを受容する。同じ人が兼ねると、受容が自己完結する(ADR-0056 決定5)",
+      "compensation": [],
+      "record": "兼務の事実を D-0 体制図(節2)へ記録し、表示し続ける。出荷判定者の兼務の例外(第3章 3.5.2)を、この組へ広げない",
+      "resolveWhen": "2つの席の責任者を別の人にできた時点。3名以上の体制では、この兼務を拒否する",
+      "source": "第3章 3.5",
+      "sourceUrl": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    },
+    {
+      "gate": null,
+      "separationId": "sep-maintainer-ops",
+      "label": "AI維持管理者(AI Maintainer) × AI運用担当者(AIOps) の兼務",
+      "rule": "AI維持管理者(AI Maintainer) × AI運用担当者(AIOps) の兼務の禁止(第3章 3.5)",
+      "reason": "1〜2名の体制で、同じ人(takenori-kusaka)が両方の席の責任者になっている。案件の都合で全社の統制を緩める経路ができる",
+      "compensation": [],
+      "record": "兼務の事実を D-0 体制図(節2)へ記録し、表示し続ける。出荷判定者の兼務の例外(第3章 3.5.2)を、この組へ広げない",
+      "resolveWhen": "2つの席の責任者を別の人にできた時点。3名以上の体制では、この兼務を拒否する",
+      "source": "第3章 3.5",
+      "sourceUrl": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/roles-responsibilities/"
+    }
+  ],
+  "shipBlocked": null,
+  "people": [
+    {
+      "id": "p1",
+      "name": "takenori-kusaka",
+      "external": false,
+      "accounts": [
+        "takenori-kusaka"
+      ]
+    }
+  ],
+  "seats": [
+    {
+      "role": "value-owner",
+      "name": "価値責任者(Value Owner)",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "delegated",
+      "delegable": true,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "tech-lead",
+      "name": "技術判断者(Tech Lead)",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "delegated",
+      "delegable": true,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "dev-verifier",
+      "name": "開発者(検証者)",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "delegated",
+      "delegable": true,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "independent-reviewer",
+      "name": "独立レビュア",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "delegated",
+      "delegable": true,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "qa-gatekeeper",
+      "name": "品質保証(出荷判定者)",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "collab",
+      "delegable": false,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "biz-approver",
+      "name": "事業決裁者",
+      "accountable": "takenori-kusaka",
+      "mode": "human",
+      "modeCeiling": "human",
+      "delegable": false,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "context-owner",
+      "name": "コンテキストオーナー",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "delegated",
+      "delegable": true,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "ai-maintainer",
+      "name": "AI維持管理者(AI Maintainer)",
+      "accountable": "takenori-kusaka",
+      "mode": "collab",
+      "modeCeiling": "collab",
+      "delegable": false,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    },
+    {
+      "role": "ai-ops",
+      "name": "AI運用担当者(AIOps)",
+      "accountable": "takenori-kusaka",
+      "mode": "human",
+      "modeCeiling": "human",
+      "delegable": false,
+      "performer": null,
+      "fallback": null,
+      "qualification": null
+    }
+  ],
+  "delegation": {
+    "allowed": true,
+    "blockedBy": [],
+    "rules": [],
+    "changeTypes": [],
+    "source": "https://takenori-kusaka.github.io/process-compass/phase4-process-design/human-ai-boundary/"
+  },
   "ci": {
-    "coverageThreshold": 80,
-    "failOnSeverity": ["critical", "high"],
-    "allowedLicenses": ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "Python-2.0", "MPL-2.0"],
-    "strengthened": false
+    "coverageThreshold": 90,
+    "derivedCoverageThreshold": 90,
+    "failOnSeverity": [
+      "critical",
+      "high"
+    ],
+    "allowedLicenses": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "Python-2.0",
+      "MPL-2.0"
+    ],
+    "strengthened": true
   },
-  "review": { "requiredApprovals": 1, "reviewerCount": 1, "mode": null, "recordFormat": "standard" },
-  "aiReview": { "enabled": true, "canApprove": false, "requiredCheck": false },
-  "task": { "maxChangedLines": 400, "maxChangedFiles": 15, "selfHealMaxIterations": 3 }
+  "review": {
+    "requiredApprovals": 0,
+    "reviewerCount": 0,
+    "mode": null,
+    "recordFormat": "standard"
+  },
+  "aiReview": {
+    "enabled": true,
+    "canApprove": false,
+    "requiredCheck": false
+  },
+  "task": {
+    "maxChangedLines": 400,
+    "maxChangedFiles": 15,
+    "selfHealMaxIterations": 3
+  },
+  "matchedRuleIds": [
+    "r-b-poc",
+    "r-s-no-existing-gates",
+    "r-a-solo",
+    "r-s-no-external-reviewer"
+  ],
+  "warnings": [],
+  "changeLog": [
+    {
+      "date": "2026-10-08",
+      "at": "2026-10-08T18:25:46+09:00",
+      "kind": "init",
+      "changePoint": null,
+      "summary": "構成を生成した",
+      "result": "changed",
+      "direction": "none",
+      "d0Before": null,
+      "d0After": null,
+      "diff": [],
+      "arising": [],
+      "separationRecheck": null,
+      "invalidatedChecks": [],
+      "expired": [],
+      "recheckDue": null,
+      "decidedBy": null,
+      "reason": null,
+      "ruleApprovedBy": null,
+      "ruleApproval": null,
+      "nameOverrides": [],
+      "sgRecord": null,
+      "outage": null,
+      "notice": null,
+      "prevHash": null,
+      "stateHash": "dded373a48d1309108f511c0c4c7073220b93bdfcc747787bcb3c556f54507b7"
+    },
+    {
+      "date": "2026-10-08",
+      "at": "2026-10-08T18:25:50+09:00",
+      "kind": "init",
+      "changePoint": null,
+      "summary": "D-0 体制図の版を取得した",
+      "result": "no-change",
+      "direction": "none",
+      "d0Before": null,
+      "d0After": "1.0",
+      "diff": [],
+      "arising": [],
+      "separationRecheck": null,
+      "invalidatedChecks": [],
+      "expired": [],
+      "recheckDue": null,
+      "decidedBy": null,
+      "reason": null,
+      "ruleApprovedBy": null,
+      "ruleApproval": null,
+      "nameOverrides": [],
+      "sgRecord": null,
+      "outage": null,
+      "notice": null,
+      "prevHash": "28ec12687029c3b9df8d8c7237cc4901fd7ac5d970cd1277e24f40bc1e4c4f34",
+      "stateHash": "0c99a0404cc928e63f63ae99f599d482b90983ca04d4db79252923ae012aa1b0"
+    },
+    {
+      "date": "2026-10-08",
+      "at": "2026-10-08T18:27:22+09:00",
+      "kind": "accountable",
+      "changePoint": 1,
+      "summary": "名簿と席の責任者を記入する(初回の記入。1名体制のため全席を兼務)",
+      "result": "changed",
+      "direction": "appoint",
+      "d0Before": "1.0",
+      "d0After": "1.1",
+      "diff": [
+        "品質保証(出荷判定者) × 事業決裁者 の兼務: 逸脱が生じる",
+        "AI維持管理者(AI Maintainer) × AI運用担当者(AIOps) の兼務: 逸脱が生じる",
+        "人の名簿: 追加 takenori-kusaka",
+        "価値責任者(Value Owner): 責任者 未記入 → takenori-kusaka",
+        "技術判断者(Tech Lead): 責任者 未記入 → takenori-kusaka",
+        "開発者(検証者): 責任者 未記入 → takenori-kusaka",
+        "独立レビュア: 責任者 未記入 → takenori-kusaka",
+        "品質保証(出荷判定者): 責任者 未記入 → takenori-kusaka",
+        "事業決裁者: 責任者 未記入 → takenori-kusaka",
+        "コンテキストオーナー: 責任者 未記入 → takenori-kusaka",
+        "AI維持管理者(AI Maintainer): 責任者 未記入 → takenori-kusaka",
+        "AI運用担当者(AIOps): 責任者 未記入 → takenori-kusaka"
+      ],
+      "arising": [
+        "逸脱の発生: 品質保証(出荷判定者) × 事業決裁者 の兼務 — 品質保証(出荷判定者) × 事業決裁者 の兼務の禁止(第3章 3.5)",
+        "逸脱の発生: AI維持管理者(AI Maintainer) × AI運用担当者(AIOps) の兼務 — AI維持管理者(AI Maintainer) × AI運用担当者(AIOps) の兼務の禁止(第3章 3.5)"
+      ],
+      "separationRecheck": "兼務禁止への抵触 0 件 / 代償措置つきの例外 0 件 / 逸脱として記録した兼務 2 件 / 同一人物のため独立が成立しない組 1 件 / 責任者が未記入の席 0 席",
+      "invalidatedChecks": [],
+      "expired": [],
+      "recheckDue": null,
+      "decidedBy": "takenori-kusaka",
+      "reason": "個人の同人アプリで開発に関わる人は1名のため、全席を本人が兼務する(2026-10-08 利用者の回答による)",
+      "ruleApprovedBy": null,
+      "ruleApproval": null,
+      "nameOverrides": [],
+      "sgRecord": null,
+      "outage": null,
+      "notice": null,
+      "prevHash": "afe75a3074c9150c4768f8a96a87963b533de5b224151782de017a65fab3fdef",
+      "stateHash": "b0723d542990448ecaef58fcdb39fc7d22b4dabc8de529bc9610af0165814720"
+    }
+  ]
 }

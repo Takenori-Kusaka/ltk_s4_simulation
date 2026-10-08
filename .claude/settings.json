@@ -25,6 +25,13 @@
       "Bash(npx -y @nanonets/graft@0.12.1 build:*)"
     ],
     "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/id_rsa*)",
+      "Read(./**/.aws/**)",
+      "Read(./**/.ssh/**)"
     ],
     "ask": [
       "Bash(npm publish:*)",
