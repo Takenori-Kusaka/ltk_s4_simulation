@@ -1,0 +1,170 @@
+{
+  "kind": "evidence-transcript",
+  "file": "LTK_Yuhi_Yutapon_Yuhi_LoL.md",
+  "source": {
+    "title": "Yutapon と Yuhi による CC NEXT の TOP(叶と推定)向けトップレーンのコーチング(VOD を見ながらの指導。LTK4 の練習の一部と推定。チーム分析配信ではない)",
+    "url": null,
+    "urlPending": true,
+    "speaker": "Yutapon(「ポンさん」)・Yuhi(「ゆさん」)が指導側、受講者は「か井さん」と聞こえる人物(叶と推定。確信は中)。発話者の区別は文字起こしからは不確か",
+    "retrievedAt": "2026-10-09"
+  },
+  "shotcalling": {},
+  "playerTraits": {
+    "CC-NEXT-TOP": [
+      {
+        "trait": "pool",
+        "summary": "カ・サンテは好きではなく候補にも入れていない。サイオンは好きだが今は弱いと本人が話した。(受講者=叶は推定)",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=28",
+        "timestamp": "0:28",
+        "selfTeam": true
+      },
+      {
+        "trait": "pool",
+        "summary": "元々オラフ・ガレン・グラガスを使い、今はガレンとグラガス中心。主力が弱体化され候補が減ったと本人が説明。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=387",
+        "timestamp": "6:27",
+        "selfTeam": true
+      },
+      {
+        "trait": "pool",
+        "summary": "好みより勝てる強いキャラだけを使いたいと本人が述べた。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=440",
+        "timestamp": "7:20",
+        "selfTeam": true
+      },
+      {
+        "trait": "pool",
+        "summary": "ティアリストの上位から選び、ティア2以下は使わないと本人が話した。指導側も強いキャラが揃ったプールと評価。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=445",
+        "timestamp": "7:25",
+        "selfTeam": true
+      },
+      {
+        "trait": "laning",
+        "summary": "課題はウェーブを溜められて押し込まれないこと。押し付けてリコールの間を作り、序盤はゴーストで戦ってみるよう指導された。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=61",
+        "timestamp": "1:01",
+        "selfTeam": true
+      },
+      {
+        "trait": "mental",
+        "summary": "まだ怖がって理性が残っており、もっと積極的に戦ってよいと指導側が指摘。本人は初対面の緊張もあると説明。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=153",
+        "timestamp": "2:33",
+        "selfTeam": true
+      },
+      {
+        "trait": "mental",
+        "summary": "大会では自分が死んで試合を壊すのを恐れがち、という話題に対し、TOP は死んでも意外と立て直せると助言された。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=108",
+        "timestamp": "1:48",
+        "selfTeam": true
+      },
+      {
+        "trait": "laning",
+        "summary": "最後の Q 以外はとても良かったと指導側が評価。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=207",
+        "timestamp": "3:27",
+        "selfTeam": true
+      },
+      {
+        "trait": "other",
+        "summary": "理論的に理解して飲み込める人だと指導側が評価し、手本を見せるのも有効と判断。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=496",
+        "timestamp": "8:16",
+        "selfTeam": true
+      },
+      {
+        "trait": "laning",
+        "summary": "フラッシュ回避を読んで Q を横に投げる判断を試した。指導側は相手を信頼できるなら有りで、最大射程に投げるのは必ずやるべきと助言。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=601",
+        "timestamp": "10:01",
+        "selfTeam": true
+      }
+    ],
+    "CC-MASTERS-TOP": [
+      {
+        "trait": "pool",
+        "summary": "前回の MASTERS では他ティアのピックの影響でカ・サンテが使えず困った、と話題に上がった(誰の発言かは不確か)。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=461",
+        "timestamp": "7:41",
+        "selfTeam": true
+      }
+    ]
+  },
+  "teamMacro": {},
+  "teamStyle": {
+    "CC-NEXT": [
+      {
+        "aspect": "top",
+        "summary": "MASTERS が先にピックしたチャンピオンは他ティアで使えなくなる制約があり、TOP の候補が重なる懸念が話題になった。受講者は気にしないと回答。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=468",
+        "timestamp": "7:48",
+        "selfTeam": true
+      }
+    ]
+  },
+  "coaches": {
+    "CC-MASTERS-TOP": [
+      {
+        "summary": "Yutapon が CC NEXT の TOP(叶と推定)へ VOD を見ながらレーン戦を指導。ウェーブ管理・リコールの間・序盤の戦い方を具体的に教えている(発話者の区別は不確か)。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=61",
+        "timestamp": "1:01"
+      },
+      {
+        "summary": "指導の方針として、練習はミスしてなんぼ、失敗するくらい攻めてよいと伝えた。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=183",
+        "timestamp": "3:03"
+      },
+      {
+        "summary": "ウェーブを止めることは一律に悪くないと説明。相手が止めた側を咎められない状況なら序盤は問題ないとの考え。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=305",
+        "timestamp": "5:05"
+      },
+      {
+        "summary": "細かい数値(アーマー変動など)に気を回すより他のことに頭を使うべきと助言。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=273",
+        "timestamp": "4:33"
+      },
+      {
+        "summary": "手本を見せることには、見せびらかしに見えるとの抵抗感を示しつつ、この受講者には有効かもしれないと判断。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=500",
+        "timestamp": "8:20"
+      }
+    ],
+    "CC-MASTERS-ADC": [
+      {
+        "summary": "Yuhi(CC NEXT コーチ)が Yutapon と一緒に CC NEXT の TOP のコーチングに同席。指導中のクイズ的なやり取りでも知識を示した(発話者の区別は不確か)。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=216",
+        "timestamp": "3:36"
+      },
+      {
+        "summary": "最初に、よく分からないチャンピオンは調べながら教えるので浅くなるかもしれないと断りを入れた(発話者は Yuhi か Yutapon か不確か)。",
+        "source": "transcript:LTK_Yuhi_Yutapon_Yuhi_LoL.md#t=6",
+        "timestamp": "0:06"
+      }
+    ]
+  },
+  "overall": [],
+  "unmapped": [
+    {
+      "heard": "か井さん",
+      "guess": "CC-NEXT-TOP(叶) 中程度の確信",
+      "summary": "コーチングの受講者。TOP の指導で、Yuhi(CC NEXT コーチ)と Yutapon(CC TOP)が担当していることから叶と推定。上記 playerTraits では CC-NEXT-TOP へ割り当てた。",
+      "timestamp": "7:25"
+    },
+    {
+      "heard": "アべさとかテ",
+      "guess": "チャンピオン名(エイトロックス等)の誤認識の可能性 低い確信",
+      "summary": "指導側がよく分かっていないチャンピオンとして挙げた。人物ではない可能性が高い。",
+      "timestamp": "0:23"
+    },
+    {
+      "heard": "おさんの神さん",
+      "guess": "不明(Yuhi と受講者を指す可能性) 低い確信",
+      "summary": "2人の笑い方が似ているという雑談。評価には使わない。",
+      "timestamp": "9:22"
+    }
+  ],
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)から AI が自分の言葉で要約した根拠。原文は転載しない。動画の URL は未確定(urlPending)で、届いたら source を時刻つきの URL に差し替える。selfTeam=true は話し手自身のチームについての発言"
+}
