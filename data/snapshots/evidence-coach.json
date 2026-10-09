@@ -1,0 +1,132 @@
+{
+  "kind": "evidence-coach",
+  "retrievedAt": "2026-10-09",
+  "description": "F-010 基準5b・5c のコーチの根拠。AI が既存の根拠(docs/research/grounds/ の調査・配信の要約、tournament.json のコーチの記録)から、コーチとしての指導・言語化・戦術・相性に当たるものを選び、自分の言葉で要約した。軸への振り分けと強さは AI の判断。順位の伸び(rankGains)は記録が無く空",
+  "coaches": {
+    "DD-MASTERS-TOP": {
+      "name": "わしだい",
+      "tierTeam": "DD-CORE",
+      "seasons": [
+        {"season":"S3","team":"DD","tier":"CORE","source":"https://zetadivision.com/news/2026/04/28/43610"}
+      ],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"S3 の DD CORE のスクリムで、仕掛けてよい合図のコールの出し方を具体的に教えていた(自動字幕で確認)","source":"https://www.youtube.com/watch?v=ISOjh-u61Do","direction":"+","strength":"中","collectedBy":"ai"}
+      ],
+      "tactics": [
+        {"summary":"S3 の DD CORE でゲーム中に具体的な指示を出していた(自動字幕で確認)","source":"https://www.youtube.com/watch?v=ISOjh-u61Do","direction":"+","strength":"中","collectedBy":"ai"},
+        {"summary":"切り抜きの題名で、コーチとしてのドラフトが「B/P 負け」と批判された(視聴者の評価)","source":"https://www.youtube.com/watch?v=Q2w8VY-7JYw","direction":"-","strength":"弱","collectedBy":"ai"}
+      ],
+      "fit": [
+        {"summary":"DD のピック・バンはチーム全体でわしだいを支える体制と hetel が述べた","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=951s","direction":"+","strength":"弱","collectedBy":"ai"}
+      ]
+    },
+    "DD-MASTERS-MID": {
+      "name": "たぬき忍者",
+      "tierTeam": "DD-NEXT",
+      "seasons": [
+        {"season":"S1","team":"ST","source":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","source":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"IT","tier":"NEXT","source":"https://zetadivision.com/news/2025/06/18/35373"}
+      ],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"S3 の IT NEXT のコーチとして、選手の吸収の早さと自信を試合前に語った(配信の字幕で確認)","source":"https://www.youtube.com/watch?v=I0VsypCJFw0","direction":"+","strength":"弱","collectedBy":"ai"}
+      ],
+      "tactics": [],
+      "fit": [
+        {"summary":"S2 のプレイオフで、DC NEXT の選手がコーチに信じてもらえたおかげで勝てたと述べた(配信の字幕で確認)","source":"https://www.youtube.com/watch?v=-Ha5zvbm_iA","direction":"+","strength":"弱","collectedBy":"ai"}
+      ]
+    },
+    "CC-MASTERS-MID": {
+      "name": "Ceros",
+      "tierTeam": "CC-CORE",
+      "seasons": [
+        {"season":"S1","team":"PD","source":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"RR","tier":"CORE","source":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"LR","tier":"CORE","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=1418s"}
+      ],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"RR CORE の練習配信で、試合後に場面のコールを振り返り、次の寄り方を具体的に指導した(自動字幕。話者は推定)","source":"https://www.youtube.com/watch?v=1RL3lCE26aA","direction":"+","strength":"弱","collectedBy":"ai"},
+        {"summary":"LTK 外のコーチ時代に、新人へコールを担うことをチームへの貢献として求めたと語った","source":"https://lolninja.net/2023/04/24/37630","direction":"+","strength":"中","collectedBy":"ai"}
+      ],
+      "tactics": [
+        {"summary":"S2 の RR CORE(優勝)で、プレイオフ前の記事がコーチの戦略(集団戦構成かポーク構成か)を注目点に挙げた","source":"https://fistbump-news.jp/article/2025/12/16/1940.html","direction":"+","strength":"中","collectedBy":"ai"},
+        {"summary":"チームとして正しい選択肢を取れたかを最重視し、選択肢をチームで共有する考えを述べた","source":"https://www.gamespark.jp/article/2022/04/16/117824.html","direction":"+","strength":"中","collectedBy":"ai"}
+      ],
+      "fit": [
+        {"summary":"IT CORE の選手が、Ceros にミッドとマクロを評価されていたと話した(以前のコーチとしての伝聞)","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=910s","direction":"+","strength":"弱","collectedBy":"ai"}
+      ]
+    },
+    "CC-MASTERS-ADC": {
+      "name": "Yuhi",
+      "tierTeam": "CC-NEXT",
+      "seasons": [
+        {"season":"S3","team":"IT","tier":"CORE","source":"https://www.youtube.com/watch?v=jDvse45YFi4"}
+      ],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"コーチとしての力を問われた hetel が、上手いと思うと答えた(聞き取りは不確か)","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=3744s","direction":"+","strength":"弱","collectedBy":"ai"}
+      ],
+      "tactics": [
+        {"summary":"S3 の IT CORE(5勝1敗で首位通過)で、選手がビルドの順番をコーチの指示どおりに買ったと話した","source":"https://www.youtube.com/watch?v=jDvse45YFi4","direction":"+","strength":"中","collectedBy":"ai"}
+      ],
+      "fit": [
+        {"summary":"CC NEXT の TOP のコーチングに Yutapon と同席し、知識を示した(話者の区別は不確か)","source":"https://www.youtube.com/watch?v=IXcDY0gvZ1w&t=216s","direction":"+","strength":"弱","collectedBy":"ai"}
+      ]
+    },
+    "IT-MASTERS-MID": {
+      "name": "Eugeo",
+      "tierTeam": "IT-CORE",
+      "seasons": [
+        {"season":"S1","team":"DC","source":"https://gamernokakurega.com/ltk-sbb"},
+        {"season":"S2","team":"DC","source":"https://gamernokakurega.com/ltk-tot"},
+        {"season":"S3","team":"DD","tier":"NEXT","source":"https://fistbump-news.jp/article/2026/06/24/2594.html"}
+      ],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"JG はコールでチームを引っ張るロールという考えを、記事で言葉にして示した","source":"https://realsound.jp/tech/2026/05/post-2368493_2.html","direction":"+","strength":"弱","collectedBy":"ai"}
+      ],
+      "tactics": [
+        {"summary":"S3 の DD NEXT で、対戦相手ごとの BAN/PICK をすべて設計し、選手は練習どおりになぞるだけだったと語った","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","direction":"+","strength":"強","collectedBy":"ai"}
+      ],
+      "fit": []
+    },
+    "IT-MASTERS-SUP": {
+      "name": "Enty",
+      "tierTeam": "IT-NEXT",
+      "seasons": [],
+      "rankGains": [],
+      "verbal": [],
+      "tactics": [],
+      "fit": [
+        {"summary":"S3 で同じチームの選手が、選手兼コーチなら Enty の方が適任だと述べた","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","direction":"+","strength":"弱","collectedBy":"ai"},
+        {"summary":"前回、白波らむねを個人的にコーチングしていたと hetel が述べた","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1760s","direction":"+","strength":"弱","collectedBy":"ai"},
+        {"summary":"IT NEXT は Enty のコーチングもあり強そうと hetel が評価した","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1712s","direction":"+","strength":"弱","collectedBy":"ai"}
+      ]
+    },
+    "LR-MASTERS-MID": {
+      "name": "Recap",
+      "tierTeam": "LR-CORE",
+      "seasons": [],
+      "rankGains": [],
+      "verbal": [],
+      "tactics": [],
+      "fit": []
+    },
+    "LR-MASTERS-JG": {
+      "name": "ねすてぃー",
+      "tierTeam": "LR-NEXT",
+      "seasons": [],
+      "rankGains": [],
+      "verbal": [
+        {"summary":"日本語と滑舌の面で、意図が伝わりにくい懸念を hetel が指摘した","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=751s","direction":"-","strength":"中","collectedBy":"ai"}
+      ],
+      "tactics": [],
+      "fit": [
+        {"summary":"LR NEXT のコーチングがチームで一番の不安材料と hetel が冗談交じりに述べた","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2338s","direction":"-","strength":"弱","collectedBy":"ai"}
+      ]
+    }
+  }
+}

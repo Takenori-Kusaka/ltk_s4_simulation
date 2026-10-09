@@ -133,8 +133,8 @@ export type LoadedSnapshot =
   | { kind: 'meta'; snapshot: MetaSnapshot | null; errors: string[] }
   | { kind: null; snapshot: null; errors: string[] };
 
-/** data/snapshots/ に置かれるが、選手の指標の材料ではないスナップショットの kind(F-010 の LTK3 の集計) */
-const OTHER_FEATURE_KINDS: readonly string[] = ['ltk3-aggregate'];
+/** data/snapshots/ に置かれるが、選手の指標の材料ではないスナップショットの kind(F-010 の LTK3 の集計・コーチの根拠) */
+const OTHER_FEATURE_KINDS: readonly string[] = ['ltk3-aggregate', 'evidence-coach'];
 
 /** JSON のファイルを読み、kind に応じて検証する */
 export function loadSnapshotFile(path: string): LoadedSnapshot {
