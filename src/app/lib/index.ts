@@ -205,6 +205,7 @@ export function pageTitle(r: Route): string {
   }
   if (r.page === 'team') return `${TEAM_INFO[r.team].name} | ${site}`;
   if (r.page === 'notfound') return `ページが見つかりません | ${site}`;
+  if (r.page === 'compare') return `比較 ${r.targets.join(' / ')} | ${site}`;
   return site;
 }
 
