@@ -1033,3 +1033,104 @@ h1[tabindex='-1']:focus {
 .indicator summary .value {
   grid-area: auto;
 }
+
+/* ---------- F-008 Task-2: 重ねて比べる ---------- */
+.compare {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.compare-head h1 {
+  margin: 4px 0 10px;
+  font-family: var(--serif-jp);
+}
+.legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.legend-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.legend-mark {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.legend-name {
+  font-family: var(--serif-jp);
+}
+.legend-note {
+  font-size: 0.72rem;
+  color: var(--ivory-dim);
+}
+.legend-remove {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0 4px;
+}
+.compare-body {
+  min-width: 0;
+}
+.compare-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+.compare-table {
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 100%;
+}
+.compare-table th,
+.compare-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: right;
+  white-space: nowrap;
+}
+.compare-table th[scope='row'],
+.compare-table thead th:first-child {
+  text-align: left;
+  font-family: var(--serif-jp);
+  color: var(--gold);
+}
+.compare-table .num {
+  font-family: var(--serif-latin);
+  font-size: 1rem;
+}
+.compare-table .conf {
+  display: inline;
+  margin-left: 4px;
+}
+.compare-table .diff {
+  color: var(--ivory-dim);
+  font-variant-numeric: tabular-nums;
+}
+.compare-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+.compare-add label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+}
+.compare-add select {
+  max-width: 100%;
+  background: var(--velvet-2);
+  color: var(--ivory);
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  font: inherit;
+}
