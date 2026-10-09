@@ -2,11 +2,10 @@
   import { radarLabelAnchor } from '../lib/index.ts';
   import { overlayGeometry, axisLabel, markerPath, SERIES_FILL_OPACITY, RADAR_SIZE } from './render.ts';
   import type { CompareSeries } from './view.ts';
-  import type { RatingsFile } from '../rating/view.ts';
 
-  let { series, labels, file }: { series: CompareSeries[]; labels: string[]; file: RatingsFile | undefined } = $props();
+  let { series, labels }: { series: CompareSeries[]; labels: string[] } = $props();
   const size = RADAR_SIZE;
-  const g = $derived(overlayGeometry(series, file));
+  const g = $derived(overlayGeometry(series));
   const rings = [0.2, 0.4, 0.6, 0.8, 1];
 </script>
 

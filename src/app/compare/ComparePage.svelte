@@ -2,11 +2,13 @@
   import { compareHref } from '../lib/index.ts';
   import type { RatingsFile } from '../rating/view.ts';
   import { compareView, addTarget } from './view.ts';
-  import { legendItems, tableRows, markerPath, candidateTargets } from './render.ts';
+  import { legendItems, tableRows, markerPath, candidateTargets, teamComparePending, TEAM_COMPARE_PENDING } from './render.ts';
   import CompareRadar from './CompareRadar.svelte';
 
   let { targets, ratings }: { targets: string[]; ratings: RatingsFile | undefined } = $props();
   const v = $derived(compareView(targets, ratings));
+  // F-008 基準11b: チームの比較は F-010 の評価が出てから(価値責任者の決定 2026-10-09)
+  const pending = $derived(teamComparePending(targets));
   const candidates = $derived(candidateTargets(targets));
   let pick = $state('');
   let message = $state('');
@@ -23,14 +25,13 @@
   <header class="frame compare-head">
     <p class="eyebrow">Compare</p>
     <h1 tabindex="-1">重ねて比べる</h1>
-    {#if v.ok}
-      <!-- F-008 基準5・9: 凡例(色・点の形・名前、除外の注記) -->
+    {#if v.ok && !pending}
+      <!-- F-008 基準5: 凡例(色・点の形・名前) -->
       <ul class="legend-list">
         {#each legendItems(v.series) as it}
           <li>
             <svg class="legend-mark" viewBox="0 0 20 20" aria-hidden="true"><path d={markerPath(it.shape, 10, 10, 6)} fill={it.color} /></svg>
             <span class="legend-name" style={`color:${it.color}`}>{it.label}</span>
-            {#if it.note}<span class="legend-note">{it.note}</span>{/if}
             {#if targets.length > 2}<a class="legend-remove" href={removeHref(it.id)} aria-label={`${it.label} を外す`}>×</a>{/if}
           </li>
         {/each}
@@ -38,11 +39,13 @@
     {/if}
   </header>
 
-  {#if !v.ok}
+  {#if pending}
+    <section class="frame alert" role="status"><p>{TEAM_COMPARE_PENDING}</p></section>
+  {:else if !v.ok}
     <section class="frame alert" role="alert"><p>{v.message}</p></section>
   {:else}
     <section class="frame compare-body">
-      <div class="radar"><CompareRadar series={v.series} labels={v.axisLabels} file={ratings} /></div>
+      <div class="radar"><CompareRadar series={v.series} labels={v.axisLabels} /></div>
 
       <!-- F-008 基準6〜8: 軸ごとの点数・確度・1つ目との差 -->
       <div class="compare-table-wrap">
@@ -57,7 +60,7 @@
             </tr>
           </thead>
           <tbody>
-            {#each tableRows(v, ratings) as r}
+            {#each tableRows(v) as r}
               <tr>
                 <th scope="row">{r.axis}</th>
                 {#each r.cells as c, i}

@@ -1,4 +1,5 @@
-// F-008 Task-2: 受入基準 1〜9・22(複数の系列を重ねるレーダーと比較の画面)
+// F-008 Task-2: 受入基準 1〜8・11b・22(選手の系列を重ねるレーダーと比較の画面)
+// 2026-10-09 価値責任者の決定でチームの比較を F-010 の軸へ改めたため、チームの系列の確度(旧 AC6)と除外の注記(旧 AC9)の検査を基準11b の検査に置き換えた
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -9,6 +10,7 @@ import type { RatingsFile } from '../../src/app/rating/view.ts';
 import { compareView, SERIES_COLORS } from '../../src/app/compare/view.ts';
 import {
   overlayGeometry, axisLabel, markerPath, legendItems, tableRows, SERIES_FILL_OPACITY, candidateTargets,
+  teamComparePending, TEAM_COMPARE_PENDING,
 } from '../../src/app/compare/render.ts';
 
 const DAY = 86_400_000;
@@ -101,7 +103,7 @@ test('AC5: 系列の色は並びの順で固定(チームの色を使わない)�
 });
 
 test('AC6: 軸ごとの表に、各系列の点数(小数第一位)と確度の文字(高・中・低・データなし)を出す', () => {
-  const rows = tableRows(view(['DD-NEXT-TOP', 'CC-NEXT-TOP', 'LR-NEXT-SUP']), FILE);
+  const rows = tableRows(view(['DD-NEXT-TOP', 'CC-NEXT-TOP', 'LR-NEXT-SUP']));
   assert.equal(rows.length, 8);
   for (const r of rows) {
     assert.equal(r.cells.length, 3);
@@ -114,29 +116,24 @@ test('AC6: 軸ごとの表に、各系列の点数(小数第一位)と確度の�
   assert.equal(rows[0].cells[2].confidence, 'データなし');
 });
 
-test('AC6: 階級チーム・チーム全体の系列の確度は、所属選手のその軸の確度の最も低いもの', () => {
-  const rows = tableRows(view(['DD-NEXT', 'CC-NEXT']), FILE);
-  // 地力: DD-NEXT は DD-NEXT-TOP(2 試合)が「低」、CC-NEXT は全員が十分な試合を持つ
-  assert.equal(rows[0].cells[0].confidence, '低');
-  assert.ok(['高', '中'].includes(rows[0].cells[1].confidence));
+test('AC11b: チーム(階級チーム・チーム全体)を選んだら、F-010 の評価が出るまでレーダーと表の代わりに案内の文を出す', () => {
+  assert.equal(teamComparePending(['CC-CORE', 'DD-CORE']), true);
+  assert.equal(teamComparePending(['CC', 'DD']), true);
+  assert.equal(teamComparePending(['CC-CORE-MID', 'DD-CORE-MID']), false);
+  assert.equal(teamComparePending([]), false);
+  assert.equal(TEAM_COMPARE_PENDING, 'チームの比較は、チームの評価を計算した後に表示します');
+  const src = readFileSync(new URL('../../src/app/compare/ComparePage.svelte', import.meta.url), 'utf8');
+  assert.match(src, /\{#if pending\}[\s\S]*TEAM_COMPARE_PENDING/);
 });
 
 test('AC7・8: 2つ目以降の差は 1つ目との差を符号つきで出し、どちらかがデータなしなら「—」', () => {
   const v = view(['CC-NEXT-SUP', 'DD-NEXT-SUP', 'LR-NEXT-SUP']);
-  const rows = tableRows(v, FILE);
+  const rows = tableRows(v);
   for (const r of rows) {
     assert.equal(r.diffs[0], null);
     assert.match(r.diffs[1]!, /^[+−]\d+\.\d$/);
     assert.equal(r.diffs[2], '—');
   }
-});
-
-test('AC9: 評価の無い選手がいるチームの系列は、凡例に「データの無い n 名を除いて計算」を出す', () => {
-  const items = legendItems(view(['LR-NEXT', 'CC-NEXT']).series);
-  assert.equal(items[0].note, 'データの無い 1 名を除いて計算');
-  assert.equal(items[1].note, undefined);
-  const whole = legendItems(view(['LR', 'DD']).series);
-  assert.equal(whole[0].note, 'データの無い 1 名を除いて計算');
 });
 
 test('AC1・14: 加えられる対象の候補は同じ種類(階級チームは同じ階級)で、まだ選んでいないもの', () => {

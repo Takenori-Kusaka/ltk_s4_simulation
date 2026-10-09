@@ -1,9 +1,10 @@
-// F-008 Task-2: 比較の画面の描き方の論理(受入基準 1〜9)。DOM に依存しない
+// F-008 Task-2: 比較の画面の描き方の論理(受入基準 1〜8・11b)。DOM に依存しない
+// チームの比較は F-010 の強さの軸・総合の軸で行う(価値責任者の決定 2026-10-09)。F-010 の評価が出るまでは案内の文だけを出す(基準11b、Task-4 で実装)
 import { ROSTER } from '../../data/roster.ts';
 import type { Confidence } from '../../rating/types.ts';
 import { TEAMS } from '../../sim/types.ts';
 import { radarEdges, radarGeometry, type Point } from '../lib/index.ts';
-import { AXIS_ORDER, lineOf, type AxisLine, type RatingsFile } from '../rating/view.ts';
+import { AXIS_ORDER, lineOf, type AxisLine } from '../rating/view.ts';
 import { MAX_SERIES, resolveTarget, type CompareSeries, type CompareTarget, type CompareView, type SeriesShape } from './view.ts';
 
 /** 基準4: 系列の塗りの不透明度(半透明。光彩は付けない) */
@@ -21,13 +22,21 @@ export interface OverlaySeries {
   edges: { from: Point; to: Point; dotted: boolean }[];
 }
 
-/** 基準1〜3: 系列ごとの頂点・辺と、いずれかの系列で欠損の軸。チームの系列の線は所属選手の最も低い確度で描く */
-export function overlayGeometry(series: readonly CompareSeries[], file?: RatingsFile, size = RADAR_SIZE) {
+/** 基準11b: F-010 の評価(強さの軸・総合の軸)がまだ無い間、チームを選んだときに出す文 */
+export const TEAM_COMPARE_PENDING = 'チームの比較は、チームの評価を計算した後に表示します';
+
+/** 基準11b: 1つ目の対象が階級チームかチーム全体なら、レーダーと表の代わりに案内の文を出す */
+export function teamComparePending(targets: readonly string[]): boolean {
+  const first = targets.length ? resolveTarget(targets[0]) : null;
+  return !!first && first.kind !== 'player';
+}
+
+/** 基準1〜3: 選手の系列ごとの頂点・辺と、いずれかの系列で欠損の軸 */
+export function overlayGeometry(series: readonly CompareSeries[], size = RADAR_SIZE) {
   const outline = radarGeometry(AXIS_ORDER.map(() => 10), size).outline;
   const out: OverlaySeries[] = series.map((s) => {
     const g = radarGeometry(s.scores, size);
-    const conf = (i: number) => (s.kind === 'player' ? s.confidences[i] : teamConfidence(s, AXIS_ORDER[i].key, file));
-    const lines = s.scores.map((v, i): AxisLine => (v === null ? 'missing' : lineOf(conf(i) ?? '高')));
+    const lines = s.scores.map((v, i): AxisLine => (v === null ? 'missing' : lineOf(s.confidences[i] ?? '高')));
     return { id: s.id, color: s.color, shape: s.shape, points: g.points, polygon: g.polygon, lines, edges: radarEdges(g.points, lines) };
   });
   const axisMissing = AXIS_ORDER.map((_, i) => series.some((s) => s.scores[i] === null));
@@ -46,37 +55,20 @@ export function markerPath(shape: SeriesShape, x: number, y: number, r = 4): str
   return `M${f(x - r)},${f(y)}A${r},${r} 0 1,0 ${f(x + r)},${f(y)}A${r},${r} 0 1,0 ${f(x - r)},${f(y)}Z`;
 }
 
-/** 基準5・9: 凡例(色・点の形・名前と、チームの系列の除外の注記) */
+/** 基準5: 凡例(色・点の形・名前) */
 export function legendItems(series: readonly CompareSeries[]) {
-  return series.map((s) => ({
-    id: s.id,
-    label: s.label,
-    color: s.color,
-    shape: s.shape,
-    note: s.kind !== 'player' && s.excluded > 0 ? `データの無い ${s.excluded} 名を除いて計算` : undefined,
-  }));
-}
-
-const RANK: Record<Confidence, number> = { 低: 0, 中: 1, 高: 2 };
-
-/** チームの系列の確度: 所属選手のその軸の確度の最も低いもの(相対評価の点数そのものは確度を持たないため) */
-function teamConfidence(s: CompareSeries, axisKey: string, file: RatingsFile | undefined): Confidence | null {
-  const members = ROSTER.filter((p) => p.team === s.team && (s.kind === 'team' || p.tier === s.tier));
-  const cs = members
-    .map((p) => file?.players.find((r) => r.playerId === p.id)?.axes.find((a) => a.key === axisKey)?.confidence)
-    .filter((c): c is Confidence => !!c);
-  return cs.length ? cs.reduce((a, b) => (RANK[b] < RANK[a] ? b : a)) : null;
+  return series.map((s) => ({ id: s.id, label: s.label, color: s.color, shape: s.shape }));
 }
 
 export type ConfidenceText = Confidence | 'データなし';
 
-/** 基準6〜8: 軸ごとの表 */
-export function tableRows(view: Extract<CompareView, { ok: true }>, file: RatingsFile | undefined) {
+/** 基準6〜8: 軸ごとの表(選手の系列) */
+export function tableRows(view: Extract<CompareView, { ok: true }>) {
   return view.rows.map((r, k) => ({
     axis: r.axis,
     cells: view.series.map((s, i) => {
       const score = s.scores[k];
-      const c = s.kind === 'player' ? s.confidences[k] : teamConfidence(s, AXIS_ORDER[k].key, file);
+      const c = s.confidences[k];
       return { display: r.values[i].display, confidence: (score === null || !c ? 'データなし' : c) as ConfidenceText };
     }),
     diffs: r.diffs,
