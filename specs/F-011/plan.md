@@ -12,6 +12,7 @@
 | Task-2 | 原稿のページ(パッチと更新日、オブジェクト・SUP・MID・ウィークサイド・サイド・LTK の規則、古い原稿の注意、画面の幅) | 1, 3, 4, 5, 6, 11, 12 | `src/app/meta/**`、`src/app/components/App.svelte`、`src/app/lib/index.ts`、`src/app/app.css`、`tests/app/meta-page.test.ts` | Task-1 | 不可 |
 | Task-3 | 選手との突き合わせ(重要チャンピオンを得意ピックに持つ選手の一覧、ロールごとの上位3名) | 7, 8 | `src/meta/match.ts`、`src/app/meta/**`、`tests/meta/match.test.ts` | Task-1 | 可 |
 | Task-4 | 勝率の計算がメタをどう使うかの説明(F-005 までは使っていない旨と F-009 のピックプールの式) | 9 | `src/app/meta/**`、`tests/app/meta-winrate.test.ts` | Task-2 | 可 |
+| Task-5 | (2026-10-09 追加。Task-3 は計算だけを取り込み、画面への表示がどのタスクにも無かったため)選手との突き合わせの表示: 重要チャンピオンを選んだときの選手の一覧(選手のページへのリンク)と、ロールごとの上位3名 | 7, 8 | `src/app/meta/**`、`tests/app/meta-match.test.ts` | Task-2, Task-3 | 可 |
 
 ## 粒度の確認
 
@@ -36,7 +37,7 @@
 | --- | --- | --- | --- |
 | 1 | Task-1 | main | データの形と検証 |
 | 2 | Task-2・Task-3 | 層1 のマージ後の main | 原稿のページ / 選手との突き合わせ(並列) |
-| 3 | Task-4 | 層2 のマージ後の main | 勝率の説明 |
+| 3 | Task-4・Task-5 | 層2 のマージ後の main | 勝率の説明 / 選手との突き合わせの表示(並列) |
 
 ## AI エージェントへ与える分割の指示
 
