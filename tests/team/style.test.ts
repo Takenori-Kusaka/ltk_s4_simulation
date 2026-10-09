@@ -202,3 +202,27 @@ test('作業上の選択: 本番とスクリムの集計は、スクリムを 0.
   assert.match(it.reason, /スクリム/);
   assert.equal(it.games, 12 + 24);
 });
+
+// 2026-10-09 の価値責任者の決定(仕様の変更)で足した検査
+test('AC12c(2026-10-09 の決定): 推定の候補は、崩れにくさを計算できた候補の後に並べる', () => {
+  // TOP は資源が少ない試合 6(計算できる)で崩れる。MID・ADC は試合なしの推定で、安定感 9.0 のため点は高い
+  const b = base();
+  const idOf = (role: string) => ROSTER.find((p) => p.team === 'LR' && p.tier === 'CORE' && p.role === role)!.id;
+  b.ratings = b.ratings.map((r) => (r.playerId === idOf('MID') || r.playerId === idOf('ADC') ? rating(r.playerId, { stability: 9 }) : r));
+  const games = [...Array.from({ length: 6 }, () => goldGame('TOP', 0.12, -800)), ...Array.from({ length: 12 }, () => goldGame('TOP', 0.3, 600))];
+  b.inputs = b.inputs.map((p) => (p.playerId === idOf('TOP') ? { ...p, games } : p));
+  const ws = find(computeStyle(b), 'LR-CORE').weakSide;
+  assert.equal(ws.lane, 'TOP');
+  assert.equal(ws.estimated, false);
+  assert.ok(ws.candidates.find((c) => c.role === 'MID')!.score > ws.candidates.find((c) => c.role === 'TOP')!.score);
+  assert.equal(ws.candidates[0].role, 'TOP');
+  assert.ok(ws.candidates.slice(1).every((c) => c.estimated));
+});
+
+test('AC12c: 崩れにくさを計算できた候補が1人もいなければ、推定の候補から最も高い選手を選ぶ', () => {
+  const ws = find(computeStyle(base()), 'DD-NEXT').weakSide;
+  assert.ok(ws.candidates.every((c) => c.estimated));
+  assert.equal(ws.estimated, true);
+  assert.equal(ws.confidence, '低');
+  assert.ok(ws.lane !== null);
+});

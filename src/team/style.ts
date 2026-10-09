@@ -277,8 +277,10 @@ export function computeStyle(input: StyleInput): TierTeamStyle[] {
       // 基準12b・12c: ウィークサイド
       const candidates = members
         .filter((p) => CFG.weakSide.lanes.includes(p.role) && ratingOf.has(p.id))
-        .map((p) => weakSideOf(ratingOf.get(p.id)!, inputOf.get(p.id), p.role, sdByPos, input.now));
-      const best = candidates.reduce<WeakSideCandidate | null>((b, x) => (!b || x.score > b.score ? x : b), null);
+        .map((p) => weakSideOf(ratingOf.get(p.id)!, inputOf.get(p.id), p.role, sdByPos, input.now))
+        // 価値責任者の決定 2026-10-09: 推定の候補(基準12c)は、崩れにくさを計算できた候補の後に並べる。同じ組の中は点の高い順(同点は名簿の順)
+        .sort((a, b) => Number(a.estimated) - Number(b.estimated) || b.score - a.score);
+      const best = candidates[0] ?? null;
 
       return {
         team, tier, continuing: s3.map((x) => x.id),
