@@ -9,6 +9,7 @@
   import Emblem from './Emblem.svelte';
   import TeamPage from '../team/TeamPage.svelte';
   import ComparePage from '../compare/ComparePage.svelte';
+  import MetaPage from '../meta/MetaPage.svelte';
   import type { RatingsFile } from '../rating/view.ts';
 
   let { files, ratings }: { files: Record<string, PlayerFile>; ratings?: RatingsFile } = $props();
@@ -76,9 +77,16 @@
         <p>「{route.hash}」に当たる選手やチームは見つかりませんでした。</p>
         <p><a class="chip" href="#/">四つの王家の一覧へ戻る</a></p>
       </section>
+    {:else if route.page === 'meta'}
+      <MetaPage />
     {:else if route.page === 'compare'}
       {#key route.targets.join('/')}
         <ComparePage targets={route.targets} {ratings} />
+      {/key}
+    {:else if route.page === 'compare-start'}
+      <!-- F-008 基準17: 1つ目の対象だけで始め、2つ目以降を選ばせる -->
+      {#key route.target}
+        <ComparePage targets={[route.target]} {ratings} />
       {/key}
     {:else if route.page === 'team'}
       {#key route.team}
