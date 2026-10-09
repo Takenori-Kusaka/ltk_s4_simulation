@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- | --- |
 | Task-1 | 勝率の土台: 評価設定、β の決め方、事前の勝率、ステージ補正、S を計算できないときの 50.0%、F-001 の勝率表の出力 | 1, 2, 3, 6, 7, 16 | `src/winrate/core.ts`、`src/winrate/config.json`、`tests/winrate/core.test.ts` | F-010 Task-2・Task-3 | 不可 |
 | Task-2 | 結果による θ の当て直し(Bradley-Terry と事前分布、本番とスクリムの重み)と、80% の区間(1,000 回の抽出、乱数の種) | 4, 7b | `src/winrate/update.ts`、`src/winrate/interval.ts`、`tests/winrate/update.test.ts` | Task-1 | 不可 |
-| Task-3 | 仕上がりの項(共同プレイ歴・メタの近さ・τ)と気持ちの補正、ドラフトの優位の項(F-006 の出力を読む)と寄与の切り詰め | 9, 10, 11, 13, 14 | `src/winrate/dynamics.ts`、`tests/winrate/dynamics.test.ts` | Task-1 | 可 |
+| Task-3 | 仕上がりの項(共同プレイ歴・メタの近さ(チャンピオンの近さと戦い方の近さ)・τ)と気持ちの補正、ドラフトの優位の項(F-006 の出力を読む)と寄与の切り詰め | 9, 10, 11, 13, 14 | `src/winrate/dynamics.ts`、`tests/winrate/dynamics.test.ts` | Task-1 | 可 |
 | Task-4 | S1〜S3 での当てはまりの確認の命令と記録、常識の検査 K-08・K-09(反したら勝率表を書かずに失敗) | 13, 15 | `scripts/winrate-backtest.mjs`、`src/winrate/checks.ts`、`src/rating/known-facts.json`、`tests/winrate/checks.test.ts` | Task-2, Task-3 | 不可 |
 | Task-5 | 試合の分析ページ(事前と更新後の勝率、上位3つの要因、β、区間、仕上がりと気持ちの内訳、予測と実際の結果) | 5, 8, 12 | `src/app/match/**`、`src/app/components/App.svelte`、`src/app/lib/index.ts`、`src/app/app.css`、`tests/app/match.test.ts` | Task-4 | 不可 |
 
@@ -28,7 +28,7 @@
 | --- | --- | --- |
 | 1, 2, 3, 6, 7, 16 | 単体(固定の S から β と勝率、和が 100.0%、ステージ補正、欠けたときの 50.0%、F-001 の形式) | `tests/winrate/core.test.ts` |
 | 4, 7b | 単体(固定の結果で θ の向き、スクリムの重み、F-004 が無いときの θ = 0、同じ種で同じ区間) | `tests/winrate/update.test.ts` |
-| 9, 10, 11, 13, 14 | 単体(d・c・m と τ の向き、連敗と回復、F-006 が無いときの 0、切り詰め) | `tests/winrate/dynamics.test.ts` |
+| 9, 10, 11, 13, 14 | 単体(d・c・m と τ の向き、m_pool と m_style の計算と、特性が無いときの m = m_pool、連敗と回復、F-006 が無いときの 0、切り詰め) | `tests/winrate/dynamics.test.ts` |
 | 13, 15 | 単体(K-08・K-09 に反すると書かずに失敗、確認の記録の形) | `tests/winrate/checks.test.ts` |
 | 5, 8, 12 | 画面の論理の単体と、Chrome での確認 | `tests/app/match.test.ts` |
 
