@@ -7,6 +7,12 @@
   const w = winRateMetaView();
   const ROLE_LABEL: Record<string, string> = { TOP: 'TOP', JG: 'JG', MID: 'MID', ADC: 'ADC', SUP: 'SUP' };
   const markClass = (m: string) => (m === '出典' ? 'ok' : m === '推定' ? 'est' : 'unv');
+
+  // F-011 Task-5: 選手との突き合わせ
+  import MetaMatch from './MetaMatch.svelte';
+  import type { RatingsFile } from '../rating/view.ts';
+  let { ratings }: { ratings?: RatingsFile } = $props();
+  const guide = loadMetaGuide();
 </script>
 
 {#snippet claim(c: ClaimView)}
@@ -71,6 +77,9 @@
       </table>
     </div>
   </section>
+
+  <!-- 基準7・8: 選手との突き合わせ -->
+  <MetaMatch {guide} {ratings} />
 
   <!-- 基準3・4: 重要度の順位と理由 -->
   {@render ranked(v.objectives)}
