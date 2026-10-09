@@ -83,6 +83,11 @@
       {#key route.targets.join('/')}
         <ComparePage targets={route.targets} {ratings} />
       {/key}
+    {:else if route.page === 'compare-start'}
+      <!-- F-008 基準17: 1つ目の対象だけで始め、2つ目以降を選ばせる -->
+      {#key route.target}
+        <ComparePage targets={[route.target]} {ratings} />
+      {/key}
     {:else if route.page === 'team'}
       {#key route.team}
         <TeamPage team={route.team} {ratings} />

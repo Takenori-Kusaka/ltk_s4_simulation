@@ -7,6 +7,8 @@
   import Emblem from '../components/Emblem.svelte';
   import RoleGlyph from '../components/RoleGlyph.svelte';
   import type { Role } from '../../data/roster.ts';
+  import { teamCompareEntries, tierAllHref } from '../compare/opponent.ts';
+  import { TIERS } from '../../sim/types.ts';
 
   let { team, ratings }: { team: TeamId; ratings: RatingsFile | undefined } = $props();
   const info = $derived(TEAM_INFO[team]);
@@ -29,6 +31,13 @@
       <span class="eyebrow">Overall</span>
       <span class="num foil">{formatScore(overallScore(whole.scores))}</span>
     </div>
+    <!-- F-008 基準17: このチームを1つ目の系列にして比較を始める -->
+    <nav class="compare-entries" aria-label="比較">
+      <span class="eyebrow">Compare</span>
+      {#each teamCompareEntries(team) as e}<a class="chip" href={e.href}>{e.label}を比較</a>{/each}
+      <!-- F-008 基準17c: 同じ階級の4チームを一度に比べる -->
+      {#each TIERS as t}<a class="chip" href={tierAllHref(t)}>{t} の4チームと比較</a>{/each}
+    </nav>
   </header>
 
   <section class="frame court-whole">

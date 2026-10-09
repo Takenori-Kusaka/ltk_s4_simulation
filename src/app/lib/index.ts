@@ -142,6 +142,7 @@ export type Route =
   | { page: 'player'; id: string }
   | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' }
   | { page: 'compare'; targets: string[] }
+  | { page: 'compare-start'; target: string }
   | { page: 'meta' }
   | { page: 'notfound'; hash: string };
 
@@ -151,6 +152,11 @@ export function targetKind(id: string): 'player' | 'tier-team' | 'team' | null {
   if (/^(DD|CC|IT|LR)-(NEXT|CORE|MASTERS)$/.test(id)) return 'tier-team';
   if (/^(DD|CC|IT|LR)$/.test(id)) return 'team';
   return null;
+}
+
+/** F-008 基準17: 1つ目の対象だけを決めて比較を始める画面の URL(2つ目以降はその画面で選ぶ。比較の URL は2〜4つのまま) */
+export function compareStartHref(target: string): string {
+  return `#/compare-from/${target}`;
 }
 
 /** F-008 基準18・19: 比較の URL */
@@ -185,6 +191,8 @@ export function parseRoute(hash: string): Route {
   if (m && ROSTER_IDS.has(m[1])) return { page: 'player', id: m[1] };
   const t = /^\/TEAM\/(DD|CC|IT|LR)$/.exec(upper);
   if (t) return { page: 'team', team: t[1] as 'DD' | 'CC' | 'IT' | 'LR' };
+  const s = /^\/COMPARE-FROM\/([A-Z0-9-]+)$/.exec(upper);
+  if (s && targetKind(s[1])) return { page: 'compare-start', target: s[1] };
   const c = /^\/COMPARE(?:\/(.*))?$/.exec(upper);
   const targets = c ? parseCompare(c[1] ?? '') : null;
   if (targets) return { page: 'compare', targets };
@@ -208,6 +216,7 @@ export function pageTitle(r: Route): string {
   if (r.page === 'team') return `${TEAM_INFO[r.team].name} | ${site}`;
   if (r.page === 'notfound') return `ページが見つかりません | ${site}`;
   if (r.page === 'compare') return `比較 ${r.targets.join(' / ')} | ${site}`;
+  if (r.page === 'compare-start') return `比較 ${r.target} | ${site}`;
   if (r.page === 'meta') return `メタ解説 | ${site}`;
   return site;
 }

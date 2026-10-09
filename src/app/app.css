@@ -1076,6 +1076,24 @@ h1[tabindex='-1']:focus {
   text-decoration: none;
   padding: 0 4px;
 }
+.legend-list li {
+  flex-wrap: wrap;
+}
+.legend-base,
+.legend-tool {
+  font-size: 0.7rem;
+  color: var(--ivory-dim);
+}
+.legend-tool {
+  color: var(--gold-hi);
+}
+.legend-swap {
+  max-width: 9.5em;
+  font-size: 0.72rem;
+  background: var(--velvet-2);
+  color: var(--ivory);
+  border: 1px solid var(--line);
+}
 .compare-body {
   min-width: 0;
 }
@@ -1134,6 +1152,19 @@ h1[tabindex='-1']:focus {
   padding: 6px 8px;
   font: inherit;
 }
+
+/* F-008 Task-3: 比較の入口 */
+.compare-entry {
+  display: inline-flex;
+  margin-top: 12px;
+}
+.compare-entries {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 8px;
 
 /* ---------- F-011 Task-2: メタ解説のページ ---------- */
 .meta-page {
