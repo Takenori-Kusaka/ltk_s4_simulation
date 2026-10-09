@@ -1,10 +1,18 @@
 <script lang="ts">
   import { loadMetaGuide } from '../../meta/load.ts';
   import { metaPageView, type ClaimView, type RankedView } from './view.ts';
+  import { winRateMetaView } from './winrate.ts';
 
   const v = metaPageView(loadMetaGuide());
+  const w = winRateMetaView();
   const ROLE_LABEL: Record<string, string> = { TOP: 'TOP', JG: 'JG', MID: 'MID', ADC: 'ADC', SUP: 'SUP' };
   const markClass = (m: string) => (m === '出典' ? 'ok' : m === '推定' ? 'est' : 'unv');
+
+  // F-011 Task-5: 選手との突き合わせ
+  import MetaMatch from './MetaMatch.svelte';
+  import type { RatingsFile } from '../rating/view.ts';
+  let { ratings }: { ratings?: RatingsFile } = $props();
+  const guide = loadMetaGuide();
 </script>
 
 {#snippet claim(c: ClaimView)}
@@ -70,6 +78,9 @@
     </div>
   </section>
 
+  <!-- 基準7・8: 選手との突き合わせ -->
+  <MetaMatch {guide} {ratings} />
+
   <!-- 基準3・4: 重要度の順位と理由 -->
   {@render ranked(v.objectives)}
   {@render ranked(v.supTypes)}
@@ -84,4 +95,18 @@
       </ul>
     </section>
   {/each}
+
+  <!-- 基準9: 勝率の計算がメタをどう使うか -->
+  <section class="frame meta-sec" id="meta-winrate">
+    <h2>勝率の計算とメタ</h2>
+    <p class="meta-notice" role="note">{w.headline}</p>
+    <dl class="details">
+      {#each w.current as r}<dt>{r.label}</dt><dd>{r.value}</dd>{/each}
+    </dl>
+    <h3 class="meta-sub">{w.plannedLabel}</h3>
+    <dl class="details">
+      {#each w.planned as r}<dt>{r.label}</dt><dd>{r.value}</dd>{/each}
+    </dl>
+    <p class="missing-note">所在: {w.plannedSource}</p>
+  </section>
 </article>

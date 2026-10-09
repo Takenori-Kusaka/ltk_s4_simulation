@@ -236,9 +236,14 @@ export function extractGame(matchId: string, info: RawInfo, puuid: string): Game
     durationMin: info.gameDuration / 60,
     queueId: info.queueId,
     position: me.teamPosition ?? '',
-    me: flatten(me),
+    me: { ...flatten(me), teamGoldEarned: teamGold(info, me.teamId) },
     opp: opp ? flatten(opp) : null,
   };
+}
+
+/** F-010 基準12b: 用語「資源が少ない試合」に使うチームの獲得ゴールドの合計 */
+function teamGold(info: RawInfo, teamId: number): number {
+  return info.participants.filter((p) => p.teamId === teamId).reduce((s, p) => s + (typeof p.goldEarned === 'number' ? p.goldEarned : 0), 0);
 }
 
 /** 母集団に使う形(ロールの無い参加者を除く) */

@@ -78,7 +78,7 @@
         <p><a class="chip" href="#/">四つの王家の一覧へ戻る</a></p>
       </section>
     {:else if route.page === 'meta'}
-      <MetaPage />
+      <MetaPage {ratings} />
     {:else if route.page === 'compare'}
       {#key route.targets.join('/')}
         <ComparePage targets={route.targets} {ratings} />
