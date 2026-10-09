@@ -9,6 +9,8 @@ import type { FetchLike } from './riot.ts';
 import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.ts';
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
 import { teamIndicators } from '../rating/team-indicators.ts';
+import { nextDraftForecast } from '../predict/next-draft.ts';
+import { loadMetaGuide } from '../meta/load.ts';
 import { ROSTER } from '../data/roster.ts';
 
 export interface AggregateMainOptions {
@@ -69,6 +71,10 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   const file = { kind: 'ratings', computedAt: now.toISOString(), configVersion: configVersion(), matches: inputs.matches.length, checks, players: ratings, teams };
   writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
   out(`評価のファイルを書いた: ${path}(評価設定の版 ${file.configVersion})`);
+  // F-006 基準9: F-005 が読む NEXT の予想ピックとプロテクト候補
+  const draftPath = join(publicDir, 'next-draft.json');
+  writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, loadMetaGuide()), null, 2) + '\n');
+  out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}`);
   return errors.length ? 1 : 0;
 }
 
