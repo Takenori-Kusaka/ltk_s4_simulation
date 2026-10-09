@@ -6,7 +6,7 @@
   import Radar from './Radar.svelte';
   import Emblem from './Emblem.svelte';
   import RoleGlyph from './RoleGlyph.svelte';
-  import { jstDate, nextOpponent, opponentCompareHref } from '../compare/opponent.ts';
+  import { jstDate, nextOpponent, opponentCompareHref, sameRoleAllHref } from '../compare/opponent.ts';
 
   let { player, rating, computedAt }: { player: Player; rating: PlayerRating | undefined; computedAt?: string } = $props();
   const axes = $derived(ratingAxesView(rating));
@@ -17,6 +17,7 @@
     const href = opponentCompareHref(player.id, now);
     return o && href ? { ...o, href } : null;
   });
+  const allFour = $derived(sameRoleAllHref(player.id));
   const avatar = $derived(placeholderAvatar(player));
   const info = $derived(TEAM_INFO[player.team]);
   const overall = $derived(overallScore(axes.map((a) => a.score)));
@@ -55,6 +56,10 @@
       <!-- F-008 基準15・16: 次に当たる対面と比較(試合日が残っていなければ出さない) -->
       {#if opponent}
         <a class="chip compare-entry" href={opponent.href}>対面と比較 · {opponent.date.slice(5).replace('-', '/')} vs {opponent.team}</a>
+      {/if}
+      <!-- F-008 基準17b: 同じ階級・同じロールの4チームの4人を一度に比べる -->
+      {#if allFour}
+        <a class="chip compare-entry" href={allFour}>{player.tier} {player.role} の4人と比較</a>
       {/if}
     </div>
   </section>

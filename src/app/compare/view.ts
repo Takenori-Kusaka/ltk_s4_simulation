@@ -97,6 +97,41 @@ export function compareView(ids: readonly string[], file: RatingsFile | undefine
   return { ok: true, kind: ts[0].kind, axisLabels: AXIS_ORDER.map((a) => a.label), series, rows };
 }
 
+/**
+ * 基準23: index 番目の系列だけを別の対象に替える(ほかの並びは変えない)。
+ * 既に重ねている対象、種類の異なる対象、階級の異なる階級チームには替えず、案内の文を返す
+ */
+export function replaceTarget(targets: readonly string[], index: number, id: string): { targets: string[]; message?: string } {
+  const norm = id.toUpperCase();
+  const keep = { targets: [...targets] };
+  const cur = resolveTarget(targets[index] ?? '');
+  const next = resolveTarget(norm);
+  if (!cur || !next) return { ...keep, message: '入れ替える対象が見つかりません' };
+  if (targets.includes(norm)) return { ...keep, message: 'その対象は既に重ねています' };
+  if (cur.kind !== next.kind) return { ...keep, message: '同じ種類の対象を選んでください' };
+  if (cur.kind === 'tier-team' && cur.tier !== next.tier) return { ...keep, message: '同じ階級の階級チームを選んでください' };
+  return { targets: targets.map((t, i) => (i === index ? norm : t)) };
+}
+
+/** 基準23: index 番目の系列の入れ替え先の候補(同じ種類、階級チームは同じ階級、まだ重ねていない対象) */
+export function replaceCandidates(targets: readonly string[], index: number): CompareTarget[] {
+  const cur = resolveTarget(targets[index] ?? '');
+  if (!cur) return [];
+  const ids =
+    cur.kind === 'player'
+      ? ROSTER.map((p) => p.id)
+      : cur.kind === 'tier-team'
+        ? ['DD', 'CC', 'IT', 'LR'].map((t) => `${t}-${cur.tier}`)
+        : ['DD', 'CC', 'IT', 'LR'];
+  return ids.filter((x) => !targets.includes(x)).map((x) => resolveTarget(x)!);
+}
+
+/** 基準24: index 番目の系列を1つ目へ移す(残りの相対の並びは保つ) */
+export function makeBaseTargets(targets: readonly string[], index: number): string[] {
+  if (index <= 0 || index >= targets.length) return [...targets];
+  return [targets[index], ...targets.filter((_, i) => i !== index)];
+}
+
 /** 基準14: 対象を加える。上限に達していれば加えずに案内の文を返す。同じ対象は加えない */
 export function addTarget(targets: readonly string[], id: string): { targets: string[]; message?: string } {
   const norm = id.toUpperCase();

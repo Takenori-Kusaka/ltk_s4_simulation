@@ -1076,6 +1076,24 @@ h1[tabindex='-1']:focus {
   text-decoration: none;
   padding: 0 4px;
 }
+.legend-list li {
+  flex-wrap: wrap;
+}
+.legend-base,
+.legend-tool {
+  font-size: 0.7rem;
+  color: var(--ivory-dim);
+}
+.legend-tool {
+  color: var(--gold-hi);
+}
+.legend-swap {
+  max-width: 9.5em;
+  font-size: 0.72rem;
+  background: var(--velvet-2);
+  color: var(--ivory);
+  border: 1px solid var(--line);
+}
 .compare-body {
   min-width: 0;
 }
