@@ -13,6 +13,7 @@
     "LR-NEXT": "LR-MASTERS-JG"
   },
   "coachPrior": { "record": 4.0, "verbal": 5.0, "tactics": 5.0, "fit": 5.0 },
+  "coachEval": { "perSeason": 1.0, "seasonCap": 3.0, "perRank": 0.5, "rankCap": 1.5, "strengthPoints": { "強": 1.5, "中": 1.0, "弱": 0.5 }, "proBase": 6.0, "proPerYear": { "LJL": 1.0, "LJL CS": 0.5 }, "highEvidence": 3 },
   "synergyPairBonus": 0.1,
   "shotcalling": { "maxWeight": 0.7, "roleWeight": 0.3, "callerThreshold": 6.0, "roleTerm": [0, 3.0, 2.0, 1.0] },
   "poolOverlapPenalty": 0.3,
