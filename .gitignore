@@ -29,6 +29,8 @@ evidence/
 
 # Riot API の生の応答と収集ログ(F-003。公開しない。公開するのは集計値だけ)
 data/raw/
+# 価値責任者が共有する配信の文字起こしと、その前処理の出力(第三者の著作物。要約だけを docs/research/grounds/ に置く)
+data/transcript/
 
 # エディタ・OS
 .DS_Store
