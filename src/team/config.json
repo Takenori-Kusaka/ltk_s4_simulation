@@ -19,5 +19,14 @@
   "poolOverlapPenalty": 0.3,
   "favoriteChampions": 5,
   "fearless": { "minGames": 3, "minWinRate": 0.5, "lowestPlayers": 3 },
-  "relative": { "center": 5.0, "scale": 2.0 }
+  "relative": { "center": 5.0, "scale": 2.0 },
+  "style": {
+    "_comment": "F-010 Task-4 戦い方の特性とウィークサイド(基準7〜13)。scrimWeight は作業上の選択(本番を主に、スクリムを 0.5 の重みで補う)",
+    "scrimWeight": 0.5,
+    "traitScale": 2,
+    "centroid": { "gold": 0.5, "damage": 0.3, "bias": 0.2 },
+    "confidence": { "high": { "continuing": 4, "games": 20 }, "mid": { "continuing": 3, "games": 10 }, "minContinuing": 2 },
+    "weakSide": { "stability": 0.6, "resilience": 0.4, "dropScale": 5, "minLowGames": 6, "lanes": ["TOP", "MID", "ADC"] },
+    "finaleMinGames": 3
+  }
 }
