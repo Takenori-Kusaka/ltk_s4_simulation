@@ -133,6 +133,9 @@ export type LoadedSnapshot =
   | { kind: 'meta'; snapshot: MetaSnapshot | null; errors: string[] }
   | { kind: null; snapshot: null; errors: string[] };
 
+/** data/snapshots/ に置かれるが、選手の指標の材料ではないスナップショットの kind(F-010 の LTK3 の集計) */
+const OTHER_FEATURE_KINDS: readonly string[] = ['ltk3-aggregate'];
+
 /** JSON のファイルを読み、kind に応じて検証する */
 export function loadSnapshotFile(path: string): LoadedSnapshot {
   const raw: unknown = JSON.parse(readFileSync(path, 'utf8'));
@@ -140,6 +143,8 @@ export function loadSnapshotFile(path: string): LoadedSnapshot {
   if (kind === 'static') return { kind, ...readStaticSnapshot(raw) };
   if (kind === 'qualitative') return { kind, ...readQualitativeSnapshot(raw) };
   if (kind === 'meta') return { kind, ...readMetaSnapshot(raw) };
+  // 他の機能が同じ置き場に置くスナップショット。検証はその機能が行い、ここでは読み飛ばす(#54)
+  if (typeof kind === 'string' && OTHER_FEATURE_KINDS.includes(kind)) return { kind: null, snapshot: null, errors: [] };
   return { kind: null, snapshot: null, errors: [`${path}: kind が static・qualitative・meta のどれでもない`] };
 }
 
