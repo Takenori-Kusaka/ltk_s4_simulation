@@ -1134,3 +1134,17 @@ h1[tabindex='-1']:focus {
   padding: 6px 8px;
   font: inherit;
 }
+
+/* F-008 Task-3: 比較の入口 */
+.compare-entry {
+  display: inline-flex;
+  margin-top: 12px;
+}
+.compare-entries {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 8px;
+}
