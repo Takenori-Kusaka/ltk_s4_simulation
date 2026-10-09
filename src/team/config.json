@@ -1,0 +1,22 @@
+{
+  "_comment": "F-010 チームの評価の設定(specs/F-010/spec.md、docs/design/team-model.md)。roleWeights は価値責任者の指示、coachWeight 0.15 は D1(2026-10-09)の初期値。ほかは仕様の受入基準に書いた初期値",
+  "roleWeights": { "MID": 0.24, "JG": 0.21, "SUP": 0.21, "TOP": 0.17, "ADC": 0.17 },
+  "coachWeight": 0.15,
+  "coaches": {
+    "DD-CORE": "DD-MASTERS-TOP",
+    "DD-NEXT": "DD-MASTERS-MID",
+    "CC-CORE": "CC-MASTERS-MID",
+    "CC-NEXT": "CC-MASTERS-ADC",
+    "IT-CORE": "IT-MASTERS-MID",
+    "IT-NEXT": "IT-MASTERS-SUP",
+    "LR-CORE": "LR-MASTERS-MID",
+    "LR-NEXT": "LR-MASTERS-JG"
+  },
+  "coachPrior": { "record": 4.0, "verbal": 5.0, "tactics": 5.0, "fit": 5.0 },
+  "synergyPairBonus": 0.1,
+  "shotcalling": { "maxWeight": 0.7, "roleWeight": 0.3, "callerThreshold": 6.0, "roleTerm": [0, 3.0, 2.0, 1.0] },
+  "poolOverlapPenalty": 0.3,
+  "favoriteChampions": 5,
+  "fearless": { "minGames": 3, "minWinRate": 0.5, "lowestPlayers": 3 },
+  "relative": { "center": 5.0, "scale": 2.0 }
+}
