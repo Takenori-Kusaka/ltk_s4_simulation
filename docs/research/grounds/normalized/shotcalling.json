@@ -366,8 +366,8 @@
         {"summary":"しゃるる杯 LoL甲子園(2024年8月)で、チーム「二子ザゲ川学園高校」の監督を務めた。","source":"https://esports-world.jp/tournament/41617","date":"2024-08","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"本人チャンネルの切り抜きに「大局を見てJGをチェスの駒のように動かし続ける『ザ・エンペラー』」という題名がある(ソロランクの場面とみられる)。(スニペットで確認)","source":"https://www.youtube.com/watch?v=pU9wjcU6420","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"たかやスペシャルもコールできると評価。IT CORE は全体的にコールできる人が多い。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1677s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"27:57","selfTeam":false},
-        {"summary":"本人は喋らずに済むならパフォーマンスが高いと述べ、コール役を担いたくない姿勢。","source":"transcript:LTK_League_of_Legends.md#t=1418","date":null,"type":"配信での雑談","direction":"-","strength":"中","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:38","selfTeam":true},
-        {"summary":"周囲(Ceros と推定)から、無言でやれば上手いと言われていたとの言及。","source":"transcript:LTK_League_of_Legends.md#t=969","date":null,"type":"配信での雑談","direction":"-","strength":"弱","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"16:09","selfTeam":true}
+        {"summary":"本人は喋らずに済むならパフォーマンスが高いと述べ、コール役を担いたくない姿勢。","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=1418s","date":null,"type":"配信での雑談","direction":"-","strength":"中","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:38","selfTeam":true},
+        {"summary":"周囲(Ceros と推定)から、無言でやれば上手いと言われていたとの言及。","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=969s","date":null,"type":"配信での雑談","direction":"-","strength":"弱","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"16:09","selfTeam":true}
       ]
     },
     "IT-CORE-ADC": {
@@ -375,8 +375,8 @@
       "evidence": [
         {"summary":"本人チャンネルの切り抜きに「コールもこなすADCで完璧な試合をした結果、味方に怖がられる」という題名がある。(スニペットで確認)","source":"https://www.youtube.com/watch?v=fR13JZA6VJI","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"S3 LTK 初戦の本人視点の切り抜きの書き起こしに、「4人で押そう」「ライン合わせよ」など進行を指示する声が多い。ただし自動字幕で、話者は特定できない。","source":"https://www.youtube.com/watch?v=fR13JZA6VJI","date":"2026-05-11","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"ごんかねは自分でコールした方がパフォーマンスが出ると言っている、とチーム内で言及。喋りたくないたかやとの相性が良いとされた。","source":"transcript:LTK_League_of_Legends.md#t=1431","date":null,"type":"配信での雑談","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:51","selfTeam":true},
-        {"summary":"ごんかねがどのくらい喋るかはまだ分からないとたかやが述べた。","source":"transcript:LTK_League_of_Legends.md#t=1412","date":null,"type":"配信での雑談","direction":"+","strength":"弱","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:32","selfTeam":true}
+        {"summary":"ごんかねは自分でコールした方がパフォーマンスが出ると言っている、とチーム内で言及。喋りたくないたかやとの相性が良いとされた。","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=1431s","date":null,"type":"配信での雑談","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:51","selfTeam":true},
+        {"summary":"ごんかねがどのくらい喋るかはまだ分からないとたかやが述べた。","source":"https://www.youtube.com/watch?v=fWYuEUedwiw&t=1412s","date":null,"type":"配信での雑談","direction":"+","strength":"弱","kind":"player","collectedBy":"ai","origin":"たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし","timestamp":"23:32","selfTeam":true}
       ]
     },
     "IT-CORE-SUP": {

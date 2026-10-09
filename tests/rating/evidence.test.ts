@@ -212,12 +212,18 @@ test('K-03: 肯定の根拠が無い選手は 2.5 以下、否定が肯定を上
   }
 });
 
-test('スナップショット: 叶・春茶は根拠が無く「コール役の実績が見当たらない」', () => {
+test('スナップショット: 春茶は根拠が無く「コール役の実績が見当たらない」', () => {
   const cfg = loadEvidenceConfig().shotcalling;
-  for (const name of ['叶', '春茶']) {
-    const r = shotcallingAxis(shotSnap.players[idOf(name)], cfg);
-    assert.match(r.reason, /コール役の実績が見当たらない/);
-  }
+  const r = shotcallingAxis(shotSnap.players[idOf('春茶')], cfg);
+  assert.match(r.reason, /コール役の実績が見当たらない/);
+});
+
+// 2026-10-09: hetel の配信で叶に肯定の根拠が入った。価値責任者の「コールしない側」の確認により 4.0 以下に収まる(価値責任者がテストの変更を決定)
+test('スナップショット: 叶は肯定の根拠があっても、価値責任者の確認により 4.0 以下', () => {
+  const cfg = loadEvidenceConfig().shotcalling;
+  const r = shotcallingAxis(shotSnap.players[idOf('叶')], cfg);
+  assert.ok(shotSnap.players[idOf('叶')].some((e) => e.direction === '+'));
+  assert.ok(r.score <= cfg.negativeCap, String(r.score));
 });
 
 // --- 基準12: 大会経験 ---
