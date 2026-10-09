@@ -60,7 +60,12 @@ test('AC2: 確度「低」の頂点に触れる辺は点線、データなしの
   const laning = 1;
   assert.equal(low.lines[laning], 'dotted');
   assert.ok(low.edges.some((e) => e.dotted));
-  assert.ok(g.series[1].edges.every((e) => !e.dotted));
+  // 点線は確度「低」の頂点に触れる辺だけ(試験用の記録ではコール力などの根拠の軸も「低」になる)
+  const s1 = g.series[1];
+  const at = (q: { x: number; y: number }) => s1.points.findIndex((x) => x !== null && x.x === q.x && x.y === q.y);
+  assert.ok(s1.edges.every((e) => e.dotted === (s1.lines[at(e.from)] === 'dotted' || s1.lines[at(e.to)] === 'dotted')));
+  assert.equal(s1.lines[0], 'solid');
+  assert.ok(s1.edges.some((e) => !e.dotted));
   const missing = overlayGeometry(view(['LR-NEXT-SUP', 'CC-NEXT-SUP']).series);
   assert.equal(missing.series[0].points.filter((p) => p !== null).length, 0);
   assert.equal(missing.series[0].edges.length, 0);
@@ -111,8 +116,9 @@ test('AC6: 軸ごとの表に、各系列の点数(小数第一位)と確度の�
 
 test('AC6: 階級チーム・チーム全体の系列の確度は、所属選手のその軸の確度の最も低いもの', () => {
   const rows = tableRows(view(['DD-NEXT', 'CC-NEXT']), FILE);
-  assert.equal(rows[1].cells[0].confidence, '低');
-  assert.ok(['高', '中'].includes(rows[1].cells[1].confidence));
+  // 地力: DD-NEXT は DD-NEXT-TOP(2 試合)が「低」、CC-NEXT は全員が十分な試合を持つ
+  assert.equal(rows[0].cells[0].confidence, '低');
+  assert.ok(['高', '中'].includes(rows[0].cells[1].confidence));
 });
 
 test('AC7・8: 2つ目以降の差は 1つ目との差を符号つきで出し、どちらかがデータなしなら「—」', () => {
