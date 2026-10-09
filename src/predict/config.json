@@ -1,0 +1,6 @@
+{
+  "_comment": "F-006 評価設定(specs/F-006/spec.md 用語)。値は AI の起案で、価値責任者が変えてよい。pick: 見込みの値の重みと上位の数、meta: メタの重要度(段階A・段階B)、protect: プロテクトの値のメタの加点とピックプールが狭い選手の閾値(Task-2 で使う)",
+  "pick": { "wGames": 0.5, "wWin": 0.3, "wMeta": 0.2, "topN": 3 },
+  "meta": { "A": 1.0, "B": 0.5 },
+  "protect": { "metaBonus": 0.5, "narrowPool": 2 }
+}

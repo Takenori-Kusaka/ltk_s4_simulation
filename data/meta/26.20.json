@@ -97,6 +97,51 @@
       {"text":"段階A は優先ピックか BAN の常連、段階B はそれに次ぐ重要な候補とした","estimated":true},
       {"text":"プロの優先度は 2026 年のシーズン通算の使用・BAN の多さで見た","url":"https://gol.gg/champion/list/season-S16/split-ALL/tournament-ALL/"},
       {"text":"NEXT の階級では、プロの優先度より選手が使い慣れたチャンピオンが強く出る","estimated":true}
+    ] },
+    { "id": "weakside", "title": "ウィークサイドの考え方", "aiWritten": true, "claims": [
+      {"text":"ウィークサイドは、JG がガンクやカバーにあまり行かない側のマップを指す","url":"https://lol.fandom.com/wiki/Weak_side"},
+      {"text":"作る目的は、資源(ガンク・視界・JG の時間)を片側へ集め、ドラゴンかヴォイドグラブを確実に取ること","url":"https://lol.fandom.com/wiki/Weak_side"},
+      {"text":"ドラゴンの価値が高く BOT には2人いるため、TOP が任されることが多い","estimated":true},
+      {"text":"任された選手は、無理に戦わず損を小さくし、相手 JG の位置を知らせ、遅れても集団戦で前に立つことが求められる","estimated":true},
+      {"text":"LTK の NEXT では TOP のレーンの優劣が勝敗に強く効いた","url":"https://note.com/futugu/n/nb4e7591c38e8"}
+    ] },
+    { "id": "sides", "title": "ブルーサイドとレッドサイド", "aiWritten": true, "claims": [
+      {"text":"ブルーは最初のピックで最強のチャンピオンを取れ、レッドは最後のピックで相手の弱点を突ける","url":"https://dignitas.gg/articles/is-league-s-blue-side-better-than-the-red-side"},
+      {"text":"2026 年のプロは、選ぶ側が「マップのサイド」か「ピックの順番」のどちらかを選ぶ方式(First Selection)になった","url":"https://esports.gg/news/league-of-legends/first-selection-explained"},
+      {"text":"LTK Finale が First Selection を使うか","unverified":true},
+      {"text":"マップの差は説明が分かれ、総合ではほぼ相殺されるとする見方もある","url":"https://dignitas.gg/articles/is-league-s-blue-side-better-than-the-red-side"},
+      {"text":"MSI 2026 ではブルーの勝率が 66% だった","url":"https://rft.gg/event/msi-2026/stats"},
+      {"text":"LTK3 の本番のブルーの勝率は NEXT 62%・CORE 56%・MASTERS 70%(試合数が少なく参考値)","url":"https://docs.google.com/spreadsheets/d/1brY8SO40YPcvgf7DT_LkojBaTBL6IY-vklsTReeaLdU/"},
+      {"text":"LTK1 の Regular のブルーの勝率は 38% で、LTK3 と逆になった(どちらをブルーとみなすかの前提つき)","unverified":true}
+    ] },
+    { "id": "ltk-rules", "title": "LTK のドラフト規則とメタ", "aiWritten": true, "claims": [
+      {"text":"NEXT はファーストピックの段で2体をプロテクトし、うち1体は相手が BAN できる","url":"https://fistbump-news.jp/article/2026/10/02/2976.html"},
+      {"text":"プロテクトの1体は確実に通り、もう1体は相手の BAN を1枠使わせるおとりにもなる","estimated":true},
+      {"text":"CORE は同じ対戦カードの直前の NEXT で使われたチャンピオンを使えないため、両方で人気のチャンピオンは取り合いになる","url":"https://docs.google.com/spreadsheets/d/1brY8SO40YPcvgf7DT_LkojBaTBL6IY-vklsTReeaLdU/"},
+      {"text":"MASTERS CUP はフィアレスで、BO3 の2戦目以降は使ったチャンピオンを使えない。範囲がシリーズ内かカップ全体かは Finale で確かめられていない","unverified":true},
+      {"text":"フィアレスの下では、複数のロールで使えるチャンピオンとピックプールの広い選手の価値が上がる","estimated":true}
     ] }
-  ]
+  ],
+  "ranked": {
+    "objectives": { "title": "オブジェクトの重要度(26.20)", "aiWritten": true, "items": [
+      {"id":"dragon","name":"ドラゴン(と魂)","rank":1,"reason":{"text":"MSI 2026 では魂を取ったチームが約9割勝ち、4体取ると勝率が大きく上がる。中盤の取り合いの軸になる","url":"https://rft.gg/event/msi-2026/stats"}},
+      {"id":"baron","name":"バロン","rank":2,"reason":{"text":"出現が20分に戻り、MSI 2026 で取ったチームの勝率は約9割。負けている側の奪取が逆転の手になる","url":"https://rft.gg/event/msi-2026/stats"}},
+      {"id":"tower","name":"タワー(プレートとファーストタワー)","rank":3,"reason":{"text":"2026 年はファーストタワーの追加ゴールドが戻り、全タワーにプレートが付いた。Riot は重心をタワーの押し込みへ移すと説明した","url":"https://www.leagueoflegends.com/en-us/news/game-updates/patch-26-1-notes"}},
+      {"id":"grubs","name":"ヴォイドグラブ","rank":4,"reason":{"text":"2026 年は出現が遅く硬くなった。3体取ったチームの勝率は MSI 2026 で 6 割強で、TOP 側の押し込みに効く","url":"https://rft.gg/event/msi-2026/stats"}},
+      {"id":"herald","name":"リフトヘラルド","rank":5,"reason":{"text":"取ったチームの勝率は MSI 2026 で 6 割強。全タワーにプレートが付き、ヘラルドでタワーを削る価値がある","url":"https://rft.gg/event/msi-2026/stats"}}
+    ] },
+    "supTypes": { "title": "SUP の型の重要度(26.20)", "aiWritten": true, "items": [
+      {"id":"enchanter","name":"エンチャンター(回復・シールド・強化)","rank":1,"reason":{"text":"プロの直前週の SUP 上位はルル・ミリオなどのエンチャンターが占めた","url":"https://gol.gg/champion/list/season-S16/split-ALL/tournament-ALL/"}},
+      {"id":"hybrid","name":"ハイブリッド(ローム・ユーティリティ)","rank":2,"reason":{"text":"バードが 2026 年の通算で高い勝率を保ち、LTK3 の MASTERS でも BAN の対象だった","url":"https://gol.gg/champion/list/season-S16/split-ALL/tournament-ALL/"}},
+      {"id":"tank","name":"タンク・エンゲージ","rank":3,"reason":{"text":"ソロキューではスレッシュ・レオナ・ブラウムが最上位で、LTK3 の NEXT もエンゲージ型が中心だった","url":"https://www.youtube.com/watch?v=QXIlupvG0z8"}},
+      {"id":"mage","name":"メイジ","rank":4,"reason":{"text":"セラフィーンは範囲の行動妨害と回復を持ち、プロのプレイオフで SUP の最多だった","url":"https://gol.gg/champion/list/season-S16/split-ALL/tournament-ALL/"}},
+      {"id":"assassin","name":"アサシン","rank":5,"reason":{"text":"プロ・ソロキュー・LTK3 のいずれでも上位に見当たらず、26.16 のローム型 SUP の調整後は出番が少ない","estimated":true}}
+    ] },
+    "midRoles": { "title": "MID の役割の重要度(26.20)", "aiWritten": true, "items": [
+      {"id":"waveclear","name":"集合のためのウェーブ処理","rank":1,"reason":{"text":"MID のロールクエストの報酬が3段階目の靴と短い帰還で、早く処理して早く集まる動きに合う","url":"https://dignitas.gg/articles/how-to-complete-the-role-quests-in-season-2026-of-league-of-legends"}},
+      {"id":"roam","name":"ローム","rank":2,"reason":{"text":"ガリオ・ツイステッド・フェイトなど、押してから他のレーンへ向かう MID がプロで使われている","url":"https://gol.gg/champion/list/season-S16/split-ALL/tournament-ALL/"}},
+      {"id":"survive","name":"一人で耐える力","rank":3,"reason":{"text":"JG の序盤の介入が主流なので、ガンクを受けても倒されにくい MID がレーンを保てる","estimated":true}},
+      {"id":"sidePush","name":"サイドでのプッシュ力","rank":4,"reason":{"text":"中盤にサイドを押して相手を引き付ける役は、ライズ・ビクター・タリヤが担う。タワーの価値が上がり出番が増える見込み","estimated":true}}
+    ] }
+  }
 }
