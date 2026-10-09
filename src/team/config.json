@@ -28,5 +28,19 @@
     "confidence": { "high": { "continuing": 4, "games": 20 }, "mid": { "continuing": 3, "games": 10 }, "minContinuing": 2 },
     "weakSide": { "stability": 0.6, "resilience": 0.4, "dropScale": 5, "minLowGames": 6, "lanes": ["TOP", "MID", "ADC"] },
     "finaleMinGames": 3
+  },
+  "overall": {
+    "_comment": "F-010 Task-5 総合の軸(基準15〜18b)。値は仕様の受入基準の初期値",
+    "aceTargetSd": 0.35,
+    "coPlayPerPair": 0.5,
+    "coPlayCap": 4.0,
+    "leaderPer": 1.0,
+    "leaderCap": 3.0,
+    "overlapBase": 3.0,
+    "overlapDivisor": 5,
+    "designCertaintyScale": 2.0,
+    "designCertaintyWeight": 6,
+    "designCoachPer": 1.0,
+    "designCoachCap": 4.0
   }
 }
