@@ -12,6 +12,7 @@ import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
 import { loadMetaGuide } from '../meta/load.ts';
 import { ROSTER } from '../data/roster.ts';
+import { evaluateTeams } from '../team/evaluate.ts';
 
 export interface AggregateMainOptions {
   rawDir?: string;
@@ -75,6 +76,12 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   const draftPath = join(publicDir, 'next-draft.json');
   writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, loadMetaGuide()), null, 2) + '\n');
   out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}`);
+  // F-010: 階級チームの評価と全階級チームの総合の軸
+  const ev = evaluateTeams({ ratings, inputs: inputs.players, matches: inputs.matches, teamIndicators: teams, now: now.getTime(), snapshotsDir: opts.snapshotsDir ?? 'data/snapshots' });
+  for (const e of ev.errors) out(`チームの評価の入力: ${e}`);
+  const teamPath = join(publicDir, 'team-evaluation.json');
+  writeFileSync(teamPath, JSON.stringify({ kind: 'team-evaluation', computedAt: now.toISOString(), configVersion: configVersion(), tierTeams: ev.tierTeams, overall: ev.overall, beta: ev.beta }, null, 2) + '\n');
+  out(`チームの評価を書いた: ${teamPath}`);
   return errors.length ? 1 : 0;
 }
 

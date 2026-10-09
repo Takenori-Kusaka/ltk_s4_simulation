@@ -47,6 +47,8 @@ export interface TierTeamStrength {
   /** コーチの総合を事前値で推定した(Task-3 のコーチの評価が入るまで) */
   coachEstimated: boolean;
   coachId: string | null;
+  /** 基準6 の重なりの数(同じチームの NEXT と CORE の得意チャンピオンの共通の数。MASTERS は 0)。総合の軸の一体感(基準18)に使う */
+  overlap: number;
   axes: StrengthAxis[];
 }
 
@@ -201,7 +203,7 @@ export function computeStrength(input: StrengthInput): TierTeamStrength[] {
           confidence: minConf(ms.map((m) => axisOf(m.rating, 'pool')?.confidence)),
           reason: `勝てるチャンピオン(3 試合以上・勝率 50% 以上)の数の少ない方から ${wins.length} 人: ${wins.join('・')}` },
       ];
-      return { team, tier, S, coachC, coachEstimated: coachC !== null && given === undefined, coachId, axes };
+      return { team, tier, S, coachC, coachEstimated: coachC !== null && given === undefined, coachId, overlap, axes };
     }),
   );
 
