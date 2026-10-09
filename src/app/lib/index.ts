@@ -143,6 +143,7 @@ export type Route =
   | { page: 'team'; team: 'DD' | 'CC' | 'IT' | 'LR' }
   | { page: 'compare'; targets: string[] }
   | { page: 'compare-start'; target: string }
+  | { page: 'meta' }
   | { page: 'notfound'; hash: string };
 
 /** F-008: 比較の対象の種類。選手 ID・階級チーム(CC-CORE)・チーム全体(CC)。存在しなければ null */
@@ -195,6 +196,7 @@ export function parseRoute(hash: string): Route {
   const c = /^\/COMPARE(?:\/(.*))?$/.exec(upper);
   const targets = c ? parseCompare(c[1] ?? '') : null;
   if (targets) return { page: 'compare', targets };
+  if (upper === '/META') return { page: 'meta' };
   return { page: 'notfound', hash };
 }
 
@@ -215,6 +217,7 @@ export function pageTitle(r: Route): string {
   if (r.page === 'notfound') return `ページが見つかりません | ${site}`;
   if (r.page === 'compare') return `比較 ${r.targets.join(' / ')} | ${site}`;
   if (r.page === 'compare-start') return `比較 ${r.target} | ${site}`;
+  if (r.page === 'meta') return `メタ解説 | ${site}`;
   return site;
 }
 

@@ -36,6 +36,31 @@ export interface Chapter {
   claims: Claim[];
 }
 
+/** 重要度つきの項目(基準3・4)。rank は 1 が最も重要な順位 */
+export interface RankedItem {
+  id: string;
+  name: string;
+  rank: number;
+  reason: Claim;
+}
+
+export interface RankedSection {
+  title: string;
+  aiWritten: boolean;
+  items: RankedItem[];
+}
+
+/** 基準3・4: 必ず載せる項目 */
+export const REQUIRED_RANKED = {
+  objectives: ['dragon', 'grubs', 'herald', 'baron', 'tower'],
+  supTypes: ['enchanter', 'tank', 'mage', 'assassin', 'hybrid'],
+  midRoles: ['sidePush', 'survive', 'waveclear', 'roam'],
+} as const;
+export type RankedKey = keyof typeof REQUIRED_RANKED;
+
+/** 基準5・6: 必ず載せる章(ウィークサイド、ブルーとレッド、LTK のドラフト規則) */
+export const REQUIRED_CHAPTERS = ['weakside', 'sides', 'ltk-rules'] as const;
+
 export interface MetaGuide {
   kind: 'meta-guide';
   /** 原稿の対象のパッチ(例: 26.20) */
@@ -47,6 +72,7 @@ export interface MetaGuide {
   basisLegend: Record<string, { label: string; url: string }>;
   champions: MetaChampion[];
   chapters: Chapter[];
+  ranked: Record<RankedKey, RankedSection>;
 }
 
 export type ClaimMark = '出典' | '推定' | '未確認';
@@ -122,6 +148,30 @@ export function validateMetaGuide(raw: unknown): { guide?: MetaGuide; errors: st
     if (!claims.length) errors.push(`${where}: 主張が無い`);
     claims.forEach((c: unknown, j) => checkClaim(c, `${where} の主張 ${j + 1}`, errors));
   });
+
+  const ids = new Set(chapters.filter(isObj).map((ch) => ch.id));
+  for (const id of REQUIRED_CHAPTERS) if (!ids.has(id)) errors.push(`章 ${id} が無い(基準5・6)`);
+
+  const ranked = isObj(raw.ranked) ? raw.ranked : {};
+  for (const key of Object.keys(REQUIRED_RANKED) as RankedKey[]) {
+    const sec = ranked[key];
+    if (!isObj(sec)) {
+      errors.push(`重要度の表 ${key} が無い(基準3・4)`);
+      continue;
+    }
+    if (!str(sec.title)) errors.push(`重要度の表 ${key}: 題が無い`);
+    if (typeof sec.aiWritten !== 'boolean') errors.push(`重要度の表 ${key}: AI 執筆かどうか(aiWritten)が無い`);
+    const items = Array.isArray(sec.items) ? sec.items : [];
+    const have = new Set(items.filter(isObj).map((i) => i.id));
+    for (const id of REQUIRED_RANKED[key]) if (!have.has(id)) errors.push(`重要度の表 ${key}: 項目 ${id} が無い`);
+    items.forEach((it: unknown, i) => {
+      const where = `重要度の表 ${key} の ${isObj(it) && str(it.id) ? it.id : i + 1}`;
+      if (!isObj(it)) return errors.push(`${where}: 形が違う`);
+      if (!str(it.name)) errors.push(`${where}: 名前が無い`);
+      if (typeof it.rank !== 'number' || !Number.isInteger(it.rank) || it.rank < 1) errors.push(`${where}: 重要度(1 以上の順位)が無い`);
+      checkClaim(it.reason, `${where} の理由`, errors);
+    });
+  }
 
   return errors.length ? { errors } : { guide: raw as unknown as MetaGuide, errors };
 }
