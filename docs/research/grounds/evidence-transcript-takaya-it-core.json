@@ -1,0 +1,366 @@
+{
+  "kind": "evidence-transcript",
+  "file": "LTK_League_of_Legends.md",
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)から AI が自分の言葉で要約した根拠。原文は転載しない。動画の URL は未確定(urlPending)で、届いたら source を時刻つきの URL に差し替える。selfTeam=true は話し手自身のチームについての発言",
+  "source": {
+    "title": "たかやスペシャル(IT CORE MID)の LoL 配信。LTK4(League The k4sen Season: Finale)に向け IT CORE の仲間(AlphaAzur・mittiii・ごんかね・レグルシュと推定)と練習しながら雑談。話者の特定は内容からの推定",
+    "url": "https://www.youtube.com/watch?v=fWYuEUedwiw",
+    "urlPending": false,
+    "speaker": "たかやスペシャル(推定。同席のチームメイトの発言を含む)",
+    "retrievedAt": "2026-10-09",
+    "file": "LTK_League_of_Legends.md"
+  },
+  "shotcalling": {
+    "IT-CORE-MID": [
+      {
+        "summary": "本人は喋らずに済むならパフォーマンスが高いと述べ、コール役を担いたくない姿勢。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1418s",
+        "date": null,
+        "type": "配信での雑談",
+        "direction": "-",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし",
+        "timestamp": "23:38",
+        "selfTeam": true
+      },
+      {
+        "summary": "周囲(Ceros と推定)から、無言でやれば上手いと言われていたとの言及。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=969s",
+        "date": null,
+        "type": "配信での雑談",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし",
+        "timestamp": "16:09",
+        "selfTeam": true
+      }
+    ],
+    "IT-CORE-ADC": [
+      {
+        "summary": "ごんかねは自分でコールした方がパフォーマンスが出ると言っている、とチーム内で言及。喋りたくないたかやとの相性が良いとされた。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1431s",
+        "date": null,
+        "type": "配信での雑談",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし",
+        "timestamp": "23:51",
+        "selfTeam": true
+      },
+      {
+        "summary": "ごんかねがどのくらい喋るかはまだ分からないとたかやが述べた。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1412s",
+        "date": null,
+        "type": "配信での雑談",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "たかやスペシャル配信(IT CORE 練習中の雑談)の文字起こし",
+        "timestamp": "23:32",
+        "selfTeam": true
+      }
+    ]
+  },
+  "playerTraits": {
+    "IT-CORE-MID": [
+      {
+        "trait": "macro",
+        "summary": "Ceros がたかやのマクロを評価。LTK 開始前は知識がほぼ無かったが、今はかなり上手いとの見方(芸風で侮られているだけ)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1383s",
+        "timestamp": "23:03",
+        "selfTeam": true
+      },
+      {
+        "trait": "mechanics",
+        "summary": "本人はマクロより操作寄りの自己認識(冗談交じり)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1402s",
+        "timestamp": "23:22",
+        "selfTeam": true
+      },
+      {
+        "trait": "mental",
+        "summary": "事前評価が高いことに戸惑い。期待される経験が少ないと不安を口にした。仲間は実際強いと応じた。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=961s",
+        "timestamp": "16:01",
+        "selfTeam": true
+      },
+      {
+        "trait": "mechanics",
+        "summary": "CORE ミッドの1番手はたかやと見る人が多いだろうと本人が述べ、自分を信じているとも発言。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=491s",
+        "timestamp": "8:11",
+        "selfTeam": true
+      },
+      {
+        "trait": "pool",
+        "summary": "葛葉がアサシン系を出すならリサンドラ等の対策ピックで構えるつもり。ジェイスも練習中。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1050s",
+        "timestamp": "17:30",
+        "selfTeam": true
+      }
+    ],
+    "IT-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "今シーズンはたかやより LP が高かった印象で、LP ではじゃすぱー以上かもしれないとの見方。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=328s",
+        "timestamp": "5:28",
+        "selfTeam": true
+      },
+      {
+        "trait": "mental",
+        "summary": "熱い男と聞いており、じゃすぱーが ADC 1番手という評価に納得しないだろうと言及。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=339s",
+        "timestamp": "5:39",
+        "selfTeam": true
+      }
+    ],
+    "IT-CORE-TOP": [
+      {
+        "trait": "mechanics",
+        "summary": "チームメイトは YUKIO よりミッチー(mittiii)の方が上手いと主張。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=981s",
+        "timestamp": "16:21",
+        "selfTeam": true
+      },
+      {
+        "trait": "pool",
+        "summary": "mittiii はファイター使いとの言及。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1035s",
+        "timestamp": "17:15",
+        "selfTeam": true
+      },
+      {
+        "trait": "other",
+        "summary": "声をかけても LoL の練習をしておらず、別ゲームをしていたとの冗談交じりの指摘。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=990s",
+        "timestamp": "16:30",
+        "selfTeam": true
+      }
+    ],
+    "IT-CORE-JG": [
+      {
+        "trait": "pool",
+        "summary": "AlphaAzur とたかやでジェイスのフレックスを検討。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=791s",
+        "timestamp": "13:11",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "じゃすぱーは今シーズン約1000LP で GM 近く。CORE にいるのが不思議なほどとの声。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=391s",
+        "timestamp": "6:31",
+        "selfTeam": false
+      },
+      {
+        "trait": "mechanics",
+        "summary": "じゃすぱーが ADC の1番手という評価が前提として語られた。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=346s",
+        "timestamp": "5:46",
+        "selfTeam": false
+      }
+    ],
+    "LR-CORE-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "乾伸一郎を CORE ミッド2番手と見る人が多そう。チーム戦ではスタンミより上手い可能性があるとたかやが評価。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=499s",
+        "timestamp": "8:19",
+        "selfTeam": false
+      },
+      {
+        "trait": "mental",
+        "summary": "性格的に余裕だとは言わない慎重なタイプだろうとの見立て。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=451s",
+        "timestamp": "7:31",
+        "selfTeam": false
+      },
+      {
+        "trait": "pool",
+        "summary": "乾・たかや・スタンミは得意チャンプが重なり、同系統のメイジ対決になりそうとの予想。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1090s",
+        "timestamp": "18:10",
+        "selfTeam": false
+      }
+    ],
+    "DD-CORE-MID": [
+      {
+        "trait": "pool",
+        "summary": "スタンミはランクでマスター到達だがチャンププールに課題がある趣旨の言及(途中で途切れ不明瞭)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=502s",
+        "timestamp": "8:22",
+        "selfTeam": false
+      },
+      {
+        "trait": "pool",
+        "summary": "スタンミがビクターを使うイメージが無いとの話題。対面想定の練習相手として名前が挙がる。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=124s",
+        "timestamp": "2:04",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "葛葉のミッドは世間の想像よりずっと上手いとたかやが評価。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=190s",
+        "timestamp": "3:10",
+        "selfTeam": false
+      },
+      {
+        "trait": "pool",
+        "summary": "葛葉はアサシン系を使う、と CORE ミッドの中で唯一の型として挙げられた。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1090s",
+        "timestamp": "18:10",
+        "selfTeam": false
+      }
+    ],
+    "CC-CORE-TOP": [
+      {
+        "trait": "experience",
+        "summary": "YUKIO は最近マスターに到達したばかりとの言及(冗談交じりに3番手扱い)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=976s",
+        "timestamp": "16:16",
+        "selfTeam": false
+      }
+    ],
+    "DD-CORE-TOP": [
+      {
+        "trait": "experience",
+        "summary": "継続的に LoL をやっていた酒寄颯馬が TOP 最強の可能性もあるとの見方。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1004s",
+        "timestamp": "16:44",
+        "selfTeam": false
+      }
+    ],
+    "CC-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "Nemoh も社会人をしながらキャスターをしている印象で、日程の負担が話題に。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=697s",
+        "timestamp": "11:37",
+        "selfTeam": false
+      }
+    ]
+  },
+  "teamMacro": {
+    "IT-CORE": [
+      {
+        "text": "たかやは喋らない方が良く、ごんかねはコールした方が良いタイプで、コール役はごんかね寄りになりそう。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1434s",
+        "timestamp": "23:54",
+        "selfTeam": true
+      }
+    ]
+  },
+  "teamStyle": {
+    "IT-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "IT CORE は mittiii・ごんかね・レグルシュが前回 LR で同チームで、むしろ前回 LR の要素が多い。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=164s",
+        "timestamp": "2:44",
+        "selfTeam": true
+      },
+      {
+        "aspect": "draft",
+        "summary": "IT はジェイス等のフレックス構成に挑むが結局やめるのが恒例、と自虐。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=801s",
+        "timestamp": "13:21",
+        "selfTeam": true
+      },
+      {
+        "aspect": "practice",
+        "summary": "練習量は k4sen のチームと同程度(10回/日程度と推定、聞き取り不明瞭)を見込む。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=891s",
+        "timestamp": "14:51",
+        "selfTeam": true
+      },
+      {
+        "aspect": "draft",
+        "summary": "ミッドが対策ピックで耐える場合は mittiii(TOP)がキャリー役を担う案が出た(冗談交じり)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1082s",
+        "timestamp": "18:02",
+        "selfTeam": true
+      }
+    ],
+    "DD-CORE": [
+      {
+        "aspect": "strength",
+        "summary": "DD CORE はかなり強いとたかやが評価(勝ち方を冗談で語る文脈)。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1187s",
+        "timestamp": "19:47",
+        "selfTeam": false
+      }
+    ]
+  },
+  "coaches": {
+    "CC-MASTERS-MID": [
+      {
+        "summary": "Ceros(CC CORE コーチ)がたかやのミッドを強く褒めていたと伝聞。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=910s",
+        "timestamp": "15:10"
+      },
+      {
+        "summary": "Ceros はたかやのマクロも評価。以前このチーム(話者側)のコーチだったため詳しいとの言及。",
+        "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1418s",
+        "timestamp": "23:38"
+      }
+    ]
+  },
+  "overall": [
+    {
+      "summary": "CORE のミッド対面(たかや・葛葉・スタンミ・乾)は豪華との評価。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=261s",
+      "timestamp": "4:21"
+    },
+    {
+      "summary": "たかやは決勝 BO5 第5戦の赤(CC)対青(IT)で自分がキャリーする展開を願望として語った。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=15s",
+      "timestamp": "0:15"
+    },
+    {
+      "summary": "同席者の1人は、視聴者なら赤(CC)を応援し k4sen の優勝を見たいと発言。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=7s",
+      "timestamp": "0:07"
+    },
+    {
+      "summary": "TOP は各チームの選手が皆自分を4番手と言っているという話題。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1000s",
+      "timestamp": "16:40"
+    }
+  ],
+  "unmapped": [
+    {
+      "heard": "ポンさん",
+      "guess": "CC-MASTERS-TOP(Yutapon) 低い確信",
+      "summary": "メインロールではない(サポ等)選手の例として言及。前シーズンのランク等の話題だが聞き取り不明瞭。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1288s",
+      "timestamp": "21:28"
+    },
+    {
+      "heard": "神楽と俺がいればオレンジ",
+      "guess": "DD-CORE-MID(スタンミ)の発言の引用 低い確信",
+      "summary": "誰かが自チームは神楽めあと自分がいれば勝てる趣旨を述べていたとの伝聞。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=153s",
+      "timestamp": "2:33"
+    },
+    {
+      "heard": "エビ君",
+      "guess": "ロスター外(今回不参加の選手) 中程度の確信",
+      "summary": "今回の LTK に参加していないことが話題に。",
+      "source": "https://www.youtube.com/watch?v=fWYuEUedwiw&t=1245s",
+      "timestamp": "20:45"
+    }
+  ]
+}
