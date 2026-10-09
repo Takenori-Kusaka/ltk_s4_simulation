@@ -1134,3 +1134,127 @@ h1[tabindex='-1']:focus {
   padding: 6px 8px;
   font: inherit;
 }
+
+/* ---------- F-011 Task-2: メタ解説のページ ---------- */
+.meta-page {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.meta-head,
+.meta-sec {
+  padding: 18px 20px;
+  min-width: 0;
+}
+.meta-head h1 {
+  margin: 4px 0 6px;
+}
+.meta-headline {
+  margin: 0;
+  font-family: var(--serif-latin);
+  color: var(--gold-hi);
+  overflow-wrap: anywhere;
+}
+.meta-notice {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border: 1px solid #d9a066;
+  color: #f0c890;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.meta-legend {
+  margin: 10px 0 0;
+  font-size: 0.74rem;
+  color: var(--ivory-dim);
+  line-height: 1.9;
+}
+.meta-sec h2 {
+  margin: 0 0 10px;
+  font-family: var(--serif-jp);
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+}
+.meta-sec .mark {
+  margin-left: 6px;
+  vertical-align: 2px;
+}
+.mark.est {
+  border-color: var(--ivory-dim);
+  color: var(--ivory-dim);
+}
+.mark.unv {
+  border-style: dashed;
+}
+.mark.ai {
+  border-color: var(--line);
+  color: var(--gold);
+}
+a.mark {
+  text-decoration: none;
+}
+.meta-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.meta-table table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 100%;
+}
+.meta-table th,
+.meta-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+.meta-table th {
+  font-family: var(--caps);
+  font-weight: 400;
+  color: var(--gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.champ {
+  display: inline-block;
+  margin: 0 8px 4px 0;
+  white-space: nowrap;
+}
+.ranked,
+.claims {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  font-size: 0.86rem;
+}
+.ranked li {
+  display: grid;
+  grid-template-columns: 2em minmax(0, 1fr);
+  gap: 8px;
+}
+.ranked .rank {
+  font-family: var(--serif-latin);
+  font-size: 1.4rem;
+  color: var(--gold-hi);
+  line-height: 1;
+}
+.ranked p {
+  margin: 2px 0 0;
+  color: var(--ivory-dim);
+  overflow-wrap: anywhere;
+}
+.claims li {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+  overflow-wrap: anywhere;
+}
+.claim-text {
+  color: var(--ivory);
+}
+.hero-links {
+  margin: 12px 0 0;
+}
