@@ -10,14 +10,14 @@
 | --- | --- | --- | --- | --- | --- |
 | Task-1 | 比較の論理(対象の解決、種類と階級の検査、差の計算、重複の除去)と `#/compare/...` の経路 | 10, 11, 12, 13, 14, 18, 19, 20, 21 | `src/app/compare/view.ts`、`src/app/lib/index.ts`、`tests/app/compare.test.ts` | — | 可 |
 | Task-2 | 複数の系列を重ねるレーダーと比較の画面(選手の系列。凡例・差の表。チームを選んだときはチームの評価の後に出す旨の文) | 1, 2, 3, 4, 5, 6, 7, 8, 11b, 22 | `src/app/components/Radar.svelte`、`src/app/compare/ComparePage.svelte`、`src/app/components/App.svelte`、`src/app/app.css`、`tests/app/compare-render.test.ts` | Task-1 | 不可 |
-| Task-3 | 選手のページとチームのページからの入口、次に当たる対面の解決 | 15, 16, 17 | `src/app/compare/opponent.ts`、`src/app/components/PlayerSheet.svelte`、`src/app/team/TeamPage.svelte`、`tests/app/compare-entry.test.ts` | Task-2 | 不可 |
+| Task-3 | 選手のページとチームのページからの入口(対面・同じ階級とロールの4人・同じ階級の4チーム・`#/compare-from/`)、次に当たる対面の解決(当日を含む)、比較の相手の入れ替えと基準の付け替え(2026-10-09 の価値責任者の決定で範囲を広げた) | 15, 16, 17, 17b, 17c, 23, 24 | `src/app/compare/opponent.ts`、`src/app/compare/view.ts`、`src/app/compare/ComparePage.svelte`、`src/app/components/PlayerSheet.svelte`、`src/app/team/TeamPage.svelte`、`tests/app/compare-entry.test.ts` | Task-2 | 不可 |
 | Task-4 | (2026-10-09 に価値責任者の決定で追加)チームの比較: 階級チームは F-010 の強さの軸、チーム全体は総合の軸の系列で重ねる。根拠の無い軸の凡例 | 9, 11 | `src/app/compare/**`、`tests/app/compare-team.test.ts` | Task-2, F-010 Task-5 | 不可 |
 
 ## 粒度の確認
 
 | 項目 | 上限 | 見込み |
 | --- | --- | --- |
-| 変更行数 | 800 | Task-1 約350 / Task-2 約550 / Task-3 約300 |
+| 変更行数 | 800 | Task-1 約350 / Task-2 約550 / Task-3 約450 |
 | 変更ファイル数 | 15 | 各 3〜6 |
 | レビュー所要時間 | 30分 | 各 20〜30 分 |
 

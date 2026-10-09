@@ -1,7 +1,7 @@
 <script lang="ts">
   import { compareHref } from '../lib/index.ts';
   import type { RatingsFile } from '../rating/view.ts';
-  import { compareView, addTarget } from './view.ts';
+  import { compareView, addTarget, replaceTarget, replaceCandidates, makeBaseTargets } from './view.ts';
   import { legendItems, tableRows, markerPath, candidateTargets, teamComparePending, TEAM_COMPARE_PENDING } from './render.ts';
   import CompareRadar from './CompareRadar.svelte';
 
@@ -19,6 +19,14 @@
     if (!r.message) location.hash = compareHref(r.targets);
   };
   const removeHref = (id: string) => compareHref(targets.filter((t) => t !== id));
+  // F-008 基準23・24: 系列の入れ替えと基準の付け替え(価値責任者の決定 2026-10-09)
+  const replace = (index: number, id: string) => {
+    if (!id) return;
+    const r = replaceTarget(targets, index, id);
+    message = r.message ?? '';
+    if (!r.message) location.hash = compareHref(r.targets);
+  };
+  const baseHref = (index: number) => compareHref(makeBaseTargets(targets, index));
 </script>
 
 <article class="compare">
@@ -28,10 +36,15 @@
     {#if v.ok && !pending}
       <!-- F-008 基準5: 凡例(色・点の形・名前) -->
       <ul class="legend-list">
-        {#each legendItems(v.series) as it}
+        {#each legendItems(v.series) as it, i}
           <li>
             <svg class="legend-mark" viewBox="0 0 20 20" aria-hidden="true"><path d={markerPath(it.shape, 10, 10, 6)} fill={it.color} /></svg>
             <span class="legend-name" style={`color:${it.color}`}>{it.label}</span>
+            {#if i === 0}<span class="legend-base">基準</span>{:else}<a class="legend-tool" href={baseHref(i)}>基準にする</a>{/if}
+            <select class="legend-swap" aria-label={`${it.label} を入れ替える`} onchange={(e) => replace(i, (e.currentTarget as HTMLSelectElement).value)}>
+              <option value="">入れ替え</option>
+              {#each replaceCandidates(targets, i) as c}<option value={c.id}>{c.label}({c.id})</option>{/each}
+            </select>
             {#if targets.length > 2}<a class="legend-remove" href={removeHref(it.id)} aria-label={`${it.label} を外す`}>×</a>{/if}
           </li>
         {/each}
