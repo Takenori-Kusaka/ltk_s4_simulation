@@ -5,7 +5,7 @@ import { TEAMS, type SimOutput, type TeamId, type Tier } from '../../sim/index.t
 import { TEAM_INFO } from '../lib/index.ts';
 import type { MatchPrior } from '../../winrate/core.ts';
 import type { WinratesFile } from '../sim/view.ts';
-import type { TeamLayer } from '../story/story.ts';
+import type { MacroPartRaw, TeamLayer } from '../story/story.ts';
 
 export type DayRef = { kind: 'regular'; day: number; date: string } | { kind: 'masters'; cup: number; date: string };
 
@@ -77,12 +77,25 @@ export interface DayBoxView {
 const finite = (x: unknown): number | undefined => (typeof x === 'number' && Number.isFinite(x) ? x : undefined);
 /** F-005 基準 3b の項目(試合ごとの pLaneA・pMacroA・pExtA、階級チームごとの M・E・externalCount)。勝率表のファイルに無ければ undefined(F-005 側の型の定義を待たず、任意の項目として読む) */
 type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown };
-type TeamFields = { M?: unknown; E?: unknown; externalCount?: unknown };
+type TeamFields = { M?: unknown; macroParts?: unknown; E?: unknown; externalCount?: unknown };
+/** teams[].macroParts のうち、key が文字列で raw が数の項目だけ(壊れた項目は入れない) */
+const macroParts = (x: unknown): MacroPartRaw[] => {
+  if (!Array.isArray(x)) return [];
+  const out: MacroPartRaw[] = [];
+  for (const p of x) {
+    const o = (p ?? {}) as { key?: unknown; label?: unknown; raw?: unknown };
+    const raw = finite(o.raw);
+    if (typeof o.key === 'string' && raw !== undefined) out.push({ key: o.key, label: typeof o.label === 'string' ? o.label : '', raw });
+  }
+  return out;
+};
 const teamLayer = (file: WinratesFile, team: TeamId, tier: Tier): TeamLayer | undefined => {
   const t = file.teams.find((x) => x.team === team && x.tier === tier) as TeamFields | undefined;
   const layer: TeamLayer = {};
   const M = finite(t?.M), E = finite(t?.E), externalCount = finite(t?.externalCount);
+  const parts = macroParts(t?.macroParts);
   if (M !== undefined) layer.M = M;
+  if (parts.length) layer.parts = parts;
   if (E !== undefined) layer.E = E;
   if (externalCount !== undefined) layer.externalCount = externalCount;
   return Object.keys(layer).length ? layer : undefined;

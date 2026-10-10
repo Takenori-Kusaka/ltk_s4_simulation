@@ -98,7 +98,7 @@
               {#each ex.items as it}
                 <li>
                   <span class="tag">{it.direction}{it.strength ? `・${it.strength}` : ''}</span>
-                  {it.speakerKind ? `${it.speakerKind} ` : ''}{it.speaker}: {it.summary}
+                  {it.speakerKind ? `${it.speakerKind} ` : ''}{it.speaker}{#if it.self}<span class="unv">(自チーム)</span>{/if}: {it.summary}
                   {#if it.url}<a href={it.url} target="_blank" rel="noopener noreferrer">出典</a>{:else if it.source}<span class="unv">({it.source})</span>{/if}
                   {#if it.date}<span class="unv">{it.date}</span>{/if}
                 </li>
