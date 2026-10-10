@@ -1351,3 +1351,8 @@ button.chip {
 .sheet > .fan {
   grid-column: 1 / -1;
 }
+
+/* F-014 Task-4: 根拠の節の表がホームのグリッドの列を広げないようにする(基準11) */
+.forecast > * {
+  min-width: 0;
+}
