@@ -100,3 +100,36 @@ test('基準7: 経路 #/sim とホームの導線', () => {
   const home = readFileSync(new URL('../../src/app/components/Home.svelte', import.meta.url), 'utf8');
   assert.match(home, /href="#\/sim"/);
 });
+
+// F-014 Task-2: 受入基準 8・9・10(優勝候補の要約、計算の根拠の折りたたみ、開幕前の予想)
+test('F-014 基準8・13: 優勝候補の要約は優勝確率の高い順で、値は simulate の出力を丸めたもの', async () => {
+  const { championSummary } = await import('../../src/app/sim/view.ts');
+  const sim = runSimulation(file);
+  const rows = championSummary(sim);
+  assert.equal(rows.length, 4);
+  for (let i = 1; i < rows.length; i++) assert.ok(rows[i - 1].championNum >= rows[i].championNum);
+  for (const r of rows) {
+    assert.equal(r.champion, (sim.championProbability[r.team] * 100).toFixed(1));
+    assert.ok(r.name.length > 0 && r.petals > 0 && /^#/.test(r.color));
+  }
+});
+
+test('F-014 基準8・9・10: #/sim は要約 → 順位表 → Day の箱 → MASTERS CUP の順で、β・S・対数オッズは閉じた折りたたみの中にだけ出る', async () => {
+  const { stageNotice } = await import('../../src/app/sim/view.ts');
+  assert.equal(stageNotice(file), '開幕前の予想');
+  assert.notEqual(stageNotice({ ...file, results: { regular: [] } }), '開幕前の予想');
+  const src = readFileSync(new URL('../../src/app/sim/SimPage.svelte', import.meta.url), 'utf8');
+  const markup = src.replace(/<script[\s\S]*?<\/script>/, '').replace(/<style[\s\S]*?<\/style>/, '');
+  const iSummary = markup.indexOf('class="champions');
+  const iBoard = markup.indexOf('<StandingsBoard');
+  const iDays = markup.indexOf('<DayBox');
+  const iMasters = markup.indexOf('MASTERS CUP');
+  const iDetails = markup.indexOf('<details');
+  assert.ok(iSummary > 0 && iBoard > iSummary && iDays > iBoard && iMasters > iDays && iDetails > iMasters, `順序 ${[iSummary, iBoard, iDays, iMasters, iDetails].join(' / ')}`);
+  assert.doesNotMatch(markup.slice(iDetails, iDetails + 40), /<details[^>]*\bopen\b/);
+  for (const word of ['β', '戦力 S', '対数オッズ']) {
+    const first = markup.indexOf(word);
+    assert.ok(first === -1 || first > iDetails, `${word} が折りたたみの外にある`);
+  }
+  assert.match(markup, /開幕前の予想|stageNotice/);
+});
