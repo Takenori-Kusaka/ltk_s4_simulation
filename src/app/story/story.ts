@@ -1,5 +1,7 @@
 // F-014 Task-4: 試合の根拠のストーリー(基準 20〜25)。文章は固定の形で組み立て、生成 AI は使わない
 // 寄与は F-010 の戦力 S の式(S = 0.85 × Σ w_r × O_r + 0.15 × C。MASTERS は S = Σ w_r × O_r)の項ごとの両チームの差。新しい計算ではなく S の差の内訳
+// F-014 Task-7: 根拠の 2 層(基準 31・32)。レーン(個人)の層は上の表、マクロ(チーム)の層はマクロの点数 M(F-005: 連携の厚み・司令塔・継続性の素点の平均)と各軸の理由
+// 3 行の勝率(レーン相対・マクロ相対・掛け合わせ)は勝率表のファイルの値をそのまま出す。ここでは計算しない
 import { ROSTER, type Role } from '../../data/roster.ts';
 import teamConfig from '../../team/config.json' with { type: 'json' };
 import type { TeamId, Tier } from '../../sim/types.ts';
@@ -26,6 +28,14 @@ export interface PlayerLike {
 export interface RatingsLike {
   players: PlayerLike[];
 }
+/** F-010 のチームの軸(team-evaluation.json の tierTeams[].axes[]) */
+export interface TeamAxisLike {
+  key: string;
+  label: string;
+  /** 素点(相対評価の前の値)。無ければ null */
+  raw?: number | null;
+  reason?: string;
+}
 export interface TierTeamLike {
   team: string;
   tier: string;
@@ -33,6 +43,8 @@ export interface TierTeamLike {
   coachC: number | null;
   coachId: string | null;
   coaching?: { coach?: { name?: string } | null } | null;
+  /** 基準32: 連携の厚み・司令塔・継続性の素点と理由をここから読む */
+  axes?: TeamAxisLike[];
 }
 export interface TeamEvalLike {
   tierTeams: TierTeamLike[];
@@ -45,6 +57,12 @@ export interface StoryInput {
   /** 両チームの勝率(%) */
   pA: number;
   pB: number;
+  /** 基準31: 勝率表のファイルの試合ごとのレーン相対・マクロ相対の勝率(%。A から見た値。F-005 基準 3b)。無い勝率表のファイルでは undefined */
+  pLane?: number;
+  pMacro?: number;
+  /** 基準32: 勝率表のファイルの階級チームごとのマクロの点数 M(F-005 基準 3b)。あれば 3 軸の素点の平均より優先する */
+  mA?: number | null;
+  mB?: number | null;
 }
 
 export interface SideScore {
@@ -81,6 +99,23 @@ export interface EvidenceView {
   name: string;
   items: EvidenceItem[];
 }
+/** 基準32: マクロ(チーム)の層の 1 軸(両チームの素点と、チームの評価のファイルの理由) */
+export interface MacroPart {
+  key: string;
+  label: string;
+  /** 素点(小数第二位)。無ければ「—」 */
+  a: string;
+  b: string;
+  /** チームの評価のファイルの各軸の理由。無ければ空 */
+  reasonA: string;
+  reasonB: string;
+}
+/** 基準31・32: 根拠の 2 層。勝率は 0.1% 単位の文字列(勝率表のファイルに無ければ null)。M は小数第二位(計算できなければ「—」) */
+export interface StoryLayers {
+  lane: { p: string | null };
+  macro: { p: string | null; M: { a: string; b: string }; parts: MacroPart[] };
+  combined: { p: string };
+}
 export type StoryView =
   | {
       ok: true;
@@ -89,6 +124,7 @@ export type StoryView =
       favoredP: string;
       even: boolean;
       headline: string;
+      layers: StoryLayers;
       rows: StoryRow[];
       evidence: EvidenceView[];
       included: string[];
@@ -130,7 +166,44 @@ export function sizeOf(contribution: number): '大' | '中' | '小' {
 }
 
 const f1 = (x: number) => x.toFixed(1);
+const f2 = (x: number) => x.toFixed(2);
 const STRENGTH_ORDER: Record<string, number> = { 強: 0, 中: 1, 弱: 2 };
+const finite = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
+
+/** 用語「マクロの点数 M」の 3 軸(F-005): チームの評価のファイルの軸の key と名前(ファイルに名前があればそれを使う) */
+export const MACRO_AXES: { key: string; label: string }[] = [
+  { key: 'synergy', label: '連携の厚み' },
+  { key: 'shotcalling', label: '司令塔' },
+  { key: 'continuity', label: '継続性' },
+];
+const rawOf = (t: TierTeamLike, key: string): number | null => {
+  const r = t.axes?.find((x) => x.key === key)?.raw;
+  return finite(r) ? r : null;
+};
+/** 用語「マクロの点数 M」: 3 軸の素点の平均。素点の無い軸は除いて平均し、すべて無ければ null(F-005 の定義と同じ) */
+export function macroScore(t: TierTeamLike): number | null {
+  const xs = MACRO_AXES.map((ax) => rawOf(t, ax.key)).filter((x): x is number => x !== null);
+  return xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : null;
+}
+
+/** 基準31・32: 根拠の 2 層。3 行の勝率は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 3 軸の素点の平均 */
+function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike): StoryLayers {
+  const pct = (p: number | undefined) => (finite(p) ? f1(p) : null);
+  const M = (t: TierTeamLike, given: number | null | undefined) => {
+    const m = finite(given) ? given : macroScore(t);
+    return m === null ? '—' : f2(m);
+  };
+  const parts: MacroPart[] = MACRO_AXES.map((ax) => {
+    const xa = A.axes?.find((x) => x.key === ax.key), xb = B.axes?.find((x) => x.key === ax.key);
+    const ra = rawOf(A, ax.key), rb = rawOf(B, ax.key);
+    return { key: ax.key, label: xa?.label ?? xb?.label ?? ax.label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
+  });
+  return {
+    lane: { p: pct(input.pLane) },
+    macro: { p: pct(input.pMacro), M: { a: M(A, input.mA), b: M(B, input.mB) }, parts },
+    combined: { p: f1(input.pA) },
+  };
+}
 
 const isHttps = (u: string | undefined): u is string => typeof u === 'string' && u.startsWith('https://');
 
@@ -245,5 +318,5 @@ export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknow
       evidence.push({ id: s.id, name: s.name, items: positiveEvidence(rs.players.find((p) => p.playerId === s.id)) });
     }
   }
-  return { ok: true, favored, favoredName, favoredP, even, headline, rows, evidence, included: INCLUDED, excluded: EXCLUDED };
+  return { ok: true, favored, favoredName, favoredP, even, headline, layers: layersOf(input, A, B), rows, evidence, included: INCLUDED, excluded: EXCLUDED };
 }

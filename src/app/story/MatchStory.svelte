@@ -1,5 +1,6 @@
 <script lang="ts">
   // F-014 Task-4: 試合の根拠の節(基準 20〜25)。日程の箱の行の直下に開く
+  // F-014 Task-7: 結論の直後に 3 行の勝率(基準31。勝率表のファイルに無ければ出さない)、内訳は「レーン(個人)」「マクロ(チーム)」の 2 層(基準32)
   import { matchStory, type StoryInput } from './story.ts';
   import { loadRatings, loadTeamEvaluation } from './data.ts';
 
@@ -12,6 +13,17 @@
     <p class="story-none">根拠を出せる材料がありません({story.reason})</p>
   {:else}
     <p class="headline">{story.headline}</p>
+    {#if story.layers.lane.p !== null && story.layers.macro.p !== null}
+      <div class="layers">
+        <p class="layers-cap">{input.a} の勝率の 2 層</p>
+        <ul>
+          <li>レーン(個人)の相対勝率 <b>{story.layers.lane.p}%</b></li>
+          <li>マクロ(チーム)の相対勝率 <b>{story.layers.macro.p}%</b></li>
+          <li>掛け合わせた試合の勝率 <b>{story.layers.combined.p}%</b></li>
+        </ul>
+      </div>
+    {/if}
+    <h4 class="layer-title">レーン(個人)</h4>
     <div class="scroll">
       <table class="breakdown">
         <thead>
@@ -48,6 +60,29 @@
         </div>
       {/each}
     </div>
+    <h4 class="layer-title">マクロ(チーム)</h4>
+    <div class="scroll">
+      <table class="breakdown macro">
+        <thead>
+          <tr><th>項目</th><th>{input.a}</th><th>{input.b}</th></tr>
+        </thead>
+        <tbody>
+          <tr class="m-total">
+            <th scope="row">マクロの点数 M</th>
+            <td><b>{story.layers.macro.M.a}</b></td>
+            <td><b>{story.layers.macro.M.b}</b></td>
+          </tr>
+          {#each story.layers.macro.parts as pt (pt.key)}
+            <tr>
+              <th scope="row">{pt.label}</th>
+              <td><b>{pt.a}</b>{#if pt.reasonA}<span class="reason">{pt.reasonA}</span>{/if}</td>
+              <td><b>{pt.b}</b>{#if pt.reasonB}<span class="reason">{pt.reasonB}</span>{/if}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">M は連携の厚み・司令塔・継続性の素点の平均。素点はチームの評価の相対評価の前の値</p>
     <div class="scope">
       <p class="scope-title">この予想に入っているもの</p>
       <ul>{#each story.included as t}<li>{t}</li>{/each}</ul>
@@ -61,6 +96,20 @@
   .story { margin: 0.5rem 0 0.4rem; padding: 0.7rem 0.8rem; border-left: 2px solid var(--gold-lo); background: rgba(0, 0, 0, 0.22); border-radius: 0 6px 6px 0; font-size: 0.88rem; }
   .headline { margin: 0 0 0.5rem; font-family: var(--serif-jp); font-size: 1rem; color: var(--ivory); }
   .story-none { margin: 0; color: var(--ivory-dim); }
+  /* 基準31: 結論の直後の 3 行 */
+  .layers { margin: 0 0 0.5rem; padding: 0.45rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(0, 0, 0, 0.16); }
+  .layers-cap { margin: 0 0 0.2rem; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--gold); }
+  .layers ul { margin: 0; padding-left: 1.1rem; }
+  .layers li { margin: 0.1rem 0; }
+  .layers b { color: var(--gold-hi); font-variant-numeric: tabular-nums; margin-left: 0.2rem; }
+  /* 基準32: 2 層の見出し。マクロの表は理由を折り返す */
+  .layer-title { margin: 0.6rem 0 0.3rem; font-family: var(--caps); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; color: var(--gold); }
+  .breakdown.macro { min-width: 0; }
+  .breakdown.macro td { white-space: normal; }
+  .breakdown.macro th[scope='row'] { white-space: nowrap; }
+  .m-total th, .m-total td { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  .reason { display: block; margin-top: 0.1rem; font-size: 0.74rem; color: var(--ivory-dim); }
+  .note { margin: 0.3rem 0 0; font-size: 0.74rem; color: var(--ivory-dim); }
   /* 基準11: 表は横に送れる枠の中。枠の幅は親に合わせ、親を広げない */
   .scroll { overflow-x: auto; max-width: 100%; min-width: 0; }
   .breakdown { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.84rem; }
