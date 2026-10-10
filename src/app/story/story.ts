@@ -2,8 +2,12 @@
 // 寄与は F-010 の戦力 S の式(S = 0.85 × Σ w_r × O_r + 0.15 × C。MASTERS は S = Σ w_r × O_r)の項ごとの両チームの差。新しい計算ではなく S の差の内訳
 // F-014 Task-7: 根拠の 2 層(基準 31〜33)。レーン(個人)の層は上の表、マクロ(チーム)の層はマクロの点数 M(F-005: 連携の厚み・司令塔の素点の平均)と各軸の理由、外部の見立て(E と記録)
 // 3 行の勝率(レーン相対・マクロ相対・掛け合わせ)と外部の見立てだけの勝率は勝率表のファイルの値をそのまま出す。ここでは計算しない
+// F-005 Task-3(基準12): 「仕上がり」の小節。両チームの仕上がりの項・τ・共同プレイ歴 c・メタの近さ m とその内訳・経過した試合日の数 d・気持ちの補正を、
+// 日程の箱の行が dynamics.ts の関数で作った値から固定の形で組み立てる。結論の一文の勝率はその試合日の値、3 行の掛け合わせは事前(d = 0)の値
 import { ROSTER, type Role } from '../../data/roster.ts';
 import teamConfig from '../../team/config.json' with { type: 'json' };
+import winrateConfig from '../../winrate/config.json' with { type: 'json' };
+import type { Maturation } from '../../winrate/dynamics.ts';
 import type { TeamId, Tier } from '../../sim/types.ts';
 import { TEAM_INFO, compareHref } from '../lib/index.ts';
 
@@ -64,6 +68,20 @@ export interface StoryInput {
   /** 基準32・33: 勝率表のファイルの両チームの M・E・件数(F-005 基準 3b) */
   teamA?: TeamLayer;
   teamB?: TeamLayer;
+  /** F-005 基準12: この試合日の仕上がり(日程の箱の行が作る)。無ければ小節を出さず、pA は事前の勝率とみなす */
+  maturation?: MatchMaturation;
+}
+/** F-005 基準9・12: 1 試合の仕上がり。pA・pB(StoryInput)はこの加算を加えた後の勝率、pPriorA は加える前の A の勝率(%) */
+export interface MatchMaturation {
+  dA: number;
+  dB: number;
+  termA: number;
+  termB: number;
+  /** 切り詰めた後の加算(A − B) */
+  shift: number;
+  pPriorA: number;
+  a: Maturation;
+  b: Maturation;
 }
 /** F-005 基準 3b の M の内訳(勝率表のファイルの teams[].macroParts[]) */
 export interface MacroPartRaw {
@@ -148,13 +166,45 @@ export interface ExternalSide {
   count: string;
   items: ExternalItem[];
 }
+/** F-005 基準12: 仕上がりの片側(文字列は表示の精度。d は整数、項と加算は小数第三位、τ・m は小数第二位、c は小数第一位) */
+export interface MaturationSide {
+  d: string;
+  term: string;
+  tau: string;
+  c: string;
+  /** 同じシーズンに同じチームだった組("甲 × 乙(S3 CC)") */
+  cPairs: string[];
+  m: string;
+  mPool: string;
+  /** 当たった選手とチャンピオン("甲: ランブル(段階A)、オラフ(段階B)") */
+  mPoolHits: string[];
+  /** "0.00(連敗 0)" */
+  mood: string;
+}
+export interface MaturationLayer {
+  a: MaturationSide;
+  b: MaturationSide;
+  /** 切り詰めた後の加算(A − B。符号つき小数第三位) */
+  shift: string;
+  /** 仕上がりを加えた、この試合日の A の勝率と、加える前の勝率(0.1% 単位) */
+  pDay: string;
+  pPrior: string;
+  confidence: '低';
+  /** 固定の形の要約(経過した試合日と、先に仕上がる側) */
+  summary: string;
+  /** 固定の文(気持ちの補正は 0、m は m_pool だけ、確度「低」と切り詰め) */
+  notes: string[];
+}
 /** 基準31〜33: 根拠の 2 層。勝率は 0.1% 単位の文字列(勝率表のファイルに無ければ null)。M は小数第二位(計算できなければ「—」) */
 export interface StoryLayers {
   lane: { p: string | null };
   macro: { p: string | null; pExt: string | null; M: { a: string; b: string }; parts: MacroPart[]; external: { a: ExternalSide; b: ExternalSide } };
+  /** 掛け合わせた試合の勝率(仕上がりを加える前の事前の値) */
   combined: { p: string };
   /** 価値責任者の要望: 結論の一文の直後に置くチームの層の一文(固定の形)。E・M が勝率表のファイルに無ければ null */
   teamSentence: string | null;
+  /** F-005 基準12: 仕上がりの小節。入力に仕上がりが無ければ null */
+  maturation: MaturationLayer | null;
 }
 export type StoryView =
   | {
@@ -187,12 +237,12 @@ export const EVEN = 0.1;
 export const INCLUDED = [
   '選手の 8 軸(ソロランクの基準・対面との差・LTK の経験・コール力と大会経験の出典つき根拠)',
   'コーチの評価(戦力の 15%。MASTERS には無い)',
+  'チームの仕上がり(共同プレイ歴・メタの近さで決まる速さ。試合日が進むほど効く。確度 低)',
 ];
 export const EXCLUDED = [
-  { text: 'チームの仕上がり(共同プレイ歴・メタの近さ)', feature: '今後の更新で入る予定(F-005 Task-3)' },
   { text: 'スクリムと本番の結果', feature: '今後の更新で入る予定(F-004・F-005 Task-2)' },
   { text: 'ドラフト(NEXT のプロテクトで CORE が使えなくなるピック)', feature: '今後の更新で入る予定(F-006・F-005 Task-3)' },
-  { text: '連敗の気持ちの補正', feature: '今後の更新で入る予定(F-005 Task-3)' },
+  { text: '連敗の気持ちの補正', feature: '今後の更新で入る予定(F-004 の結果の入力の後。いまは 0)' },
 ];
 
 /** F-010 の選手の総合 O(playerOverall と同じ式: 5 + 8 軸の表示の点数の 5 からの差の平均) */
@@ -296,6 +346,54 @@ function teamSentenceOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, par
   return team + external;
 }
 
+const f3 = (x: number) => x.toFixed(3);
+const signed3 = (x: number) => (x < 0 ? '' : '+') + f3(x);
+const CAP = (winrateConfig as { unvalidatedCap: number }).unvalidatedCap;
+
+/** F-005 基準12: 仕上がりの片側。連敗 k は本番の結果が入るまで 0 */
+function maturationSideOf(d: number, term: number, m: Maturation): MaturationSide {
+  const byPlayer = new Map<string, string[]>();
+  for (const h of m.mPoolHits) byPlayer.set(h.name, [...(byPlayer.get(h.name) ?? []), `${h.champion}(段階${h.tier})`]);
+  return {
+    d: String(d),
+    term: f3(term),
+    tau: f2(m.tau),
+    c: f1(m.c),
+    cPairs: m.cPairs.map((p) => `${p.a} × ${p.b}(${p.shared.join('・')})`),
+    m: f2(m.m),
+    mPool: f2(m.mPool),
+    mPoolHits: [...byPlayer].map(([name, champs]) => `${name}: ${champs.join('、')}`),
+    mood: '0.00(連敗 0)',
+  };
+}
+
+/** F-005 基準12: 仕上がりの小節(固定の形)。summary は経過した試合日と、先に仕上がる側(τ の小さい側) */
+function maturationLayerOf(input: StoryInput): MaturationLayer | null {
+  const x = input.maturation;
+  if (!x) return null;
+  const nameA = TEAM_INFO[input.a].name, nameB = TEAM_INFO[input.b].name;
+  const tauA = x.a.tau, tauB = x.b.tau;
+  const faster = tauA === tauB ? `仕上がりの速さは同じ(τ ${f2(tauA)} 試合日)` : `先に仕上がるのは ${tauA < tauB ? nameA : nameB}(τ ${f2(Math.min(tauA, tauB))} 試合日 vs ${f2(Math.max(tauA, tauB))} 試合日。小さいほど早い)`;
+  const shift = Math.round(x.shift * 1000) / 1000;
+  const summary = x.dA === 0 && x.dB === 0
+    ? `初日はどちらも仕上がり前(項は 0)。${faster}`
+    : `ここまで ${nameA} は ${x.dA} 試合日、${nameB} は ${x.dB} 試合日を戦った。仕上がりの差は ${signed3(shift)}(${shift === 0 ? 'どちらにも寄らない' : `${shift > 0 ? nameA : nameB} に有利`})。${faster}`;
+  return {
+    a: maturationSideOf(x.dA, x.termA, x.a),
+    b: maturationSideOf(x.dB, x.termB, x.b),
+    shift: signed3(shift),
+    pDay: f1(input.pA),
+    pPrior: f1(x.pPriorA),
+    confidence: '低',
+    summary,
+    notes: [
+      'メタの近さ m は、いまはチャンピオンの近さ m_pool だけ(戦い方の近さは、メタの一覧に主流の向きが入るまで使わない)',
+      '気持ちの補正(連敗で下がる分)は、本番の結果が入るまで 0(連敗 0)',
+      `確度は「低」。S1〜S3 での当てはまりの確認が済むまで、仕上がりの寄与は ±${CAP.toFixed(2)} に切り詰める`,
+    ],
+  };
+}
+
 /** 基準31〜33: 根拠の 2 層。3 行の勝率と p_ext は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 2 軸の素点の平均 */
 function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: unknown): StoryLayers {
   const pct = (p: number | undefined) => (finite(p) ? f1(p) : null);
@@ -323,8 +421,10 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
       parts,
       external: { a: ext(input.a, input.teamA), b: ext(input.b, input.teamB) },
     },
-    combined: { p: f1(input.pA) },
+    // 掛け合わせの行は事前(d = 0)の勝率。仕上がりがあれば pA はその試合日の値なので、加える前の値を出す
+    combined: { p: f1(input.maturation?.pPriorA ?? input.pA) },
     teamSentence: teamSentenceOf(input, A, B, parts),
+    maturation: maturationLayerOf(input),
   };
 }
 

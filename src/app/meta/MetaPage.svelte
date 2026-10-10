@@ -4,7 +4,8 @@
   import { winRateMetaView } from './winrate.ts';
 
   const v = metaPageView(loadMetaGuide());
-  const w = winRateMetaView();
+  // F-005 Task-3 で勝率の計算がメタの近さ(チャンピオンの近さ m_pool)を使うようになった
+  const w = winRateMetaView({ winRateImplemented: true });
   const ROLE_LABEL: Record<string, string> = { TOP: 'TOP', JG: 'JG', MID: 'MID', ADC: 'ADC', SUP: 'SUP' };
   const markClass = (m: string) => (m === '出典' ? 'ok' : m === '推定' ? 'est' : 'unv');
 

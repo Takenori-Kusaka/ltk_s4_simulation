@@ -1,6 +1,9 @@
 // F-013 Task-1: 勝率とシミュレーションの結果のページの論理(基準 1〜6・9)。計算は足さず、F-005 の勝率表と F-001 の simulate の出力を丸めて表にする
+// F-005 Task-3(基準9): 模擬には試合日ごとの勝率表(Regular Stage の日・MASTERS CUP のカップ)と、Playoffs の初日までの仕上がりを加えた表を渡す
 import type { WinrateOutput } from '../../winrate/core.ts';
-import { simulate, TEAMS, TIERS, type SimOutput, type TeamId, type Tier } from '../../sim/index.ts';
+import { dayWinrate, percentPair, PLAYOFFS_DATE } from '../../winrate/dynamics.ts';
+import { MASTERS_CUPS, REGULAR_DAYS } from '../../sim/schedule.ts';
+import { simulate, TEAMS, TIERS, type SimOutput, type TeamId, type Tier, type WinTable } from '../../sim/index.ts';
 import { TEAM_INFO } from '../lib/index.ts';
 
 /** 固定の種と試行の数(仕様の用語) */
@@ -92,9 +95,48 @@ export function tierTables(file: WinratesFile): TierTableView[] {
   });
 }
 
-/** 基準2: F-001 の simulate を固定の種・試行の数で実行する(結果の入力が無い間は results を渡さない) */
+const stageTables = (file: WinratesFile) => file.stageWinTables ?? { regular: file.winTable, masters: file.winTable, playoffs: file.winTable };
+/** 表の a>b の事前の勝率(片方向だけあれば 1 − 逆) */
+const priorOf = (t: WinTable, tier: Tier, a: TeamId, b: TeamId): number => {
+  const direct = t[tier]?.[`${a}>${b}`];
+  return direct !== undefined ? direct : 1 - (t[tier]?.[`${b}>${a}`] ?? 0.5);
+};
+/** その日(date)の勝率表: tiers の階級はステージの表の各組にその日の仕上がりの項の差を加え(0.1% 単位)、ほかの階級はステージの表のまま */
+function dayTable(file: WinratesFile, base: WinTable, date: string, tiers: readonly Tier[]): WinTable {
+  const t = {} as WinTable;
+  for (const tier of TIERS) {
+    t[tier] = {};
+    for (const a of TEAMS) {
+      for (const b of TEAMS) {
+        if (!(a < b)) continue;
+        const prior = priorOf(base, tier, a, b);
+        const w = tiers.includes(tier) ? dayWinrate(file.teams, tier, a, b, prior, date) : null;
+        t[tier][`${a}>${b}`] = w && w.p !== prior ? percentPair(w.p)[0] / 100 : prior;
+      }
+    }
+  }
+  return t;
+}
+
+/** F-005 基準9: 試合日ごとの勝率表。Regular Stage は日ごと(NEXT・CORE)、MASTERS CUP はカップごと(MASTERS)。仕上がりの無い勝率表ではステージの表と同じ */
+export function dayWinTables(file: WinratesFile): { regular: Record<number, WinTable>; masters: Record<number, WinTable> } {
+  const stage = stageTables(file);
+  return {
+    regular: Object.fromEntries(REGULAR_DAYS.map((d) => [d.day, dayTable(file, stage.regular, d.date, ['NEXT', 'CORE'])])),
+    masters: Object.fromEntries(MASTERS_CUPS.map((c) => [c.cup, dayTable(file, stage.masters, c.date, ['MASTERS'])])),
+  };
+}
+
+/** F-005 基準9: Playoffs の勝率表。初日(11/21)までに戦った試合日の数で仕上がりを加える */
+export function playoffWinTable(file: WinratesFile): WinTable {
+  return dayTable(file, stageTables(file).playoffs, PLAYOFFS_DATE, TIERS);
+}
+
+/** 基準2: F-001 の simulate を固定の種・試行の数で実行する(結果の入力が無い間は results を渡さない)。試合日ごとの勝率表(F-005 Task-3)を渡す */
 export function runSimulation(file: WinratesFile): SimOutput {
-  return simulate({ winTable: file.winTable, stageWinTables: file.stageWinTables, seed: SIM_SEED, trials: SIM_TRIALS });
+  return simulate({
+    winTable: file.winTable, stageWinTables: { ...stageTables(file), playoffs: playoffWinTable(file) }, dayWinTables: dayWinTables(file), seed: SIM_SEED, trials: SIM_TRIALS,
+  });
 }
 
 /** 基準2・3・9: シミュレーションの出力を表の行にする(優勝確率の高い順) */
