@@ -130,7 +130,7 @@
             <div class="stat main">
               <span class="k">予想順位</span>
               <span class="v">{outlook.rank}<small>位</small></span>
-              <span class="n">期待 pt {outlook.total}</span>
+              <span class="n">予想 pt(RS+MASTERS CUP) {outlook.total}</span>
             </div>
             {#each outlook.seeds as s, i}
               <div class="stat">

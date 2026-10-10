@@ -28,7 +28,7 @@
     <p class="sub" role="alert">{notice}</p>
   {:else if file && sim}
     <p class="sub">{stageNotice(file)} · 10,000 回のシミュレーションから</p>
-    <p class="meta">種 {sim.seed} · 試行 {sim.trials.toLocaleString('ja-JP')} 回 · 勝率表の計算日時 {when(sim.computedAt)}</p>
+    <p class="meta">乱数の種 {sim.seed} · 試行 {sim.trials.toLocaleString('ja-JP')} 回 · 勝率表の計算日時 {when(sim.computedAt)}</p>
   {/if}
   <p class="hero-links"><a class="chip" href="#/">四つの王家へ戻る ›</a></p>
 </section>
@@ -51,7 +51,7 @@
   </section>
 
   <div class="forecast">
-    <StandingsBoard view={table} sub="全ステージ · 予想" />
+    <StandingsBoard view={table} sub="SEASON FORECAST · 全日程の予想" />
   </div>
 
   <section class="days">

@@ -25,12 +25,12 @@
           <div class="sides">
             <div class="side blue" class:hl={highlight === r.blue.team} style={`--team:${r.blue.color}`}>
               <span class="emb"><Emblem petals={r.blue.petals} color={r.blue.color} /></span>
-              <span class="label">{r.blue.team} {r.tier}</span>
+              <span class="label">{r.blue.team} {r.tier}<small class="full">{r.blue.name}</small></span>
               <span class="pct">{r.blue.p}<small>%</small></span>
             </div>
             <div class="side red" class:hl={highlight === r.red.team} style={`--team:${r.red.color}`}>
               <span class="pct">{r.red.p}<small>%</small></span>
-              <span class="label">{r.red.team} {r.tier}</span>
+              <span class="label">{r.red.team} {r.tier}<small class="full">{r.red.name}</small></span>
               <span class="emb"><Emblem petals={r.red.petals} color={r.red.color} /></span>
             </div>
           </div>
@@ -76,7 +76,8 @@
   .side.hl { background: color-mix(in srgb, var(--team) 22%, transparent); outline: 1px solid var(--team); }
   .emb { width: 1.5rem; height: 1.5rem; flex: none; display: inline-flex; }
   .emb :global(svg) { width: 100%; height: 100%; }
-  .label { font-family: var(--caps); font-size: 0.82rem; letter-spacing: 0.06em; white-space: nowrap; }
+  .label { font-family: var(--caps); font-size: 0.82rem; letter-spacing: 0.06em; white-space: nowrap; display: inline-flex; flex-direction: column; line-height: 1.1; }
+  .label .full { font-family: var(--serif-latin); font-size: 0.62rem; letter-spacing: 0.04em; color: var(--ivory-dim); text-transform: uppercase; }
   .pct { font-family: var(--serif-latin); font-size: 1.25rem; font-weight: 700; color: var(--ivory); white-space: nowrap; }
   .pct small { font-size: 0.7rem; margin-left: 0.05rem; color: var(--ivory-dim); }
   .bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 0.3rem; background: var(--velvet-3); }

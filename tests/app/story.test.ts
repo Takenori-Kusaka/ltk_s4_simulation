@@ -106,7 +106,7 @@ test('基準20: 結論の一文は有利なチームと勝率、寄与の上位 
   assert.ok(s.ok);
   assert.equal(s.favored, 'CC');
   assert.equal(s.even, false);
-  assert.match(s.headline, /^Camellia Crown が有利\(63\.9%\)。いちばんの差は /);
+  assert.match(s.headline, /^Camellia Crown が有利\(63\.9%\)。いちばん効いているのは /);
   assert.match(s.headline, new RegExp(`${s.rows[0].label}: ${s.rows[0].left.name} ${s.rows[0].left.score} vs ${s.rows[0].right.name} ${s.rows[0].right.score}`));
   assert.match(s.headline, /、次に /);
   assert.equal(EVEN, 0.1);
@@ -114,7 +114,8 @@ test('基準20: 結論の一文は有利なチームと勝率、寄与の上位 
   const e = matchStory({ ...input, pA: 50.6, pB: 49.4 }, ratings, close);
   assert.ok(e.ok);
   assert.equal(e.even, true);
-  assert.match(e.headline, /^ほぼ互角/);
+  assert.match(e.headline, /^ほぼ互角\(Camellia Crown 50\.6% vs Dahlia Diadem 49\.4%\)。差が出るとすれば /);
+  assert.ok(!e.headline.includes('−'));
 });
 
 test('基準22: 上位 2 つの項の両側の人について、出典つきの肯定の根拠を強さの順に最大 2 件。無ければ空', () => {
@@ -131,6 +132,18 @@ test('基準22: 上位 2 つの項の両側の人について、出典つきの�
   assert.ok(ids.includes('CC-CORE-JG'));
   assert.ok(s.evidence.find((e) => e.id === 'DD-CORE-JG')!.items.length === 0);
   assert.equal(positiveEvidence(undefined).length, 0);
+  // 基準28: 大会経験の根拠(text + url)も出し、印を持つ
+  const withTournament: PlayerLike = {
+    ...players[1],
+    axes: players[1].axes.map((ax) => (ax.key === 'tournament' ? { ...ax, evidence: { evidence: [{ text: 'LTK S3 CC CORE JG 2-7', source: 'docs/research/format-history.md 節6', url: 'https://example.com/s3', marks: ['AI 収集'] }, { text: '出典なし', source: 'docs/x.md' }] } } : ax)),
+  };
+  const t = positiveEvidence(withTournament);
+  assert.equal(t.length, 3);
+  assert.deepEqual(t.map((i) => i.kind), ['他ゲームの IGL', '選手としてのコール', '大会経験']);
+  assert.equal(t[2].text, 'LTK S3 CC CORE JG 2-7');
+  assert.equal(t[2].source, 'https://example.com/s3');
+  assert.deepEqual(t[2].marks, ['AI 収集']);
+  assert.deepEqual(items[0].marks, []);
 });
 
 test('基準23・24: 固定の文(入っているもの・入っていないもの)があり、β・対数オッズ・標準偏差の語が無い', () => {
@@ -138,7 +151,8 @@ test('基準23・24: 固定の文(入っているもの・入っていないも�
   assert.ok(s.ok);
   assert.deepEqual(s.included, INCLUDED);
   assert.deepEqual(s.excluded, EXCLUDED);
-  assert.ok(INCLUDED.some((t) => /コーチ/.test(t)));
+  assert.ok(INCLUDED.some((t) => /コーチ/.test(t) && /15%/.test(t) && !/0\.15/.test(t)));
+  assert.ok(EXCLUDED.every((x) => /今後の更新で入る予定/.test(x.feature)));
   assert.ok(EXCLUDED.some((x) => /チームの仕上がり/.test(x.text) && /F-005/.test(x.feature)));
   assert.ok(EXCLUDED.some((x) => /結果/.test(x.text) && /F-004/.test(x.feature)));
   const text = JSON.stringify(s);
@@ -147,6 +161,9 @@ test('基準23・24: 固定の文(入っているもの・入っていないも�
   for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!svelte.includes(w), `MatchStory に ${w}`);
   assert.match(svelte, /出典つきの根拠は見当たらない/);
   assert.match(svelte, /根拠を出せる材料がありません/);
+  assert.match(svelte, /<th>影響<\/th>/);
+  assert.ok(!/<th>効き<\/th>/.test(svelte));
+  assert.match(svelte, /未確認\(/);
 });
 
 test('基準25: 評価のファイルやチームの評価が無い、または S を計算できないときは理由つきで表を出さない', () => {

@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { computePriorWinrates, type TierTeamS } from '../../src/winrate/core.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../../src/sim/index.ts';
 import { runSimulation, type WinratesFile } from '../../src/app/sim/view.ts';
-import { allDays, dateLabel, dayBox, nearestDay, standings, jstDate, predictedResult, predictedWinner } from '../../src/app/schedule/view.ts';
+import { allDays, dateLabel, dayBox, nearestDay, standings, jstDate, predictedResult, predictedWinner, forecastHeading, STANDINGS_NOTE } from '../../src/app/schedule/view.ts';
 import { REGULAR_DAYS } from '../../src/sim/schedule.ts';
 
 const S: Record<Tier, Record<TeamId, number | null>> = {
@@ -96,6 +96,10 @@ test('基準4・5・13: 順位表は予想の結果(整数の勝ち数・負け�
   const sim = runSimulation(file);
   const t = standings(file, sim);
   assert.equal(t.label, '予想(開幕前)');
+  // 基準26(再判定 3): 順位表の直下の注記
+  assert.equal(t.note, STANDINGS_NOTE);
+  assert.match(t.note, /勝率の高い側が勝ったとした予想の結果/);
+  assert.match(t.note, /Playoffs/);
   assert.equal(t.rows.length, 4);
   assert.deepEqual(t.rows.map((r) => r.no), [1, 2, 3, 4]);
   assert.equal(t.rows[0].first, true);
@@ -120,6 +124,15 @@ test('基準4・5・13: 順位表は予想の結果(整数の勝ち数・負け�
   }
   const withResults = standings({ ...file, results: { regular: [] } }, sim);
   assert.notEqual(withResults.label, '予想(開幕前)');
+});
+
+test('基準30: 最後の日程の日より後は「最後の試合日の予想」と Playoffs の案内', () => {
+  assert.deepEqual(forecastHeading(at('2026-10-01T00:00:00+09:00')), { title: '次の試合日の予想', note: null, past: false });
+  assert.equal(forecastHeading(at('2026-11-09T23:00:00+09:00')).past, false);
+  const h = forecastHeading(at('2026-11-10T00:00:00+09:00'));
+  assert.equal(h.past, true);
+  assert.equal(h.title, '最後の試合日の予想');
+  assert.match(h.note ?? '', /11\/21/);
 });
 
 test('用語「予想の結果」: 勝率の高い側が勝ち、各階級の勝ち数の合計は 12。1 勝 1pt と同日の両勝ちの +1pt、MASTERS CUP は 3/2/1/0pt で合計 6pt × 3 回', () => {
