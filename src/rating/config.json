@@ -5,7 +5,7 @@
     "minMinutes": 10,
     "halfLifeDays": 45,
     "k": 8,
-    "perfScale": 1.5,
+    "perfScale": 0.5, "roleSwitchPenalty": 0.5, "exProFloor": { "default": 8, "LJL-starter": 10, "overseas-major": 10 },
     "zClip": 3,
     "confidence": {
       "high": 15,
@@ -25,7 +25,7 @@
       "kindWeights": {
         "player": 1,
         "coach": 1,
-        "other-game": 1,
+        "other-game": 0.5,
         "other": 0,
         "owner-confirmation": 1
       },
@@ -60,7 +60,7 @@
       },
       "proMax": 2,
       "otherPer": 0.5,
-      "otherMax": 1
+      "otherMax": 1, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }
     }
   },
   "form": {

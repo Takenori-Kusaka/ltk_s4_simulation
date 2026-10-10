@@ -34,6 +34,11 @@ export function rankAnchor(r: RankEntry | null | undefined): number | null {
 
 /** 元プロのランクの基準の下限(基準29): Challenger 0 LP の基準 */
 export const EX_PRO_FLOOR = 8;
+/** 元プロの下限を経歴の水準で決める(基準29 の改訂、2026-10-10): 設定の exProFloor[水準]、無ければ default、無ければ従来の 8.0 */
+export function exProFloorOf(level: string): number {
+  const m = loadEngineConfig().exProFloor;
+  return m?.[level] ?? m?.default ?? EX_PRO_FLOOR;
+}
 
 /** ランクの表記(最高ランクの説明に使う): Challenger 1883LP、Emerald II 45LP */
 const rankText = (r: RankEntry) => [r.tier, r.division, `${r.lp}LP`].filter(Boolean).join(' ');
@@ -69,8 +74,8 @@ export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' |
     choice = { anchor: a, anchorSource: source, soloMissing };
     if (source !== 'ソロランク') choice.anchorNote = `${rankText(r!)}${r!.source ? `。出典: ${r!.source}` : ''}`;
   }
-  if (input.exPro && choice.anchor < EX_PRO_FLOOR) {
-    choice = { ...choice, anchor: EX_PRO_FLOOR, anchorSource: '元プロの下限', anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}` };
+  if (input.exPro && choice.anchor < exProFloorOf(input.exPro.level)) {
+    choice = { ...choice, anchor: exProFloorOf(input.exPro.level), anchorSource: '元プロの下限', anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}` };
   }
   return choice;
 }

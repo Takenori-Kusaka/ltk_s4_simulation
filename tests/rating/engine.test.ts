@@ -1,7 +1,7 @@
 // F-009 Task-1: 受入基準 1〜9・23(評価の土台)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
+import { resolveAnchor,
   rankAnchor,
   recencyWeight,
   selectGames,
@@ -160,7 +160,8 @@ test('AC20 の材料: 使った試合数・ロールの割合・日付の範囲�
 
 // F-009 Task-11: 受入基準 6(改訂)・28〜30(経歴の反映: 最高ランクとソロランクの高い方、元プロの下限、出どころ)
 const twenty = () => Array.from({ length: 20 }, () => game({ ageDays: 1 }));
-const EX_PRO = { level: 'LJL-starter', source: 'https://example.test/wiki/A' };
+// 2026-10-10 基準29 の改訂: LJL のスタメン・海外の主要リーグの元プロは下限 10.0 になった。8.0 の下限の検査は LJL-sub で行う
+const EX_PRO = { level: 'LJL-sub', source: 'https://example.test/wiki/A' };
 
 test('AC28: 最高ランクがソロランクより高ければ基準は最高ランク由来。ソロランクはあるので確度は下げない', () => {
   const peakRank = { tier: 'MASTER', division: 'I', lp: 0, source: 'https://example.test/opgg/a' };
@@ -187,7 +188,7 @@ test('AC29: 元プロはランクの基準の下限が 8.0(Challenger 0 LP)。�
   assert.equal(r.anchor, 8);
   assert.equal(r.anchorSource, '元プロの下限');
   assert.equal(r.confidence, '高');
-  assert.match(r.anchorNote ?? '', /LJL-starter/);
+  assert.match(r.anchorNote ?? '', /LJL-sub/);
   assert.match(r.anchorNote ?? '', /https:\/\/example\.test\/wiki\/A/);
   assert.ok(Math.abs(r.base - (8 * 0.8 + 5 * 0.2)) < 1e-9, `${r.base}`);
 });
@@ -263,4 +264,15 @@ test('AC29 追補: 元プロの下限は、3 つの記録の最大が 8.0 未満
   assert.equal(r.anchorSource, '元プロの下限');
   const high = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank, seasonPeakRank: { tier: 'MASTER', division: '', lp: 300, source: 'https://example.test/c' }, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
   assert.equal(high.anchorSource, '最高ランク(今季)');
+});
+
+
+test('AC29(改訂 2026-10-10): 元プロの下限は経歴の水準で決める。LJL のスタメン・海外の主要リーグは 10.0、それ以外は 8.0', () => {
+  const gold = { tier: 'GOLD', division: 'IV', lp: 0 };
+  const at = (level: string) => resolveAnchor({ rank: gold, peakRank: null, seasonPeakRank: null, exPro: { level, source: 'https://example.test/wiki/A' }, medianAnchor: 5 });
+  assert.equal(at('LJL-starter').anchor, 10);
+  assert.equal(at('overseas-major').anchor, 10);
+  assert.equal(at('LJL-sub').anchor, 8);
+  assert.equal(at('LJL CS-starter').anchor, 8);
+  assert.equal(at('LJL-starter').anchorSource, '元プロの下限');
 });

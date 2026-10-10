@@ -144,7 +144,7 @@ test('常識: ソロランクの無い選手の出発点は、同じ階級の選
 // F-009 Task-11: 受入基準 29(元プロの下限)がピックプールを含む6軸で同じに効く
 test('AC29: 元プロの下限と「ソロランクと最高ランクの高い方」は、ピックプールを含む6軸で同じ基準と出どころになる', () => {
   const games = Array.from({ length: 12 }, () => g('MIDDLE', 'Ahri', true));
-  const ex = player('EX', 'MIDDLE', games, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: { level: 'LJL-starter', source: 'https://example.test/wiki/A' } });
+  const ex = player('EX', 'MIDDLE', games, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: { level: 'LJL-sub', source: 'https://example.test/wiki/A' } });
   const ctx = buildRatingContext([ex], [], cfg, NOW);
   for (const r of rateDataAxes(ex, ctx)) {
     assert.equal(r.anchor, 8, r.key);

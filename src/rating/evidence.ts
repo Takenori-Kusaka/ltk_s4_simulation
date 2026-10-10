@@ -61,6 +61,10 @@ export interface TournamentConfig {
   proMax: number;
   otherPer: number;
   otherMax: number;
+  /** 今のロール以外での LTK の出場の重み(基準12 の改訂。初期値 0.5。省略時 1) */
+  roleOtherWeight?: number;
+  /** 層ごとの LTK の出場の重み(初期値 MASTERS 1・CORE 1・NEXT 0.75。省略時 1) */
+  tierWeights?: Record<string, number>;
 }
 
 export interface EvidenceConfig { shotcalling: ShotcallingConfig; tournament: TournamentConfig }
@@ -168,11 +172,28 @@ function summarizeKinds(list: readonly ShotcallingEvidence[]): string {
 }
 
 /** 基準12: 大会経験。LTK の参加シーズン数を基準に、試合数(勝率は使わない)・コーチ・プロの経歴・他の大会を加える */
-export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig = loadEvidenceConfig().tournament): EvidenceAxisResult {
-  const seasons = new Set(record.ltk.map((x) => x.season)).size;
-  const seasonScore = cfg.seasonScores[Math.min(seasons, cfg.seasonScores.length - 1)];
+/** ロール転向の割引(基準31): LTK の出場シーズンのうち今のロール以外の割合 × penalty。出場歴が無い・ロールが不明なら 0 */
+export function roleSwitchDiscount(record: TournamentRecord, currentRole: string | undefined, penalty: number): { value: number; reason: string | null } {
+  const same = new Map<string, boolean>();
+  if (currentRole) for (const x of record.ltk) same.set(x.season, (same.get(x.season) ?? false) || x.role === currentRole);
+  if (!currentRole || same.size === 0 || penalty <= 0) return { value: 0, reason: null };
+  const other = [...same.values()].filter((s) => !s).length;
+  const value = (penalty * other) / same.size;
+  return { value, reason: value > 0 ? `ロール転向の割引 −${round(value)}(LTK の出場 ${same.size} シーズンのうち ${currentRole} は ${same.size - other})` : null };
+}
+
+export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig = loadEvidenceConfig().tournament, currentRole?: string): EvidenceAxisResult {
+  // 基準12 の改訂(2026-10-10): 今のロール以外での出場は roleOtherWeight、層ごとに tierWeights の重みで数える(シーズンの点は補間)
+  const weightOf = (x: { tier: string; role: string }) => (currentRole && x.role !== currentRole ? cfg.roleOtherWeight ?? 1 : 1) * (cfg.tierWeights?.[x.tier] ?? 1);
+  const seasonWeight = new Map<string, number>();
+  for (const x of record.ltk) seasonWeight.set(x.season, Math.max(seasonWeight.get(x.season) ?? 0, weightOf(x)));
+  const seasons = seasonWeight.size;
+  const effSeasons = Math.min([...seasonWeight.values()].reduce((s, w) => s + w, 0), cfg.seasonScores.length - 1);
+  const lo = Math.floor(effSeasons), hi = Math.min(lo + 1, cfg.seasonScores.length - 1);
+  const seasonScore = cfg.seasonScores[lo] + (cfg.seasonScores[hi] - cfg.seasonScores[lo]) * (effSeasons - lo);
   const games = record.ltk.reduce((s, x) => s + (x.wins ?? 0) + (x.losses ?? 0), 0);
-  const gamesBonus = Math.min(cfg.gamesMax, (cfg.gamesMax * games) / cfg.gamesFull);
+  const effGames = record.ltk.reduce((s, x) => s + ((x.wins ?? 0) + (x.losses ?? 0)) * weightOf(x), 0);
+  const gamesBonus = Math.min(cfg.gamesMax, (cfg.gamesMax * effGames) / cfg.gamesFull);
   const coachBonus = Math.min(cfg.coachMax, cfg.coachPerSeason * record.coach.length);
   const proRaw = record.pro.reduce((s, x) => s + (cfg.proPerYear[x.league] ?? 0) * x.years, 0);
   const proBonus = Math.min(cfg.proMax, proRaw);
@@ -181,7 +202,7 @@ export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig =
 
   const list = (xs: string[]) => (xs.length ? xs.join('、') : 'なし');
   const reason = [
-    `LTK の参加 ${seasons} シーズン(${list(record.ltk.map((x) => `${x.season} ${x.team} ${x.tier} ${x.role}`))})で ${seasonScore}`,
+    `LTK の参加 ${seasons} シーズン(${list(record.ltk.map((x) => `${x.season} ${x.team} ${x.tier} ${x.role}`))})で ${round(seasonScore)}${Math.abs(effSeasons - seasons) > 1e-9 ? `(今のロール以外・NEXT の出場を軽く数えて ${round(effSeasons)} シーズン相当)` : ''}`,
     `LTK の出場 ${games} 試合で +${round(gamesBonus)}(勝率は使わない)`,
     `コーチ ${record.coach.length} シーズンで +${round(coachBonus)}`,
     `プロの経歴(${list(record.pro.map((x) => `${x.league} ${x.team} ${x.years} 年`))})で +${round(proBonus)}`,

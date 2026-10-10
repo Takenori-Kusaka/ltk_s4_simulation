@@ -116,7 +116,7 @@ test('AC29/AC30: 軸の説明にランクの基準の出どころ(ソロラン�
     ...extra,
   });
   const players = [
-    base('EX', { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: { level: 'LJL-starter', source: 'https://example.test/wiki/A' } }),
+    base('EX', { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: { level: 'LJL-sub', source: 'https://example.test/wiki/A' } }),
     base('PK', { rank: { tier: 'EMERALD', division: 'II', lp: 40 }, peakRank: { tier: 'Master', division: '', lp: 120, source: 'https://example.test/opgg/pk' } }),
     base('SO', { rank: { tier: 'DIAMOND', division: 'I', lp: 50 } }),
     // 歴代は Challenger の LP 不明(0 LP = 8.00)、今季は Grandmaster 1060LP(9.41)→ 今季の記録を採る
@@ -128,7 +128,7 @@ test('AC29/AC30: 軸の説明にランクの基準の出どころ(ソロラン�
   ];
   const ratings = buildRatings({ players, matches: [] }, NOW);
   const reason = (id: string) => ratings.find((r) => r.playerId === id)!.axes.find((a) => a.key === 'ground')!.reason;
-  assert.match(reason('EX'), /ランクの基準 8\.00\(元プロの下限: LJL-starter。出典: https:\/\/example\.test\/wiki\/A\)/);
+  assert.match(reason('EX'), /ランクの基準 8\.00\(元プロの下限: LJL-sub。出典: https:\/\/example\.test\/wiki\/A\)/);
   assert.match(reason('PK'), /ランクの基準 8\.16\(最高ランク: Master 120LP。出典: https:\/\/example\.test\/opgg\/pk\)/);
   assert.match(reason('SO'), /ランクの基準 \d\.\d\d\(ソロランク\)/);
   assert.match(reason('SE'), /ランクの基準 9\.41\(最高ランク\(今季\): Grandmaster 1060LP。出典: https:\/\/example\.test\/opgg\/se\)/);
