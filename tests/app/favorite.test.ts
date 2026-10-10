@@ -114,10 +114,13 @@ test('基準14(a): チームの直近の試合日の箱は、その日の箱か�
   assert.equal(b.placeholders.length, 0);
   const m = teamDayBox(file, 'CC', { kind: 'masters', cup: 2, date: '2026-10-28' });
   assert.equal(m.title, 'MASTERS CUP 2');
-  assert.equal(m.boxes.length, 1);
+  // 再判定 2(Task-5): M3・M4 は予想の組み合わせの箱になり、そのチームが出る方が残る
+  assert.equal(m.boxes.length, 2);
   assert.equal(m.boxes[0].rows[0].blue.team, 'CC');
   assert.equal(m.boxes[0].rows[0].red.team, 'LR');
-  assert.deepEqual(m.placeholders.map((p) => p.label), ['M3', 'M4']);
+  assert.equal(m.placeholders.length, 0);
+  assert.match(m.boxes[1].label, /予想の組み合わせ/);
+  assert.ok(m.boxes[1].rows[0].blue.team === 'CC' || m.boxes[1].rows[0].red.team === 'CC');
 });
 
 test('基準14(c)・13: 見通しは F-001 の優勝確率・シード 1〜4 位の確率を丸めた値と、順位表での予想の順位', () => {

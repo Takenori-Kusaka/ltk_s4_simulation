@@ -51,7 +51,7 @@
   </section>
 
   <div class="forecast">
-    <StandingsBoard view={table} sub="全ステージ · 期待値" />
+    <StandingsBoard view={table} sub="全ステージ · 予想" />
   </div>
 
   <section class="days">
