@@ -269,7 +269,7 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
 // ---- F-005 Task-6(再判定 2): 外部の見立ての項 ----
 
 test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強さの重み 強 1.5・中 1.0・弱 0.5)を ±clip(3.0)に切り詰めた値と件数。読み込みは形の違う項目を理由つきで除く', () => {
-  assert.deepEqual(baseConfig.external, { targetSd: 0.2, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0 });
+  assert.deepEqual(baseConfig.external, { targetSd: 0.2, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0, selfTeam: 0.5 });
   const cfg = baseConfig.external;
   assert.deepEqual(externalOf(VIEWS, 'DD-NEXT', cfg), { E: 2.5, count: 2 });
   assert.deepEqual(externalOf(VIEWS, 'CC-NEXT', cfg), { E: -0.5, count: 1 });
@@ -278,6 +278,14 @@ test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強�
   assert.deepEqual(externalOf(VIEWS, 'CC-CORE', cfg), { E: -3.0, count: 3 });
   assert.deepEqual(externalOf(VIEWS, 'DD-CORE', cfg), { E: 1.0, count: 1 });
   assert.deepEqual(externalOf(VIEWS, 'DD-NEXT', { ...cfg, clip: 2.0 }), { E: 2.0, count: 2 });
+  // 話者の自チームについての項目(selfTeam: true)は × 0.5(評価設定 external.selfTeam)。1.5 + 1.5 × 0.5 − 1.0 = 1.25
+  const own = [view('IT-NEXT', '+', '強', 11), { ...view('IT-NEXT', '+', '強', 12), selfTeam: true }, { ...view('IT-NEXT', '-', '中', 13), selfTeam: false }];
+  assert.deepEqual(externalOf(own, 'IT-NEXT', cfg), { E: 1.25, count: 3 });
+  assert.deepEqual(externalOf(own, 'IT-NEXT', { ...cfg, selfTeam: 1.0 }), { E: 2.0, count: 3 });
+  const ownRead = readExternalViews({ kind: 'external-views', items: [{ ...VIEWS[0], selfTeam: true }, { ...VIEWS[1], selfTeam: 'yes' }] });
+  assert.deepEqual(ownRead.items, [{ ...VIEWS[0], selfTeam: true }]);
+  assert.equal(ownRead.errors.length, 1);
+  assert.match(ownRead.errors[0], /selfTeam/);
   // ファイルの中身の検証: kind と items、target(階級チーム)・direction・strength
   const ok = readExternalViews({ kind: 'external-views', items: VIEWS });
   assert.deepEqual(ok, { items: VIEWS, errors: [] });

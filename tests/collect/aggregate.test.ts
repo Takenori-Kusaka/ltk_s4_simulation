@@ -335,16 +335,17 @@ test('コマンド: groundsDir の external-views.json を勝率表の E に入�
     ({ target, direction, strength, speaker: '解説者', speakerKind: 'analyst', summary: '見立て', source: 'https://example.com/x', date: '2026-10-10' });
   writeFileSync(join(groundsDir, 'external-views.json'), JSON.stringify({
     kind: 'external-views',
-    items: [item('DD-CORE', '+', '強'), item('DD-CORE', '-', '弱'), item('ZZ-CORE', '+', '強')],
+    // 強 1.5 − 弱 0.5 + 自チームの中 1.0 × 0.5 = 1.5(3 件)。ZZ-CORE は階級チームではないため除く
+    items: [item('DD-CORE', '+', '強'), item('DD-CORE', '-', '弱'), { ...item('DD-CORE', '+', '中'), selfTeam: true }, item('ZZ-CORE', '+', '強')],
   }));
   lines.length = 0;
   await main(opts);
   const after = JSON.parse(readFileSync(join(publicDir, 'winrates.json'), 'utf8')) as WinratesFile;
   const dd = after.teams.find((t) => t.key === 'DD-CORE');
-  assert.equal(dd?.E, 1.0);
-  assert.equal(dd?.externalCount, 2);
+  assert.equal(dd?.E, 1.5);
+  assert.equal(dd?.externalCount, 3);
   assert.ok(after.teams.filter((t) => t.key !== 'DD-CORE').every((t) => t.E === 0 && t.externalCount === 0));
   assert.ok(after.betaExt.CORE > 0);
   assert.equal(after.betaExt.NEXT, 0);
-  assert.ok(lines.some((l) => /外部の見立て/.test(l) && /items\[2\]/.test(l) && /ZZ-CORE/.test(l)));
+  assert.ok(lines.some((l) => /外部の見立て/.test(l) && /items\[3\]/.test(l) && /ZZ-CORE/.test(l)));
 });

@@ -9,11 +9,12 @@ import type { WinTable } from '../sim/validate.ts';
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
 
-/** 外部の見立ての設定: 広がり、強さの重み(強・中・弱)、E の切り詰め(±clip) */
+/** 外部の見立ての設定: 広がり、強さの重み(強・中・弱)、E の切り詰め(±clip)、話者の自チームについての項目の係数 */
 export interface ExternalConfig {
   targetSd: number;
   strength: Record<string, number>;
   clip: number;
+  selfTeam: number;
 }
 
 export interface WinrateConfig {
@@ -39,6 +40,8 @@ export interface ExternalView {
   target: string;
   direction: '+' | '-';
   strength: (typeof EXTERNAL_STRENGTHS)[number];
+  /** 話者が自チームについて言った項目(重みを external.selfTeam 倍にする) */
+  selfTeam?: boolean;
   speaker?: string;
   speakerKind?: string;
   summary?: string;
@@ -199,6 +202,7 @@ export function readExternalViews(raw: unknown): { items: ExternalView[]; errors
       typeof v.target === 'string' && keys.has(v.target) ? null : `target ${JSON.stringify(v.target)}(階級チームではない)`,
       v.direction === '+' || v.direction === '-' ? null : `direction ${JSON.stringify(v.direction)}(+ か −)`,
       (EXTERNAL_STRENGTHS as readonly unknown[]).includes(v.strength) ? null : `strength ${JSON.stringify(v.strength)}(強・中・弱)`,
+      v.selfTeam === undefined || typeof v.selfTeam === 'boolean' ? null : `selfTeam ${JSON.stringify(v.selfTeam)}(true か false)`,
     ].filter((x): x is string => x !== null);
     if (bad.length) errors.push(`external-views.json items[${i}]: ${bad.join('、')}`);
     else items.push(v as unknown as ExternalView);
@@ -206,10 +210,10 @@ export function readExternalViews(raw: unknown): { items: ExternalView[]; errors
   return { items, errors };
 }
 
-/** 用語「外部の見立て E」: 階級チーム(key)ごとの Σ(向き × 強さの重み)を ±clip に切り詰めた値と件数 */
+/** 用語「外部の見立て E」: 階級チーム(key)ごとの Σ(向き × 強さの重み。話者の自チームについての項目は × selfTeam)を ±clip に切り詰めた値と件数 */
 export function externalOf(items: readonly ExternalView[], key: string, cfg: ExternalConfig): { E: number; count: number } {
   const mine = items.filter((v) => v.target === key);
-  const sum = mine.reduce((s, v) => s + (v.direction === '-' ? -1 : 1) * (cfg.strength[v.strength] ?? 0), 0);
+  const sum = mine.reduce((s, v) => s + (v.direction === '-' ? -1 : 1) * (cfg.strength[v.strength] ?? 0) * (v.selfTeam ? cfg.selfTeam : 1), 0);
   return { E: r2(Math.max(-cfg.clip, Math.min(cfg.clip, sum))), count: mine.length };
 }
 
