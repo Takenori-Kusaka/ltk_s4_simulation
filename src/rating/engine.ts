@@ -49,20 +49,25 @@ export interface AnchorChoice {
 
 /**
  * 基準6・9・28〜30: ランクの基準の決め方。
- * ソロランクと出典つきの最高ランクの高い方(同じならソロランク)。どちらも無ければ母集団の中央値。
+ * ソロランク・歴代の最高ランク・今季の最高ランク(出典つき)のうち、基準の値が最も高い記録を採る
+ * (LP 不明は 0 LP。同じ値ならソロランク → 歴代 → 今季の順)。どれも無ければ母集団の中央値。
  * 出典つきのプロの経歴があれば、下限を Challenger 0 LP(8.0)にする(元プロの下限)
  */
-export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' | 'exPro' | 'medianAnchor'>): AnchorChoice {
-  const solo = rankAnchor(input.rank);
-  const peak = rankAnchor(input.peakRank);
-  let choice: AnchorChoice;
-  if (peak !== null && (solo === null || peak > solo)) {
-    const r = input.peakRank!;
-    choice = { anchor: peak, anchorSource: '最高ランク', anchorNote: `${rankText(r)}${r.source ? `。出典: ${r.source}` : ''}`, soloMissing: solo === null };
-  } else if (solo !== null) {
-    choice = { anchor: solo, anchorSource: 'ソロランク', soloMissing: false };
-  } else {
-    choice = { anchor: input.medianAnchor ?? 5, anchorSource: '母集団の中央値', soloMissing: true };
+export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' | 'seasonPeakRank' | 'exPro' | 'medianAnchor'>): AnchorChoice {
+  const soloMissing = rankAnchor(input.rank) === null;
+  const records: [RankEntry | null | undefined, AnchorSource][] = [
+    [input.rank, 'ソロランク'],
+    [input.peakRank, '最高ランク'],
+    [input.seasonPeakRank, '最高ランク(今季)'],
+  ];
+  let choice: AnchorChoice = { anchor: input.medianAnchor ?? 5, anchorSource: '母集団の中央値', soloMissing };
+  let best: number | null = null;
+  for (const [r, source] of records) {
+    const a = rankAnchor(r);
+    if (a === null || (best !== null && a <= best)) continue;
+    best = a;
+    choice = { anchor: a, anchorSource: source, soloMissing };
+    if (source !== 'ソロランク') choice.anchorNote = `${rankText(r!)}${r!.source ? `。出典: ${r!.source}` : ''}`;
   }
   if (input.exPro && choice.anchor < EX_PRO_FLOOR) {
     choice = { ...choice, anchor: EX_PRO_FLOOR, anchorSource: '元プロの下限', anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}` };

@@ -27,8 +27,10 @@ export interface PlayerRatingInput {
   /** 大会のロール(teamPosition の値) */
   position: string;
   rank: RankEntry | null;
-  /** 出典つきの最高ランク(経歴の記録 career.json の peak.allTime。基準28) */
+  /** 出典つきの歴代の最高ランク(経歴の記録 career.json の peak.allTime。基準28) */
   peakRank?: RankEntry | null;
+  /** 出典つきの今季の最高ランク(経歴の記録の peak.thisSeason。ソロランク・歴代と合わせ、基準の値が最も高い記録を採る) */
+  seasonPeakRank?: RankEntry | null;
   /** 出典つきのプロの経歴(経歴の記録の lol.highestLevel。基準29) */
   exPro?: ExProCareer | null;
   games: GameRecord[];
@@ -91,6 +93,7 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     position: p.position,
     rank: p.rank,
     peakRank: p.peakRank ?? null,
+    seasonPeakRank: p.seasonPeakRank ?? null,
     exPro: p.exPro ?? null,
     games: p.games,
     ltkSeasons: new Set(p.tournament.ltk.map((x) => x.season)).size,
@@ -196,6 +199,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       position: POSITION[r.role],
       rank: solo ? { tier: solo.tier, division: solo.rank, lp: solo.leaguePoints } : null,
       peakRank: cr.players[r.id]?.peakRank ?? null,
+      seasonPeakRank: cr.players[r.id]?.seasonPeakRank ?? null,
       exPro: cr.players[r.id]?.exPro ?? null,
       games,
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],

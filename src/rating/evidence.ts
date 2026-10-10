@@ -262,9 +262,10 @@ export function readTournamentSnapshot(raw: unknown): { players: Record<string, 
 
 // --- 経歴の記録の読み込み(docs/research/grounds/normalized/career.json。基準28〜30) ---
 
-/** 評価の入力に使う経歴: 出典つきの最高ランクと、出典つきのプロの経歴 */
+/** 評価の入力に使う経歴: 出典つきの最高ランク(歴代・今季)と、出典つきのプロの経歴 */
 export interface CareerInput {
   peakRank: RankEntry | null;
+  seasonPeakRank: RankEntry | null;
   exPro: ExProCareer | null;
 }
 
@@ -274,21 +275,24 @@ export const PRO_LEVELS: readonly string[] = ['overseas-major', 'LJL-starter', '
 const DIVISION_TEXT: Record<string, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' };
 
 /**
- * 経歴の記録を読む。最高ランクは peak.allTime(tier・division・lp・出典)、プロの経歴は lol.highestLevel と
- * その出典(lol.statusSource。無ければ元の行 lol.basis)。出典の無いものは使わず、選手と項目をエラーに出す
+ * 経歴の記録を読む。最高ランクは peak.allTime(歴代)と peak.thisSeason(今季)の tier・division・lp・出典(LP 不明は 0 LP)、
+ * プロの経歴は lol.highestLevel とその出典(lol.statusSource。無ければ元の行 lol.basis)。出典の無いものは使わず、選手と項目をエラーに出す
  */
 export function readCareerSnapshot(raw: unknown): { players: Record<string, CareerInput>; errors: string[] } {
   const { players, errors } = readPlayers(raw, 'evidence-career-normalized');
   const out: Record<string, CareerInput> = {};
   for (const [id, p] of players) {
-    const entry: CareerInput = { peakRank: null, exPro: null };
-    const peak = isObj(p.peak) && isObj(p.peak.allTime) ? p.peak.allTime : null;
-    if (peak && str(peak.tier)) {
-      if (str(peak.source)) {
-        const division = DIVISION_TEXT[String(peak.division ?? '')] ?? (str(peak.division) ? String(peak.division).toUpperCase() : '');
-        entry.peakRank = { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source) };
-      } else errors.push(`${id}: 最高ランク(${String(peak.tier)})に出典が無い`);
-    }
+    const readPeak = (key: 'allTime' | 'thisSeason', label: string): RankEntry | null => {
+      const peak = isObj(p.peak) && isObj(p.peak[key]) ? p.peak[key] : null;
+      if (!peak || !str(peak.tier)) return null;
+      if (!str(peak.source)) {
+        errors.push(`${id}: ${label}(${String(peak.tier)})に出典が無い`);
+        return null;
+      }
+      const division = DIVISION_TEXT[String(peak.division ?? '')] ?? (str(peak.division) ? String(peak.division).toUpperCase() : '');
+      return { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source) };
+    };
+    const entry: CareerInput = { peakRank: readPeak('allTime', '最高ランク'), seasonPeakRank: readPeak('thisSeason', '最高ランク(今季)'), exPro: null };
     const lol = isObj(p.lol) ? p.lol : null;
     const level = lol && str(lol.highestLevel) ? String(lol.highestLevel) : 'none';
     if (lol && PRO_LEVELS.includes(level)) {
