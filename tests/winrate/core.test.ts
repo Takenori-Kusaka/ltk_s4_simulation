@@ -212,7 +212,7 @@ test('基準2・3b: 対数オッズはレーン項 β × (S_A − S_B) とマク
     const l = x.pLaneA / 100, g = x.pMacroA / 100;
     const combined = ((l * g) / (l * g + (1 - l) * (1 - g))) * 100;
     assert.ok(Math.abs(combined - x.pA) <= 0.1, `${x.tier} ${x.a} vs ${x.b}: 掛け合わせ ${combined} と勝率 ${x.pA}`);
-    assert.ok(Math.abs(x.logit - r3(x.laneLogit + x.macroLogit + x.externalLogit + x.stageTerm)) < 0.002, `${x.tier} ${x.a} vs ${x.b} の対数オッズの和`);
+    assert.ok(Math.abs(x.logit - r3(x.laneLogit + x.macroLogit + x.extLogit + x.stageTerm)) < 0.002, `${x.tier} ${x.a} vs ${x.b} の対数オッズの和`);
   }
   // 階級チームごとの M(小数第二位)と内訳
   const cc = out.teams.find((t) => t.team === 'CC' && t.tier === 'NEXT');
@@ -262,7 +262,7 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
   assert.equal(x.pA, 50.0);
   assert.equal(x.pLaneA, 50.0);
   assert.equal(x.pMacroA, 50.0);
-  assert.equal(x.pExternalA, 50.0);
+  assert.equal(x.pExtA, 50.0);
   assert.match(x.dataMissing ?? '', /データ不足/);
 });
 
@@ -280,8 +280,11 @@ test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強�
   assert.deepEqual(externalOf(VIEWS, 'DD-NEXT', { ...cfg, clip: 2.0 }), { E: 2.0, count: 2 });
   // 話者の自チームについての項目(selfTeam: true)は × 0.5(評価設定 external.selfTeam)。1.5 + 1.5 × 0.5 − 1.0 = 1.25
   const own = [view('IT-NEXT', '+', '強', 11), { ...view('IT-NEXT', '+', '強', 12), selfTeam: true }, { ...view('IT-NEXT', '-', '中', 13), selfTeam: false }];
-  assert.deepEqual(externalOf(own, 'IT-NEXT', cfg), { E: 1.25, count: 3 });
+  // E は小数第一位(0.05 の端数は 0 から遠い側へ: 1.25 → 1.3、−0.25 → −0.3)
+  assert.deepEqual(externalOf(own, 'IT-NEXT', cfg), { E: 1.3, count: 3 });
   assert.deepEqual(externalOf(own, 'IT-NEXT', { ...cfg, selfTeam: 1.0 }), { E: 2.0, count: 3 });
+  assert.deepEqual(externalOf([{ ...view('LR-CORE', '-', '弱', 14), selfTeam: true }], 'LR-CORE', cfg), { E: -0.3, count: 1 });
+  assert.deepEqual(externalOf([{ ...view('LR-CORE', '+', '弱', 15), selfTeam: true }], 'LR-CORE', cfg), { E: 0.3, count: 1 });
   const ownRead = readExternalViews({ kind: 'external-views', items: [{ ...VIEWS[0], selfTeam: true }, { ...VIEWS[1], selfTeam: 'yes' }] });
   assert.deepEqual(ownRead.items, [{ ...VIEWS[0], selfTeam: true }]);
   assert.equal(ownRead.errors.length, 1);
@@ -325,18 +328,18 @@ test('基準2・3: β_ext は 6 組の E の差の二乗平均平方根が exter
   assert.equal(m.betaExt, out.betaExt.NEXT);
   assert.ok(Math.abs(m.laneLogit - -0.341) < 0.002);
   assert.ok(Math.abs(m.macroLogit - -0.274) < 0.002);
-  assert.ok(Math.abs(m.externalLogit - -0.243) < 0.002, `外部の見立ての項 ${m.externalLogit}`);
+  assert.ok(Math.abs(m.extLogit - -0.243) < 0.002, `外部の見立ての項 ${m.extLogit}`);
   assert.ok(Math.abs(m.logit - -0.858) < 0.003, `対数オッズ ${m.logit}`);
   assert.equal(m.pLaneA, 41.5);
-  assert.equal(m.pExternalA, 44.0);
-  assert.equal(m.pExternalB, 56.0);
+  assert.equal(m.pExtA, 44.0);
+  assert.equal(m.pExtB, 56.0);
   assert.equal(m.pMacroA, 37.4);
   assert.equal(m.pMacroB, 62.6);
   assert.equal(m.pA, 29.8);
   assert.equal(m.pB, 70.2);
   const m2 = nextMatch(out, 1, 'IT', 'LR');
   assert.ok(m2);
-  assert.equal(m2.pExternalA, 44.0);
+  assert.equal(m2.pExtA, 44.0);
   assert.equal(m2.pMacroA, 37.4);
   assert.equal(m2.pA, 33.4);
   // CORE は S が同じ(β = 0)で M が無いため、外部の見立ての項だけが効く
@@ -344,17 +347,20 @@ test('基準2・3: β_ext は 6 組の E の差の二乗平均平方根が exter
   assert.ok(core);
   assert.equal(core.pLaneA, 50.0);
   assert.equal(core.macroLogit, 0);
-  assert.ok(Math.abs(core.externalLogit - -0.328) < 0.002);
-  assert.equal(core.pExternalA, 41.9);
+  assert.ok(Math.abs(core.extLogit - -0.328) < 0.002);
+  assert.equal(core.pExtA, 41.9);
   assert.equal(core.pMacroA, 41.9);
   assert.equal(core.pA, 41.9);
   // 全試合で、p_external の和は 100.0、掛け合わせ(p_lane × p_macro)が勝率に一致し、対数オッズは各項の和
   for (const x of out.matches) {
-    assert.equal(tenths(x.pExternalA) + tenths(x.pExternalB), 1000, `${x.tier} ${x.a} vs ${x.b} の p_external`);
+    assert.equal(tenths(x.pExtA) + tenths(x.pExtB), 1000, `${x.tier} ${x.a} vs ${x.b} の p_ext`);
+    // p_macro はマクロ項と外部の見立ての項の和の勝率、p_ext は外部の見立ての項だけの勝率(対数オッズは 0.001 単位、勝率は 0.1% 単位の丸め)
+    assert.ok(Math.abs(x.pMacroA - 100 / (1 + Math.exp(-(x.macroLogit + x.extLogit)))) <= 0.08, `${x.tier} ${x.a} vs ${x.b} の p_macro ${x.pMacroA}`);
+    assert.ok(Math.abs(x.pExtA - 100 / (1 + Math.exp(-x.extLogit))) <= 0.08, `${x.tier} ${x.a} vs ${x.b} の p_ext ${x.pExtA}`);
     const l = x.pLaneA / 100, g = x.pMacroA / 100;
     const combined = ((l * g) / (l * g + (1 - l) * (1 - g))) * 100;
     assert.ok(Math.abs(combined - x.pA) <= 0.1, `${x.tier} ${x.a} vs ${x.b}: 掛け合わせ ${combined} と勝率 ${x.pA}`);
-    assert.ok(Math.abs(x.logit - r3(x.laneLogit + x.macroLogit + x.externalLogit + x.stageTerm)) < 0.002, `${x.tier} ${x.a} vs ${x.b} の対数オッズの和`);
+    assert.ok(Math.abs(x.logit - r3(x.laneLogit + x.macroLogit + x.extLogit + x.stageTerm)) < 0.002, `${x.tier} ${x.a} vs ${x.b} の対数オッズの和`);
   }
   assert.ok(Math.abs(validateWinTable(out.winTable)('NEXT', 'CC', 'DD') - 0.298) < 1e-9);
   // external.targetSd を 0.4 にすると β_ext は 2 倍
@@ -370,7 +376,7 @@ test('基準3b: 外部の見立てのファイルが無い(項目を渡さない
   assert.ok(out.teams.every((t) => t.E === 0 && t.externalCount === 0));
   for (const tier of TIERS) assert.equal(out.betaExt[tier], 0);
   assert.match(out.betaExtBasis.NEXT, /β_ext = 0/);
-  assert.ok(out.matches.every((m) => m.pExternalA === 50.0 && m.pExternalB === 50.0 && m.externalLogit === 0));
+  assert.ok(out.matches.every((m) => m.pExtA === 50.0 && m.pExtB === 50.0 && m.extLogit === 0));
   const m = nextMatch(out, 1, 'CC', 'DD');
   assert.equal(m?.pMacroA, 43.2);
   assert.equal(m?.pA, 35.1);

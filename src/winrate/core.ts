@@ -82,7 +82,7 @@ export interface TeamRow {
   macroParts: MacroPart[];
   /** M を計算できない理由。計算できれば null */
   macroReason: string | null;
-  /** 外部の見立て E(Σ 向き × 強さの重みを ±clip に切り詰めた値)と件数。無ければ 0 */
+  /** 外部の見立て E(Σ 向き × 強さの重みを ±clip に切り詰めた値。小数第一位)と件数。無ければ 0 */
   E: number;
   externalCount: number;
 }
@@ -112,7 +112,7 @@ export interface MatchPrior {
   /** マクロ項 β_macro × (M_A − M_B)。M が無い側があれば 0 */
   macroLogit: number;
   /** 外部の見立ての項 β_ext × (E_A − E_B) */
-  externalLogit: number;
+  extLogit: number;
   /** 基準6: ステージ補正(A の値 − B の値) */
   stageTerm: number;
   /** A の勝率(%、0.1 単位)。p_lane と p_macro の掛け合わせにステージ補正を加えた値 */
@@ -123,9 +123,9 @@ export interface MatchPrior {
   pLaneB: number;
   pMacroA: number;
   pMacroB: number;
-  /** 外部の見立ての項だけの勝率 p_external(%、0.1 単位。A と B の和が 100.0) */
-  pExternalA: number;
-  pExternalB: number;
+  /** 外部の見立ての項だけの勝率 p_ext(%、0.1 単位。A と B の和が 100.0) */
+  pExtA: number;
+  pExtB: number;
   /** 基準3b: M を計算できない階級チームが関わるとき(p_macro は 50.0%)の理由。無ければ null */
   macroMissing: string | null;
   /** 基準16: データ不足の表示と理由。無ければ null */
@@ -154,6 +154,8 @@ const sigmoid = (x: number) => 1 / (1 + Math.exp(-x));
 // 末尾の + 0 は −0 を 0 にする(0 × 負の差が −0 になり、出力の比較で区別されるのを避ける)
 const r3 = (x: number) => Math.round(x * 1000) / 1000 + 0;
 const r2 = (x: number) => Math.round(x * 100) / 100 + 0;
+/** 小数第一位。0.05 の端数は 0 から遠い側へ丸める(符号で非対称にならないように) */
+const r1 = (x: number) => (Math.sign(x) * Math.round(Math.abs(x) * 10)) / 10 + 0;
 
 /** 同じ階級のチームの組(i < j)の値の差の二乗平均平方根(組の向きに依らない広がり)。組が無ければ 0 */
 function rmsDiff(v: readonly number[]): number {
@@ -214,7 +216,7 @@ export function readExternalViews(raw: unknown): { items: ExternalView[]; errors
 export function externalOf(items: readonly ExternalView[], key: string, cfg: ExternalConfig): { E: number; count: number } {
   const mine = items.filter((v) => v.target === key);
   const sum = mine.reduce((s, v) => s + (v.direction === '-' ? -1 : 1) * (cfg.strength[v.strength] ?? 0) * (v.selfTeam ? cfg.selfTeam : 1), 0);
-  return { E: r2(Math.max(-cfg.clip, Math.min(cfg.clip, sum))), count: mine.length };
+  return { E: r1(Math.max(-cfg.clip, Math.min(cfg.clip, sum))), count: mine.length };
 }
 
 /** 基準1: 両チームの勝率を 0.1% 単位で、和が 100.0% になるように丸める */
@@ -274,10 +276,10 @@ export function computePriorWinrates(
     const noM = [A, B].filter((x) => x.M === null);
     const macroMissing = noM.length ? `マクロの点数が無い(${noM.map((x) => `${x.key}: ${x.macroReason}`).join(' / ')})` : null;
     const common = { sA: A.S, sB: B.S, mA: A.M, mB: B.M, eA: A.E, eB: B.E, beta: beta[tier], betaMacro: betaMacro[tier], betaExt: betaExt[tier], stageTerm: st, macroMissing };
-    const half = { pA: 50.0, pB: 50.0, pLaneA: 50.0, pLaneB: 50.0, pMacroA: 50.0, pMacroB: 50.0, pExternalA: 50.0, pExternalB: 50.0 };
+    const half = { pA: 50.0, pB: 50.0, pLaneA: 50.0, pLaneB: 50.0, pMacroA: 50.0, pMacroB: 50.0, pExtA: 50.0, pExtB: 50.0 };
     if (A.S === null || B.S === null) {
       const why = [A, B].filter((x) => x.S === null).map((x) => `${x.key}: ${x.reason}`).join(' / ');
-      return { ...common, logit: 0, laneLogit: 0, macroLogit: 0, externalLogit: 0, ...half, dataMissing: `データ不足(${why})` };
+      return { ...common, logit: 0, laneLogit: 0, macroLogit: 0, extLogit: 0, ...half, dataMissing: `データ不足(${why})` };
     }
     const lane = beta[tier] * (A.S - B.S);
     const macro = A.M === null || B.M === null ? 0 : betaMacro[tier] * (A.M - B.M);
@@ -286,10 +288,10 @@ export function computePriorWinrates(
     const [pA, pB] = percents(sigmoid(logit));
     const [pLaneA, pLaneB] = percents(sigmoid(lane));
     const [pMacroA, pMacroB] = percents(sigmoid(macro + ext));
-    const [pExternalA, pExternalB] = percents(sigmoid(ext));
+    const [pExtA, pExtB] = percents(sigmoid(ext));
     return {
-      ...common, logit: r3(logit), laneLogit: r3(lane), macroLogit: r3(macro), externalLogit: r3(ext),
-      pA, pB, pLaneA, pLaneB, pMacroA, pMacroB, pExternalA, pExternalB, dataMissing: null,
+      ...common, logit: r3(logit), laneLogit: r3(lane), macroLogit: r3(macro), extLogit: r3(ext),
+      pA, pB, pLaneA, pLaneB, pMacroA, pMacroB, pExtA, pExtB, dataMissing: null,
     };
   };
 
