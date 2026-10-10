@@ -15,6 +15,7 @@
     <p class="story-none">根拠を出せる材料がありません({story.reason})</p>
   {:else}
     <p class="headline">{story.headline}</p>
+    {#if story.layers.teamSentence}<p class="team-sentence">{story.layers.teamSentence}</p>{/if}
     {#if story.layers.lane.p !== null && story.layers.macro.p !== null}
       <div class="layers">
         <p class="layers-cap">{input.a} の勝率の 2 層</p>
@@ -122,6 +123,8 @@
 <style>
   .story { margin: 0.5rem 0 0.4rem; padding: 0.7rem 0.8rem; border-left: 2px solid var(--gold-lo); background: rgba(0, 0, 0, 0.22); border-radius: 0 6px 6px 0; font-size: 0.88rem; }
   .headline { margin: 0 0 0.5rem; font-family: var(--serif-jp); font-size: 1rem; color: var(--ivory); }
+  /* 結論の直下のチームの層の一文 */
+  .team-sentence { margin: -0.2rem 0 0.5rem; font-family: var(--serif-jp); font-size: 0.92rem; color: var(--ivory); }
   .story-none { margin: 0; color: var(--ivory-dim); }
   /* 基準31: 結論の直後の 3 行 */
   .layers { margin: 0 0 0.5rem; padding: 0.45rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(0, 0, 0, 0.16); }

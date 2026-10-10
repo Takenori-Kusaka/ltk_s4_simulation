@@ -8,7 +8,7 @@ import { REGULAR_DAYS } from '../../src/sim/schedule.ts';
 import type { WinratesFile } from '../../src/app/sim/view.ts';
 import { dayBox } from '../../src/app/schedule/view.ts';
 import {
-  EXTERNAL_MAX, MACRO_AXES, NO_EXTERNAL, externalItems, macroScore, matchStory, type PlayerLike, type StoryInput, type TeamEvalLike, type TierTeamLike,
+  EXTERNAL_MAX, MACRO_AXES, NO_EXTERNAL, TEAM_EVEN, externalItems, macroScore, matchStory, type PlayerLike, type StoryInput, type TeamEvalLike, type TierTeamLike,
 } from '../../src/app/story/story.ts';
 
 const KEYS: [string, string][] = [
@@ -328,4 +328,62 @@ test('基準31〜33(日程の箱): 行から根拠の節へ pLane・pMacro・pEx
   const m = /<MatchStory input=\{\{([^}]*)\}\}/.exec(svelte);
   assert.ok(m, 'MatchStory の input');
   for (const k of ['pA: r.blue.pNum', 'pB: r.red.pNum', 'pLane: r.pLane', 'pMacro: r.pMacro', 'pExt: r.pExt', 'teamA: r.blue.layer', 'teamB: r.red.layer']) assert.ok(m![1].includes(k), k);
+});
+
+// 価値責任者の要望(Task-7 の追補): 結論の一文の直後に、チームの層の一文を固定の形で置く
+test('チームの層の一文: 差の絶対値が大きい軸(素点 a vs b)で上の側の英語名、外部の見立ての寄り(E a vs b)。両軸とも差 0.1 未満なら「ほぼ互角」、E が同じなら「互角」。E・M が勝率表に無ければ null', () => {
+  assert.equal(TEAM_EVEN, 0.1);
+  const a = { M: 6.54, E: 1.5, externalCount: 4 }, b = { M: 5.05, E: -0.5, externalCount: 1 };
+  // チームの評価の素点: CC 6.522/6.558 vs DD 5.1/5.0 → 差は司令塔 1.558 > 連携の厚み 1.422
+  const s = matchStory({ ...input, teamA: a, teamB: b }, ratings, teamEval);
+  assert.ok(s.ok);
+  assert.equal(s.layers.teamSentence, 'チームとしては、司令塔(6.56 vs 5.00)で Camellia Crown が上。外部の見立ては Camellia Crown 寄り(E +1.5 vs -0.5)。');
+  // 勝率表の内訳(macroParts)があればその素点で比べる。B が上・E は B 寄り
+  const t = matchStory({ ...input, teamA: { ...a, E: -1, parts: [{ key: 'synergy', label: '連携の厚み', raw: 3.0 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }] }, teamB: { ...b, E: 2 } }, ratings, teamEval);
+  assert.ok(t.ok);
+  assert.equal(t.layers.teamSentence, 'チームとしては、連携の厚み(3.00 vs 5.10)で Dahlia Diadem が上。外部の見立ては Dahlia Diadem 寄り(E -1.0 vs +2.0)。');
+  // 両軸とも差 0.1 未満ならほぼ互角、E が同じなら互角
+  const even = matchStory(
+    {
+      ...input,
+      teamA: { ...a, E: 0.5, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }] },
+      teamB: { ...b, E: 0.5, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.45 }, { key: 'shotcalling', label: '司令塔', raw: 6.5 }] },
+    },
+    ratings,
+    teamEval,
+  );
+  assert.ok(even.ok);
+  assert.equal(even.layers.teamSentence, 'チームとしてはほぼ互角。外部の見立ては互角。');
+  // 差がちょうど 0.1 は「上」(浮動小数の誤差で互角にしない)
+  const edge = matchStory(
+    {
+      ...input,
+      teamA: { ...a, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.6 }, { key: 'shotcalling', label: '司令塔', raw: 6.5 }] },
+      teamB: { ...b, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.5 }, { key: 'shotcalling', label: '司令塔', raw: 6.5 }] },
+    },
+    ratings,
+    teamEval,
+  );
+  assert.ok(edge.ok);
+  assert.match(edge.layers.teamSentence ?? '', /^チームとしては、連携の厚み\(6\.60 vs 6\.50\)で Camellia Crown が上。/);
+  // E・M が勝率表に無ければ出さない(片方のチームだけ無い場合も)
+  for (const [ta, tb] of [[undefined, undefined], [{ M: 6.54 }, { M: 5.05 }], [{ E: 1 }, { E: 0 }], [{ M: 6.54, E: 1 }, { E: 0 }]]) {
+    const n = matchStory({ ...input, teamA: ta, teamB: tb }, ratings, teamEval);
+    assert.ok(n.ok);
+    assert.equal(n.layers.teamSentence, null, JSON.stringify([ta, tb]));
+  }
+  // 比べられる素点が無い(MASTERS の DD は軸も内訳も無い)ときも出さない
+  const m = matchStory({ tier: 'MASTERS', a: 'CC', b: 'DD', pA: 50, pB: 50, teamA: { M: 6.5, E: 1 }, teamB: { M: 6.0, E: 0 } }, ratings, teamEval);
+  assert.ok(m.ok);
+  assert.equal(m.layers.teamSentence, null);
+  for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!(s.layers.teamSentence ?? '').includes(w), w);
+});
+
+test('チームの層の一文(表示): 結論の一文の直下、3 行より前に出す。無ければ出さない', () => {
+  const svelte = src('../../src/app/story/MatchStory.svelte').replace(/<style[\s\S]*<\/style>/, '');
+  const iHead = svelte.indexOf('{story.headline}');
+  const iSentence = svelte.indexOf('{story.layers.teamSentence}');
+  const iLane = svelte.indexOf('レーン(個人)の相対勝率');
+  assert.ok(iHead > 0 && iSentence > iHead && iSentence < iLane, '結論の直下');
+  assert.match(svelte, /\{#if story\.layers\.teamSentence\}/);
 });

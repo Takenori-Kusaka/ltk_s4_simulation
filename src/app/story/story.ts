@@ -153,6 +153,8 @@ export interface StoryLayers {
   lane: { p: string | null };
   macro: { p: string | null; pExt: string | null; M: { a: string; b: string }; parts: MacroPart[]; external: { a: ExternalSide; b: ExternalSide } };
   combined: { p: string };
+  /** 価値責任者の要望: 結論の一文の直後に置くチームの層の一文(固定の形)。E・M が勝率表のファイルに無ければ null */
+  teamSentence: string | null;
 }
 export type StoryView =
   | {
@@ -265,6 +267,34 @@ export function externalItems(views: unknown, team: string, tier: string, max = 
 
 /** E は勝率表のファイルで小数第一位(F-005)。符号を付けてそのまま */
 const signedE = (x: number) => (x < 0 ? '' : '+') + f1(x);
+/** チームの層の一文で「ほぼ互角」とする境界(2 軸の素点の差の絶対値。両軸ともこれ未満) */
+export const TEAM_EVEN = 0.1;
+
+// 素点は勝率表のファイルの内訳(teams[].macroParts)を優先し、無ければチームの評価のファイルの素点。理由はチームの評価のファイルだけにある
+const rawFor = (t: TierTeamLike, layer: TeamLayer | undefined, key: string): number | null => {
+  const given = layer?.parts?.find((p) => p.key === key)?.raw;
+  return finite(given) ? given : rawOf(t, key);
+};
+
+/** 価値責任者の要望: チームの層の一文(結論の一文の直後)。2 軸のうち差の絶対値が大きい方で上の側、外部の見立ての寄り。E・M が勝率表のファイルに無ければ null */
+function teamSentenceOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, parts: MacroPart[]): string | null {
+  const la = input.teamA, lb = input.teamB;
+  const mA = la?.M, mB = lb?.M, eA = la?.E, eB = lb?.E;
+  if (!finite(mA) || !finite(mB) || !finite(eA) || !finite(eB)) return null;
+  let best: { label: string; ra: number; rb: number } | null = null;
+  for (const ax of MACRO_AXES) {
+    const ra = rawFor(A, la, ax.key), rb = rawFor(B, lb, ax.key);
+    if (ra === null || rb === null) continue;
+    if (!best || Math.abs(ra - rb) > Math.abs(best.ra - best.rb)) best = { label: parts.find((p) => p.key === ax.key)?.label ?? ax.label, ra, rb };
+  }
+  if (!best) return null;
+  const nameA = TEAM_INFO[input.a].name, nameB = TEAM_INFO[input.b].name;
+  // 差は小数第三位で丸めてから境界と比べる(6.6 − 6.5 のような浮動小数の誤差で互角にしない)
+  const gap = Math.round(Math.abs(best.ra - best.rb) * 1000) / 1000;
+  const team = gap < TEAM_EVEN ? 'チームとしてはほぼ互角。' : `チームとしては、${best.label}(${f2(best.ra)} vs ${f2(best.rb)})で ${best.ra > best.rb ? nameA : nameB} が上。`;
+  const external = eA === eB ? '外部の見立ては互角。' : `外部の見立ては ${eA > eB ? nameA : nameB} 寄り(E ${signedE(eA)} vs ${signedE(eB)})。`;
+  return team + external;
+}
 
 /** 基準31〜33: 根拠の 2 層。3 行の勝率と p_ext は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 2 軸の素点の平均 */
 function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: unknown): StoryLayers {
@@ -273,11 +303,6 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
     const given = layer?.M;
     const m = finite(given) ? given : macroScore(t);
     return m === null ? '—' : f2(m);
-  };
-  // 素点は勝率表のファイルの内訳(teams[].macroParts)を優先し、無ければチームの評価のファイルの素点。理由はチームの評価のファイルだけにある
-  const rawFor = (t: TierTeamLike, layer: TeamLayer | undefined, key: string): number | null => {
-    const given = layer?.parts?.find((p) => p.key === key)?.raw;
-    return finite(given) ? given : rawOf(t, key);
   };
   const parts: MacroPart[] = MACRO_AXES.map((ax) => {
     const xa = A.axes?.find((x) => x.key === ax.key), xb = B.axes?.find((x) => x.key === ax.key);
@@ -299,6 +324,7 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
       external: { a: ext(input.a, input.teamA), b: ext(input.b, input.teamB) },
     },
     combined: { p: f1(input.pA) },
+    teamSentence: teamSentenceOf(input, A, B, parts),
   };
 }
 
