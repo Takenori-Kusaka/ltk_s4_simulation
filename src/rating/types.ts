@@ -76,6 +76,8 @@ export interface EngineConfig {
   k: number;
   /** 補正 1 標準偏差あたりの点数 */
   perfScale: number;
+  /** 形の係数(2026-10-10): 直近成績の補正のうち、6 軸の平均からのずれに掛ける係数。省略時は perfScale と同じ(分けない) */
+  shapeScale?: number;
   /** ロール転向の割引(基準31。LTK の出場シーズンのうち今のロール以外の割合 × この値をデータの軸から引く。初期値 0.5) */
   roleSwitchPenalty?: number;
   /** 元プロの下限(基準29 の改訂): 経歴の水準(lol.highestLevel)ごとのランクの基準の下限。default は水準に無いとき */

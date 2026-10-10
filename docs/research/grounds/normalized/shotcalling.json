@@ -139,7 +139,6 @@
         {"summary":"同じインタビューで、試合中の判断は「みんなで相談しながら決めていた」と述べ、決定的なコールの担い手としてまざー3となぎさっちを挙げた。メインのショットコーラーは自分ではないことを示す。","source":"https://fistbump-news.jp/article/2026/03/25/2262.html","date":"2026-03-25","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"S3 の BAN/PICK はコーチ Eugeo が事前に組み、実戦でもそのとおりになぞったとこく兄が語る。戦略の決定はコーチ主導だった。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"SHAKA はかなりコールできるタイプだが、TOP からのコールは難しく、15分以降に介入できる段階から出せると評価。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2814s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"弱","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"46:54","selfTeam":true},
-        {"summary":"Overwatch 移籍時に DETONATOR5 のリーダーとして発表。IGL かは未確認","source":"https://ja.wikipedia.org/wiki/SHAKA","date":"2016-07-11","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"Riot Games ONE 2022・2023 と k4sen Con 2024・2025 で Team SHAKA を率いた","source":"https://esports-world.jp/news/24434","date":"2022-12-23","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"コールは出せるが、トップの対面を考えると(コール役は)辛いとの見立て。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"弱","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"20:54","note":"名前(シャカさん)は区間にある","selfTeam":false}
       ]
@@ -162,8 +161,6 @@
     "DD-NEXT-MID": {
       "name": "天ノ川ねる",
       "evidence": [
-        {"summary":"S3 で、SHAKA が襲われたとき BOT 側から「誰か助けろよ！」と怒り、こく兄も「SHAKA見ろって言ってんだろ！」と叱られたと語る。それまで言わなかったが、ついに言うようになったと評される。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
-        {"summary":"本人のチャンネルの切り抜きの題名が「コールを無視してフラッシュインで敵に突っ込む天ノ川ねる」(カスタム)。コールに従わない場面がある。","source":"https://www.youtube.com/watch?v=czahN03y3wM","date":"2025-06-20","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
       ]
     },
     "DD-NEXT-ADC": {
@@ -427,11 +424,7 @@
     "IT-CORE-JG": {
       "name": "AlphaAzur",
       "evidence": [
-        {"summary":"同じ対談で k4sen は、ST CORE は元プロが多く「試合中の報告がもとから上手い」と述べた。AlphaAzur は元 PUBG プロだが、本人個人のコールへの言及ではない。","source":"https://fistbump-news.jp/article/2025/07/13/1287.html","date":"2025-07-13","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"育成企画 k4sen学院(カセガク)で COREクラスの講師として NEXT の生徒クラスを指導した。集団戦の削りを「税金徴収」にたとえ、クラスの共通認識をそろえたと評されている(ファンブログ)。","source":"https://red-ff-gamenews.com/k4segaku-0329-alpha-class","date":"2026-03-29","type":"記事","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"本人が「Team AlphaAzur」の発表を告知し、生徒に向けて目標(期末テスト4位回避)を掲げた。講師として率いる立場だった。(スニペットで確認)","source":"https://x.com/AzurAlpha/status/2025917281247842399","date":"2026-02","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"カセガク第1期の期末大会で Team AlphaAzur は退学決定戦に敗れ、退学となった。講師としての指導の成果は結果につながらなかった。","source":"https://fistbump-news.jp/article/2026/04/04/2294.html","date":"2026-04-04","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"AlphaAzur は戦場を俯瞰して積極的にコールする役が向き、自由度の高い JG はその点で合うとの評価。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=1640s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"27:20","selfTeam":false},
         {"summary":"CRカップ Apex 第6回(優勝)で方針を出す役。まとめ記事が的確な IGL を勝因に挙げる","source":"https://www.miyall.com/crcup-apex-summary","date":"2021-07-23","type":"大会での役割","direction":"+","strength":"強","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"PLAY ALIVE Apex Vol.5 の切り抜きで IGL として位置取りと突入を指示","source":"https://www.youtube.com/watch?v=zdA5IPelEGA","date":"2022-11-23","type":"記事","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"PUBG の切り抜きで、展開の方向と見る範囲の分担を指示","source":"https://www.youtube.com/watch?v=LZ7Ln3cK3ao","date":"2023-09-03","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
@@ -478,7 +471,6 @@
         {"summary":"同大会後のインタビューで本人は、コールは JG の銀城サイネと ADC の白波らむねが担ってくれたと評価した。リーダーではあったが、コールの主体は他のメンバーだった。","source":"https://fistbump-news.jp/article/2026/03/31/2276.html","date":"2026-03-31","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"TOP は序盤に関われない場面が多く、他の4人に「頑張ってくれ」としか言えないのが苦しかったと語った。","source":"https://fistbump-news.jp/article/2026/03/31/2276.html","date":"2026-03-31","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"V最協 APEX S4 で花の都のリーダー兼 IGL。12位","source":"https://bigorgan81.com/archives/7031","date":"2022-04-17","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"V最協 APEX S4〜S6 をすべてリーダーで出場。S5・S6 で IGL かは未確認","source":"https://wikiwiki.jp/vspo/%E6%A9%98%E3%81%B2%E3%81%AA%E3%81%AE","date":"2023-04-15 / 2024-08-24","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"2022-03 の取材で、APEX で IGL を担う機会が増え、プレーを言語化するようになったと本人が話した","source":"https://dime.jp/genre/1355475/","date":"2022-03-28","type":"本人の発言","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
       ]
     },
@@ -509,8 +501,7 @@
       "name": "白那しずく",
       "evidence": [
         {"summary":"S3 の振り返り配信で、本人が試合の場面を見ながら「コールはバックだったので、みんなで統一するのが大事だと思った」「もっと強くバック、バックと言えばよかった」と話した。撤退のコールに自分も関わっていた様子がうかがえる。","source":"https://www.youtube.com/watch?v=m3ILrq8fULM","date":"2026-06-23","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"同じ振り返り配信で、復活時間を見て試合を決める判断の例という判断を DC NEXT の頃から教わっていたと説明した。エンドのコールの基準を持っている。","source":"https://www.youtube.com/watch?v=m3ILrq8fULM","date":"2026-06-23","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"V最協 VALORANT Act2 で 真・クロ600％ のリーダー(ドラフト役)。8位。試合中の IGL かは未確認","source":"https://panora.tokyo/archives/121313","date":"2025-11-09","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
+        {"summary":"同じ振り返り配信で、復活時間を見て試合を決める判断の例という判断を DC NEXT の頃から教わっていたと説明した。エンドのコールの基準を持っている。","source":"https://www.youtube.com/watch?v=m3ILrq8fULM","date":"2026-06-23","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
       ]
     },
     "LR-MASTERS-TOP": {
@@ -530,7 +521,6 @@
       "evidence": [
         {"summary":"S3 マスターズカップ Day1 の実況が、プロを目指す選手の発掘イベントの頃から、ネスティはコールと知識を高く評価されてきたと紹介した。練られた戦略を実行するのが上手いジャングラーという評価(文脈から LR の JG であるネスティを指す)。","source":"https://www.youtube.com/watch?v=6uSyBBqLpaE","date":"2026-05-13","type":"大会での役割","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
         {"summary":"ねすてぃーは Recap のコールに合わせる側になるとの推測。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2131s","date":"2026-10-09","type":"配信での分析","direction":"-","strength":"弱","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"35:31","selfTeam":false},
-        {"summary":"ねすてぃーはよく喋るが日本語・滑舌の問題で意図が伝わりにくいと指摘(コミュニケーション面の懸念)。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2001s","date":"2026-10-09","type":"配信での分析","direction":"-","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"33:21","selfTeam":false},
         {"summary":"しゃるるの動画題名がねすてぃーをチームを率いる側と紹介","source":"https://www.youtube.com/watch?v=ETIjW6WMRO8","date":"2024-08-15","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"コーチとしてほぼ優勝してきたと本人が発信(自己申告)","source":"https://x.com/nesu_lol","date":"2026-10-07","type":"本人の発言","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"CC MASTERS のスクリム振り返りで、集団戦までは強いが集団戦は弱く位置取りがずれると評された(話者不明)","source":"https://www.youtube.com/watch?v=Jsfsz9SATTA","date":"2026-05-22","type":"記事","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
@@ -570,13 +560,7 @@
     "LR-CORE-JG": {
       "name": "Killin9Hit(KH)",
       "evidence": [
-        {"summary":"S2 前半終了後、乾伸一郎が、序盤に崩れても「ケイさんも励ますコールをしていた」「成熟した大人」と評価した。","source":"https://www.youtube.com/watch?v=zWbUv2x8tyw","date":"2025-10-04","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"S3 の FISTBUMP インタビューで、フィードバックでは自分が強く言う場面があり、その後メンバーから謝罪の長文 DM が届いたと語った。チーム内で発言力のある立場にいることがわかる。","source":"https://fistbump-news.jp/article/2026/06/24/2595.html","date":"2026-06-24","type":"本人の発言","direction":"+","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"S2 優勝後の振り返りで、「誰が決める?」と聞いたら Ceros コーチに「あなたでしょ」と言われたと明かした。ジャングラーである自分の仕事なのに、理解が足りず味方に判断を任せてしまう心配があったと述べた。","source":"https://www.youtube.com/watch?v=N-54g-OsF7k","date":"2025-12-24","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"S2 プレイオフの直前から、敵ジャングルの位置・レーン状況・オブジェクトの時間を同時に把握できるようになったと述べ、Ceros の指導のおかげとした。","source":"https://www.youtube.com/watch?v=N-54g-OsF7k","date":"2025-12-24","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"試合中の日本語でのコミュニケーションを課題にしていた。本番で緊張すると「うひ」ではなく「千燈さん」と呼んでしまうので早く直したいと話した(S2 開幕直後)。","source":"https://www.youtube.com/watch?v=EMad3J7DPa0","date":"2025-09-19","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"PUBG の DTN KOREA で指導・運営の側(コーチ/マネージャー)にいた時期に、PKL 2019 P2 3位・PGC 2019 出場。試合中の IGL ではない","source":"https://pubg-esports.fandom.com/wiki/DeToNator_Korea ; https://liquipedia.net/pubg/DeToNator.KOREA","date":"2018〜2020-03","type":"記事","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"PUBG の DeToNator KOREA の結成時(2017-12)に、韓国部門のリーダーを務める選手と紹介された。試合中の指示役(IGL)かは未確認","source":"https://www.negitaku.org/news/n-22157","date":"2017-12-29","type":"大会での役割","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
+        {"summary":"S2 優勝後の振り返りで、「誰が決める?」と聞いたら Ceros コーチに「あなたでしょ」と言われたと明かした。ジャングラーである自分の仕事なのに、理解が足りず味方に判断を任せてしまう心配があったと述べた。","source":"https://www.youtube.com/watch?v=N-54g-OsF7k","date":"2025-12-24","type":"本人の発言","direction":"-","strength":"中","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
       ]
     },
     "LR-CORE-MID": {

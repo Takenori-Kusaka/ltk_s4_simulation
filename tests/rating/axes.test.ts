@@ -1,7 +1,7 @@
 // F-009 Task-2: 受入基準 10・11(データの6軸、LTK の経験の項、ピックプール)と軸の定義
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DATA_AXES, ltkBonus, rateDataAxes, buildRatingContext } from '../../src/rating/axes.ts';
+import { splitLevelAndShape, DATA_AXES, ltkBonus, rateDataAxes, buildRatingContext } from '../../src/rating/axes.ts';
 import { loadEngineConfig } from '../../src/rating/engine.ts';
 import type { GameRecord } from '../../src/rating/types.ts';
 import axesConf from '../../src/rating/axes.json' with { type: 'json' };
@@ -159,4 +159,16 @@ test('AC29: 元プロの下限と「ソロランクと最高ランクの高い�
     assert.equal(r.anchorSource, '最高ランク', r.key);
     if (!r.estimated) assert.notEqual(r.confidence, '低', r.key);
   }
+});
+
+// 2026-10-10: 直近成績の補正の水準と形の分離
+test('水準と形: shapeScale があれば、ピックプール以外の軸に (補正 − 平均) × 縮小 × (shapeScale − perfScale) を足す。平均は変わらず、無ければ何もしない', () => {
+  const mk = (key: string, correction: number, base: number) => ({ key, label: key, base, correction, shrink: 0.8, estimated: false } as unknown as Parameters<typeof splitLevelAndShape>[0][number]);
+  const rs = [mk('ground', 0.4, 6), mk('laning', -0.4, 6), mk('pool', 0.9, 6)];
+  const out = splitLevelAndShape(rs, { perfScale: 0.5, shapeScale: 1.5 });
+  assert.ok(Math.abs(out[0].base - (6 + 0.4 * 0.8 * 1.0)) < 1e-12);
+  assert.ok(Math.abs(out[1].base - (6 - 0.4 * 0.8 * 1.0)) < 1e-12);
+  assert.equal(out[2].base, 6);
+  assert.ok(Math.abs((out[0].shapeAdj ?? 0) + (out[1].shapeAdj ?? 0)) < 1e-12);
+  assert.deepEqual(splitLevelAndShape(rs, { perfScale: 0.5 }).map((r) => r.base), [6, 6, 6]);
 });
