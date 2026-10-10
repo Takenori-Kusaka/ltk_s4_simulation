@@ -75,7 +75,7 @@ test('AC28: career.json を読み、最高ランク(tier・division・lp・出�
   const top = find(inputs.players, 'DD-MASTERS-TOP');
   assert.deepEqual(top.peakRank, { tier: 'Challenger', division: '', lp: 1883, source: 'https://example.test/opgg/top' });
   assert.deepEqual(top.seasonPeakRank, { tier: 'Challenger', division: '', lp: 1883, source: 'https://example.test/opgg/top' });
-  assert.deepEqual(top.exPro, { level: 'LJL-starter', source: 'https://example.test/wiki/top' });
+  assert.deepEqual(top.exPro, { level: 'LJL-starter', source: 'https://example.test/wiki/top', years: 0 });
   // division は 1〜4 の数で記録されている → I〜IV。今季の記録(peak.thisSeason)も読み、LP 不明は 0 LP
   const jg = find(inputs.players, 'DD-MASTERS-JG');
   assert.deepEqual(jg.peakRank, { tier: 'Emerald', division: 'II', lp: 45, source: 'https://example.test/opgg/jg' });
