@@ -422,13 +422,13 @@ export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknow
       compareHref: A.coachId && B.coachId ? compareHref([A.coachId, B.coachId]) : null,
     });
   }
-  rows.sort((x, y) => Math.abs(y.contribution) - Math.abs(x.contribution));
+  // 行はロールの順(TOP・JG・MID・ADC・SUP)で、コーチを最後に置く(基準21)。結論の「いちばん効いている」は寄与の絶対値の順で選ぶ
 
   const even = Math.abs(A.S - B.S) < EVEN;
   const favored = input.pA >= input.pB ? input.a : input.b;
   const favoredName = TEAM_INFO[favored].name;
   const favoredP = f1(favored === input.a ? input.pA : input.pB);
-  const top = rows.slice(0, 2);
+  const top = [...rows].sort((x, y) => Math.abs(y.contribution) - Math.abs(x.contribution)).slice(0, 2);
   // 基準27(再判定 3): 「いちばん効いているのは」。両チームの勝率は「vs」でつなぐ
   const headline = even
     ? `ほぼ互角(${TEAM_INFO[input.a].name} ${f1(input.pA)}% vs ${TEAM_INFO[input.b].name} ${f1(input.pB)}%)。差が出るとすれば ${top.map(describe).join('、次に ')}`
