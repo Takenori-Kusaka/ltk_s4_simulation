@@ -1,11 +1,11 @@
 {
   "kind": "evidence-transcript",
   "file": "20261010-transcript-[000000] それもお互い様でしょ [000.md",
-  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は未確定(urlPending)で、届いたら source を時刻つきの URL に、origin を transcript:<動画の ID> に差し替えてから統合する。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 13738 字 → 4115 字(30.0%)、区間 43 → 39、長さ 21 分",
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は価値責任者から 2026-10-10 に受け取り(題名を oEmbed で確認)、source を時刻つきの URL に、origin を transcript:<動画の ID> に置き換えた。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 13738 字 → 4115 字(30.0%)、区間 43 → 39、長さ 21 分",
   "source": {
     "title": "LTK Season: Finale の各チーム考察配信(LR MASTERS・CORE・NEXT、IT CORE、DD MASTERS・CORE・NEXT の部分)。文字起こしの先頭の文から『それもお互い様でしょ』の名前で保存されたもの。CC の部分は evidence-transcript-analysis-eugeo-1-20261010.json",
-    "url": "",
-    "urlPending": true,
+    "url": "https://www.youtube.com/watch?v=qsrVbjq2KMM",
+    "urlPending": false,
     "speaker": "Eugeo(IT MASTERS MID)と推定。根拠: 自チームを IT と呼ぶ(5:06)、以前 DD MASTERS でわしだいと一緒に本番に出た(11:57)、たぬき忍者を元プロと比べる立場(10:55)。『それもお互い様でしょ』など相づちや掛け合いがあり、別の人物の発言が混ざる可能性がある(確かさ 中)",
     "retrievedAt": "2026-10-10",
     "preprocessed": "data/transcript/structured/20261010-transcript-[000000] それもお互い様でしょ [000.json",
@@ -15,7 +15,7 @@
   "caveats": [
     "自動字幕には話者の情報が無い。話者はファイル内の自称・自チームの呼び方から推定した(source.speaker)。相づちや同席者・視聴者のコメントの読み上げが混ざる可能性がある",
     "配信の日付は不明(チーム分けの発表後、大会の開始前と推定)。各項目の date は 2026-10 とした",
-    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者に尋ねる必要がある(state:needs-po)。URL が決まるまで正規化の記録へは統合しない",
+    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者が 2026-10-10 に示した URL を使った。前処理の出力の内容(どの階級チームの話が多いか)と動画の題名の対応を確かめた",
     "名前が区間に無い項目は、前後の区間の名前や紹介の順序から人物を推定した。推定の確かさは各項目の note にある",
     "unmapped には名簿の誰かと推定できる呼び名だけを残し、名簿外の人物・私生活・年齢や勤め先に当たる話題は書いていない"
   ],
@@ -25,14 +25,14 @@
     "LR-MASTERS-MID": [
       {
         "summary": "たぶんかなりコールして頑張ると見立て。前回の(IT MASTERS?)では静かそうだったという趣旨。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=58",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=58s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "弱",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "0:58",
         "selfTeam": false,
         "note": "『リケさん』と聞こえ、LR MASTERS の紹介(0:00)の直後のため Recap と推定(確かさ 中)。『たぶん』と推測の発言",
@@ -43,14 +43,14 @@
     "LR-CORE-SUP": [
       {
         "summary": "ジャングルもできてコールもできると評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=155",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=155s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "中",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "2:35",
         "selfTeam": false,
         "note": "『ウヒさん』と聞こえ、LR CORE の話の流れから千燈ゆうひと推定(確かさ 中〜高。別の配信でも『ウヒ』は千燈ゆうひを指す)",
@@ -60,14 +60,14 @@
     "DD-MASTERS-SUP": [
       {
         "summary": "コールを多くするタイプではなく、優しく、人に合わせて任せる側と評価。わしだいが崩れたときに指摘できる人がいない懸念。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=774",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=774s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "-",
         "strength": "中",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "12:54",
         "selfTeam": false,
         "note": "名前(ヘテル)は区間にある。話者は Eugeo と推定(確かさ 中)",
@@ -77,14 +77,14 @@
     "DD-CORE-SUP": [
       {
         "summary": "CORE のサポートの中で一番上手く、あれだけコールもエンゲージもできると評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=862",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=862s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "中",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "14:22",
         "selfTeam": false,
         "note": "名前は区間に無く、前後(13:58・15:52)の神楽めあの話の流れから推定(確かさ 中)",
@@ -94,14 +94,14 @@
     "DD-NEXT-JG": [
       {
         "summary": "白波らむねと 2 人でコールを出し合うのがよいとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1254",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "中",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "20:54",
         "selfTeam": false,
         "note": "『マダさん』と聞こえ、19:05 の『マザーさん』と同じくまざー3 と推定(確かさ 中)",
@@ -111,14 +111,14 @@
     "DD-NEXT-SUP": [
       {
         "summary": "まざー3 と 2 人でコールを出し合うのがよいとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1254",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "中",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "20:54",
         "selfTeam": false,
         "note": "『ラムチさん』と聞こえ、白波らむねと推定(確かさ 中)",
@@ -128,14 +128,14 @@
     "DD-NEXT-TOP": [
       {
         "summary": "コールは出せるが、トップの対面を考えると(コール役は)辛いとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1254",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s",
         "date": "2026-10",
         "type": "配信者の評価(第三者)",
         "direction": "+",
         "strength": "弱",
         "kind": "player",
         "collectedBy": "ai",
-        "origin": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md",
+        "origin": "transcript:qsrVbjq2KMM",
         "timestamp": "20:54",
         "selfTeam": false,
         "note": "名前(シャカさん)は区間にある",
@@ -148,7 +148,7 @@
       {
         "trait": "laning",
         "summary": "これまでは CORE 最強のミッドという印象だったが、今回は葛葉・スタンミ・たかやスペシャルが相手で苦しそうとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=187",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=187s",
         "timestamp": "3:07",
         "selfTeam": false,
         "note": "『イヌイ殿』『イヌイド』と聞こえ、乾伸一郎と推定(確かさ 高)",
@@ -159,7 +159,7 @@
       {
         "trait": "other",
         "summary": "CORE の中で一番きつい(ジャングル経験の不足)との見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=214",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=214s",
         "timestamp": "3:34",
         "selfTeam": true,
         "note": "名前(アルファ君)は区間にある",
@@ -168,7 +168,7 @@
       {
         "trait": "other",
         "summary": "ジャングルとしては未知数。コーチングがとても上手いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=338",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=338s",
         "timestamp": "5:38",
         "selfTeam": true,
         "note": "名前(アルファさん)は区間にある",
@@ -178,7 +178,7 @@
       {
         "trait": "mental",
         "summary": "勉強熱心なタイプと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=368",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=368s",
         "timestamp": "6:08",
         "selfTeam": true,
         "note": "名前(アルファ君)は区間にある",
@@ -189,7 +189,7 @@
       {
         "trait": "other",
         "summary": "一度 ADC に戻っていたためトップにブランクがある。ブラッドミアなどのピックに言及。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=245",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=245s",
         "timestamp": "4:05",
         "selfTeam": false,
         "note": "『パンさん』と聞こえ、焼きパンと推定(確かさ 高)。3:34 の『パンさんはやっぱ1回ADCに戻って』の続き",
@@ -198,7 +198,7 @@
       {
         "trait": "mechanics",
         "summary": "そつなく何でもこなしてとても上手い。以前の CORE で一番厄介だった。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=276",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=276s",
         "timestamp": "4:36",
         "selfTeam": false,
         "note": "名前は区間に無く、直前(4:05)の焼きパンの話の続きと推定(確かさ 低)",
@@ -209,7 +209,7 @@
       {
         "trait": "laning",
         "summary": "mittiii らと共に CORE のトップとして強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=245",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=245s",
         "timestamp": "4:05",
         "selfTeam": false,
         "note": "『雪代』と聞こえ、YUKIO と推定(確かさ 高)",
@@ -220,7 +220,7 @@
       {
         "trait": "laning",
         "summary": "YUKIO らと共に CORE のトップとして強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=245",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=245s",
         "timestamp": "4:05",
         "selfTeam": true,
         "note": "名前(ミッチー)は区間にある",
@@ -229,7 +229,7 @@
       {
         "trait": "other",
         "summary": "ごんかねらと共にキャリー力が強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=306",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=306s",
         "timestamp": "5:06",
         "selfTeam": true,
         "note": "『ミッチ』と聞こえ、mittiii と推定(確かさ 高)",
@@ -240,7 +240,7 @@
       {
         "trait": "other",
         "summary": "mittiii らと共にキャリー力が強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=306",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=306s",
         "timestamp": "5:06",
         "selfTeam": true,
         "note": "名前(ゴンカネ)は区間にある",
@@ -251,7 +251,7 @@
       {
         "trait": "other",
         "summary": "どれだけ LoL をやっているか不明。ゴールドくらいと聞いており、対面のレベルが高くきついとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=431",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=431s",
         "timestamp": "7:11",
         "selfTeam": false,
         "note": "『ハルチャさん』と聞こえ、春茶と推定(確かさ 高)",
@@ -262,7 +262,7 @@
       {
         "trait": "other",
         "summary": "CORE のミッドで一番下手だと言われた(冗談めいたやり取り)。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=494",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=494s",
         "timestamp": "8:14",
         "selfTeam": true,
         "note": "『タカヤ』『スペシャル』と聞こえ、たかやスペシャルと推定(確かさ 高)。相手の『ザケ』は不明",
@@ -271,7 +271,7 @@
       {
         "trait": "other",
         "summary": "プレイオフで一度も勝っていないと指摘され、少し弱いかという話(冗談めいた流れ)。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=528",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=528s",
         "timestamp": "8:48",
         "selfTeam": true,
         "note": "『高ちゃん』と聞こえ、たかやスペシャルと推定(確かさ 中)",
@@ -282,7 +282,7 @@
       {
         "trait": "other",
         "summary": "ミッドのたぬき忍者と ADC(Day1 と推定)の組ではキャリー力に欠けるとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=625",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=625s",
         "timestamp": "10:25",
         "selfTeam": false,
         "note": "『ニンニン』=たぬき忍者(確かさ 高)。『渡る』は Day1 の聞き違いと推定(確かさ 低)",
@@ -291,7 +291,7 @@
       {
         "trait": "other",
         "summary": "チャレンジャーでも元プロとは違い、前回の LTK でも苦しそうだったと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=655",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=655s",
         "timestamp": "10:55",
         "selfTeam": false,
         "note": "『ニンニン』=たぬき忍者(確かさ 高)",
@@ -302,7 +302,7 @@
       {
         "trait": "other",
         "summary": "ジャングルとしてはついていけると評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=625",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=625s",
         "timestamp": "10:25",
         "selfTeam": false,
         "note": "『シャルさん』と聞こえ、しゃるると推定(確かさ 高)",
@@ -313,7 +313,7 @@
       {
         "trait": "mechanics",
         "summary": "トップの中で一番上手いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=717",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=717s",
         "timestamp": "11:57",
         "selfTeam": false,
         "note": "『ワシ君』と聞こえ、わしだいと推定(確かさ 高)",
@@ -322,7 +322,7 @@
       {
         "trait": "mechanics",
         "summary": "Yutapon よりも強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=748",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=748s",
         "timestamp": "12:28",
         "selfTeam": false,
         "note": "『わしくん』と聞こえ、わしだいと推定(確かさ 高)",
@@ -331,7 +331,7 @@
       {
         "trait": "mental",
         "summary": "崩れたときに指摘できる人がチームにいないことを懸念。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=774",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=774s",
         "timestamp": "12:54",
         "selfTeam": false,
         "note": "『わしくん』=わしだい(確かさ 高)",
@@ -340,7 +340,7 @@
       {
         "trait": "other",
         "summary": "バンピックは怪しいとの見方(ただし大きな心配はないとも)。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=804",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=804s",
         "timestamp": "13:24",
         "selfTeam": false,
         "note": "『わしく』と聞こえ、わしだいと推定(確かさ 中)",
@@ -351,7 +351,7 @@
       {
         "trait": "mechanics",
         "summary": "MASTERS でも通用するレベルと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=838",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=838s",
         "timestamp": "13:58",
         "selfTeam": false,
         "note": "名前(ジャスパー)は区間にある",
@@ -360,7 +360,7 @@
       {
         "trait": "mechanics",
         "summary": "どのチームに置いてもそのチームが一番強くなるほど突出していると評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1046",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1046s",
         "timestamp": "17:26",
         "selfTeam": false,
         "note": "名前(JASPER・ジャスパー)は区間にある",
@@ -369,7 +369,7 @@
       {
         "trait": "other",
         "summary": "最近あまり LoL をやっておらず、少しブランクがあるかもしれない。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1076",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1076s",
         "timestamp": "17:56",
         "selfTeam": false,
         "note": "名前(ジャスパー)は区間にある",
@@ -380,7 +380,7 @@
       {
         "trait": "laning",
         "summary": "安定したミッドレーナーと評価。レーンで大負けしなければ序盤の影響は小さいという趣旨。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=892",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=892s",
         "timestamp": "14:52",
         "selfTeam": false,
         "note": "名前は区間に無く、13:58 のスタンミの話の流れから推定(確かさ 中)",
@@ -391,7 +391,7 @@
       {
         "trait": "mechanics",
         "summary": "上手い(ダイヤモンドに届く)が、かなり LoL をやっていなかったためブランクがある。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=922",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=922s",
         "timestamp": "15:22",
         "selfTeam": false,
         "note": "名前(きなこさん)は区間にある",
@@ -402,7 +402,7 @@
       {
         "trait": "mechanics",
         "summary": "エメラルドで、本当に上手いと評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1145",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1145s",
         "timestamp": "19:05",
         "selfTeam": false,
         "note": "『マザーさん』と聞こえ、まざー3 と推定(確かさ 中)",
@@ -413,7 +413,7 @@
       {
         "trait": "mechanics",
         "summary": "NEXT のジャングルで一番と評価。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1145",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1145s",
         "timestamp": "19:05",
         "selfTeam": false,
         "note": "『ユフィ』と聞こえ、ゆふなと推定(確かさ 中)",
@@ -424,7 +424,7 @@
       {
         "trait": "other",
         "summary": "トップとしての実力は未知数との見方。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1145",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1145s",
         "timestamp": "19:05",
         "selfTeam": false,
         "note": "名前(シャカさん)は区間にある",
@@ -433,7 +433,7 @@
       {
         "trait": "laning",
         "summary": "レーンで大負けはしないだろうが、トップの経験は少なそう。ADC なら上手いがトップは難しそう。本人もチームで一番下手と言っているとのこと。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1176",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1176s",
         "timestamp": "19:36",
         "selfTeam": false,
         "note": "名前は区間に無く、19:05 のシャカの話の続きと推定(確かさ 中)",
@@ -445,7 +445,7 @@
     "DD-MASTERS": [
       {
         "text": "マクロもそうだが集団戦が課題という趣旨。マクロが強くても(集団戦で負ける)という見方。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=589",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=589s",
         "timestamp": "9:49",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -457,7 +457,7 @@
       {
         "aspect": "lanes",
         "summary": "ボットは他の MASTERS のボットに比べて(見劣りする趣旨)。ミッド・ジャングルは IT のゆにか・Eugeo の組と同じくらい強い。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=88",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=88s",
         "timestamp": "1:28",
         "selfTeam": false,
         "note": "『ユニカ友情』は『ゆにか・ユージオ』の聞き違いと推定",
@@ -466,7 +466,7 @@
       {
         "aspect": "chemistry",
         "summary": "てぃんとんと apaMEN が一緒(のチーム経験がある)。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=120",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=120s",
         "timestamp": "2:00",
         "selfTeam": false,
         "note": "『ティーンさん』『アパさん』と聞こえる",
@@ -478,7 +478,7 @@
       {
         "aspect": "bot",
         "summary": "他の CORE のボットレーンと比べると難しそう。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=187",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=187s",
         "timestamp": "3:07",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -488,7 +488,7 @@
       {
         "aspect": "chemistry",
         "summary": "元々チームを組んでいたメンバーが集まっている。AlphaAzur のジャングル経験不足が懸念で、ごんかね・mittiii らのキャリー力が強み。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=306",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=306s",
         "timestamp": "5:06",
         "selfTeam": true,
         "aiCheck": "unclear",
@@ -499,7 +499,7 @@
       {
         "aspect": "lanes",
         "summary": "トップ(狐白うる)が強い。ジャングル・ミッドはかなり苦戦しそう。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=399",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=399s",
         "timestamp": "6:39",
         "selfTeam": false,
         "note": "『神』は狐白うるの呼び名と推定",
@@ -508,7 +508,7 @@
       {
         "aspect": "lanes",
         "summary": "トップとボットは心配ないが、ジャングル・ミッドが懸念。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=431",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=431s",
         "timestamp": "7:11",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -518,7 +518,7 @@
       {
         "aspect": "lanes",
         "summary": "ミッド・ジャングルが苦しいと、ジャングル・サポートの連携を通じてボットにも影響が出ると懸念。バンピックは(誰かが)支えると言っていたとのこと。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=804",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=804s",
         "timestamp": "13:24",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -528,7 +528,7 @@
       {
         "aspect": "carry",
         "summary": "ボットがハイパーキャリーする。トップがダイブで狙われるのが唯一の怖さ。タンクが上手く、コーチがウィークサイドの耐え方を教えているという趣旨。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=952",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=952s",
         "timestamp": "15:52",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -536,7 +536,7 @@
       {
         "aspect": "lanes",
         "summary": "上側(トップ・ジャングル)が崩れる可能性が懸念。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1017",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1017s",
         "timestamp": "16:57",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -544,7 +544,7 @@
       {
         "aspect": "bot",
         "summary": "ボットレーンをどう崩すかが他の CORE の鍵。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1113",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1113s",
         "timestamp": "18:33",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -554,7 +554,7 @@
       {
         "aspect": "carry",
         "summary": "ジャングルとボットでゲームを動かしてもらう形。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1176",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1176s",
         "timestamp": "19:36",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -562,7 +562,7 @@
       {
         "aspect": "balance",
         "summary": "全体のバランスがよい。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1254",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s",
         "timestamp": "20:54",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -573,7 +573,7 @@
     "IT-MASTERS-JG": [
       {
         "summary": "きっちりしたマクロで、ジャングルを始める人に合う。AlphaAzur と最も相性のよいコーチで、どれだけ育てられるかが大事との見立て。",
-        "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=368",
+        "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=368s",
         "timestamp": "6:08",
         "selfTeam": true,
         "note": "ゆにかが IT CORE(AlphaAzur)を教える前提の発言",
@@ -588,7 +588,7 @@
       "direction": "-",
       "strength": "弱",
       "timestamp": "1:28",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=88",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=88s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -598,7 +598,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "1:28",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=88",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=88s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -608,7 +608,7 @@
       "direction": "-",
       "strength": "中",
       "timestamp": "2:00",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=120",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=120s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -618,7 +618,7 @@
       "direction": "-",
       "strength": "中",
       "timestamp": "4:36",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=276",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=276s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -628,7 +628,7 @@
       "direction": "-",
       "strength": "中",
       "timestamp": "5:06",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=306",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=306s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -638,7 +638,7 @@
       "direction": "-",
       "strength": "弱",
       "timestamp": "6:39",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=399",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=399s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -648,7 +648,7 @@
       "direction": "-",
       "strength": "中",
       "timestamp": "7:11",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=431",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=431s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -658,7 +658,7 @@
       "direction": "-",
       "strength": "強",
       "timestamp": "9:19",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=559",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=559s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -668,7 +668,7 @@
       "direction": "-",
       "strength": "強",
       "timestamp": "9:49",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=589",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=589s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -678,7 +678,7 @@
       "direction": "-",
       "strength": "中",
       "timestamp": "13:24",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=804",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=804s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -688,7 +688,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "13:58",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=838",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=838s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -698,7 +698,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "15:52",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=952",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=952s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -708,7 +708,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "16:24",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=984",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=984s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -718,7 +718,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "16:24",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=984",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=984s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -728,7 +728,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "16:57",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1017",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1017s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -738,7 +738,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "19:05",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1145",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1145s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     },
@@ -748,7 +748,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "20:54",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1254",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s",
       "speaker": "Eugeo(推定)",
       "speakerConfidence": "中"
     }
@@ -758,28 +758,28 @@
       "heard": "にんこさん(ねーにんこ)",
       "guess": "LR-CORE-ADC(大御所にゅん子)。確かさ 中",
       "summary": "とても上手い ADC と評価(偉い ADC という趣旨)。",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=155",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=155s",
       "timestamp": "2:35"
     },
     {
       "heard": "ポッポ",
       "guess": "LR-CORE-JG(Killin9Hit)か不明。確かさ 低",
       "summary": "ジャングルとしてとても上手く、ちゃんとしていると評価。15:22 でも『ポッポさん』と出た直後に『きなこさん』と言い直しているため、呼び名の対象は不確か。",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=214",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=214s",
       "timestamp": "3:34"
     },
     {
       "heard": "そばちゃん",
       "guess": "DD-CORE-TOP(酒寄颯馬)。確かさ 低",
       "summary": "DD CORE のトップとして名前が挙がった。",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=952",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=952s",
       "timestamp": "15:52"
     },
     {
       "heard": "ねりんご",
       "guess": "DD-NEXT-MID(天ノ川ねる)。確かさ 低",
       "summary": "集団戦でキャリーするタイプ。話者がコーチをした経験から、課題はメンタルと評価。",
-      "source": "transcript:20261010-transcript-[000000] それもお互い様でしょ [000.md#t=1211",
+      "source": "https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1211s",
       "timestamp": "20:11"
     }
   ],

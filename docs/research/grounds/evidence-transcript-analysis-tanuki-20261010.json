@@ -1,11 +1,11 @@
 {
   "kind": "evidence-transcript",
   "file": "20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md",
-  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は未確定(urlPending)で、届いたら source を時刻つきの URL に、origin を transcript:<動画の ID> に差し替えてから統合する。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 11669 字 → 2860 字(24.5%)、区間 37 → 31、長さ 17 分",
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は価値責任者から 2026-10-10 に受け取り(題名を oEmbed で確認)、source を時刻つきの URL に、origin を transcript:<動画の ID> に置き換えた。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 11669 字 → 2860 字(24.5%)、区間 37 → 31、長さ 17 分",
   "source": {
     "title": "LTK Season: Finale のチーム分けを見ながらの各チーム考察配信(LR・IT・CC・DD の順)。文字起こしの先頭の文から『ちょっと今のうちにやってなかっ』の名前で保存されたもの",
-    "url": "",
-    "urlPending": true,
+    "url": "https://www.youtube.com/watch?v=5LgfqfmCRcQ",
+    "urlPending": false,
     "speaker": "たぬき忍者(DD MASTERS MID)と推定。根拠: しゃるると同じチームになった(2:54・3:26)、DD NEXT のコーチを務める(16:57)、ミッドでビクターを使う(7:45)。確かさ 高",
     "retrievedAt": "2026-10-10",
     "preprocessed": "data/transcript/structured/20261010-transcript-[000000] ちょっと今のうちにやってなかっ.json",
@@ -15,7 +15,7 @@
   "caveats": [
     "自動字幕には話者の情報が無い。話者はファイル内の自称・自チームの呼び方から推定した(source.speaker)。相づちや同席者・視聴者のコメントの読み上げが混ざる可能性がある",
     "配信の日付は不明(チーム分けの発表後、大会の開始前と推定)。各項目の date は 2026-10 とした",
-    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者に尋ねる必要がある(state:needs-po)。URL が決まるまで正規化の記録へは統合しない",
+    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者が 2026-10-10 に示した URL を使った。前処理の出力の内容(どの階級チームの話が多いか)と動画の題名の対応を確かめた",
     "名前が区間に無い項目は、前後の区間の名前や紹介の順序から人物を推定した。推定の確かさは各項目の note にある",
     "unmapped には名簿の誰かと推定できる呼び名だけを残し、名簿外の人物・私生活・年齢や勤め先に当たる話題は書いていない"
   ],
@@ -27,7 +27,7 @@
       {
         "trait": "other",
         "summary": "NEXT の中で強く、CORE の経験もある。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=84",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=84s",
         "timestamp": "1:24",
         "selfTeam": false,
         "note": "『神』と聞こえ、狐白うると推定(前処理も確信の低い候補として出す。確かさ 中)",
@@ -36,7 +36,7 @@
       {
         "trait": "mechanics",
         "summary": "NEXT の最強格と名高いと評価。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=114",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=114s",
         "timestamp": "1:54",
         "selfTeam": false,
         "note": "『神』=狐白うる(確かさ 中)",
@@ -47,7 +47,7 @@
       {
         "trait": "other",
         "summary": "出場は意外。たまに LoL 配信をする程度という認識。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=114",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=114s",
         "timestamp": "1:54",
         "selfTeam": false,
         "note": "名前(春茶さん)は区間にある",
@@ -58,7 +58,7 @@
       {
         "trait": "laning",
         "summary": "LTK で初めてのミッド。レーン勝ちで強いという趣旨。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=238",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=238s",
         "timestamp": "3:58",
         "selfTeam": false,
         "note": "名前は区間に無く、IT CORE の『LTK 初ミッド』からたかやスペシャルと推定(確かさ 中)",
@@ -69,7 +69,7 @@
       {
         "trait": "other",
         "summary": "IT CORE はすべて AlphaAzur がどれだけ仕上がるか次第との見立て。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=344",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=344s",
         "timestamp": "5:44",
         "selfTeam": false,
         "note": "名前(アルファ君)は区間にある",
@@ -78,7 +78,7 @@
       {
         "trait": "other",
         "summary": "最初から上手いことはなく、どれだけ上手くなるか。ジャングルは途中から急に上達しやすいロールとの見方。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=374",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=374s",
         "timestamp": "6:14",
         "selfTeam": false,
         "note": "名前は区間に無く、5:44・6:47 の AlphaAzur の話の続き(確かさ 中)",
@@ -89,7 +89,7 @@
       {
         "trait": "laning",
         "summary": "レーニングが強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=465",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=465s",
         "timestamp": "7:45",
         "selfTeam": false,
         "note": "名前(まいたけ)は区間にある。ビクターの話は誰のピックか不明",
@@ -100,7 +100,7 @@
       {
         "trait": "other",
         "summary": "とても練習していると評価(『演習』と聞こえる)。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=614",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=614s",
         "timestamp": "10:14",
         "selfTeam": false,
         "note": "名前(くずは)は区間にある",
@@ -109,7 +109,7 @@
       {
         "trait": "laning",
         "summary": "強いが、他の CORE のミッドも強いので、へこまされるとチームがそのまま負けそうとの見立て。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=674",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=674s",
         "timestamp": "11:14",
         "selfTeam": false,
         "note": "『クズハ』と聞こえ、葛葉(確かさ 高)",
@@ -120,7 +120,7 @@
       {
         "trait": "mechanics",
         "summary": "とても強いと評価。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=773",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=773s",
         "timestamp": "12:53",
         "selfTeam": false,
         "note": "『ユフナ』と聞こえ、ゆふな(確かさ 高)",
@@ -132,7 +132,7 @@
     "CC-CORE": [
       {
         "text": "ミッドが負けるとそのまま負けるという見立て。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=674",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=674s",
         "timestamp": "11:14",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -144,7 +144,7 @@
       {
         "aspect": "lanes",
         "summary": "ミッド・ジャングルが強い。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=0",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=0s",
         "timestamp": "0:00",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -154,7 +154,7 @@
       {
         "aspect": "jungle",
         "summary": "すべて AlphaAzur がどれだけ仕上がるか次第。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=344",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=344s",
         "timestamp": "5:44",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -164,7 +164,7 @@
       {
         "aspect": "chemistry",
         "summary": "話者(たぬき忍者)が以前教えた選手が多く、コーチのような気分になるとのこと。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=407",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=407s",
         "timestamp": "6:47",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -172,7 +172,7 @@
       {
         "aspect": "shotcalling",
         "summary": "トップはマクロに詳しくコールできるが、ボット側にコールできる人がいないと虚しいという趣旨。あまり喋る人がいない(誰を指すかは不明)。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=522",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=522s",
         "timestamp": "8:42",
         "selfTeam": false,
         "note": "IT NEXT の話の流れ(7:15〜9:12)の中の発言だが、対象の選手は明示されていない",
@@ -183,7 +183,7 @@
       {
         "aspect": "shotcalling",
         "summary": "試合中盤までのコールが心配。ミッドがへこむと何をすべきか分からなくなるチームとの見立てで、ミッドを勝たせたい。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=674",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=674s",
         "timestamp": "11:14",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -191,7 +191,7 @@
       {
         "aspect": "pick",
         "summary": "何をピックするかの方針が大切。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=707",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=707s",
         "timestamp": "11:47",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -201,7 +201,7 @@
       {
         "aspect": "lanes",
         "summary": "ミッドで勝つことが重要。ボットはレート(エメラルド平均)から見ると勝つのが難しそう。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=773",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=773s",
         "timestamp": "12:53",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -212,7 +212,7 @@
     "IT-MASTERS-JG": [
       {
         "summary": "教えるのに熱心で、AlphaAzur と相性がよさそうとの見方。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=407",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=407s",
         "timestamp": "6:47",
         "selfTeam": false,
         "aiCheck": "not-refuted"
@@ -221,7 +221,7 @@
     "DD-MASTERS-MID": [
       {
         "summary": "DD NEXT のコーチを務める(本人)。楽しみにしている。",
-        "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=1017",
+        "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=1017s",
         "timestamp": "16:57",
         "selfTeam": true,
         "aiCheck": "not-refuted"
@@ -235,7 +235,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "0:00",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=0",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=0s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -245,7 +245,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "1:24",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=84",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=84s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -255,7 +255,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "2:24",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=144",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=144s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -265,7 +265,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "3:26",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=206",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=206s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -275,7 +275,7 @@
       "direction": "+",
       "strength": "弱",
       "timestamp": "3:26",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=206",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=206s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高",
       "selfTeam": true
@@ -286,7 +286,7 @@
       "direction": "-",
       "strength": "弱",
       "timestamp": "5:44",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=344",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=344s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -296,7 +296,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "7:15",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=435",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=435s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -306,7 +306,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "9:12",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=552",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=552s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -316,7 +316,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "9:43",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=583",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=583s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -326,7 +326,7 @@
       "direction": "-",
       "strength": "弱",
       "timestamp": "11:14",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=674",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=674s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -336,7 +336,7 @@
       "direction": "+",
       "strength": "中",
       "timestamp": "12:23",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=743",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=743s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高"
     },
@@ -346,7 +346,7 @@
       "direction": "+",
       "strength": "強",
       "timestamp": "15:55",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=955",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=955s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高",
       "selfTeam": true
@@ -357,7 +357,7 @@
       "direction": "-",
       "strength": "弱",
       "timestamp": "16:26",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=986",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=986s",
       "speaker": "たぬき忍者(推定)",
       "speakerConfidence": "高",
       "selfTeam": true
@@ -368,7 +368,7 @@
       "heard": "ラムネ君",
       "guess": "DD-NEXT-SUP(白波らむね)。確かさ 低",
       "summary": "(誰かが)見てもらった相手として名前が出た(文脈は不完全)。",
-      "source": "transcript:20261010-transcript-[000000] ちょっと今のうちにやってなかっ.md#t=955",
+      "source": "https://www.youtube.com/watch?v=5LgfqfmCRcQ&t=955s",
       "timestamp": "15:55"
     }
   ],
