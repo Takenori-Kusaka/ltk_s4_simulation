@@ -1,7 +1,7 @@
 {
   "kind": "evidence-shotcalling",
   "retrievedAt": "2026-10-08",
-  "description": "F-009 コール力の根拠(ADR-0004 決定5)。collectedBy=ai は AI の調査エージェントが集めた未確認の根拠(「AI 収集」と表示)、human は価値責任者の確認。kindBy=機械で推定 は IT・LR の根拠の種類を要約の語から機械で付けたもの。2026-10-09: hetel のチーム分析配信(https://www.youtube.com/watch?v=xdsbfDbaqRU 、価値責任者が共有)の根拠を追加。selfTeam=true は DD の選手である hetel 自身のチームについての発言。2026-10-09: 価値責任者が共有した配信の文字起こし(IT CORE の練習配信と推定)の根拠を追加(URL 未確定) 2026-10-10: 経歴の根拠(docs/research/grounds/career/*.json)の shotcallingIgl のうち、verification.status が confirmed で、既存の根拠と出典の URL が重ならない行を追加(origin=career-research-2026-10-10。kind は調査の分類、type は要約の語から機械で推定(typeBy=機械で推定)。selfTeam は話し手が名簿の選手と分かる行だけに付け、true は同じチームの選手の発言)。",
+  "description": "F-009 コール力の根拠(ADR-0004 決定5)。collectedBy=ai は AI の調査エージェントが集めた未確認の根拠(「AI 収集」と表示)、human は価値責任者の確認。kindBy=機械で推定 は IT・LR の根拠の種類を要約の語から機械で付けたもの。2026-10-09: hetel のチーム分析配信(https://www.youtube.com/watch?v=xdsbfDbaqRU 、価値責任者が共有)の根拠を追加。selfTeam=true は DD の選手である hetel 自身のチームについての発言。2026-10-09: 価値責任者が共有した配信の文字起こし(IT CORE の練習配信と推定)の根拠を追加(URL 未確定) 2026-10-10: 経歴の根拠(docs/research/grounds/career/*.json)の shotcallingIgl のうち、verification.status が confirmed で、既存の根拠と出典の URL が重ならない行を追加(origin=career-research-2026-10-10。kind は調査の分類、type は要約の語から機械で推定(typeBy=機械で推定)。selfTeam は話し手が名簿の選手と分かる行だけに付け、true は同じチームの選手の発言)。 2026-10-11: 価値責任者本人の DD 15 名の点数レビューの文字起こし(data/transcript/owner-review/、リポジトリ外)から、コールの担い手についての発言を kind owner-confirmation として AI が書き起こして追加(docs/research/grounds/evidence-owner-review-dd-20261011.json)。発言の全文は転記していない。価値責任者が PR で確認するまで仮の記録",
   "players": {
     "DD-MASTERS-TOP": {
       "name": "わしだい",
@@ -13,7 +13,8 @@
         {"summary":"DD MASTERS のコール役として hetel と並んでわしだいの名を挙げた。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2405s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"40:05","selfTeam":true},
         {"summary":"わしだいは後半、TOP が集団戦に関与するフェーズからコールに加わる想定。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2453s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"40:53","selfTeam":true},
         {"summary":"V3・AXC で負け癖、QTD でも途中まで曖昧な判断で進めたと自己分析","source":"https://fistbump-news.jp/article/2025/09/17/1583.html","date":"2025-09-17","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"プロ在籍中も配信者へのコーチングを継続","source":"https://fistbump-news.jp/article/2025/09/17/1583.html","date":"2025-09-17","type":"記事","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
+        {"summary":"プロ在籍中も配信者へのコーチングを継続","source":"https://fistbump-news.jp/article/2025/09/17/1583.html","date":"2025-09-17","type":"記事","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
+        {"summary":"価値責任者が「わしだいはコールができる(喋れる)」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:17])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"12:27 でも『コールもできるので問題ない』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-MASTERS-JG": {
@@ -75,7 +76,8 @@
         {"summary":"プロカスタムの切り抜き題名『本気のコールで勝ちにいきます』。自らコールする側","source":"https://www.youtube.com/watch?v=HrqiSwJ2V5I","date":"2026-09-28","type":"視聴者の声","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"久々のチーム戦で下手だったとしてリハビリすると発言(ブランク)","source":"https://www.youtube.com/watch?v=I2xYEjwHFb0","date":"2026-09-29","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"Scouting Grounds(2026)の若手を『日本一デュオBOT』の2人でコーチングし、SUP の個人面談も行った","source":"https://www.youtube.com/@hetelch/videos","date":"2026-08〜09","type":"記事","direction":"+","strength":"弱","kind":"coach","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"コールを多くするタイプではなく、優しく、人に合わせて任せる側と評価。わしだいが崩れたときに指摘できる人がいない懸念。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=774s","date":"2026-10","type":"配信者の評価(第三者)","direction":"-","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"12:54","note":"名前(ヘテル)は区間にある。話者は Eugeo と推定(確かさ 中)","selfTeam":false}
+        {"summary":"コールを多くするタイプではなく、優しく、人に合わせて任せる側と評価。わしだいが崩れたときに指摘できる人がいない懸念。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=774s","date":"2026-10","type":"配信者の評価(第三者)","direction":"-","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"12:54","note":"名前(ヘテル)は区間にある。話者は Eugeo と推定(確かさ 中)","selfTeam":false},
+        {"summary":"価値責任者が「hetel はコール力が十分にあり、フォーカスのコールもできる」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:00])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"2:17 でも『喋れる』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-CORE-TOP": {
@@ -96,7 +98,8 @@
         {"summary":"Crazy Raccoon Wiki によると、公式紹介でゲーム IQ が高く、IGL を務めることが多いとされる(主に Apex)。","source":"https://wikiwiki.jp/crazyraccoon/kinako","date":"不明","type":"記事","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"S1 の FISTBUMP 記事は、正確なエンゲージと相手の仕掛けを潰すプレイを評価した。コールについての記述はない。","source":"https://fistbump-news.jp/article/2025/07/30/1384.html","date":"2025-07-30","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"CR 公式プロフィールが、ゲーム IQ が高く IGL を務めることが多いと紹介(FPS)","source":"https://crazyraccoon.jp/member/kinako","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"LTK S1 振り返りで、自分が相手の一番の脅威だったと述べた(役割の認識でコールではない)","source":"https://www.youtube.com/watch?v=_PhWnFdReic","date":"2025-09-10","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
+        {"summary":"LTK S1 振り返りで、自分が相手の一番の脅威だったと述べた(役割の認識でコールではない)","source":"https://www.youtube.com/watch?v=_PhWnFdReic","date":"2025-09-10","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
+        {"summary":"価値責任者が「きなこはチャンピオンとロールの理解度が低くコールがちゃんとできず、味方のコールを受けて動く側」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:39])","date":"2026-10-11","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"22:01『味方のコールをもらって動く』。9:16 では神楽めあのマクロに意見を出す側としても言及。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-CORE-MID": {
@@ -107,7 +110,8 @@
         {"summary":"DD CORE のコールはスタンミと神楽めあが担うのではとの見立て。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2679s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"44:39","selfTeam":true},
         {"summary":"げまげまのリーダーと紹介(グループの代表で、ゲーム内の IGL とは別)","source":"https://hominis.media/category/cultural/post13707?page=3","date":"2024-12-15","type":"大会での役割","direction":"+","strength":"中","kind":"other","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"DreamHack 2023 の事前記事: 最も LoL 歴が長くランクも高いスタンミがどう引っ張るかが鍵","source":"https://esports-select.com/topics/4395","date":"2023-05-13","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"Riot Games ONE 2024 後、たぬき忍者の事前の助言で試合中が楽になったとスタンミが述べた(任せる側)","source":"https://hominis.media/category/cultural/post13707?page=2","date":"2024-12-15","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"}
+        {"summary":"Riot Games ONE 2024 後、たぬき忍者の事前の助言で試合中が楽になったとスタンミが述べた(任せる側)","source":"https://hominis.media/category/cultural/post13707?page=2","date":"2024-12-15","type":"本人の発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
+        {"summary":"価値責任者が「スタンミじゃぱんはコールがちゃんとしっかりできる」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:22:41])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-CORE-ADC": {
@@ -128,7 +132,8 @@
         {"summary":"S2 の PD コーチの Zerost が、めあはコールが圧倒的に増え、味方の安全を気にかける声掛けも増えたと評した。SHAKA は「キレなくなった」と述べた。","source":"https://fistbump-news.jp/article/2026/01/07/2001.html","date":"2026-01-07","type":"チームメイトの発言","direction":"+","strength":"強","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"S3 の切り抜きの題名に「爆育ちしてアイテムに悩む大御所にめあ語でアドバイスする神楽めあ」がある。","source":"https://www.youtube.com/watch?v=B7WRG6B2XuA","date":"不明","type":"視聴者の声","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"神楽めあも結構コールするタイプと評価。","source":"https://www.youtube.com/watch?v=xdsbfDbaqRU&t=2679s","date":"2026-10-09","type":"配信での分析","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"hetel のチーム分析配信(文字起こし)","timestamp":"44:39","selfTeam":true},
-        {"summary":"CORE のサポートの中で一番上手く、あれだけコールもエンゲージもできると評価。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=862s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"14:22","note":"名前は区間に無く、前後(13:58・15:52)の神楽めあの話の流れから推定(確かさ 中)","selfTeam":false}
+        {"summary":"CORE のサポートの中で一番上手く、あれだけコールもエンゲージもできると評価。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=862s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"14:22","note":"名前は区間に無く、前後(13:58・15:52)の神楽めあの話の流れから推定(確かさ 中)","selfTeam":false},
+        {"summary":"価値責任者が「神楽めあは DD CORE のコールの中心で、オブジェクトの判断を促すコールやマクロの指示を出す側」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:38])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"4:29『かなり喋りまくる』、8:59『オブジェクトのコールを投げかけ続ける』、9:10『マクロのベースで、コーチ陣とズレがない』、25:05『コール力は最大級でよい』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-NEXT-TOP": {
@@ -155,12 +160,14 @@
         {"summary":"Riot Games ONE 2024 コンソール版 VALORANT で的確なコール。本人もコールで経験が生きたと語る","source":"https://esports-world.jp/interview/45296","date":"2024-12-19","type":"本人の発言","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"VALORANT のコーチング企画の経験","source":"https://game.watch.impress.co.jp/docs/interview/1434753.html","date":"2022-08-26","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"VTuber最協 VALORANT Act.1 で夢野あかりのチーム「せんちねるず」のコーチ(4位)","source":"https://wikiwiki.jp/vspo/%E5%A4%A2%E9%87%8E%E3%81%82%E3%81%8B%E3%82%8A","date":"2023-11-19","type":"記事","direction":"+","strength":"弱","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"白波らむねと 2 人でコールを出し合うのがよいとの見立て。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"20:54","note":"『マダさん』と聞こえ、19:05 の『マザーさん』と同じくまざー3 と推定(確かさ 中)","selfTeam":false}
+        {"summary":"白波らむねと 2 人でコールを出し合うのがよいとの見立て。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"20:54","note":"『マダさん』と聞こえ、19:05 の『マザーさん』と同じくまざー3 と推定(確かさ 中)","selfTeam":false},
+        {"summary":"価値責任者が「まざー3 はコールがとてもでき、ジャングルの中からジャングル・オブジェクト・レーンの状況を喋って確認できる」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:27:11])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"28:07 の補足も含む。マクロの理解度が高いわけではないが NEXT の中でコール力は高い、との留保つき。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-NEXT-MID": {
       "name": "天ノ川ねる",
       "evidence": [
+        {"summary":"価値責任者が「天ノ川ねるはコール力があまりなく、コールする側ではない」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:09])","date":"2026-10-11","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"『あんまりないのでこんなもん』(現在の 2.5 を妥当とする文脈)。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "DD-NEXT-ADC": {
@@ -185,7 +192,8 @@
         {"summary":"LR コーチらいじん: S3 の LR NEXT は JG の選手とらむねが軸で、SUP・JG へのマクロ指導が多く、コールのために犠牲にした部分が大きい","source":"https://fistbump-news.jp/article/2026/06/26/2605.html","date":"2026-06-26","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10","selfTeam":false},
         {"summary":"S3 で同じチーム(LR)の Enty による SUP の実戦解説動画で、基礎を教わる側として映る(土台づくりの段階)","source":"https://www.youtube.com/watch?v=sYI2XLcSICU","date":"2026-05-08","type":"チームメイトの発言","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10","selfTeam":false},
         {"summary":"VALORANT で、V最協 Act.1 と RAGE VALORANT 2024 feat.VSPO! ではメイン IGL、上級者の多い CR カップではサブ IGL の役割が多い(ファン Wiki)","source":"https://wikiwiki.jp/vspo/%E7%99%BD%E6%B3%A2%E3%82%89%E3%82%80%E3%81%AD","date":"2023-11-19 ほか","type":"視聴者の声","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"まざー3 と 2 人でコールを出し合うのがよいとの見立て。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"20:54","note":"『ラムチさん』と聞こえ、白波らむねと推定(確かさ 中)","selfTeam":false}
+        {"summary":"まざー3 と 2 人でコールを出し合うのがよいとの見立て。","source":"https://www.youtube.com/watch?v=qsrVbjq2KMM&t=1254s","date":"2026-10","type":"配信者の評価(第三者)","direction":"+","strength":"中","kind":"player","collectedBy":"ai","origin":"transcript:qsrVbjq2KMM","timestamp":"20:54","note":"『ラムチさん』と聞こえ、白波らむねと推定(確かさ 中)","selfTeam":false},
+        {"summary":"価値責任者が「白波らむねはコールがしっかりでき、分かりやすいコールが多くチームが動きやすい」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:32:24])","date":"2026-10-11","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
       ]
     },
     "CC-MASTERS-TOP": {
