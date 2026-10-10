@@ -5451,9 +5451,9 @@
         "allTime": {
           "tier": "Master",
           "division": null,
-          "lp": 233,
-          "when": "2026 シーズン(2026-10-08 の現在値。下限)",
-          "isLowerBound": true,
+          "lp": 559,
+          "when": "2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Diamond 2 が最高)",
+          "isLowerBound": false,
           "source": "https://op.gg/lol/summoners/jp/%E3%82%82%E3%81%A1%E3%81%82%E3%81%8D-%E3%82%A4%E3%83%AB%E3%83%9C%E3%83%B3"
         },
         "thisSeason": {
@@ -5544,11 +5544,11 @@
       "name": "ねすてぃー / Nesty",
       "peak": {
         "allTime": {
-          "tier": "Master",
+          "tier": "Challenger",
           "division": null,
-          "lp": 831,
-          "when": "2026 シーズン(2026-10-08 の現在値。下限)",
-          "isLowerBound": true,
+          "lp": 1341,
+          "when": "2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2024 S1 の Master 318 が最高)",
+          "isLowerBound": false,
           "source": "https://op.gg/lol/summoners/jp/%E3%81%AD%E3%81%99%E3%81%A6%E3%81%83%E3%83%BC-7777"
         },
         "thisSeason": {
@@ -5646,9 +5646,9 @@
         "allTime": {
           "tier": "Challenger",
           "division": null,
-          "lp": 1761,
-          "when": "2026 シーズン(2026-10-08 の現在値。下限)",
-          "isLowerBound": true,
+          "lp": 2074,
+          "when": "2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Challenger 1012 が最高)",
+          "isLowerBound": false,
           "source": "https://op.gg/lol/summoners/jp/Recap-125"
         },
         "thisSeason": {
@@ -5844,11 +5844,11 @@
       "name": "てぃんとん / ThintoN",
       "peak": {
         "allTime": {
-          "tier": "Master",
+          "tier": "Grandmaster",
           "division": null,
-          "lp": 1006,
-          "when": "2026 シーズン(2026-10-08 の現在値。下限)",
-          "isLowerBound": true,
+          "lp": 1158,
+          "when": "2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Grandmaster 693・S2024 S2 の Grandmaster 685)",
+          "isLowerBound": false,
           "source": "https://op.gg/lol/summoners/jp/%E3%81%A6%E3%81%83%E3%82%93%E3%81%A8%E3%82%93-1017"
         },
         "thisSeason": {
@@ -6790,8 +6790,8 @@
         "allTime": {
           "tier": "Gold",
           "division": 2,
-          "lp": 62,
-          "when": "S2026",
+          "lp": 83,
+          "when": "S2026(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2025 の Gold 4 が最高)",
           "isLowerBound": false,
           "source": "https://op.gg/lol/summoners/jp/%E6%A8%AA%E6%8F%BA%E3%82%8C%E3%81%97%E3%83%86%E3%83%AB%E3%83%AC%E3%83%80-ODORE"
         },
