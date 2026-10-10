@@ -154,7 +154,8 @@
   .missing { margin: 0.2rem 0 0; font-size: 0.76rem; color: var(--ivory-dim); }
   .pct { font-family: var(--serif-latin); font-size: 1.25rem; font-weight: 700; color: var(--ivory); white-space: nowrap; }
   .pct small { font-size: 0.7rem; margin-left: 0.05rem; color: var(--ivory-dim); }
-  .bar { display: block; height: 6px; border-radius: 3px; overflow: hidden; background: var(--velvet-3); }
+  /* app.css の .bar(選手のページの棒。grid-area: bar)と同名。この節のグリッドでは自動配置に戻す */
+  .bar { grid-area: auto; display: block; height: 6px; border-radius: 3px; overflow: hidden; background: var(--velvet-3); }
   .bar i { display: block; height: 100%; background: var(--team); opacity: 0.9; }
   /* 基準15(a): 直近の試合 */
   .next { display: grid; gap: 0.3rem; }
@@ -178,10 +179,12 @@
   .tier-name { font-family: var(--caps); font-size: 1rem; letter-spacing: 0.1em; color: var(--gold-hi); }
   .exp { font-size: 0.82rem; color: var(--ivory-dim); }
   .exp b { font-family: var(--serif-latin); font-size: 1.2rem; color: var(--ivory); }
+  .exp small { margin-left: 0.15em; }
   /* 基準11 と同じ扱い: 表は横に送れる枠の中に置き、ページを横にスクロールさせない */
   .scroll { overflow-x: auto; }
   table { border-collapse: separate; border-spacing: 0 3px; width: 100%; font-size: 0.84rem; }
-  thead th { font-family: var(--caps); font-weight: 400; font-size: 0.66rem; letter-spacing: 0.12em; color: var(--ivory-dim); text-align: left; padding: 0.15rem 0.5rem; }
+  /* 幅 390px で「サイド」が 2 行に割れないようにする(表は横に送れる枠の中) */
+  thead th { font-family: var(--caps); font-weight: 400; font-size: 0.66rem; letter-spacing: 0.12em; color: var(--ivory-dim); text-align: left; padding: 0.15rem 0.5rem; white-space: nowrap; }
   tbody td { padding: 0.35rem 0.5rem; background: rgba(0, 0, 0, 0.18); vertical-align: middle; white-space: nowrap; }
   td.d b { font-family: var(--caps); font-weight: 400; letter-spacing: 0.06em; }
   td.d .date { font-family: var(--caps); font-size: 0.74rem; letter-spacing: 0.06em; color: var(--ivory-dim); }
@@ -195,7 +198,8 @@
   td.p .missing { display: block; white-space: normal; }
   /* 基準14(c): 見通し */
   .outlook { display: grid; gap: 0.4rem; }
-  .stats { display: grid; gap: 0.6rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* app.css の .stats(選手のページの枠。padding と animation)と同名。ここでは余白と動きを付けない */
+  .stats { display: grid; gap: 0.6rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; animation: none; }
   .stat { display: grid; gap: 0.2rem; padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(0, 0, 0, 0.18); min-width: 0; }
   .stat .k { font-size: 0.76rem; color: var(--ivory-dim); }
   .stat .v { font-family: var(--serif-latin); font-size: 1.6rem; font-weight: 700; line-height: 1.1; color: var(--ivory); }

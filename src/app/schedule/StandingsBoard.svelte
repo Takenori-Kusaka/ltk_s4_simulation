@@ -44,7 +44,7 @@
   /* 基準11: 表は横に送れる枠の中に置き、ページを横にスクロールさせない */
   .scroll { overflow-x: auto; }
   table { border-collapse: separate; border-spacing: 0 4px; width: 100%; min-width: 30rem; font-family: ui-monospace, 'Courier New', monospace; font-size: 0.85rem; }
-  thead th { font-weight: 600; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--ivory-dim); padding: 0.2rem 0.6rem; text-align: center; background: var(--velvet-3); }
+  thead th { font-weight: 600; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--ivory-dim); padding: 0.2rem 0.6rem; text-align: center; background: var(--velvet-3); white-space: nowrap; }
   thead th.team { text-align: left; }
   tbody td { padding: 0.5rem 0.6rem; text-align: center; background: var(--velvet-2); white-space: nowrap; }
   tbody tr.hl td { background: color-mix(in srgb, var(--team) 18%, var(--velvet-2)); }
