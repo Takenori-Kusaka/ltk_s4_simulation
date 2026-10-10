@@ -115,3 +115,30 @@ export function simulationView(sim: SimOutput, file: WinratesFile): SimView {
 export function resultsNotice(file: WinratesFile): string {
   return file.results ? '結果の反映: あり(入力された結果まで)' : '結果の反映: なし(開幕前の予想)';
 }
+
+export interface ChampionRowView {
+  team: TeamId;
+  name: string;
+  color: string;
+  petals: number;
+  /** 優勝確率(0.1% 単位) */
+  champion: string;
+  championNum: number;
+}
+
+/** F-014 基準8: 優勝候補の要約(優勝確率の高い順)。値は F-001 の出力を丸めるだけ */
+export function championSummary(sim: SimOutput): ChampionRowView[] {
+  return TEAMS.map((team) => ({
+    team,
+    name: TEAM_INFO[team].name,
+    color: TEAM_INFO[team].color,
+    petals: TEAM_INFO[team].petals,
+    champion: pct(sim.championProbability[team]),
+    championNum: sim.championProbability[team] * 100,
+  })).sort((x, y) => y.championNum - x.championNum);
+}
+
+/** F-014 基準10: 開幕前の予想の印(結果の入力が無い間) */
+export function stageNotice(file: WinratesFile): string {
+  return file.results ? '結果を反映した予想' : '開幕前の予想';
+}
