@@ -65,10 +65,18 @@ export interface StoryInput {
   teamA?: TeamLayer;
   teamB?: TeamLayer;
 }
+/** F-005 基準 3b の M の内訳(勝率表のファイルの teams[].macroParts[]) */
+export interface MacroPartRaw {
+  key: string;
+  label: string;
+  raw: number;
+}
 /** F-005 基準 3b の階級チームごとの項目(勝率表のファイルの teams[])。無い項目は入れない */
 export interface TeamLayer {
   /** マクロの点数 M。あれば 2 軸の素点の平均より優先する */
   M?: number;
+  /** M の内訳(2 軸の素点)。あればチームの評価のファイルの素点より優先する */
+  parts?: MacroPartRaw[];
   /** 外部の見立ての点数 E(−3〜+3)と件数 */
   E?: number;
   externalCount?: number;
@@ -131,6 +139,8 @@ export interface ExternalItem {
   /** 出典が https の URL のときだけ */
   url: string | null;
   date: string;
+  /** 話者の自チームについての見立て(記録の selfTeam。F-005 では重みが半分) */
+  self: boolean;
 }
 export interface ExternalSide {
   /** 外部の見立ての点数 E(符号つき小数第二位)。勝率表のファイルに無ければ「—」 */
@@ -217,6 +227,8 @@ export function macroScore(t: TierTeamLike): number | null {
 export const EXTERNAL_MAX = 3;
 export const NO_EXTERNAL = '外部の見立ては記録なし';
 const DIRECTION: Record<string, string> = { '+': '肯定', '-': '否定', '−': '否定', 肯定: '肯定', 否定: '否定', positive: '肯定', negative: '否定' };
+/** 記録の話者の種類の符号(ex-pro・player など)を言い換える。知らない表記はそのまま */
+const SPEAKER_KIND: Record<string, string> = { 'ex-pro': '元プロ', player: '選手', caster: '解説', analyst: '解説', commentator: '解説' };
 const str = (x: unknown): string => (typeof x === 'string' ? x : typeof x === 'number' ? String(x) : '');
 /** 記録の target(階級チーム。"CC-CORE" の文字列か { team, tier })を "CC-CORE" の形に揃える */
 const targetKey = (t: unknown): string | null => {
@@ -243,7 +255,8 @@ export function externalItems(views: unknown, team: string, tier: string, max = 
     const d = it.direction;
     const direction = typeof d === 'number' ? (d > 0 ? '肯定' : d < 0 ? '否定' : '') : (DIRECTION[str(d)] ?? str(d));
     const source = str(it.source);
-    out.push({ direction, strength: str(it.strength), speaker: str(it.speaker), speakerKind: str(it.speakerKind), summary, source, url: isHttps(source) ? source : null, date: str(it.date) });
+    const kind = str(it.speakerKind);
+    out.push({ direction, strength: str(it.strength), speaker: str(it.speaker), speakerKind: SPEAKER_KIND[kind] ?? kind, summary, source, url: isHttps(source) ? source : null, date: str(it.date), self: it.selfTeam === true });
   }
   // 新しい順(日付の無い記録は最後)。強さで選ばない(否定の記録を落とさないため)
   out.sort((x, y) => (x.date < y.date ? 1 : x.date > y.date ? -1 : 0));
@@ -260,10 +273,16 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
     const m = finite(given) ? given : macroScore(t);
     return m === null ? '—' : f2(m);
   };
+  // 素点は勝率表のファイルの内訳(teams[].macroParts)を優先し、無ければチームの評価のファイルの素点。理由はチームの評価のファイルだけにある
+  const rawFor = (t: TierTeamLike, layer: TeamLayer | undefined, key: string): number | null => {
+    const given = layer?.parts?.find((p) => p.key === key)?.raw;
+    return finite(given) ? given : rawOf(t, key);
+  };
   const parts: MacroPart[] = MACRO_AXES.map((ax) => {
     const xa = A.axes?.find((x) => x.key === ax.key), xb = B.axes?.find((x) => x.key === ax.key);
-    const ra = rawOf(A, ax.key), rb = rawOf(B, ax.key);
-    return { key: ax.key, label: xa?.label ?? xb?.label ?? ax.label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
+    const ra = rawFor(A, input.teamA, ax.key), rb = rawFor(B, input.teamB, ax.key);
+    const label = input.teamA?.parts?.find((p) => p.key === ax.key)?.label || xa?.label || xb?.label || ax.label;
+    return { key: ax.key, label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
   });
   const ext = (team: string, layer: TeamLayer | undefined): ExternalSide => {
     const e = layer?.E, c = layer?.externalCount;

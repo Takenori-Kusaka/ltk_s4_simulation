@@ -46,15 +46,16 @@ const DD_M = (5.1 + 5.0) / 2;
 const src = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
 // 外部の見立ての記録(normalized/external-views.json)。CC-CORE に 4 件(新しい順で 3 件に絞られる)、DD-CORE に出典が URL でない 1 件、CC-NEXT に 1 件(対象外)
-const view = (target: unknown, direction: string, strength: string, speaker: string, speakerKind: string, summary: string, source: string, date: string) => ({ target, direction, strength, speaker, speakerKind, summary, source, date });
+// speakerKind は記録の符号(ex-pro・player)。表示では「元プロ」「選手」に言い換え、知らない表記はそのまま。selfTeam は話者の自チームについての見立て
+const view = (target: unknown, direction: string, strength: string, speaker: string, speakerKind: string, summary: string, source: string, date: string, selfTeam = false) => ({ target, direction, strength, speaker, speakerKind, summary, source, date, selfTeam });
 const externalViews = {
   kind: 'external-views',
   items: [
-    view('CC-CORE', '+', '強', '話者A', '元プロ', 'CC CORE は構成の完成度が高い', 'https://example.com/v1', '2026-10-01'),
+    view('CC-CORE', '+', '強', '話者A', 'ex-pro', 'CC CORE は構成の完成度が高い', 'https://example.com/v1', '2026-10-01'),
     view('CC-CORE', '-', '弱', '話者B', '解説', '序盤の動きに迷いがある', 'https://example.com/v2', '2026-10-03'),
-    view('CC-CORE', '+', '中', '話者C', '選手', '集団戦の連携が良い', 'https://example.com/v3', '2026-10-05'),
-    view('CC-CORE', '+', '中', '話者D', '元プロ', '古い見立て', 'https://example.com/v4', '2026-09-20'),
-    view('DD-CORE', '肯定', '中', '話者E', '解説', 'DD の見立て', 'docs/research/x.md', '2026-10-02'),
+    view('CC-CORE', '+', '中', '話者C', 'player', '集団戦の連携が良い', 'https://example.com/v3', '2026-10-05', true),
+    view('CC-CORE', '+', '中', '話者D', 'ex-pro', '古い見立て', 'https://example.com/v4', '2026-09-20'),
+    view('DD-CORE', '肯定', '中', '話者E', 'caster', 'DD の見立て', 'docs/research/x.md', '2026-10-02'),
     view('CC-NEXT', '+', '強', '話者F', '解説', 'NEXT の見立て(対象外)', 'https://example.com/v5', '2026-10-02'),
   ],
 };
@@ -132,6 +133,37 @@ test('基準32: マクロ(チーム)の層は両チームの M(小数第二位)�
   assert.ok(g.ok);
   assert.equal(g.layers.macro.M.a, '5.50');
   assert.equal(g.layers.macro.M.b, DD_M.toFixed(2));
+  // 勝率表のファイルの内訳(teams[].macroParts)があれば素点はそれを優先し、理由はチームの評価のファイルから。無い軸はチームの評価のファイルの素点
+  const f = matchStory({ ...input, teamA: { M: 6.5, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.9 }, { key: 'shotcalling', label: '司令塔', raw: 6.1 }] }, teamB: { parts: [{ key: 'synergy', label: '連携の厚み', raw: 5.3 }] } }, ratings, teamEval);
+  assert.ok(f.ok);
+  assert.equal(f.layers.macro.M.a, '6.50');
+  assert.deepEqual(f.layers.macro.parts.map((p) => p.a), ['6.90', '6.10']);
+  assert.deepEqual(f.layers.macro.parts.map((p) => p.b), ['5.30', '5.00']);
+  assert.equal(f.layers.macro.parts[0].reasonA, '(連携 + 集団戦) ÷ 2 の平均 6.12 + 継続性の組 4 × 0.1');
+  assert.equal(f.layers.macro.parts[0].reasonB, 'DD の連携');
+});
+
+test('基準33(実データ): normalized/external-views.json の記録は階級チームごとに最大 3 件に絞られ、向きは肯定/否定、話者の種類は言い換え済み、出典は https。禁止語は無い', () => {
+  const real = JSON.parse(src('../../docs/research/grounds/normalized/external-views.json'));
+  assert.ok(Array.isArray(real.items) && real.items.length > 0);
+  let total = 0;
+  for (const team of ['CC', 'DD', 'IT', 'LR']) {
+    for (const tier of ['NEXT', 'CORE', 'MASTERS']) {
+      const items = externalItems(real, team, tier);
+      assert.ok(items.length <= 3);
+      total += items.length;
+      for (const it of items) {
+        assert.ok(['肯定', '否定'].includes(it.direction), `${team}-${tier} の向き ${it.direction}`);
+        assert.ok(['強', '中', '弱'].includes(it.strength), `${team}-${tier} の強さ ${it.strength}`);
+        assert.ok(it.url !== null && it.url.startsWith('https://'), `${team}-${tier} の出典 ${it.source}`);
+        assert.ok(it.summary.length > 0 && it.speaker.length > 0);
+        assert.ok(!/^[a-z-]+$/.test(it.speakerKind), `話者の種類が符号のまま: ${it.speakerKind}`);
+        for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!JSON.stringify(it).includes(w), w);
+      }
+    }
+  }
+  assert.ok(total > 0);
+  assert.ok(externalItems(real, 'CC', 'CORE').length > 0);
 });
 
 test('基準33: 外部の見立ての項目は、記録の target がその階級チームに当たるものを新しい順に最大 3 件。向き・強さ・話者(種類)・要約・出典(https のときだけリンク)', () => {
@@ -143,15 +175,18 @@ test('基準33: 外部の見立ての項目は、記録の target がその階�
   assert.deepEqual(cc.map((i) => i.strength), ['中', '弱', '強']);
   assert.deepEqual(cc.map((i) => i.speaker), ['話者C', '話者B', '話者A']);
   assert.deepEqual(cc.map((i) => i.speakerKind), ['選手', '解説', '元プロ']);
+  assert.deepEqual(cc.map((i) => i.self), [true, false, false]);
   assert.equal(cc[0].summary, '集団戦の連携が良い');
   assert.equal(cc[0].url, 'https://example.com/v3');
   assert.equal(cc[0].source, 'https://example.com/v3');
-  // 出典が URL でない記録はリンクを持たない。向きは「肯定」「否定」の表記も受ける
+  // 出典が URL でない記録はリンクを持たない。向きは「肯定」「否定」の表記も受ける。caster は「解説」
   const dd = externalItems(externalViews, 'DD', 'CORE');
   assert.equal(dd.length, 1);
   assert.equal(dd[0].url, null);
   assert.equal(dd[0].source, 'docs/research/x.md');
   assert.equal(dd[0].direction, '肯定');
+  assert.equal(dd[0].speakerKind, '解説');
+  assert.equal(dd[0].self, false);
   // 階級が違う記録は当たらない。target はオブジェクトの形({ team, tier })も受ける
   assert.equal(externalItems(externalViews, 'DD', 'NEXT').length, 0);
   assert.equal(externalItems({ items: [view({ team: 'IT', tier: 'MASTERS' }, '-', '強', 'x', '解説', 'y', 'https://example.com/z', '2026-10-01')] }, 'IT', 'MASTERS').length, 1);
@@ -208,6 +243,9 @@ test('基準31〜33(表示): 結論の直後に 3 行(両方そろうときだ�
   assert.match(svelte, /story\.layers\.macro\.external/);
   assert.match(svelte, /外部の見立ては記録なし/);
   assert.match(svelte, /loadExternalViews\(\)/);
+  // 話者の自チームについての見立てには印を付ける(F-005 では重みが半分)
+  assert.match(svelte, /it\.self/);
+  assert.match(svelte, /自チーム/);
   for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!svelte.includes(w), `MatchStory に ${w}`);
   const data = src('../../src/app/story/data.ts');
   assert.match(data, /export function loadExternalViews/);
@@ -229,7 +267,13 @@ type Layered = MatchPrior & { pLaneA?: number; pLaneB?: number; pMacroA?: number
 const file: WinratesFile = {
   ...base,
   matches: base.matches.map((m): Layered => (m.stage === 'regular' && m.day === 1 ? { ...m, pLaneA: 58.0, pLaneB: 42.0, pMacroA: 55.0, pMacroB: 45.0, pExtA: 52.0, pExtB: 48.0 } : m)),
-  teams: base.teams.map((t) => (t.team === 'CC' && t.tier === 'CORE' ? { ...t, M: 6.54, E: 1.25, externalCount: 4 } : t.team === 'IT' && t.tier === 'CORE' ? { ...t, E: -0.5 } : t)),
+  teams: base.teams.map((t) =>
+    t.team === 'CC' && t.tier === 'CORE'
+      ? { ...t, M: 6.54, macroParts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }], E: 1.25, externalCount: 4 }
+      : t.team === 'IT' && t.tier === 'CORE'
+        ? { ...t, E: -0.5, macroParts: 'x' }
+        : t,
+  ),
   computedAt: '2026-10-10T10:00:00.000Z',
   configVersion: 'abcdef012345',
   results: null,
@@ -253,7 +297,8 @@ test('基準31・33(日程の箱): 行は勝率表のファイルの試合の pL
     assert.equal(r.pExt, undefined);
   }
   const core = [...rows1, ...rows2].filter((r) => r.tier === 'CORE').flatMap((r) => [r.blue, r.red]);
-  assert.deepEqual(core.find((x) => x.team === 'CC')!.layer, { M: 6.54, E: 1.25, externalCount: 4 });
+  assert.deepEqual(core.find((x) => x.team === 'CC')!.layer, { M: 6.54, E: 1.25, externalCount: 4, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }] });
+  // 壊れた macroParts は入れない
   assert.deepEqual(core.find((x) => x.team === 'IT')!.layer, { E: -0.5 });
   assert.equal(core.find((x) => x.team === 'DD')!.layer, undefined);
   assert.equal([...rows1, ...rows2].filter((r) => r.tier === 'NEXT').flatMap((r) => [r.blue, r.red]).find((x) => x.team === 'CC')!.layer, undefined);
