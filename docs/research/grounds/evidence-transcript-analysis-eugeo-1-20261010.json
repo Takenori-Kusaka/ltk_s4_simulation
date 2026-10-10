@@ -1,0 +1,488 @@
+{
+  "kind": "evidence-transcript",
+  "file": "20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md",
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は未確定(urlPending)で、届いたら source を時刻つきの URL に、origin を transcript:<動画の ID> に差し替えてから統合する。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 9170 字 → 2520 字(27.5%)、区間 26 → 24、長さ 12 分",
+  "source": {
+    "title": "LTK Season: Finale の各チーム考察配信(CC MASTERS・CORE・NEXT の部分)。文字起こしの先頭の文から『4階全部押しずと一緒なんだよね』の名前で保存されたもの。続きの部分(LR・IT CORE・DD)は evidence-transcript-analysis-eugeo-2-20261010.json",
+    "url": "",
+    "urlPending": true,
+    "speaker": "Eugeo(IT MASTERS MID)と推定。根拠: 以前 DD MASTERS で Rainbrain と一緒だった(2:40)、ゆにか・Nemoh と同じチームだった(4:26)、続きのファイルで自チームを IT と呼ぶ(5:06)。相づちなど別の人物の発言が混ざる可能性があり、確かさは中",
+    "retrievedAt": "2026-10-10",
+    "preprocessed": "data/transcript/structured/20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.json",
+    "preprocessedWith": "abc5e68"
+  },
+  "aiCheckBy": "Claude Opus 5.5 (claude-opus-5-5)",
+  "caveats": [
+    "自動字幕には話者の情報が無い。話者はファイル内の自称・自チームの呼び方から推定した(source.speaker)。相づちや同席者・視聴者のコメントの読み上げが混ざる可能性がある",
+    "配信の日付は不明(チーム分けの発表後、大会の開始前と推定)。各項目の date は 2026-10 とした",
+    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者に尋ねる必要がある(state:needs-po)。URL が決まるまで正規化の記録へは統合しない",
+    "名前が区間に無い項目は、前後の区間の名前や紹介の順序から人物を推定した。推定の確かさは各項目の note にある",
+    "unmapped には名簿の誰かと推定できる呼び名だけを残し、名簿外の人物・私生活・年齢や勤め先に当たる話題は書いていない"
+  ],
+  "matches": [],
+  "picks": {},
+  "shotcalling": {},
+  "playerTraits": {
+    "CC-MASTERS-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "普通に上手いと評価。MASTERS のジャングラー 4 人の中での比較に言及(結論は前処理で省かれている)。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=130",
+        "timestamp": "2:10",
+        "selfTeam": false,
+        "note": "『レイさん』と聞こえ、直前の Rainbrain の話の流れから推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "話者が以前 DD MASTERS で一緒にプレイした相手で、とても上手いと評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=160",
+        "timestamp": "2:40",
+        "selfTeam": false,
+        "note": "名前(レインさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "最近 LoL をまったくやっていないことが懸念と評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=160",
+        "timestamp": "2:40",
+        "selfTeam": false,
+        "note": "名前(ネモーさん)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "現役当時は日本人サポートの中でもトップクラスだったと評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=190",
+        "timestamp": "3:10",
+        "selfTeam": false,
+        "note": "名前(ネモーさん)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "pool",
+        "summary": "スレッシュ・ブリッツなどフック系が得意で、エンチャンターなど柔らかいチャンピオンは苦手。もともとはトップレーナー。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=236",
+        "timestamp": "3:56",
+        "selfTeam": false,
+        "note": "名前は直前(3:41)と直後(4:26)の区間にあり、Nemoh の話の続きと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "pool",
+        "summary": "解説と元プロサポートのイメージだが、もともとはトップでダリウスをメインにしていた。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=266",
+        "timestamp": "4:26",
+        "selfTeam": false,
+        "note": "名前(ネモさん)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "本当に上手いが、ブランクをどれだけ戻せるかが鍵との見立て。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=297",
+        "timestamp": "4:57",
+        "selfTeam": false,
+        "note": "名前(ネモーさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-CORE-ADC": [
+      {
+        "trait": "laning",
+        "summary": "とても上手いが、CORE の ADC(じゃすぱー・ごんかね・大御所にゅん子)のレベルが高く、対面はきつそうとの見立て。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=444",
+        "timestamp": "7:24",
+        "selfTeam": false,
+        "note": "『辰巻千瀬』『竜巻さん』と聞こえ、龍巻ちせと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "CORE の ADC の中でもごんかねと並んで本当に上手いと評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=444",
+        "timestamp": "7:24",
+        "selfTeam": false,
+        "note": "名前(ジャスパー)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "CORE の ADC の中でもじゃすぱーと並んで本当に上手いと評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=444",
+        "timestamp": "7:24",
+        "selfTeam": true,
+        "note": "名前(ゴンカネ)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "CORE の ADC のレベルの高さの例として名前が挙がった。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=444",
+        "timestamp": "7:24",
+        "selfTeam": false,
+        "note": "『オオコショニュンコ』と聞こえ、大御所にゅん子と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "『アカリン』(獅子堂あかりか夢野あかり)・なぎさっちと共に、去年までの LTK なら CORE に入れるレベルと評価。今年は ADC 全体のレベルが上がったため NEXT という見方。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=566",
+        "timestamp": "9:26",
+        "selfTeam": true,
+        "note": "『テンテ』と聞こえ、天帝フォルテと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-NEXT-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "『アカリン』(獅子堂あかりか夢野あかり)・天帝フォルテと共に、去年までの LTK なら CORE に入れるレベルと評価。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=566",
+        "timestamp": "9:26",
+        "selfTeam": false,
+        "note": "『ナギちゃん』と聞こえ、なぎさっちと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT-MID": [
+      {
+        "trait": "pool",
+        "summary": "アカリがメイン。やや LoL のブランクがあるかもしれないとの見立て。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=687",
+        "timestamp": "11:27",
+        "selfTeam": false,
+        "note": "『アシミ』と聞こえ、CC NEXT のミッドの話の流れから空澄セナと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "teamMacro": {},
+  "teamStyle": {
+    "DD-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "ボットレーンのコンビが復活したと述べた。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=68",
+        "timestamp": "1:08",
+        "selfTeam": false,
+        "note": "『DC』と聞こえ、DD CORE(じゃすぱー・神楽めあ)と推定(確かさ 低)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "DCがどのチームか、どの階級のボットかが本文から決まらない"
+      }
+    ],
+    "CC-MASTERS": [
+      {
+        "aspect": "lineup",
+        "summary": "Yutapon・Ceros・Yuhi・Rainbrain の 4 人は安定して強い。問題は Nemoh の最近のプレイ不足。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=160",
+        "timestamp": "2:40",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-CORE": [
+      {
+        "aspect": "carry",
+        "summary": "突出したキャリーがいない安定型で、CORE で一番強いわけではないとの見立て。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=383",
+        "timestamp": "6:23",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "mid",
+        "summary": "CORE のミッドはレベルが高いという見方。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=414",
+        "timestamp": "6:54",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "以前一緒だったメンバーがいて、チームの連携力は既にある。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=504",
+        "timestamp": "8:24",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "ほとんど同じメンバーのため、連携力が強み。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=504",
+        "timestamp": "8:24",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT": [
+      {
+        "aspect": "coach",
+        "summary": "コーチに Yuhi と Yutapon がついているので安心という趣旨。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=596",
+        "timestamp": "9:56",
+        "selfTeam": false,
+        "note": "『ゆいさんとぽんさん』と聞こえ、Yuhi・Yutapon と推定(確かさ 中)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "ゆいさん=Yuhiが明らかでない(千燈ゆうひもいる)"
+      },
+      {
+        "aspect": "lanes",
+        "summary": "トップ・ジャングルが強い。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=657",
+        "timestamp": "10:57",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "top",
+        "summary": "トップのキャリー系のピックプール(オラフ・カミール・アンベッサ)がチームに合っているとの見立て。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=687",
+        "timestamp": "11:27",
+        "selfTeam": false,
+        "note": "選手名は『カナカナ』と聞こえ、unmapped に記録",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "coaches": {
+    "CC-MASTERS-ADC": [
+      {
+        "summary": "CC NEXT のコーチを務めると言及。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=596",
+        "timestamp": "9:56",
+        "note": "『ゆいさん』と聞こえ、Yuhi と推定(確かさ 中)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "ゆいさん=Yuhiの対応が名簿と照らして明らかでない"
+      }
+    ],
+    "CC-MASTERS-TOP": [
+      {
+        "summary": "CC NEXT のコーチを務めると言及。",
+        "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=596",
+        "timestamp": "9:56",
+        "note": "『ぽんさん』と聞こえ、Yutapon と推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "overall": [
+    {
+      "target": "CC-MASTERS",
+      "summary": "Yuhi と Ceros の並びが際立って強いと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "0:00",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=0",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-MASTERS",
+      "summary": "MASTERS は CC が最強との見立て(前後が省略されており文脈は不完全)。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "0:32",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=32",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "IT-MASTERS",
+      "summary": "IT MASTERS は 2 番手との見立て(前後が省略されており文脈は不完全)。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "0:32",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=32",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "IT-CORE",
+      "summary": "IT CORE も 2 番手だが、AlphaAzur 次第で 3 番手くらいになるとの見立て。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "0:32",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=32",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "IT-NEXT",
+      "summary": "IT NEXT は 2 番手・3 番手(の選手)が集まっているという趣旨の発言(文脈は不完全)。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "0:32",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=32",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "IT",
+      "summary": "3 階級すべてのバランスがよいチームが勝ってきたという一般論の後、青(IT)もとても強いと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "1:08",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=68",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-MASTERS",
+      "summary": "Yutapon・Rainbrain・Ceros・Yuhi・Nemoh の並びはもう強いと評価。",
+      "direction": "+",
+      "strength": "強",
+      "timestamp": "1:39",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=99",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-MASTERS",
+      "summary": "Yutapon・Ceros・Yuhi・Rainbrain の 4 人は安定して非常に強い。問題は Nemoh が最近 LoL をまったくやっていないこと。",
+      "direction": "+",
+      "strength": "強",
+      "timestamp": "2:40",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=160",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-MASTERS",
+      "summary": "Nemoh のブランクをどれだけ戻せるかが CC MASTERS の鍵との見立て。",
+      "direction": "-",
+      "strength": "弱",
+      "timestamp": "4:57",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=297",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-CORE",
+      "summary": "バランスがよいチームと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "5:53",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=353",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-CORE",
+      "summary": "CORE で一番強いとは思わない。爆発的なキャリー力を持つ選手がおらず安定型との見立て。",
+      "direction": "-",
+      "strength": "弱",
+      "timestamp": "6:23",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=383",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-CORE",
+      "summary": "以前から一緒のメンバーがいて、チームの連携力は既にあると評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "8:24",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=504",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "LR-CORE",
+      "summary": "ほとんど同じメンバーのため連携力があるのが強みと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "8:24",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=504",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    },
+    {
+      "target": "CC-NEXT",
+      "summary": "トップ・ジャングルが強いと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "10:57",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=657",
+      "speaker": "Eugeo(推定)",
+      "speakerConfidence": "中"
+    }
+  ],
+  "unmapped": [
+    {
+      "heard": "押しず・ユフィ",
+      "guess": "IT-NEXT-SUP(白那しずく)・CC-NEXT-JG(ゆふな)。確かさ 低",
+      "summary": "話者が 4 回(の LTK)すべてで一緒だったと述べる相手。昔の DD NEXT 組は仲がよいとの話(評価ではなく話者の関係の手がかり)。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=99",
+      "timestamp": "1:39"
+    },
+    {
+      "heard": "ヤウジ",
+      "guess": "CC-CORE-TOP(YUKIO)。確かさ 低",
+      "summary": "安定志向でキャリーしないタイプと評価。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=383",
+      "timestamp": "6:23"
+    },
+    {
+      "heard": "チャンクズ",
+      "guess": "CC-CORE-MID(葛葉)。確かさ 低",
+      "summary": "チームの中でキャリータイプと評価。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=414",
+      "timestamp": "6:54"
+    },
+    {
+      "heard": "あーちゃん",
+      "guess": "CC-CORE-SUP(昏昏アリア)。確かさ 中",
+      "summary": "今回マスターに到達し、LTK を通じてとても上手くなった。以前はタリック中心だったが、今はノーチラスなどでエンゲージができる(7:54)。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=444",
+      "timestamp": "7:24"
+    },
+    {
+      "heard": "カセッチ・アージャン",
+      "guess": "CC-CORE-JG(k4sen)・不明。確かさ 低",
+      "summary": "話者が CC で一緒だったメンバーとして挙げた。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=504",
+      "timestamp": "8:24"
+    },
+    {
+      "heard": "アカリン(9:56 は『あかりんさん』)",
+      "guess": "DD-NEXT-ADC(夢野あかり)か CC-NEXT-ADC(獅子堂あかり)。確かさ 低",
+      "summary": "CC NEXT の話の中で『他の NEXT の ADC』として天帝フォルテ・なぎさっちと共に挙がり、去年までの LTK なら CORE に入れるレベルと評価(9:26)。9:56 の『あかりんさん』はランクに関わらず上手いと評価され、コーチに Yuhi・Yutapon がいる話が続くため、こちらは CC の獅子堂あかりの可能性もある。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=566",
+      "timestamp": "9:26"
+    },
+    {
+      "heard": "カナカナ",
+      "guess": "CC-NEXT-TOP(叶)。確かさ 中",
+      "summary": "話者がソロキューの配信をよく見ている。キャリーのポテンシャルがあり、オラフ・カミール・アンベッサなどキャリー系のピックプールがチームに合っていると評価(11:27)。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=657",
+      "timestamp": "10:57"
+    },
+    {
+      "heard": "リーちゃん",
+      "guess": "CC-NEXT-SUP(鷹宮リオン)。確かさ 低",
+      "summary": "上手いと評価。",
+      "source": "transcript:20261010-transcript-[000000] 4階全部押しずと一緒なんだよね.md#t=749",
+      "timestamp": "12:29"
+    }
+  ],
+  "preprocessingNotes": [
+    "辞書に無い呼び名(p に出ない): 『アシミ』(空澄セナ)、『カナカナ』(叶と推定)、『あーちゃん』(昏昏アリアと推定)、『リーちゃん』(鷹宮リオンと推定)、『ヤウジ』(YUKIO と推定)、『チャンクズ』(葛葉と推定)、『レイさん』(Rainbrain。2:10)、『アカリン』『テンテ』『ナギちゃん』(獅子堂あかり・天帝フォルテ・なぎさっち。9:26)、『ゴンカネ』は 7:24 で IT-CORE-ADC に対応づけられたが『オオコショニュンコ』(大御所にゅん子)は対応づけられていない",
+    "『DC』は DD の聞き違いの可能性がある(1:08 の『DC のボットレーンコンビ』、1:39 の『DC ネクスト』)",
+    "先頭の『4階全部押しず』は『4回全部しずくと』の聞き違いと推定(ファイル名にもなっている)",
+    "名簿外の過去のチームメイトの名前(3:41)が本文に残っている(評価には使わない)"
+  ]
+}
