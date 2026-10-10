@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 import { DATA_AXES, ltkBonus, rateDataAxes, buildRatingContext } from '../../src/rating/axes.ts';
 import { loadEngineConfig } from '../../src/rating/engine.ts';
 import type { GameRecord } from '../../src/rating/types.ts';
+import axesConf from '../../src/rating/axes.json' with { type: 'json' };
+// 評価設定の初期値(2026-10-10 に 0.4/1.2 → 0.2/0.6 へ変更。出場歴が 4 軸に効く二重カウントの緩和)
+const PER = (axesConf as { ltkBonusPerSeason: number }).ltkBonusPerSeason;
+const CAP = (axesConf as { ltkBonusCap: number }).ltkBonusCap;
 
 const DAY = 86_400_000;
 const NOW = Date.parse('2026-10-09T00:00:00Z');
@@ -37,12 +41,14 @@ test('レーン戦の指標はロールで変わる(JG は序盤のジャング�
   assert.ok(forPos('MIDDLE').includes('maxCsAdvantageOnLaneOpponent'));
 });
 
-test('AC10: LTK の経験の項は参加シーズン数 × 0.4、上限 1.2', () => {
+test('AC10: LTK の経験の項は参加シーズン数 × 評価設定の 1 シーズンあたりの加点、上限あり(初期値 0.2 / 0.6)', () => {
+  assert.equal(PER, 0.2);
+  assert.equal(CAP, 0.6);
   assert.equal(ltkBonus(0), 0);
-  assert.equal(ltkBonus(1), 0.4);
-  assert.ok(Math.abs(ltkBonus(2) - 0.8) < 1e-12);
-  assert.ok(Math.abs(ltkBonus(3) - 1.2) < 1e-12);
-  assert.ok(Math.abs(ltkBonus(5) - 1.2) < 1e-12);
+  assert.ok(Math.abs(ltkBonus(1) - PER) < 1e-12);
+  assert.ok(Math.abs(ltkBonus(2) - 2 * PER) < 1e-12);
+  assert.ok(Math.abs(ltkBonus(3) - CAP) < 1e-12);
+  assert.ok(Math.abs(ltkBonus(5) - CAP) < 1e-12);
 });
 
 const player = (id: string, pos: string, games: GameRecord[], extra: Partial<Parameters<typeof rateDataAxes>[0]> = {}) => ({
@@ -61,7 +67,7 @@ test('AC10: LTK の経験の項は集団戦・連携・安定感だけに加わ�
   const ctx = buildRatingContext([a, b], [], cfg, NOW);
   const ra = Object.fromEntries(rateDataAxes(a, ctx).map((x) => [x.key, x]));
   const rb = Object.fromEntries(rateDataAxes(b, ctx).map((x) => [x.key, x]));
-  for (const k of ['teamfight', 'synergy', 'stability']) assert.ok(Math.abs(rb[k].base - ra[k].base - 0.8) < 1e-9, k);
+  for (const k of ['teamfight', 'synergy', 'stability']) assert.ok(Math.abs(rb[k].base - ra[k].base - 2 * PER) < 1e-9, k);
   for (const k of ['ground', 'laning', 'pool']) assert.equal(rb[k].base, ra[k].base, k);
   assert.match(rb.teamfight.bonusReason!, /S2.*S3/);
 });
