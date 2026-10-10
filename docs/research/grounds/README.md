@@ -7,6 +7,7 @@ F-009(コール力の軸)と F-010(司令塔・指導・一体感)の材料。AI
 | `evidence-dd-cc.json` / `.md` | DD・CC の30名(根拠 205 件) |
 | `evidence-it-lr.json` / `.md` | IT・LR の30名(根拠 182 件) |
 | `evidence-hetel.json` | hetel のチーム分析配信(https://www.youtube.com/watch?v=xdsbfDbaqRU 、価値責任者が 2026-10-09 に共有)から AI が要約した根拠。コール力 40 件(normalized/shotcalling.json へ統合済み)、選手の特性 52 件、階級チームのマクロ 12 件と戦い方 43 件、コーチ 9 件。原文は転載せず、時刻つきの URL を付ける。selfTeam=true は hetel 自身のチーム(DD)についての発言 |
+| `normalized/external-views.json` | LoL に詳しい第三者(元プロ・解説・選手)の、階級チーム(TEAM-TIER)についての見立て 33 件(2026-10-10 作成)。`evidence-hetel.json`(32 件)と `evidence-transcript-takaya-it-core.json`(1 件)の `overall`・`teamStyle`・`teamMacro` から、向き(+/−)と強さ(強/中/弱)を要約から機械的に付け、時刻つきの URL を持つ。選手個人の評価は含めない。話者が自チームについて言ったものは selfTeam=true(8 件)。`evidence-dd-cc` / `evidence-it-lr` にはチーム単位の節が無く、`evidence-transcript-yuhi-yutapon` は中立の項目だけで 0 件。元のファイルに `aiCheck` が無いため項目には付けていない。**AI 収集(未確認)** |
 
 各根拠: `summary`(自分の言葉の要約)、`url`(出典)、`date`、`type`(記事/本人の発言/チームメイトの発言/視聴者の声/大会での役割)、`direction`(+ コールする / − 任せる)、`strength`(強/中/弱)。DD・CC には `category`(LoL・コーチ・他ゲーム等。機械的に付与し一部を手で修正)。
 
