@@ -112,15 +112,21 @@ test('AC9: 既定の試行回数は 10,000 回', () => {
 // F-005 Task-3(仕上がりの項): 試合日ごとの勝率表
 test('F-005 基準9: dayWinTables で日(Regular Stage)とカップ(MASTERS CUP)ごとの勝率表を与えると、その日の試合だけがその表に従い、無い日はステージの表を使う', () => {
   const plain = simulate(base());
+  // DD>x の片方向だけを持つ表(ddStrong は x>DD = 0.5 も持ち、CC がブルーの第1日は CC>DD が直接引かれて DD が有利にならない。基準12 の「片方向だけあれば逆は 1−p」を使う)
+  const ddOnly = (p: number): WinTable => {
+    const t = ddStrong(p);
+    for (const tier of ['NEXT', 'CORE', 'MASTERS'] as const) for (const o of ['CC', 'IT', 'LR']) delete t[tier][`${o}>DD`];
+    return t;
+  };
   // 第1日だけ DD が全階級で必ず勝つ(ほかの日は互角)
-  const day1 = simulate(base({ dayWinTables: { regular: { 1: ddStrong(1) } } }));
+  const day1 = simulate(base({ dayWinTables: { regular: { 1: ddOnly(1) } } }));
   assert.ok(day1.expectedRegularPoints.DD > plain.expectedRegularPoints.DD + 1.5, `${day1.expectedRegularPoints.DD}`);
   assert.deepEqual(day1.expectedMastersPoints, plain.expectedMastersPoints, 'MASTERS CUP は変わらない');
   // 第1日の表を全日に与えたときと、ステージの表に与えたときは同じ結果
-  const all = simulate(base({ dayWinTables: { regular: { 1: ddStrong(1), 2: ddStrong(1), 3: ddStrong(1), 4: ddStrong(1), 5: ddStrong(1), 6: ddStrong(1) } } }));
-  assert.deepEqual(all, simulate(base({ stageWinTables: { regular: ddStrong(1) } })));
+  const all = simulate(base({ dayWinTables: { regular: { 1: ddOnly(1), 2: ddOnly(1), 3: ddOnly(1), 4: ddOnly(1), 5: ddOnly(1), 6: ddOnly(1) } } }));
+  assert.deepEqual(all, simulate(base({ stageWinTables: { regular: ddOnly(1) } })));
   // CUP 1 だけ DD が必ず勝つ: CUP 1 の 3pt は確定、ほかは互角
-  const cup1 = simulate(base({ dayWinTables: { masters: { 1: ddStrong(1) } } }));
+  const cup1 = simulate(base({ dayWinTables: { masters: { 1: ddOnly(1) } } }));
   assert.ok(cup1.expectedMastersPoints.DD > plain.expectedMastersPoints.DD + 1, `${cup1.expectedMastersPoints.DD}`);
   assert.deepEqual(cup1.expectedRegularPoints, plain.expectedRegularPoints, 'Regular Stage は変わらない');
   // 日の表も検証する(AC12 と同じ)
@@ -128,5 +134,5 @@ test('F-005 基準9: dayWinTables で日(Regular Stage)とカップ(MASTERS CUP)
   bad.NEXT['DD>CC'] = 1.5;
   assert.throws(() => simulate(base({ dayWinTables: { regular: { 2: bad } } })), /NEXT.*DD vs CC/);
   // 同じ入力と種なら同じ結果
-  assert.deepEqual(simulate(base({ dayWinTables: { regular: { 3: ddStrong(0.9) } } })), simulate(base({ dayWinTables: { regular: { 3: ddStrong(0.9) } } })));
+  assert.deepEqual(simulate(base({ dayWinTables: { regular: { 3: ddOnly(0.9) } } })), simulate(base({ dayWinTables: { regular: { 3: ddOnly(0.9) } } })));
 });
