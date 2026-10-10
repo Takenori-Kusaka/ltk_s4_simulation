@@ -18,7 +18,7 @@
   {:else}
     <p class="countdown">大会 開催中</p>
   {/if}
-  <p class="hero-links"><a class="chip" href="#/meta">いまのメタを知る ›</a></p>
+  <p class="hero-links"><a class="chip" href="#/sim">勝率とシミュレーション ›</a> <a class="chip" href="#/meta">いまのメタを知る ›</a></p>
 </section>
 
 <div class="houses">

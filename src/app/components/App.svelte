@@ -10,9 +10,10 @@
   import TeamPage from '../team/TeamPage.svelte';
   import ComparePage from '../compare/ComparePage.svelte';
   import MetaPage from '../meta/MetaPage.svelte';
+  import SimPage from '../sim/SimPage.svelte';
   import type { RatingsFile } from '../rating/view.ts';
 
-  let { files, ratings }: { files: Record<string, PlayerFile>; ratings?: RatingsFile } = $props();
+  let { files, ratings, winrates }: { files: Record<string, PlayerFile>; ratings?: RatingsFile; winrates?: unknown } = $props();
   let hash = $state(location.hash);
   let content: HTMLElement | undefined = $state();
 
@@ -79,6 +80,8 @@
       </section>
     {:else if route.page === 'meta'}
       <MetaPage {ratings} />
+    {:else if route.page === 'sim'}
+      <SimPage {winrates} />
     {:else if route.page === 'compare'}
       {#key route.targets.join('/')}
         <ComparePage targets={route.targets} {ratings} />
