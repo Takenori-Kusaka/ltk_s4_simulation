@@ -17,6 +17,8 @@ export interface RankEntry {
 export interface ExProCareer {
   level: string;
   source: string;
+  /** その水準での年数(経歴の記録の lol.years[水準]。下限の計算に使う。無ければ 0) */
+  years?: number;
 }
 
 /** ランクの基準の出どころ(基準30) */
@@ -77,7 +79,7 @@ export interface EngineConfig {
   /** ロール転向の割引(基準31。LTK の出場シーズンのうち今のロール以外の割合 × この値をデータの軸から引く。初期値 0.5) */
   roleSwitchPenalty?: number;
   /** 元プロの下限(基準29 の改訂): 経歴の水準(lol.highestLevel)ごとのランクの基準の下限。default は水準に無いとき */
-  exProFloor?: Record<string, number>;
+  exProFloor?: Record<string, number | { base: number; perYear: number; max: number }>;
   zClip: number;
   confidence: { high: number; mid: number };
 }

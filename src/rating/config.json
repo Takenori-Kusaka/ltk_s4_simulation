@@ -5,7 +5,7 @@
     "minMinutes": 10,
     "halfLifeDays": 45,
     "k": 8,
-    "perfScale": 0.5, "roleSwitchPenalty": 0.5, "exProFloor": { "default": 8, "LJL-starter": 10, "overseas-major": 10 },
+    "perfScale": 0.5, "roleSwitchPenalty": 0.5, "exProFloor": { "default": 8, "LJL-starter": { "base": 8, "perYear": 0.5, "max": 10 }, "overseas-major": 10 },
     "zClip": 3,
     "confidence": {
       "high": 15,

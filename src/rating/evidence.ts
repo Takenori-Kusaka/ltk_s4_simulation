@@ -319,7 +319,8 @@ export function readCareerSnapshot(raw: unknown): { players: Record<string, Care
     if (lol && PRO_LEVELS.includes(level)) {
       const basis = (Array.isArray(lol.basis) ? lol.basis : []).filter(str).map(String);
       const source = str(lol.statusSource) ? String(lol.statusSource) : basis.length ? `経歴の記録(career.json)の ${basis.join('・')}` : null;
-      if (source) entry.exPro = { level, source };
+      const years = lol.years && typeof lol.years === 'object' && Number.isFinite(Number((lol.years as Record<string, unknown>)[level])) ? Number((lol.years as Record<string, unknown>)[level]) : 0;
+      if (source) entry.exPro = { level, source, years };
       else errors.push(`${id}: プロの経歴(${level})に出典が無い`);
     }
     out[id] = entry;

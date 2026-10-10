@@ -269,10 +269,14 @@ test('AC29 追補: 元プロの下限は、3 つの記録の最大が 8.0 未満
 
 test('AC29(改訂 2026-10-10): 元プロの下限は経歴の水準で決める。LJL のスタメン・海外の主要リーグは 10.0、それ以外は 8.0', () => {
   const gold = { tier: 'GOLD', division: 'IV', lp: 0 };
-  const at = (level: string) => resolveAnchor({ rank: gold, peakRank: null, seasonPeakRank: null, exPro: { level, source: 'https://example.test/wiki/A' }, medianAnchor: 5 });
-  assert.equal(at('LJL-starter').anchor, 10);
+  const at = (level: string, years?: number) => resolveAnchor({ rank: gold, peakRank: null, seasonPeakRank: null, exPro: { level, source: 'https://example.test/wiki/A', years }, medianAnchor: 5 });
+  // LJL のスタメンは 8.0 + 0.5 × 年数(上限 10.0)。年数が無ければ 8.0
+  assert.equal(at('LJL-starter', 4).anchor, 10);
+  assert.equal(at('LJL-starter', 9).anchor, 10);
+  assert.equal(at('LJL-starter', 1).anchor, 8.5);
+  assert.equal(at('LJL-starter').anchor, 8);
   assert.equal(at('overseas-major').anchor, 10);
-  assert.equal(at('LJL-sub').anchor, 8);
+  assert.equal(at('LJL-sub', 5).anchor, 8);
   assert.equal(at('LJL CS-starter').anchor, 8);
-  assert.equal(at('LJL-starter').anchorSource, '元プロの下限');
+  assert.equal(at('LJL-starter', 4).anchorSource, '元プロの下限');
 });
