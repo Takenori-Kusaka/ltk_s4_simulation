@@ -1,0 +1,178 @@
+{
+  "kind": "evidence-transcript",
+  "file": "owner-review/20261011-it-review.md",
+  "description": "価値責任者本人が公開ページを見ながら IT の 3 階級チーム 15 名の点数について話した音声の文字起こし(data/transcript/owner-review/、リポジトリ外、話者は価値責任者 1 人、約 25 分)から、AI が発言を 4 種類(A 事実 / B 点数への意見 / C モデル・表示への指摘 / D 雑談)に分けて要約した記録。発言の全文は転記しない。A のうちコールの担い手についての明確な発言は normalized/shotcalling.json へ kind owner-confirmation として足した(normalized: true)。曖昧なもの(normalized: false)と B・C は docs/research/grounds/owner-review-it-20261011.md の表にある。前処理と別の AI による反証の試みは行っていない",
+  "source": { "title": "価値責任者による IT(MASTERS・CORE・NEXT)の点数レビュー(2026-10-11 の録音の文字起こし)", "url": "", "urlPending": false, "speaker": "価値責任者(本人。確かさ 高)", "retrievedAt": "2026-10-11", "preprocessed": "", "preprocessedWith": "", "note": "内部の録音のため URL は無い。前処理はかけず AI が直接読んだ" },
+  "aiCheckBy": "",
+  "caveats": [
+    "話者は価値責任者本人のため発言は『価値責任者の確認』として扱えるが、記録を書き起こしたのは AI。価値責任者が PR で各項目を確認するまでは仮の記録",
+    "価値責任者の『期待する順位・点数』そのものと、他の選手との順位づけの発言は記録しない",
+    "自動の文字起こしのため固有名詞に誤変換がある(例: a ジョー・AGAO・ゆうじお・友情 = Eugeo、にかさん・ユニカー・井上 = ゆにか、NT・エンティー = Enty、来人・来様 = らいじん、ミッチ = mittiii、アルファアルズール = AlphaAzur、カネゴン・ゴンカネ = ごんかね、リグルース・レグレッシュ = レグルシュ・ライオンハート、立花雛乃・橘平和 = 橘ひなの、有権・ハーリケーン・アリケン = ありけん、舞武・前竹・舞茸 = まいたけ、天手ホルテス・テンティフォルテ = 天帝フォルテ、白の雫・白のしずく = 白那しずく、ゆふな・マザー = ゆふな・まざー3、コアークウル = 狐白うる)。名簿と照らして対応づけた",
+    "らいじんのコーチングについての発言(8:07)は IT NEXT のコーチとしての言及で、既存の記録(Enty が IT NEXT 全体コーチ)と役割の対応を確かめる必要がある"
+  ],
+  "related": { "reviewTable": "docs/research/grounds/owner-review-it-20261011.md" },
+  "matches": [],
+  "picks": {},
+  "shotcalling": {
+    "IT-MASTERS-TOP": [
+      { "summary": "価値責任者が「らいじんはコール力がしっかりある」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:48])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "8:48", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-MASTERS-JG": [
+      { "summary": "価値責任者が「ゆにかはコールも割とちゃんとでき、Eugeo の IGL に乗って引っ張っていける」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:44])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "9:44", "selfTeam": false, "note": "1:14 の『Eugeo が IGL をして全体を引っ張り、ゆにかが乗っかって引っ張っていける』を含む。『コールはもう少し伸ばしてよい』との意見つき。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-MASTERS-MID": [
+      { "summary": "価値責任者が「Eugeo が IGL をして IT MASTERS 全体を引っ張る」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:10])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "1:10", "selfTeam": false, "note": "10:58 で、コールが次第にエゴコールになりワンマンになる面が安定性を下げるとの留保。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-MASTERS-ADC": [
+      { "summary": "Zerost は頭では理解しコーチングも上手いが、インプレイでコールをたくさんするわけではないとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:27])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "12:27", "selfTeam": false, "note": "程度の発言のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "IT-MASTERS-SUP": [
+      { "summary": "Enty のコールはぼちぼち出るとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:15])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "13:15", "selfTeam": false, "note": "程度の発言のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "IT-CORE-TOP": [
+      { "summary": "価値責任者が「mittiii はコールがしっかり出る」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:21])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "13:21", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-CORE-JG": [
+      { "summary": "AlphaAzur はコールはできるかもしれないとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:59])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "14:59", "selfTeam": false, "note": "不確かな発言のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "IT-CORE-MID": [
+      { "summary": "価値責任者が「たかやスペシャルはコールがとてもでき、IT CORE の要」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:13])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "15:13", "selfTeam": false, "note": "2:36 でも『喋れる』、17:16 でも『どんどんコールする』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-CORE-ADC": [
+      { "summary": "価値責任者が「ごんかねは ADC なのにコールし続ける(コールで自分のポジショニングが分かると語っていた)」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:06])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "17:06", "selfTeam": false, "note": "2:36 でも『喋れる』。今回はたかやがコールして自分はフィジカルに集中したときの出来は未知、との留保。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-CORE-SUP": [
+      { "summary": "レグルシュ・ライオンハートは喋れる(2:40)が、コールは情報を落とせるだけで、IGL 的に引っ張るコールは全然できない(18:56)との発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:56])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "18:56", "selfTeam": false, "note": "『情報は落とす(+)』と『IGL は無理(−)』の混在のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "IT-NEXT-TOP": [
+      { "summary": "橘ひなのはトップでの判断に手一杯で、ADC 時代に見られた全体が見えている IGL 的なコールがあまり見られなくなっているとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:19:29])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "19:29", "selfTeam": false, "note": "3:14 でも『トップからのマクロコールはあまりできない』。状況の変化の話で確認にはしない(表 B)", "normalized": false }
+    ],
+    "IT-NEXT-JG": [
+      { "summary": "ありけんはコール力はあるが、慌てたコールが白那しずくのコールをかき消すことがあるとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:20:06])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "20:06", "selfTeam": false, "note": "3:28 の『わたわたしたコールにかき消される』を含む。混在のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "IT-NEXT-MID": [
+      { "summary": "価値責任者が「まいたけはコール力が無く、たくさん喋るが助けになるコールがほとんど無い(むしろコールの邪魔をしている)」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:20:39])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "-", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "20:39", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "IT-NEXT-SUP": [
+      { "summary": "価値責任者が「白那しずくは言っていることが正しく適切で、IGL 的なコールをしている」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:05])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-it-20261011.json", "timestamp": "24:05", "selfTeam": false, "note": "声が小さく、声の大きい味方のコールにかき消されるという言い方の話は、規則によりコール力の否定に数えない。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ]
+  },
+  "playerTraits": {
+    "IT-MASTERS-TOP": [
+      { "trait": "other", "summary": "元プロだがプロの期間がとても短く、地力は他と比べてこんなに高くない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:33])", "timestamp": "8:33", "category": "A", "note": "normalized/career.json(LJL-starter 2 年、7th Heaven 2018)と整合" },
+      { "trait": "mental", "summary": "安定感がとてもあり、ウィークサイドでもちゃんと回せる。レーン戦はまあまあ流せ、集団戦はぼちぼち参加でき、連携もできる。ピックプールはぼちぼち", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:46])", "timestamp": "8:46", "category": "B", "note": "MASTERS のトップ内の順位づけは記録しない" }
+    ],
+    "IT-MASTERS-JG": [
+      { "trait": "mechanics", "summary": "強いジャングラーで、地力・レーン戦・集団戦がある。全体的に評価が低すぎる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:08])", "timestamp": "9:08", "category": "B" },
+      { "trait": "other", "summary": "Eugeo と V3 で同じチームだったので連携にかなり期待でき、安定性はとてもある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:34])", "timestamp": "9:34", "category": "A", "note": "normalized/tournament.json(V3 Esports 在籍)と一致" },
+      { "trait": "other", "summary": "最近までプロシーンにいたので大会経験はもう少し伸ばしてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:49])", "timestamp": "9:49", "category": "B", "note": "normalized/career.json(LJL-starter 3 年・sub 1・LJL CS 1・academy 1、retired)" }
+    ],
+    "IT-MASTERS-MID": [
+      { "trait": "laning", "summary": "切るまで行かなくても必要なタイミングでレーンを押して味方に寄れる状況を作れるので、レーン戦は高くてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:12])", "timestamp": "10:12", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦でキャリーポジションを取るのが上手く大きなダメージを出すので、集団戦はもっとあってよい。連携も問題ない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:27])", "timestamp": "10:27", "category": "B" },
+      { "trait": "mental", "summary": "負けそうになると一人で巻き取ろうとするワンマンになり、コールもエゴコールになる面が安定性を下げる。ミッドで崩されたりジャングルのプレッシャーが強い試合はうまくいかないかも", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:51])", "timestamp": "10:51", "category": "B" }
+    ],
+    "IT-MASTERS-ADC": [
+      { "trait": "other", "summary": "VALORANT と LoL の両方でプロをやった", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:38])", "timestamp": "11:38", "category": "A", "note": "normalized/career.json(LJL-starter 4 年、VALORANT pro 3 年)と一致" },
+      { "trait": "teamfight", "summary": "レーンでキルを取るより、集団戦までに ADC のステータスを最大限上げて集団戦で還元するプレイが上手い。レーン戦は低め、集団戦は高め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:45])", "timestamp": "11:45", "category": "B" },
+      { "trait": "other", "summary": "ボットは一人で置いておけばよいと言うことが多く、連携するより ADC がキャリーになるために必要なことを自分でやる型。安定感は高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:07])", "timestamp": "12:07", "category": "B" }
+    ],
+    "IT-MASTERS-SUP": [
+      { "trait": "other", "summary": "元プロなので大会経験は高い。レーン戦・集団戦も高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:40])", "timestamp": "12:40", "category": "B", "note": "normalized/career.json(LJL-starter 10 年)と一致" },
+      { "trait": "mental", "summary": "見ている世界観が独特でエゴプレイが多く、チームメイトの考えを踏まえたプレイがまだできないので、安定感と連携は低くなる。ピックプールはかなり広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:51])", "timestamp": "12:51", "category": "B" }
+    ],
+    "IT-CORE-TOP": [
+      { "trait": "other", "summary": "最高ランクはエメラルドかダイヤで、地力はまあまああるが一番ではない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:23])", "timestamp": "13:23", "category": "A", "note": "normalized/career.json(Diamond I 33LP)と一致" },
+      { "trait": "pool", "summary": "変わったピックプールでカウンターピックができ、レーン戦を回せる。ピックプールはとても広い(ティーモなど)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:34])", "timestamp": "13:34", "category": "A" },
+      { "trait": "teamfight", "summary": "レーンの有利ピックを集団戦で還元する方法まで分からず、集団戦での貢献が下がることがよく起きる(トップ ヴェインで集団戦で活躍できないなど)。安定感は低め。連携はでき話も聞ける", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:49])", "timestamp": "13:49", "category": "B" }
+    ],
+    "IT-CORE-JG": [
+      { "trait": "other", "summary": "初めてのジャングルで IT CORE の明確な隙。地力はもっと低くてよく、レーン戦は思い切り下げ、集団戦の活躍も難しい。ファームを捨てて連携に行きがちで良くない。安定感もピックプールも低い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:29])", "timestamp": "14:29", "category": "B" },
+      { "trait": "mechanics", "summary": "ミッドとしてはかなり上手いプレイヤー", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:18])", "timestamp": "2:18", "category": "A", "note": "normalized/career.json(LTK S1〜S3 は MID)と一致" }
+    ],
+    "IT-CORE-MID": [
+      { "trait": "other", "summary": "大会経験はこんなに低くなく、もう少しあってよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:09])", "timestamp": "15:09", "category": "B", "note": "normalized/career.json(LTK S1〜S3 を SUP で出場)" },
+      { "trait": "laning", "summary": "4 チームの中で一番強いミッドで地力はもっとあってよい。キルではなく CS と集団戦に寄れるレーンを作るミッドの支配力で勝つ型で、レーン戦はもう少し高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:15])", "timestamp": "15:15", "category": "B" },
+      { "trait": "macro", "summary": "元サポートなのでマップ全体がよく見えており、連携はしっかりでき、安定感も高い。集団戦のポテンシャルも高く、ピックプールも広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:48])", "timestamp": "15:48", "category": "B" }
+    ],
+    "IT-CORE-ADC": [
+      { "trait": "mechanics", "summary": "ADC としての実力はグランドマスター級で、チャレンジャーに行ってもおかしくない。前期は MASTERS に混ざった方がよいとも言われていた。MASTERS の選手とデュオでランクを上げることもある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:02])", "timestamp": "16:02", "category": "B", "note": "normalized/career.json は最高ランク Master 621LP。じゃすぱーとの比較の発言は記録しない" },
+      { "trait": "other", "summary": "大会にはあまり出ていない。LoL のゲーム理解度は高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:08])", "timestamp": "16:08", "category": "A", "note": "normalized/career.json(LTK S3 のみ)と一致" },
+      { "trait": "mental", "summary": "ピックプールは広く安定感も高いが、自分が何とかしなければと思い出すと急にキャッチされ出すので、安定感を低くしてよい理由はある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:23])", "timestamp": "17:23", "category": "B" }
+    ],
+    "IT-CORE-SUP": [
+      { "trait": "other", "summary": "サポートの中ではランクも大会経験も低く、地力は低め。長くやっているので地力はそこそこある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:48])", "timestamp": "17:48", "category": "B", "note": "normalized/career.json には最高ランクの記録が無い(ランクの基準は母集団の中央値)" },
+      { "trait": "laning", "summary": "そつなくこなすサポートで、レーンで大きく負けることはなくダメージトレードも返す。集団戦で分かりやすい活躍はないが、強い ADC を活かすプレイはしっかりできる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:57])", "timestamp": "17:57", "category": "B" },
+      { "trait": "pool", "summary": "今回はエンチャンターメタで得意なスタイルと合い、かなり安定しそう。タンクメタなら辛い。ピックプールはエンチャンターメタのおかげで広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:27])", "timestamp": "18:27", "category": "B", "note": "神楽めあとの比較の発言は記録しない" }
+    ],
+    "IT-NEXT-TOP": [
+      { "trait": "other", "summary": "大会経験はぼちぼちあるが、トップ転向のため地力・レーン戦・集団戦・連携・安定感のいずれも高くはつけられない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:19:12])", "timestamp": "19:12", "category": "B", "note": "normalized/career.json(LTK S1・S2 は ADC)と一致" },
+      { "trait": "macro", "summary": "トップのチャンピオン知識が乏しく、対面ごとの立ち回りやトップでの勝ち方が分かっておらず、ADC 的な感性でレーンを回している。キルは取れても優位をトップとして拡張する方法が分かっていない。らいじんのコーチングで大きく変わる可能性", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:29])", "timestamp": "7:29", "category": "B" }
+    ],
+    "IT-NEXT-JG": [
+      { "trait": "mental", "summary": "ピーキーでプレイに迷いが多く安定感が低い。ピックプールはあるが、安定感・連携・集団戦が低い。フルクリアのタイムなど洗練の余地がある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:19:49])", "timestamp": "19:49", "category": "B" },
+      { "trait": "laning", "summary": "負けている時のプレーがうまく回せない。ゆふな・まざー3 には及ばず、アステル・レダとはやれる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:00])", "timestamp": "4:00", "category": "B" }
+    ],
+    "IT-NEXT-MID": [
+      { "trait": "laning", "summary": "五分を張れる程度の地力はありレーン戦もできるが、レーンで崩れると崩れたままになり、負けている時のプレーができない。キルラインを狙って失敗するプレイが多くレーン戦は負けがち", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:20:56])", "timestamp": "20:56", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦で寄った時のポジションが悪く、寄るべきところに寄れず、リミットテスト的なプレイでソロキルされることが目立つ。安定性はもう少し低くてよい。ピックプールは広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:02])", "timestamp": "21:02", "category": "B" }
+    ],
+    "IT-NEXT-ADC": [
+      { "trait": "mechanics", "summary": "ADC としての地力が伸びてきておらず頭打ち感がある。強いサポートの隣にいなかったためと見られ、初期の LTK では強すぎて CORE に上がったほどで本来の地力は高いはずだが、今は自信を失っている", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:27])", "timestamp": "21:27", "category": "B", "note": "normalized/career.json(S1 NEXT → S2 CORE → S3 NEXT)と整合" },
+      { "trait": "laning", "summary": "負け癖がつき、レーンで戦えないことを前提にしたプレイをしがちでボットで有利が取れない。レーン戦は厳しめ。なぎさっちとは五分、夢野あかりとはチャンピオン相性次第、獅子堂あかりには勝てる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:52])", "timestamp": "4:52", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦で囲まれる位置に立ち、敵の位置が見えていないので低め。白那しずくがサポートになって活躍の場を作れるかが鍵", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:22:19])", "timestamp": "22:19", "category": "B" }
+    ],
+    "IT-NEXT-SUP": [
+      { "trait": "teamfight", "summary": "NEXT のサポートで地力・レーン戦が高く、特に集団戦が飛び抜けている。集団戦の勝ち筋が最も早く見え、それを実現する能力とポジショニングがある。連携・安定性・ピックプールもよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:23:02])", "timestamp": "23:02", "category": "B", "note": "NEXT のサポート内の順位づけは記録しない" },
+      { "trait": "pool", "summary": "レル・ノーチラスのエンゲージで集団戦の流れを作れる。エンチャンターメタで特性を活かしづらく、タンクサポートを使わせられるかが要", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:17])", "timestamp": "6:17", "category": "B", "note": "23:42 の同趣旨を含む" },
+      { "trait": "other", "summary": "LTK にずっと出ている(天帝フォルテと共に)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:00])", "timestamp": "3:00", "category": "A", "note": "normalized/career.json(S1〜S3 出場)と一致" }
+    ]
+  },
+  "teamMacro": {
+    "IT-MASTERS": [
+      { "text": "Eugeo が IGL をして全体を引っ張り、ゆにかが乗っかって引っ張る形", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:10])", "timestamp": "1:10", "category": "A" }
+    ],
+    "IT-CORE": [
+      { "text": "たかやスペシャル・ごんかね・レグルシュが喋れ、喋れる人が多いのでチームのコール力は高め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:36])", "timestamp": "2:36", "category": "A" }
+    ],
+    "IT-NEXT": [
+      { "text": "ジャングル・ミッドのマクロコールが弱く、橘ひなののマクロコールはトップからではあまりできない。白那しずくは熱量を持って喋る人ではなく、ありけん・まいたけの慌てたコールにかき消されてコール力を活かせていない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:05])", "timestamp": "3:05", "category": "A" },
+      { "text": "もともとのチームが違い、マクロでの集団戦の作り方や考え方が合っていない。Enty のコーチングが NEXT の目線に立てておらず、連携が伸びずに苦しみそう", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:09])", "timestamp": "4:09", "category": "B" }
+    ]
+  },
+  "teamStyle": {
+    "IT-MASTERS": [
+      { "aspect": "carry", "summary": "地力がこんなに低いことはない。元プロの Enty、Eugeo、V3 で連携のあるゆにかがいる。レーン戦と集団戦の低さもこんなに低いわけがない。ボットは他のボットと比べて辛くない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:00])", "timestamp": "0:00", "category": "B" },
+      { "aspect": "tournament", "summary": "大会経験が全員高いのは妥当", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:10])", "timestamp": "0:10", "category": "B" },
+      { "aspect": "stability", "summary": "安定感は分からなくもない(Enty の安定性が少し低い)。ピックプールはもっとある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:27])", "timestamp": "1:27", "category": "B" }
+    ],
+    "IT-CORE": [
+      { "aspect": "stability", "summary": "AlphaAzur が初ジャングルで明確な隙があり、ジャングルがうまくいった試合は強く、いかなかった試合は弱いので安定感が低いのは妥当", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:40])", "timestamp": "1:40", "category": "B" },
+      { "aspect": "chemistry", "summary": "元同じチームの mittiii・ごんかね・レグルシュがいて、たかやも加わり連携は十分。ジャングラー以外の 3 レーンがこけないのが強み。地力もみんな高い。ピックプールも広い。おおむね合っている", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:59])", "timestamp": "1:59", "category": "B" }
+    ],
+    "IT-NEXT": [
+      { "aspect": "overall", "summary": "弱め。大会経験はみんなぼちぼちある。ピックプールはみんな広め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:53])", "timestamp": "2:53", "category": "B" },
+      { "aspect": "stability", "summary": "まいたけ・ありけんが負けている時のプレーを回せず安定性は低い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:50])", "timestamp": "3:50", "category": "B" },
+      { "aspect": "lanes", "summary": "集団戦はワンチャンがあり高めでもよい。レーン戦は負けがち(天帝フォルテ・まいたけ)。4 チームの中でトップと言える選手がおらず、唯一飛び抜けた白那しずくがエンゲージで集団戦を作れれば、まいたけ・ありけんも合わせられる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:40])", "timestamp": "4:40", "category": "B" },
+      { "aspect": "coach", "summary": "個人としての全体コーチングがまだ足りていない。らいじんのコーチングが入れば変わる可能性があり、プレイオフまでには仕上がるかもしれない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:35])", "timestamp": "6:35", "category": "B" }
+    ]
+  },
+  "coaches": {
+    "IT-MASTERS-SUP": [
+      { "summary": "IT NEXT の全体コーチとしてのコーチングが、自分の能力の高さゆえに NEXT の目線に立てていないことが目立つ(価値責任者の見方)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:21])", "timestamp": "4:21", "category": "B" }
+    ],
+    "IT-MASTERS-TOP": [
+      { "summary": "IT NEXT に対するらいじんのコーチングが(初日まで難しいという事情の後)入れば、トップの橘ひなのが大きく変わる可能性があるとの言及", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:07])", "timestamp": "8:07", "category": "B", "note": "らいじんのコーチの役割は既存の記録(Enty が全体コーチ)と照らして確認が要る" }
+    ]
+  },
+  "overall": [
+    { "target": "IT-MASTERS", "summary": "地力・レーン戦・集団戦がこんなに低いことはない。Eugeo が IGL でゆにかが乗る形で全然悪くない。", "direction": "+", "strength": "中", "timestamp": "0:00", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:00])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "IT-CORE", "summary": "ジャングル以外の 3 レーンがこけず連携・コール力・ピックプールが高いが、初ジャングルの AlphaAzur が明確な隙で安定感は低い。おおむね合っている。", "direction": "+", "strength": "中", "timestamp": "1:35", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:35])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "IT-NEXT", "summary": "弱め。コール力が活かせず、レーン戦は負けがちで安定性が低い。白那しずくの集団戦と、コーチングで仕上がるかが鍵。", "direction": "-", "strength": "中", "timestamp": "2:53", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:53])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" }
+  ],
+  "unmapped": [],
+  "preprocessingNotes": [
+    "前処理はかけていない。価値責任者本人のレビューのため AI が直接読んだ",
+    "0:17〜0:33(らいじんの位置づけ)、9:34〜9:44(ゆにかのピックプール)、17:38〜17:48、22:37〜23:02(天帝フォルテの続き)、24:20〜24:28(白那しずくのコールの続き)の一部が文字起こしで欠落している"
+  ]
+}
