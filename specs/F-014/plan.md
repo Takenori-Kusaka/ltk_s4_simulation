@@ -15,7 +15,7 @@
 | Task-5 | (2026-10-10 追加。再判定 2)順位表を予想の結果(整数の勝ち数・負け数・ポイント)にする: 各試合で勝率の高い側が勝ったとした結果の集計(Regular Stage のポイントの規則、MASTERS CUP の決勝・3 位決定戦とポイント)、TOTAL の並び(同点の扱い)、見出しの文言、MASTERS CUP の M3・M4 の予想の組み合わせの箱(基準 1・8) | 1, 4, 5, 8, 13 |
 | Task-6 | (2026-10-10 追加。再判定 3)内容レビューの反映: 順位表の注記、結論の一文の言い回し、大会経験の根拠と「未確認(AI 収集)」の印、言い回しの統一(乱数の種・影響・予想 pt・今後の更新・15%)、英語のチーム名、最後の日より後の見出しと Playoffs の案内 | 26, 27, 28, 29, 30 | `src/app/schedule/view.ts`、`src/app/schedule/StandingsBoard.svelte`、`src/app/schedule/DayBox.svelte`、`src/app/components/Home.svelte`、`src/app/sim/SimPage.svelte`、`tests/app/schedule.test.ts` | Task-1 | 可 |
 | (Task-6 の対象パス) | `src/app/schedule/**`、`src/app/story/**`、`src/app/sim/**`、`src/app/team/**`、`src/app/components/Home.svelte`、`src/app/components/PlayerSheet.svelte`、`tests/app/**` | Task-5 | 不可 |
-| Task-7 | (2026-10-10 追加。再判定 4)根拠の 2 層: レーン(個人)とマクロ(チーム)の相対勝率の 3 行、マクロの層(M と 3 つの軸の素点と理由) | 31, 32 | `src/app/story/**`、`tests/app/story.test.ts` | Task-6 | 不可 |
+| Task-7 | (2026-10-10 追加。再判定 4)根拠の 2 層: レーン(個人)とマクロ(チーム)の相対勝率の 3 行、マクロの層(M と 2 つの軸の素点と理由)、外部の見立ての小節 | 31, 32, 33 | `src/app/story/**`、`tests/app/story.test.ts` | Task-6 | 不可 |
 
 ## 粒度の確認
 
