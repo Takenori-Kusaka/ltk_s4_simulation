@@ -17,6 +17,7 @@
 | Task-6 | 画面(選手のページ): 全軸のレーダー(確度で線を変える、推定の印)と調子、軸の説明(基準・補正・縮小・LTK の項・試合数・指標の位置・根拠・確度の理由) | 20, 24 | `src/app/**`、`tests/app/**` | Task-7 | 不可 |
 | Task-8 | (2026-10-09 に旧 Task-6 から分割。変更行数が上限 800 を超えたため関心事で分けた)チームの指標(視界・オブジェクト・マクロ)の計算と、評価のファイルへの書き出し | 25 | `src/rating/team-indicators.ts`、`src/rating/axes.json`、`src/collect/aggregate-cli.ts`、`tests/rating/team-indicators.test.ts` | Task-7 | 可 |
 | Task-9 | (2026-10-09 に旧 Task-6 から分割)画面(チームのページ): 全軸の相対評価のレーダーとチームの指標の表示 | 25 | `src/app/team/**`、`src/app/**`、`tests/app/**` | Task-6, Task-8 | 不可 |
+| Task-11 | (2026-10-10 追加。再判定 2)経歴の反映: 経歴の記録の読み込み(最高ランク・プロの経歴)、ランクの基準 = ソロランクと最高ランクの高い方、元プロの下限(Challenger 0 LP = 8.0)、基準の出どころの表示 | 6, 28, 29, 30 | `src/rating/engine.ts`、`src/rating/build.ts`、`src/rating/types.ts`、`src/rating/evidence.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-7 | 可 |
 | Task-10 | (2026-10-09 追加。価値責任者の依頼)根拠の収集の道具: 配信の文字起こしの前処理(生成 AI を使わない。自動字幕の重なりの除去、区間、LoL・LTK と無関係の区間の除去、選手の対応付け、コール・プレイスタンスの手がかりの数)。根拠の抜き出しは前処理の出力を読む | 12〜16 | `src/transcript/**`、`tests/transcript/**`、`docs/research/grounds/README.md` | — | 可 |
 
 ## 粒度の確認

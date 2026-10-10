@@ -12,6 +12,7 @@
 | Task-2 | 結果による θ の当て直し(Bradley-Terry と事前分布、本番とスクリムの重み)と、80% の区間(1,000 回の抽出、乱数の種) | 4, 7b | `src/winrate/update.ts`、`src/winrate/interval.ts`、`tests/winrate/update.test.ts` | Task-1 | 不可 |
 | Task-3 | 仕上がりの項(共同プレイ歴・メタの近さ(チャンピオンの近さと戦い方の近さ)・τ)と気持ちの補正、ドラフトの優位の項(F-006 の出力を読む)と寄与の切り詰め | 9, 10, 11, 13, 14 | `src/winrate/dynamics.ts`、`tests/winrate/dynamics.test.ts` | Task-1 | 可 |
 | Task-4 | S1〜S3 での当てはまりの確認の命令と記録、常識の検査 K-08・K-09(反したら勝率表を書かずに失敗) | 13, 15 | `scripts/winrate-backtest.mjs`、`src/winrate/checks.ts`、`src/rating/known-facts.json`、`tests/winrate/checks.test.ts` | Task-2, Task-3 | 不可 |
+| Task-6 | (2026-10-10 追加。再判定)マクロ項: マクロの点数 M(F-010 のチームの軸の素点の平均)、β_macro、レーン相対とマクロ相対の勝率、掛け合わせ(対数オッズの和)、勝率表のファイルへの p_lane・p_macro・M の書き出し | 2, 3, 3b, 7 | `src/winrate/core.ts`、`src/winrate/config.json`、`src/collect/aggregate-cli.ts`、`tests/winrate/core.test.ts` | Task-1 | 可 |
 | Task-5 | 試合の分析ページ(事前と更新後の勝率、上位3つの要因、β、区間、仕上がりと気持ちの内訳、予測と実際の結果) | 5, 8, 12 | `src/app/match/**`、`src/app/components/App.svelte`、`src/app/lib/index.ts`、`src/app/app.css`、`tests/app/match.test.ts` | Task-4 | 不可 |
 
 ## 粒度の確認
