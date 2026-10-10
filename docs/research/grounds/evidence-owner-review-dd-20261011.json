@@ -1,0 +1,226 @@
+{
+  "kind": "evidence-transcript",
+  "file": "owner-review/20261011-dd-review.md",
+  "description": "価値責任者本人が公開ページを見ながら DD の 3 階級チーム 15 名の点数について話した音声の文字起こし(data/transcript/owner-review/、リポジトリ外、話者は価値責任者 1 人)から、AI が発言を 4 種類(A 事実の主張 / B 点数への意見 / C モデル・表示への指摘 / D 雑談)に分けて要約した記録。発言の全文は転記しない。A のうちコールの担い手についての明確な発言は normalized/shotcalling.json へ kind owner-confirmation として足した(normalized: true)。事実と意見の境目が曖昧なもの(normalized: false)と B・C は docs/research/grounds/owner-review-dd-20261011.md の表にある。前処理と別の AI による反証の試みは行っていない(話者が価値責任者本人で、記録の確認は価値責任者が PR で行う)",
+  "source": {
+    "title": "価値責任者による DD(MASTERS・CORE・NEXT)の点数レビュー(2026-10-11 の録音の文字起こし。約 32 分)",
+    "url": "",
+    "urlPending": false,
+    "speaker": "価値責任者(本人。確かさ 高)",
+    "retrievedAt": "2026-10-11",
+    "preprocessed": "",
+    "preprocessedWith": "",
+    "note": "内部の録音のため URL は無い(urlPending は該当しない)。前処理はかけず AI が直接読んだ"
+  },
+  "aiCheckBy": "",
+  "caveats": [
+    "話者は価値責任者本人のため、発言は『価値責任者の確認』として扱えるが、記録を書き起こしたのは AI。価値責任者が PR で各項目を確認するまでは仮の記録",
+    "価値責任者の『期待する順位・点数』そのものは記録しない(規則: 見立てを根拠にしない)。点数への意見は owner-review-dd-20261011.md の表に、現在の値と根拠を添えて残す",
+    "27:24 以降で価値責任者は、個人の点数が階級内ではなく全選手の相対評価だと気づき、それ以前の NEXT の個人についての発言はその前提を踏まえていないと述べた(それ以前の NEXT の個人の意見は階級内の相対で語られている可能性がある)",
+    "自動の文字起こしのため固有名詞に誤変換がある(例: 坂井壮馬 = 酒寄颯馬、カグラメア = 神楽めあ、ワシャレ = わしだい、紅白ウル = 狐白うる、知らなみのラムネ = 白波らむね、天永ねる = 天ノ川ねる、スターミジャパン = スタンミじゃぱん、マザー = まざー3、ユフィ = ゆふな、友情 = Eugeo)。名簿と照らして対応づけた"
+  ],
+  "related": { "reviewTable": "docs/research/grounds/owner-review-dd-20261011.md" },
+  "matches": [],
+  "picks": {},
+  "shotcalling": {
+    "DD-MASTERS-TOP": [
+      { "summary": "価値責任者が「わしだいはコールができる(喋れる)」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:17])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "2:17", "selfTeam": false, "note": "12:27 でも『コールもできるので問題ない』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-MASTERS-JG": [
+      { "summary": "しゃるるは結構喋れるが、必要な情報を落としてプロ経験者に判断を渡す側で、チームを導くコール役ではない(コール力が最大級なのは高すぎるとの意見)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:43])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "中", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "13:43", "selfTeam": false, "note": "2:21『結構喋れる』と 13:43『チームを導くコール力ではない』が混在し、事実と意見の境目が曖昧なため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-MASTERS-MID": [
+      { "summary": "たぬき忍者のコール力はそんなに高くないとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:26])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "15:26", "selfTeam": false, "note": "程度の意見(『そんなに高くない』)で『コールしない側』の確認ではないため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-MASTERS-ADC": [
+      { "summary": "Day1 のコール力は一般的な程度はあり、今の中央値くらいでよいとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:31])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "16:31", "selfTeam": false, "note": "点数への意見に近いため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-MASTERS-SUP": [
+      { "summary": "価値責任者が「hetel はコール力が十分にあり、フォーカスのコールもできる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:00])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "18:00", "selfTeam": false, "note": "2:17 でも『喋れる』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-CORE-TOP": [
+      { "summary": "酒寄颯馬は情報を落とすという意味でのコールはできるが、IGL ができるわけではない(コール力をここまで伸ばさなくてよいとの意見)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:05])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "21:05", "selfTeam": false, "note": "『情報は落とす(+)』と『IGL ではない(−)』が混在するため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-CORE-JG": [
+      { "summary": "価値責任者が「きなこはチャンピオンとロールの理解度が低くコールがちゃんとできず、味方のコールを受けて動く側」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:39])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "-", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "21:39", "selfTeam": false, "note": "22:01『味方のコールをもらって動く』。9:16 では神楽めあのマクロに意見を出す側としても言及。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-CORE-MID": [
+      { "summary": "価値責任者が「スタンミじゃぱんはコールがちゃんとしっかりできる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:22:41])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "22:41", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-CORE-ADC": [
+      { "summary": "じゃすぱーは情報を落とせるが、LTK の序盤はコールが出ないかもしれず、だんだん出る、本番で急に喋り出す可能性もある。チームゲームのコールがどこまでできるかは不確かで、コール力は少し下げてもよく確度も低いとの意見", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:23:36])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "23:36", "selfTeam": false, "note": "不確かさの表明のため正規化の記録へは入れない(表 B・C)", "normalized": false }
+    ],
+    "DD-CORE-SUP": [
+      { "summary": "価値責任者が「神楽めあは DD CORE のコールの中心で、オブジェクトの判断を促すコールやマクロの指示を出す側」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:38])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "2:38", "selfTeam": false, "note": "4:29『かなり喋りまくる』、8:59『オブジェクトのコールを投げかけ続ける』、9:10『マクロのベースで、コーチ陣とズレがない』、25:05『コール力は最大級でよい』。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-NEXT-TOP": [
+      { "summary": "SHAKA のコール力はまあまああるとの発言(直後の発言は文字起こしで欠落)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:26:40])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "+", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "26:40", "selfTeam": false, "note": "程度の発言で、続きが欠落しているため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-NEXT-JG": [
+      { "summary": "価値責任者が「まざー3 はコールがとてもでき、ジャングルの中からジャングル・オブジェクト・レーンの状況を喋って確認できる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:27:11])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "27:11", "selfTeam": false, "note": "28:07 の補足も含む。マクロの理解度が高いわけではないが NEXT の中でコール力は高い、との留保つき。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-NEXT-MID": [
+      { "summary": "価値責任者が「天ノ川ねるはコール力があまりなく、コールする側ではない」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:09])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "-", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "29:09", "selfTeam": false, "note": "『あんまりないのでこんなもん』(現在の 2.5 を妥当とする文脈)。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "DD-NEXT-ADC": [
+      { "summary": "夢野あかりは前シーズン、自分だけに見えているキルラインを味方に伝えることが課題だった。今回は白波らむねがやりたいことを汲み取れるので連携の問題は吸収されそう", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:31:08])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "31:08", "selfTeam": false, "note": "コールの有無ではなく伝達の課題の話のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "DD-NEXT-SUP": [
+      { "summary": "価値責任者が「白波らむねはコールがしっかりでき、分かりやすいコールが多くチームが動きやすい」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:32:24])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-dd-20261011.json", "timestamp": "32:24", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ]
+  },
+  "playerTraits": {
+    "DD-MASTERS-TOP": [
+      { "trait": "mental", "summary": "DD MASTERS の中で唯一、上振れ・下振れの大きい選手", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:47])", "timestamp": "1:47", "category": "A" },
+      { "trait": "other", "summary": "去年まで V3 Esports でプロとしてプレイし、LJL 優勝の経験がある(大会経験が低いことはあり得ない)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:45])", "timestamp": "11:45", "category": "A", "note": "normalized/career.json(LJL-starter 5 年)と tournament.json(V3 Esports・QT DIG∞ の各 1 年、LJL 2025 優勝)に既にある。表 B の原因の候補は係数" },
+      { "trait": "pool", "summary": "ピックプールは十分に広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:25])", "timestamp": "12:25", "category": "A" },
+      { "trait": "teamfight", "summary": "今回は他のメンバーとの兼ね合いで自分が何とかしなければという構えになりそう(連携の懸念)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:12])", "timestamp": "12:12", "category": "B" }
+    ],
+    "DD-MASTERS-JG": [
+      { "trait": "other", "summary": "プロシーンの経験は無い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:26])", "timestamp": "13:26", "category": "A", "note": "normalized/career.json(highestLevel none)と一致" },
+      { "trait": "mental", "summary": "キャッチされがちで安定感は低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:30])", "timestamp": "13:30", "category": "B" },
+      { "trait": "teamfight", "summary": "連携は合わせられ、集団戦の意識も高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:35])", "timestamp": "13:35", "category": "B" },
+      { "trait": "other", "summary": "たぬき忍者と長く一緒にプレイしている(連携の下地)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:36])", "timestamp": "1:36", "category": "A", "note": "『ゲーム明けまでずっと続けてる』と聞こえ、文意は不確か" }
+    ],
+    "DD-MASTERS-MID": [
+      { "trait": "other", "summary": "プロシーンの経験は無い(価値責任者の認識)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:21])", "timestamp": "14:21", "category": "A", "note": "normalized/career.json は LJL CS(2 部)のスタメンを記録しており、『プロシーン』の範囲の認識が異なる可能性がある(表 C)" },
+      { "trait": "laning", "summary": "今回のミッドの相手(Ceros・Eugeo ら)に対してはレーン戦が相対的にきつく、ミッドは破壊されかねない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:23])", "timestamp": "14:23", "category": "B" },
+      { "trait": "teamfight", "summary": "固定カメラでプレイしておりフィジカルを出し切れない面があり、集団戦は微妙", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:45])", "timestamp": "14:45", "category": "B" },
+      { "trait": "mental", "summary": "テンパると連携が難しくなる(前回の IT MASTERS で見られた)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:58])", "timestamp": "14:58", "category": "B" },
+      { "trait": "pool", "summary": "メタに対応して強いミッド相手に戦えるという意味でのピックプールは狭い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:06])", "timestamp": "15:06", "category": "B" },
+      { "trait": "other", "summary": "チャレンジャーの実力はあり、LTK にもずっと出ている", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:42])", "timestamp": "15:42", "category": "A" }
+    ],
+    "DD-MASTERS-ADC": [
+      { "trait": "other", "summary": "プロシーンにいた", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:19])", "timestamp": "16:19", "category": "A", "note": "normalized/career.json(LJL-starter 4 年)と一致" },
+      { "trait": "mental", "summary": "安定感がとても高く、無茶なプレイをせず粛々とやるべきことをやる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:45])", "timestamp": "16:45", "category": "B" },
+      { "trait": "laning", "summary": "相手のボットより上手いときにダメージトレードで有利を作り込む力は相対的に不足し、レーン戦は低めでよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:55])", "timestamp": "16:55", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦は変な位置でキャッチされることはないが、上手いポジションで大活躍する型でもない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:21])", "timestamp": "17:21", "category": "B" }
+    ],
+    "DD-MASTERS-SUP": [
+      { "trait": "other", "summary": "去年までプロシーンにいた(大会経験が低いことはあり得ない)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:49])", "timestamp": "17:49", "category": "A", "note": "normalized/career.json(LJL-starter 5 年)と tournament.json(V3 Esports・QT DIG∞)に既にある。表 B の原因の候補は係数" },
+      { "trait": "laning", "summary": "レーン戦で大きく有利を取る型ではなく、チャンスメイクを数回できる程度", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:16])", "timestamp": "18:16", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦はかなりでき、オブジェクトから見て広い視野・広いエリアを使える。連携を合わせるのがとても得意", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:29])", "timestamp": "18:29", "category": "B" },
+      { "trait": "pool", "summary": "ピックプールは広い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:46])", "timestamp": "18:46", "category": "A" }
+    ],
+    "DD-CORE-TOP": [
+      { "trait": "pool", "summary": "ピックプールがとても広く、スタンミじゃぱんの狭さをカバーできる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:01])", "timestamp": "3:01", "category": "A" },
+      { "trait": "mental", "summary": "ウィークサイドを任せられることにおいて CORE のトップで一番。不利なときに無茶をせず、相手をスノーボールさせないプレイがとても上手い(安定感はもっと高くてよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:19:17])", "timestamp": "19:17", "category": "B" },
+      { "trait": "teamfight", "summary": "ヘラルドなどへの合流が遅れたり、ウィークサイドで耐えている分だけ寄り切れないことがあり、集団戦と連携は低めでよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:20:22])", "timestamp": "20:22", "category": "B" },
+      { "trait": "laning", "summary": "CORE のトップ 4 人の中ではレートが低く、レーン戦は下がり気味だが安定感で補える", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:20:43])", "timestamp": "20:43", "category": "B" },
+      { "trait": "other", "summary": "大会経験は 2時3時杯と LTK くらいで、多くのカスタムに出ていたわけではない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:14])", "timestamp": "21:14", "category": "A", "note": "normalized/career.json(LTK S3、lolTournaments 1)と整合" }
+    ],
+    "DD-CORE-JG": [
+      { "trait": "pool", "summary": "LTK でメタの方向を吸収しており、期間中にメタが大きく変わらないためピックプールはそれほど広くなくても足りる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:09])", "timestamp": "3:09", "category": "A" },
+      { "trait": "other", "summary": "もともと他のゲームで活躍していた", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:29])", "timestamp": "21:29", "category": "A", "note": "ゲーム名は語られていない。normalized/tournament.json の other『別ゲームのプロ経験(ゲーム名は未確認)』と整合" },
+      { "trait": "macro", "summary": "チャンピオンとロールの理解度が低く、誰を狙うか・どう動くかは味方のコールをもらって動く。いるべき場所にはいられる(安定感は高い)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:55])", "timestamp": "21:55", "category": "B" },
+      { "trait": "other", "summary": "ジャングルなりの視界取りはするが、それ以上はない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:23])", "timestamp": "8:23", "category": "B" }
+    ],
+    "DD-CORE-MID": [
+      { "trait": "pool", "summary": "アニビア・TF などメタと関係のないチャンピオンを OTP 的に使い込んでおり、ピックプールは下がる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:46])", "timestamp": "2:46", "category": "A" },
+      { "trait": "mental", "summary": "チャレンジングなプレイが多く、下振れるとミッドで大敗することがあるが、本番に向けて安定プレイを目指すだろう(安定感は下げてよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:02])", "timestamp": "5:02", "category": "B" },
+      { "trait": "other", "summary": "ソロキューの感覚でワードをあまり置かない(視界管理の懸念)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:12])", "timestamp": "8:12", "category": "B" },
+      { "trait": "other", "summary": "LTK の経験は無く、チームゲームの経験もそれほど多くない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:22:30])", "timestamp": "22:30", "category": "A", "note": "normalized/career.json(LTK 出場なし)と一致" },
+      { "trait": "teamfight", "summary": "ポジション取りとスキルの使い方が上手く、集団戦での爆発力がある(集団戦はもっと上でよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:22:58])", "timestamp": "22:58", "category": "B" },
+      { "trait": "laning", "summary": "レーン戦は葛葉・乾伸一郎には勝てても、たかやスペシャルには勝てないだろう(低めでよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:23:07])", "timestamp": "23:07", "category": "B" }
+    ],
+    "DD-CORE-ADC": [
+      { "trait": "pool", "summary": "どのチャンピオンでもかなりいける", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:28])", "timestamp": "3:28", "category": "A" },
+      { "trait": "other", "summary": "ソロキューの感覚でワードをあまり置かない(視界管理の懸念)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:12])", "timestamp": "8:12", "category": "B" },
+      { "trait": "other", "summary": "KR サーバーでマスターに到達していた", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:01])", "timestamp": "24:01", "category": "A", "note": "normalized/career.json はサーバーを区別せず最高ランク Challenger・今季 Grandmaster(JP)を持つ。KR のランクを持つ欄は無い" },
+      { "trait": "mental", "summary": "KR ではミスを咎められるため、安定感がなければマスターに行けない(安定感はもっと高くてよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:06])", "timestamp": "24:06", "category": "B" },
+      { "trait": "teamfight", "summary": "狙われていない限り最大限に殴り続ける型で、集団戦のパフォーマンスはとても高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:19])", "timestamp": "24:19", "category": "B" },
+      { "trait": "laning", "summary": "KR でプレイしているため相手の弱みをつくのが上手く、レーン戦は破壊する側", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:30])", "timestamp": "24:30", "category": "B" },
+      { "trait": "mechanics", "summary": "チャレンジャーで、コーチも MASTERS に出られる ADC だと言っている(地力はほぼ最大級)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:24:41])", "timestamp": "24:41", "category": "B" }
+    ],
+    "DD-CORE-SUP": [
+      { "trait": "pool", "summary": "もともとトップで、タンク・エンゲージ系がメイン。ネクストのフィアレスでタンクサポートが使われた場合の手札は課題だが、エンチャンター系も使えるよう練習中", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:28])", "timestamp": "3:28", "category": "A" },
+      { "trait": "mental", "summary": "本番で喋りすぎてチームの会話が混乱すると崩れる恐れがあり、個人の質としての安定感は低め(ボットで勝って元気にコールできている間は強い)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:27])", "timestamp": "4:27", "category": "B", "note": "25:09 でも同じ趣旨" },
+      { "trait": "other", "summary": "視界は取るが、相手を見つけて倒すための視界取りで、チームの情報量を増やす視界取りではない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:35])", "timestamp": "8:35", "category": "B" },
+      { "trait": "macro", "summary": "マクロの指示の正確性は高く、フィードバックでの見立てがコーチ陣とずれない。過去の LTK を通じて十分に高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:29])", "timestamp": "9:29", "category": "A" },
+      { "trait": "teamfight", "summary": "キルラインなど集団戦で見えている世界が他とずれることがあり連携は低め。ただしエンゲージなど役目を最大限に果たそうとするプレイはでき、集団戦は高くてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:25:25])", "timestamp": "25:25", "category": "B" },
+      { "trait": "laning", "summary": "レーンを勝ち切るよりオブジェクトにつなげて勝とうとするマクロ的なサポート(もともとトップ)。レーン戦はぼちぼちか少し上", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:25:46])", "timestamp": "25:46", "category": "B" },
+      { "trait": "other", "summary": "トップで毎シーズン マスターに到達し続けている(地力はもう少し上でよい)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:26:18])", "timestamp": "26:18", "category": "A", "note": "normalized/career.json(最高ランク Master 274LP)と一致" }
+    ],
+    "DD-NEXT-TOP": [
+      { "trait": "laning", "summary": "2026-10-10 の IT NEXT とのスクリムで橘ひなの相手に五分かそれ以上のプレイができており、ロールスワップしても大きく負けそうにない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:37])", "timestamp": "5:37", "category": "A", "note": "スクリムの観察。試合の結果(勝敗)は語られていない。F-004(結果の入力)ができるまで材料として残す" },
+      { "trait": "pool", "summary": "トップに転向したばかりで使えるチャンピオンがとても少ない(ピックプールが狭いのはその通り)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:24])", "timestamp": "7:24", "category": "A" },
+      { "trait": "macro", "summary": "トップから降りずに押し込み、自分が十分に強くなってから降りる構えなら問題ないが、そうでない場合の安定感は無い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:49])", "timestamp": "6:49", "category": "B", "note": "6:55〜7:12 の一部が文字起こしで欠落" }
+    ],
+    "DD-NEXT-JG": [
+      { "trait": "other", "summary": "エメラルドのジャングラーで、NEXT の中では地力が高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:29])", "timestamp": "5:29", "category": "A", "note": "normalized/career.json(最高ランク Emerald II)と一致" },
+      { "trait": "other", "summary": "VSPO との関わりが強く、連携・コミュニケーションは問題ない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:41])", "timestamp": "7:41", "category": "A" },
+      { "trait": "macro", "summary": "マクロの理解度が高いわけではないが、ジャングルから状況を喋って確認できる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:27:58])", "timestamp": "27:58", "category": "A" },
+      { "trait": "teamfight", "summary": "レーン戦の能力は高い。集団戦ではポジショニングは取れるが破壊するポジションまでは行けず、安定するポジションにいる型(タンクなら前、AP なら後ろ)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:28:17])", "timestamp": "28:17", "category": "B" },
+      { "trait": "pool", "summary": "トップなどいろいろなレーンの気持ちが分かるのが長所で、ピックプールはもう少し広めでよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:28:41])", "timestamp": "28:41", "category": "B", "note": "LTK S1・S2 は TOP で出場(normalized/career.json と一致)" }
+    ],
+    "DD-NEXT-MID": [
+      { "trait": "laning", "summary": "レーンを流すのが上手く、勝ちはしないが負けもしない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:17])", "timestamp": "6:17", "category": "B", "note": "29:38 でも同じ趣旨" },
+      { "trait": "pool", "summary": "メタピックができる(ピックプールは少し評価できる)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:12])", "timestamp": "29:12", "category": "A" },
+      { "trait": "mental", "summary": "メンタルが弱く安定感は低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:17])", "timestamp": "29:17", "category": "B" },
+      { "trait": "teamfight", "summary": "グルーピングが遅れがちで連携は低め。集団戦に入ればスキルを回してパフォーマンスは出せる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:26])", "timestamp": "29:26", "category": "B" }
+    ],
+    "DD-NEXT-ADC": [
+      { "trait": "other", "summary": "白波らむねとデュオでランクをずっと回しており(VSPO のデュオボット)、レーン戦の仕上がりが高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:21])", "timestamp": "6:21", "category": "A" },
+      { "trait": "other", "summary": "あらゆるロールで大会に出ようとしているほど多くの大会に出ており、大会経験は十分", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:29:52])", "timestamp": "29:52", "category": "A", "note": "normalized/career.json の activities(LoL の大会 5・他ゲームの大会 7)と整合。tournament.json の other には無い(表 C)" },
+      { "trait": "mental", "summary": "ソロランクの回し方は相当だが、リミットテスト的なプレイが負けにつながることが多く、地力はあるが安定感は低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:30:02])", "timestamp": "30:02", "category": "B" },
+      { "trait": "pool", "summary": "ピックプールは広くなく、強いチャンピオンを使い込む型", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:30:27])", "timestamp": "30:27", "category": "A" },
+      { "trait": "laning", "summary": "キルチャンスを狙いに行くのでレーン戦は高め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:30:43])", "timestamp": "30:43", "category": "B" },
+      { "trait": "teamfight", "summary": "フォーカスされる位置に立つことが多く集団戦は低め。ただし咎めないと火力を出すポジションにいる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:30:49])", "timestamp": "30:49", "category": "B" }
+    ],
+    "DD-NEXT-SUP": [
+      { "trait": "other", "summary": "情報取り・エリア取り・視界取りを大事にする(VALORANT でも同様)。敵を倒すためというより視界を取り盤面を整理するサポートの役割を全うできる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:24])", "timestamp": "10:24", "category": "A" },
+      { "trait": "mechanics", "summary": "ミクロ(手の速さ)が弱く地力は低め。ただしレーン戦・集団戦・連携・安定感は NEXT のサポートの中で非常によい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:31:38])", "timestamp": "31:38", "category": "B" },
+      { "trait": "other", "summary": "白那しずくが NEXT のサポートで一番強く勝利を直接もたらす型なのに対し、白波らむねはチームの土台を作るのが上手いサポート", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:31:54])", "timestamp": "31:54", "category": "B", "note": "IT-NEXT-SUP(白那しずく)との比較。順位の記述は記録しない" },
+      { "trait": "pool", "summary": "土台を作る意味でピックプールは広め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:32:20])", "timestamp": "32:20", "category": "A" },
+      { "trait": "other", "summary": "ADC からサポートへ転向しており、ADC の気持ちがよく分かる。大会経験も十分", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:32:31])", "timestamp": "32:31", "category": "A", "note": "normalized/career.json(LTK S1・S2 ADC、S3 SUP)と一致" }
+    ]
+  },
+  "teamMacro": {
+    "DD-CORE": [
+      { "text": "マクロは神楽めあがベースで、きなこがそれに意見する形。神楽めあのマクロはコーチ陣とズレがなく、指示の正確性は高い。じゃすぱーはフィジカルを優先できる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:08])", "timestamp": "9:08", "category": "A" },
+      { "text": "コーチが納得できるマクロを喋れる人はどのチームにも 1 人はいるので、チームのマクロは意外と差がつかないかもしれない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:54])", "timestamp": "9:54", "category": "C" }
+    ],
+    "DD-NEXT": [
+      { "text": "NEXT としては LTK 経験の豊富な選手が多く、マクロは他の NEXT より少し高めになりうる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:16])", "timestamp": "11:16", "category": "B" },
+      { "text": "オブジェクトは足並みが揃い切らず間に合わないことが増えそうだが、白波らむねの視界・オブジェクト意識で修正できるかもしれない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:57])", "timestamp": "10:57", "category": "B" }
+    ]
+  },
+  "teamStyle": {
+    "DD-MASTERS": [
+      { "aspect": "stability", "summary": "はっちゃける人がおらず安定プレイの選手が多い。わしだいだけ上下の振れが大きい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:47])", "timestamp": "1:47", "category": "B" },
+      { "aspect": "pool", "summary": "全員チャレンジャーなのでメタについていける(ピックプールは問題ない)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:02])", "timestamp": "2:02", "category": "B" },
+      { "aspect": "shotcalling", "summary": "わしだい・hetel が喋れ、しゃるるも結構喋れるので、コールはぼちぼちできる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:17])", "timestamp": "2:17", "category": "A" },
+      { "aspect": "vision", "summary": "視界管理はマスターのレベルで十分にあり、他と差はあまりない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:59])", "timestamp": "7:59", "category": "B" }
+    ],
+    "DD-CORE": [
+      { "aspect": "shotcalling", "summary": "神楽めあを中心に喋れる人が多く、コール力はもっと飛び抜けていてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:38])", "timestamp": "2:38", "category": "B" },
+      { "aspect": "pool", "summary": "スタンミじゃぱんの OTP 的なプールで下がるが、酒寄颯馬の広さでカバーできる。きなこは LTK のメタを押さえている", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:46])", "timestamp": "2:46", "category": "B" },
+      { "aspect": "carry", "summary": "フィジカルの高い選手が多く地力はもっと上でよい。ボットのレーン戦は確実に勝つ。連携・集団戦は個人のフィジカルに頼った動きになりがち", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:03])", "timestamp": "4:03", "category": "B" },
+      { "aspect": "stability", "summary": "神楽めあが喋りまくり、本番でスタンミ・じゃすぱーも喋るとコミュニケーションが混乱して崩れる恐れがあり、安定感は低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:27])", "timestamp": "4:27", "category": "B" },
+      { "aspect": "vision", "summary": "スタンミ・じゃすぱーがワードを置かない節があり、きなこはジャングルなりの視界取りまで、神楽めあは相手を倒すための視界取りなので、チームの視界スコアは他の CORE より低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:08])", "timestamp": "8:08", "category": "B" },
+      { "aspect": "objective", "summary": "オブジェクト意識は高く、神楽めあがオブジェクトの判断を促すコールを出し続ける", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:56])", "timestamp": "8:56", "category": "A" }
+    ],
+    "DD-NEXT": [
+      { "aspect": "carry", "summary": "相対評価として高めなのは妥当。まざー3 の地力が高く、弱点と見られていた SHAKA も弱点になっていない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:27])", "timestamp": "5:27", "category": "B" },
+      { "aspect": "laning", "summary": "天ノ川ねるがレーンを流すのが上手く、夢野あかり・白波らむねがデュオでランクを回しているので、レーン戦の仕上がりが高い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:15])", "timestamp": "6:15", "category": "A" },
+      { "aspect": "stability", "summary": "集団戦の安定感はなく、ミッド・ボットが流せずに負けた場合は取り返しが難しい。SHAKA のピックプールが狭いのはその通り", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:35])", "timestamp": "6:35", "category": "B" },
+      { "aspect": "chemistry", "summary": "VSPO のデュオボットはずっと一緒におり、まざー3・SHAKA も VSPO との関わりが強いので、連携・コミュニケーションは問題ない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:31])", "timestamp": "7:31", "category": "A" },
+      { "aspect": "vision", "summary": "白波らむねが視界取りを大事にするサポートなので、視界スコアは他の NEXT より高くなりそう", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:21])", "timestamp": "10:21", "category": "B" }
+    ]
+  },
+  "coaches": {},
+  "overall": [
+    { "target": "DD-MASTERS", "summary": "しゃるる・たぬき忍者がプロシーンにいなかったため大会経験が少なめで地力も低めなのは妥当。レーンは無難。", "direction": "-", "strength": "弱", "timestamp": "1:13", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:13])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "DD-CORE", "summary": "喋れる人が多くコール力は飛び抜けていてよい。地力・ボットのレーン戦はもっと上。安定感はコミュニケーションの混乱の恐れがあり低め。", "direction": "+", "strength": "中", "timestamp": "2:38", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:38])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "DD-NEXT", "summary": "相対評価として高めなのは妥当。地力・レーン戦・連携は高く、集団戦の安定感とピックプールが弱み。", "direction": "+", "strength": "中", "timestamp": "5:27", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:27])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" }
+  ],
+  "unmapped": [
+    { "heard": "NTさん(18:11)・後でもさん(18:57)", "guess": "CC-MASTERS-SUP(Nemoh)。確かさ 中", "summary": "hetel の地力の比較相手として挙がった MASTERS のサポート(てぃんとん・Nemoh・Enty と並べて)。順位の記述は記録しない。", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:18:11])", "timestamp": "18:11" },
+    { "heard": "ユフィ(5:35)", "guess": "CC-NEXT-JG(ゆふな)。確かさ 中", "summary": "NEXT のジャングラーの地力の比較相手として挙がった。", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:35])", "timestamp": "5:35" }
+  ],
+  "preprocessingNotes": [
+    "前処理(src/transcript/cli.ts)はかけていない。価値責任者本人のレビューのため AI が直接読んだ。同じ手順を CC のレビューにも使う",
+    "6:38〜6:49 と 7:00〜7:12、26:40〜27:07 に文字起こしの欠落がある(集団戦と SHAKA のコールの話の続き)",
+    "固有名詞の誤変換が多い(caveats 参照)。前処理の辞書を通す場合は『坂井壮馬』『カグラメア』『スターミジャパン』『天永ねる』『知らなみのラムネ』『紅白ウル』の別名が要る"
+  ]
+}
