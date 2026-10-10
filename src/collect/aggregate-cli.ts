@@ -11,6 +11,7 @@ import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-f
 import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
 import { computePriorWinrates, MACRO_KEYS, readExternalViews, type MacroPart, type TierTeamS } from '../winrate/core.ts';
+import type { MaturationMember } from '../winrate/dynamics.ts';
 import { TIERS } from '../sim/types.ts';
 import winrateConfig from '../winrate/config.json' with { type: 'json' };
 import { createHash } from 'node:crypto';
@@ -78,8 +79,9 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
   out(`評価のファイルを書いた: ${path}(評価設定の版 ${file.configVersion})`);
   // F-006 基準9: F-005 が読む NEXT の予想ピックとプロテクト候補
+  const meta = loadMetaGuide();
   const draftPath = join(publicDir, 'next-draft.json');
-  writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, loadMetaGuide()), null, 2) + '\n');
+  writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, meta), null, 2) + '\n');
   out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}`);
   // F-010: 階級チームの評価と全階級チームの総合の軸
   const ev = evaluateTeams({ ratings, inputs: inputs.players, matches: inputs.matches, teamIndicators: teams, now: now.getTime(), snapshotsDir: opts.snapshotsDir ?? 'data/snapshots' });
@@ -89,14 +91,22 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   out(`チームの評価を書いた: ${teamPath}`);
   // F-005 Task-1: 事前の勝率表(F-001 の入力の形式)。S を計算できない階級チームは理由つきで null(基準16)
   // F-005 Task-6: マクロの点数 M の内訳は F-010 のチームの軸「連携の厚み」「司令塔」の素点(相対評価の前の値)
+  // F-005 Task-3: 仕上がりの材料は名簿の 5 人の LTK の出場記録(tournament.json)と F-009 のピックプール(pool 軸の poolDetail)、メタの一覧は F-011 の champions[]
   const rated = new Set(ratings.map((r) => r.playerId));
+  const inputOf = new Map(inputs.players.map((p) => [p.playerId, p]));
+  const ratingOf = new Map(ratings.map((r) => [r.playerId, r]));
   const tierTeams: TierTeamS[] = ev.tierTeams.map((t) => {
     const unrated = ROSTER.filter((p) => p.team === t.team && p.tier === t.tier && !rated.has(p.id)).map((p) => p.name);
     const macroParts: MacroPart[] = MACRO_KEYS.flatMap((key) => {
       const axis = t.axes.find((a) => a.key === key);
       return axis ? [{ key, label: axis.label, raw: axis.raw }] : [];
     });
-    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts };
+    const members: MaturationMember[] = ROSTER.filter((p) => p.team === t.team && p.tier === t.tier).map((p) => ({
+      id: p.id, name: p.name, role: p.role,
+      ltk: (inputOf.get(p.id)?.tournament.ltk ?? []).map((x) => ({ season: x.season, team: x.team })),
+      pool: (ratingOf.get(p.id)?.axes.find((a) => a.key === 'pool')?.data?.poolDetail?.list ?? []).map((x) => ({ championId: x.championId, games: x.games })),
+    }));
+    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts, members };
     return unrated.length ? { ...base, S: null, reason: `評価の無い選手: ${unrated.join('・')}` } : { ...base, S: t.S };
   });
   // 外部の見立て(groundsDir の external-views.json)。無ければ項は 0
@@ -109,7 +119,7 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   }
   const external = readExternalViews(externalRaw);
   for (const e of external.errors) out(`外部の見立ての入力: ${e}`);
-  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items });
+  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions });
   const winratePath = join(publicDir, 'winrates.json');
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
   writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');

@@ -1,11 +1,14 @@
 // F-005 Task-1: 勝率の土台(基準 1・2・3・6・7・16)。β、事前の勝率、ステージ補正、S を計算できないときの 50.0%、F-001 の勝率表の出力
 // F-005 Task-6: マクロ項(基準 2・3・3b)。マクロの点数 M(F-010 のチームの軸の素点の平均)、β_macro、レーン相対とマクロ相対の勝率、掛け合わせ(対数オッズの和)
 // 再判定 2: M は連携の厚み・司令塔の 2 軸(継続性は仕上がりの項で扱う)。外部の見立ての項 E・β_ext を足し、p_macro はマクロ項と外部の見立ての項の和から作る
-// DOM と Node 固有の API に依存しない。結果による更新(θ)・仕上がり・気持ち・ドラフトの項は後のタスク(ここでは 0)
+// F-005 Task-3: 階級チームごとの仕上がり(共同プレイ歴 c・メタの近さ m・仕上がりの速さ τ)を teams[].maturation に出す(src/winrate/dynamics.ts)。
+// 試合ごとの事前の勝率は d = 0 の値のまま(試合日ごとの勝率は dynamics.ts の純粋な関数で画面が作る)
+// DOM と Node 固有の API に依存しない。結果による更新(θ)・気持ち・ドラフトの項は後のタスク(ここでは 0)
 import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../sim/types.ts';
 import type { WinTable } from '../sim/validate.ts';
+import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMember, type MetaChampionLike } from './dynamics.ts';
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
 
@@ -17,7 +20,7 @@ export interface ExternalConfig {
   selfTeam: number;
 }
 
-export interface WinrateConfig {
+export interface WinrateConfig extends DynamicsConfig {
   beta: { targetSd: number };
   /** 基準3: β_macro × (M_A − M_B) の 6 組の二乗平均平方根を合わせる広がり */
   macro: { targetSd: number };
@@ -68,6 +71,8 @@ export interface TierTeamS {
   macroReason?: string;
   /** M の内訳(連携の厚み・司令塔・継続性の素点) */
   macroParts?: MacroPart[];
+  /** Task-3: 仕上がりの材料(名簿の 5 人の LTK の出場記録とピックプール)。無ければ c = 0・当たり無しで計算する */
+  members?: readonly MaturationMember[];
 }
 
 export interface TeamRow {
@@ -85,6 +90,8 @@ export interface TeamRow {
   /** 外部の見立て E(Σ 向き × 強さの重みを ±clip に切り詰めた値。小数第一位)と件数。無ければ 0 */
   E: number;
   externalCount: number;
+  /** Task-3(基準 9・10・12): 仕上がり(c・m_pool・m・τ と内訳)。試合日ごとの勝率は画面が dynamics.ts の関数で作る */
+  maturation: Maturation;
 }
 
 export interface MatchPrior {
@@ -227,7 +234,7 @@ function percents(p: number): [number, number] {
 
 export function computePriorWinrates(
   teams: readonly TierTeamS[],
-  opts: { config?: WinrateConfig; externalViews?: readonly ExternalView[] } = {},
+  opts: { config?: WinrateConfig; externalViews?: readonly ExternalView[]; meta?: readonly MetaChampionLike[] | null } = {},
 ): WinrateOutput {
   const cfg = opts.config ?? CFG;
   const views = opts.externalViews ?? [];
@@ -243,7 +250,9 @@ export function computePriorWinrates(
         : t.M === null || !Number.isFinite(t.M) ? { M: null, reason: t.macroReason ?? 'マクロの点数が無い' }
         : { M: r2(t.M), reason: null };
       const ext = externalOf(views, key, cfg.external);
-      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count };
+      // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
+      const maturation = maturationOf(t?.members, opts.meta, cfg);
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
       else rows.push({ ...base, S: t.S, reason: null });
