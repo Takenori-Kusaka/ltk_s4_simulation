@@ -1,4 +1,5 @@
 // F-005 Task-1: 勝率の土台(基準 1・2・3・6・7・16)。β、事前の勝率、ステージ補正、S を計算できないときの 50.0%、F-001 の勝率表の出力
+// F-005 Task-6: マクロ項(基準 2・3・3b)。マクロの点数 M(F-010 のチームの軸の素点の平均)、β_macro、レーン相対とマクロ相対の勝率、掛け合わせ(対数オッズの和)
 // DOM と Node 固有の API に依存しない。結果による更新(θ)・仕上がり・気持ち・ドラフトの項は後のタスク(ここでは 0)
 import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
@@ -9,10 +10,23 @@ export type StageKey = 'regular' | 'masters' | 'playoffs';
 
 export interface WinrateConfig {
   beta: { targetSd: number };
+  /** 基準3: β_macro × (M_A − M_B) の 6 組の二乗平均平方根を合わせる広がり */
+  macro: { targetSd: number };
   /** 基準6: ステージごと・階級チーム(例 DD-NEXT)ごとの対数オッズの加算値 */
   stage: Record<StageKey, Record<string, number>>;
   stageBasis: string;
   [k: string]: unknown;
+}
+
+/** 用語「マクロの点数 M」に使う F-010 のチームの軸(素点 `axes[].raw`) */
+export const MACRO_KEYS = ['synergy', 'shotcalling', 'continuity'] as const;
+export type MacroKey = (typeof MACRO_KEYS)[number];
+
+/** M の内訳。raw は F-010 の相対評価の前の素点。無ければ null */
+export interface MacroPart {
+  key: MacroKey;
+  label: string;
+  raw: number | null;
 }
 
 /** 階級チームの戦力 S(F-010)。計算できないときは S を null にし、理由を書く */
@@ -21,6 +35,12 @@ export interface TierTeamS {
   tier: Tier;
   S: number | null;
   reason?: string;
+  /** マクロの点数 M。省略すれば macroParts から作り、macroParts も無ければ計算できない扱い(後方互換) */
+  M?: number | null;
+  /** M を計算できない理由(M が null のとき) */
+  macroReason?: string;
+  /** M の内訳(連携の厚み・司令塔・継続性の素点) */
+  macroParts?: MacroPart[];
 }
 
 export interface TeamRow {
@@ -30,6 +50,11 @@ export interface TeamRow {
   S: number | null;
   /** S を計算できない理由(基準16)。計算できれば null */
   reason: string | null;
+  /** 基準3b: マクロの点数 M(小数第二位)。計算できなければ null */
+  M: number | null;
+  macroParts: MacroPart[];
+  /** M を計算できない理由。計算できれば null */
+  macroReason: string | null;
 }
 
 export interface MatchPrior {
@@ -41,14 +66,29 @@ export interface MatchPrior {
   b: TeamId;
   sA: number | null;
   sB: number | null;
+  /** 基準3b: 両チームのマクロの点数 M。計算できなければ null */
+  mA: number | null;
+  mB: number | null;
   beta: number;
-  /** 基準2 の事前の対数オッズ(β × (S_A − S_B) + ステージ補正) */
+  betaMacro: number;
+  /** 基準2 の事前の対数オッズ(レーン項 + マクロ項 + ステージ補正) */
   logit: number;
+  /** レーン項 β × (S_A − S_B) */
+  laneLogit: number;
+  /** マクロ項 β_macro × (M_A − M_B)。M が無い側があれば 0 */
+  macroLogit: number;
   /** 基準6: ステージ補正(A の値 − B の値) */
   stageTerm: number;
-  /** A の勝率(%、0.1 単位) */
+  /** A の勝率(%、0.1 単位)。p_lane と p_macro の掛け合わせにステージ補正を加えた値 */
   pA: number;
   pB: number;
+  /** 基準3b: レーン相対の勝率 p_lane とマクロ相対の勝率 p_macro(%、0.1 単位。A と B の和が 100.0) */
+  pLaneA: number;
+  pLaneB: number;
+  pMacroA: number;
+  pMacroB: number;
+  /** 基準3b: M を計算できない階級チームが関わるとき(p_macro は 50.0%)の理由。無ければ null */
+  macroMissing: string | null;
   /** 基準16: データ不足の表示と理由。無ければ null */
   dataMissing: string | null;
 }
@@ -57,6 +97,9 @@ export interface WinrateOutput {
   kind: 'winrates';
   beta: Record<Tier, number>;
   betaBasis: Record<Tier, string>;
+  /** 基準3: 階級ごとの β_macro とその根拠 */
+  betaMacro: Record<Tier, number>;
+  betaMacroBasis: Record<Tier, string>;
   stageBasis: string;
   teams: TeamRow[];
   matches: MatchPrior[];
@@ -67,14 +110,36 @@ export interface WinrateOutput {
 const CFG = config as unknown as WinrateConfig;
 const sigmoid = (x: number) => 1 / (1 + Math.exp(-x));
 const r3 = (x: number) => Math.round(x * 1000) / 1000;
+const r2 = (x: number) => Math.round(x * 100) / 100;
 
-/** 基準3: 同じ階級の4チームの6組の S の差の二乗平均平方根が targetSd になる β。差がすべて 0 なら 0 */
-export function betaOf(S: readonly number[], targetSd: number): number {
+/** 同じ階級のチームの組(i < j)の値の差の二乗平均平方根(組の向きに依らない広がり)。組が無ければ 0 */
+function rmsDiff(v: readonly number[]): number {
   const sq: number[] = [];
-  for (let i = 0; i < S.length; i++) for (let j = i + 1; j < S.length; j++) sq.push((S[i] - S[j]) ** 2);
-  if (!sq.length) return 0;
-  const rms = Math.sqrt(sq.reduce((a, b) => a + b, 0) / sq.length);
+  for (let i = 0; i < v.length; i++) for (let j = i + 1; j < v.length; j++) sq.push((v[i] - v[j]) ** 2);
+  return sq.length ? Math.sqrt(sq.reduce((a, b) => a + b, 0) / sq.length) : 0;
+}
+
+/** 基準3: 同じ階級の4チームの6組の S(または M)の差の二乗平均平方根が targetSd になる β(または β_macro)。差がすべて 0 なら 0 */
+export function betaOf(S: readonly number[], targetSd: number): number {
+  const rms = rmsDiff(S);
   return rms > 1e-12 ? targetSd / rms : 0;
+}
+
+/** 基準3 の根拠の文。name は S か M、symbol は β か β_macro */
+function scaleBasis(name: string, symbol: string, known: readonly number[], targetSd: number): string {
+  const n = known.length;
+  return n < 2
+    ? `${name} を計算できたチームが ${n} 件のため ${symbol} = 0`
+    : `${n} チームの ${name} の差(${(n * (n - 1)) / 2} 組)の二乗平均平方根 ${r3(rmsDiff(known))} に対して ${symbol} × 差の広がりが ${targetSd} になる値`;
+}
+
+/** 用語「マクロの点数 M」: 連携の厚み・司令塔・継続性の素点の平均(小数第二位)。素点の無い軸は除き、すべて無ければ null と理由 */
+export function macroOf(parts: readonly MacroPart[]): { M: number | null; reason: string | null } {
+  const known = parts.filter((p) => p.raw !== null && Number.isFinite(p.raw)).map((p) => p.raw as number);
+  if (!known.length) {
+    return { M: null, reason: parts.length ? `素点の無い軸: ${parts.map((p) => p.label).join('・')}` : 'F-010 のチームの軸が無い' };
+  }
+  return { M: r2(known.reduce((a, b) => a + b, 0) / known.length), reason: null };
 }
 
 /** 基準1: 両チームの勝率を 0.1% 単位で、和が 100.0% になるように丸める */
@@ -90,36 +155,51 @@ export function computePriorWinrates(teams: readonly TierTeamS[], opts: { config
     for (const team of TEAMS) {
       const t = teams.find((x) => x.team === team && x.tier === tier);
       const key = `${team}-${tier}`;
-      if (!t) rows.push({ key, team, tier, S: null, reason: 'F-010 の計算が無い' });
-      else if (t.S === null || !Number.isFinite(t.S)) rows.push({ key, team, tier, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
-      else rows.push({ key, team, tier, S: t.S, reason: null });
+      // マクロの点数 M: 与えられた M を優先し、無ければ内訳から作る(基準3b)
+      const macroParts = t?.macroParts ?? [];
+      const macro =
+        t?.M === undefined ? macroOf(macroParts)
+        : t.M === null || !Number.isFinite(t.M) ? { M: null, reason: t.macroReason ?? 'マクロの点数が無い' }
+        : { M: r2(t.M), reason: null };
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason };
+      if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
+      else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
+      else rows.push({ ...base, S: t.S, reason: null });
     }
   }
   const sOf = (team: TeamId, tier: Tier) => rows.find((r) => r.team === team && r.tier === tier)!;
 
   const beta = {} as Record<Tier, number>;
   const betaBasis = {} as Record<Tier, string>;
+  const betaMacro = {} as Record<Tier, number>;
+  const betaMacroBasis = {} as Record<Tier, string>;
   for (const tier of TIERS) {
     const known = rows.filter((r) => r.tier === tier && r.S !== null).map((r) => r.S as number);
     beta[tier] = r3(betaOf(known, cfg.beta.targetSd));
-    const rms = beta[tier] > 0 ? cfg.beta.targetSd / beta[tier] : 0;
-    betaBasis[tier] =
-      known.length < 2
-        ? `S を計算できたチームが ${known.length} 件のため β = 0`
-        : `${known.length} チームの S の差(${known.length === 4 ? 6 : (known.length * (known.length - 1)) / 2} 組)の二乗平均平方根 ${r3(rms)} に対して β × 差の広がりが ${cfg.beta.targetSd} になる値`;
+    betaBasis[tier] = scaleBasis('S', 'β', known, cfg.beta.targetSd);
+    const knownM = rows.filter((r) => r.tier === tier && r.M !== null).map((r) => r.M as number);
+    betaMacro[tier] = r3(betaOf(knownM, cfg.macro.targetSd));
+    betaMacroBasis[tier] = scaleBasis('M', 'β_macro', knownM, cfg.macro.targetSd);
   }
 
-  // 1組の事前の勝率(A の対数オッズ)。stage が無ければステージ補正なし
+  // 1組の事前の勝率(A の対数オッズ = レーン項 + マクロ項 + ステージ補正)。stage が無ければステージ補正なし
   const prior = (tier: Tier, a: TeamId, b: TeamId, stage?: StageKey) => {
     const A = sOf(a, tier), B = sOf(b, tier);
     const st = stage ? (cfg.stage[stage]?.[A.key] ?? 0) - (cfg.stage[stage]?.[B.key] ?? 0) : 0;
+    const noM = [A, B].filter((x) => x.M === null);
+    const macroMissing = noM.length ? `マクロの点数が無い(${noM.map((x) => `${x.key}: ${x.macroReason}`).join(' / ')})` : null;
+    const common = { sA: A.S, sB: B.S, mA: A.M, mB: B.M, betaMacro: betaMacro[tier], stageTerm: st, macroMissing };
     if (A.S === null || B.S === null) {
       const why = [A, B].filter((x) => x.S === null).map((x) => `${x.key}: ${x.reason}`).join(' / ');
-      return { sA: A.S, sB: B.S, logit: 0, stageTerm: st, pA: 50.0, pB: 50.0, dataMissing: `データ不足(${why})` };
+      return { ...common, logit: 0, laneLogit: 0, macroLogit: 0, pA: 50.0, pB: 50.0, pLaneA: 50.0, pLaneB: 50.0, pMacroA: 50.0, pMacroB: 50.0, dataMissing: `データ不足(${why})` };
     }
-    const logit = beta[tier] * (A.S - B.S) + st;
+    const lane = beta[tier] * (A.S - B.S);
+    const macro = A.M === null || B.M === null ? 0 : betaMacro[tier] * (A.M - B.M);
+    const logit = lane + macro + st;
     const [pA, pB] = percents(sigmoid(logit));
-    return { sA: A.S, sB: B.S, logit: r3(logit), stageTerm: st, pA, pB, dataMissing: null };
+    const [pLaneA, pLaneB] = percents(sigmoid(lane));
+    const [pMacroA, pMacroB] = percents(sigmoid(macro));
+    return { ...common, logit: r3(logit), laneLogit: r3(lane), macroLogit: r3(macro), pA, pB, pLaneA, pLaneB, pMacroA, pMacroB, dataMissing: null };
   };
 
   const matches: MatchPrior[] = [];
@@ -148,6 +228,8 @@ export function computePriorWinrates(teams: readonly TierTeamS[], opts: { config
     kind: 'winrates',
     beta,
     betaBasis,
+    betaMacro,
+    betaMacroBasis,
     stageBasis: cfg.stageBasis,
     teams: rows,
     matches,

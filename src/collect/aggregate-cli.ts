@@ -10,7 +10,8 @@ import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.t
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
 import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
-import { computePriorWinrates, type TierTeamS } from '../winrate/core.ts';
+import { computePriorWinrates, MACRO_KEYS, type MacroPart, type TierTeamS } from '../winrate/core.ts';
+import { TIERS } from '../sim/types.ts';
 import winrateConfig from '../winrate/config.json' with { type: 'json' };
 import { createHash } from 'node:crypto';
 import { loadMetaGuide } from '../meta/load.ts';
@@ -86,18 +87,23 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   writeFileSync(teamPath, JSON.stringify({ kind: 'team-evaluation', computedAt: now.toISOString(), configVersion: configVersion(), tierTeams: ev.tierTeams, overall: ev.overall, beta: ev.beta }, null, 2) + '\n');
   out(`チームの評価を書いた: ${teamPath}`);
   // F-005 Task-1: 事前の勝率表(F-001 の入力の形式)。S を計算できない階級チームは理由つきで null(基準16)
+  // F-005 Task-6: マクロの点数 M の内訳は F-010 のチームの軸「連携の厚み」「司令塔」「継続性」の素点(相対評価の前の値)
   const rated = new Set(ratings.map((r) => r.playerId));
   const tierTeams: TierTeamS[] = ev.tierTeams.map((t) => {
     const unrated = ROSTER.filter((p) => p.team === t.team && p.tier === t.tier && !rated.has(p.id)).map((p) => p.name);
-    return unrated.length
-      ? { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: null, reason: `評価の無い選手: ${unrated.join('・')}` }
-      : { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: t.S };
+    const macroParts: MacroPart[] = MACRO_KEYS.flatMap((key) => {
+      const axis = t.axes.find((a) => a.key === key);
+      return axis ? [{ key, label: axis.label, raw: axis.raw }] : [];
+    });
+    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts };
+    return unrated.length ? { ...base, S: null, reason: `評価の無い選手: ${unrated.join('・')}` } : { ...base, S: t.S };
   });
   const winrates = computePriorWinrates(tierTeams);
   const winratePath = join(publicDir, 'winrates.json');
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
   writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');
-  out(`勝率表を書いた: ${winratePath}(β NEXT ${winrates.beta.NEXT} / CORE ${winrates.beta.CORE} / MASTERS ${winrates.beta.MASTERS})`);
+  const scales = TIERS.map((tier) => `${tier} β ${winrates.beta[tier]} / β_macro ${winrates.betaMacro[tier]}`).join('、');
+  out(`勝率表を書いた: ${winratePath}(${scales})`);
   return errors.length ? 1 : 0;
 }
 
