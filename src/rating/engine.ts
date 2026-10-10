@@ -1,6 +1,7 @@
 // F-009 Task-1: 評価の土台(ADR-0004、docs/design/rating-model.md)
 // データの軸の基礎の点数 = clamp( A×r + 5×(1−r) + P × n/(n+k) × perfScale + 加点, 0, 10 )
 import type {
+  AnchorSource,
   Confidence,
   DataAxisDef,
   DataAxisResult,
@@ -29,6 +30,44 @@ export function rankAnchor(r: RankEntry | null | undefined): number | null {
   if (base >= 28) return Math.min(10, 8 + (2 * Math.max(0, r.lp)) / 1500);
   const steps = base + (DIVISION[r.division.toUpperCase()] ?? 0) + clamp(r.lp, 0, 100) / 100;
   return Math.min(8, (steps / 28) * 8);
+}
+
+/** 元プロのランクの基準の下限(基準29): Challenger 0 LP の基準 */
+export const EX_PRO_FLOOR = 8;
+
+/** ランクの表記(最高ランクの説明に使う): Challenger 1883LP、Emerald II 45LP */
+const rankText = (r: RankEntry) => [r.tier, r.division, `${r.lp}LP`].filter(Boolean).join(' ');
+
+export interface AnchorChoice {
+  anchor: number;
+  anchorSource: AnchorSource;
+  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典) */
+  anchorNote?: string;
+  /** ソロランクが無い(基準9: 確度を 1 段下げる) */
+  soloMissing: boolean;
+}
+
+/**
+ * 基準6・9・28〜30: ランクの基準の決め方。
+ * ソロランクと出典つきの最高ランクの高い方(同じならソロランク)。どちらも無ければ母集団の中央値。
+ * 出典つきのプロの経歴があれば、下限を Challenger 0 LP(8.0)にする(元プロの下限)
+ */
+export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' | 'exPro' | 'medianAnchor'>): AnchorChoice {
+  const solo = rankAnchor(input.rank);
+  const peak = rankAnchor(input.peakRank);
+  let choice: AnchorChoice;
+  if (peak !== null && (solo === null || peak > solo)) {
+    const r = input.peakRank!;
+    choice = { anchor: peak, anchorSource: '最高ランク', anchorNote: `${rankText(r)}${r.source ? `。出典: ${r.source}` : ''}`, soloMissing: solo === null };
+  } else if (solo !== null) {
+    choice = { anchor: solo, anchorSource: 'ソロランク', soloMissing: false };
+  } else {
+    choice = { anchor: input.medianAnchor ?? 5, anchorSource: '母集団の中央値', soloMissing: true };
+  }
+  if (input.exPro && choice.anchor < EX_PRO_FLOOR) {
+    choice = { ...choice, anchor: EX_PRO_FLOOR, anchorSource: '元プロの下限', anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}` };
+  }
+  return choice;
 }
 
 /** 新しさの重み 0.5^(日数 / 半減期) */
@@ -114,17 +153,8 @@ export function scoreDataAxis(
   now: number,
   bonus = 0,
 ): DataAxisResult {
-  // ランクの基準と事前値(基準9)
-  let anchor = rankAnchor(input.rank);
-  let anchorSource: DataAxisResult['anchorSource'] = 'ソロランク';
-  if (anchor === null) {
-    anchor = rankAnchor(input.peakRank);
-    anchorSource = '最高ランク';
-    if (anchor === null) {
-      anchor = input.medianAnchor ?? 5;
-      anchorSource = '母集団の中央値';
-    }
-  }
+  // ランクの基準と事前値(基準6・9・28〜30)
+  const { anchor, anchorSource, anchorNote, soloMissing } = resolveAnchor(input);
   const games = selectGames(input.games, now, cfg, { roleOnly: axis.roleDependent, position: input.position })
     .slice()
     .sort((a, b) => b.endTime - a.endTime || a.matchId.localeCompare(b.matchId));
@@ -160,7 +190,7 @@ export function scoreDataAxis(
   const base = clamp(anchor * r + 5 * (1 - r) + correction * shrink * cfg.perfScale + bonus, 0, 10);
   const estimated = n === 0;
   let confidence: Confidence = estimated ? '低' : confidenceOf(n, cfg);
-  if (anchorSource !== 'ソロランク' && !estimated) confidence = downgrade(confidence);
+  if (soloMissing && !estimated) confidence = downgrade(confidence);
   const onRole = games.filter((g) => g.position === input.position).length;
   return {
     key: axis.key,
@@ -170,6 +200,7 @@ export function scoreDataAxis(
     estimated,
     anchor,
     anchorSource,
+    ...(anchorNote ? { anchorNote } : {}),
     correction,
     shrink,
     effectiveGames: n,

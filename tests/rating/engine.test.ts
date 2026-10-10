@@ -157,3 +157,65 @@ test('AC20 の材料: 使った試合数・ロールの割合・日付の範囲�
   assert.equal(r.newest, '2026-10-07');
   assert.equal(r.oldest, '2026-09-09');
 });
+
+// F-009 Task-11: 受入基準 6(改訂)・28〜30(経歴の反映: 最高ランクとソロランクの高い方、元プロの下限、出どころ)
+const twenty = () => Array.from({ length: 20 }, () => game({ ageDays: 1 }));
+const EX_PRO = { level: 'LJL-starter', source: 'https://example.test/wiki/A' };
+
+test('AC28: 最高ランクがソロランクより高ければ基準は最高ランク由来。ソロランクはあるので確度は下げない', () => {
+  const peakRank = { tier: 'MASTER', division: 'I', lp: 0, source: 'https://example.test/opgg/a' };
+  const r = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(r.anchor, 8);
+  assert.equal(r.anchorSource, '最高ランク');
+  assert.equal(r.confidence, '高');
+  assert.match(r.anchorNote ?? '', /MASTER/);
+  assert.match(r.anchorNote ?? '', /https:\/\/example\.test\/opgg\/a/);
+});
+
+test('AC28: 最高ランクがソロランク以下ならソロランクの基準(出どころはソロランク)', () => {
+  const lower = scoreDataAxis(axis, { rank: { tier: 'MASTER', division: 'I', lp: 0 }, peakRank: { tier: 'GOLD', division: 'IV', lp: 0 }, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(lower.anchor, 8);
+  assert.equal(lower.anchorSource, 'ソロランク');
+  const same = scoreDataAxis(axis, { rank: { tier: 'MASTER', division: 'I', lp: 0 }, peakRank: { tier: 'MASTER', division: 'I', lp: 0 }, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(same.anchorSource, 'ソロランク');
+  assert.equal(same.confidence, '高');
+  assert.equal(same.anchorNote, undefined);
+});
+
+test('AC29: 元プロはランクの基準の下限が 8.0(Challenger 0 LP)。出どころは「元プロの下限」、説明に区分と出典', () => {
+  const r = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(r.anchor, 8);
+  assert.equal(r.anchorSource, '元プロの下限');
+  assert.equal(r.confidence, '高');
+  assert.match(r.anchorNote ?? '', /LJL-starter/);
+  assert.match(r.anchorNote ?? '', /https:\/\/example\.test\/wiki\/A/);
+  assert.ok(Math.abs(r.base - (8 * 0.8 + 5 * 0.2)) < 1e-9, `${r.base}`);
+});
+
+test('AC29: 基準が 8.0 以上の元プロには下限が効かない(ソロランク・最高ランクのまま)', () => {
+  const solo = scoreDataAxis(axis, { rank: { tier: 'CHALLENGER', division: 'I', lp: 1500 }, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(solo.anchor, 10);
+  assert.equal(solo.anchorSource, 'ソロランク');
+  const peakRank = { tier: 'MASTER', division: 'I', lp: 750, source: 'https://example.test/opgg/b' };
+  const peak = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(peak.anchor, 9);
+  assert.equal(peak.anchorSource, '最高ランク');
+});
+
+test('AC29/AC9: ソロランクも最高ランクも無い元プロは 8.0(元プロの下限)。確度は基準 9 のとおり 1 段下げる', () => {
+  const r = scoreDataAxis(axis, { rank: null, exPro: { level: 'LJL-sub', source: 'https://example.test/wiki/B' }, games: twenty(), position: 'MIDDLE', medianAnchor: 6 }, population, cfg, NOW);
+  assert.equal(r.anchor, 8);
+  assert.equal(r.anchorSource, '元プロの下限');
+  assert.equal(r.confidence, '中');
+});
+
+test('AC28: 経歴の記録が無い選手は従来どおり(ソロランク、無ければ母集団の中央値)', () => {
+  const solo = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank: null, exPro: null, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(solo.anchor - 3.43) < 0.01);
+  assert.equal(solo.anchorSource, 'ソロランク');
+  assert.equal(solo.anchorNote, undefined);
+  const none = scoreDataAxis(axis, { rank: null, peakRank: null, exPro: null, games: twenty(), position: 'MIDDLE', medianAnchor: 6 }, population, cfg, NOW);
+  assert.equal(none.anchor, 6);
+  assert.equal(none.anchorSource, '母集団の中央値');
+  assert.equal(none.confidence, '中');
+});

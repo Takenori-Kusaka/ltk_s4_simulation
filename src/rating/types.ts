@@ -9,7 +9,18 @@ export interface RankEntry {
   tier: string;
   division: string;
   lp: number;
+  /** 出典(経歴の記録の最高ランクに付く。Riot API の現在値には無い) */
+  source?: string;
 }
+
+/** LoL のプロの経歴(経歴の記録の lol.highestLevel が LJL・海外・CS・アカデミーのいずれか。出典つき。基準29) */
+export interface ExProCareer {
+  level: string;
+  source: string;
+}
+
+/** ランクの基準の出どころ(基準30) */
+export type AnchorSource = 'ソロランク' | '最高ランク' | '元プロの下限' | '母集団の中央値';
 
 /** 1試合の選手の記録。stats は participant の数値と challenges を平らにしたもの */
 export interface GameRecord {
@@ -72,7 +83,10 @@ export type Population = Record<string, Record<string, { mean: number; sd: numbe
 
 export interface PlayerAxisInput {
   rank: RankEntry | null;
+  /** 出典つきの最高ランク(経歴の記録)。ソロランクとの高い方を基準にする(基準6・28) */
   peakRank?: RankEntry | null;
+  /** 出典つきのプロの経歴(経歴の記録)。あれば基準の下限を Challenger 0 LP(8.0)にする(基準29) */
+  exPro?: ExProCareer | null;
   /** ランクが無く最高ランクも無いときの基準(60 選手の中央値など) */
   medianAnchor?: number;
   games: GameRecord[];
@@ -99,7 +113,9 @@ export interface DataAxisResult {
   /** 事前値だけで決まった */
   estimated: boolean;
   anchor: number;
-  anchorSource: 'ソロランク' | '最高ランク' | '母集団の中央値';
+  anchorSource: AnchorSource;
+  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典)。ソロランク・中央値のときは無い */
+  anchorNote?: string;
   /** 補正 P */
   correction: number;
   /** 縮小の割合 n / (n + k) */
