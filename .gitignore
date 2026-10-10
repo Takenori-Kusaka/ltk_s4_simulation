@@ -31,6 +31,8 @@ evidence/
 data/raw/
 # 価値責任者が共有する配信の文字起こしと、その前処理の出力(第三者の著作物。要約だけを docs/research/grounds/ に置く)
 data/transcript/
+# スクリムの書き起こしの作業用の置き場(/input-scrim)。根拠は docs/research/grounds/scrims/ に置く
+data/scrim/
 
 # エディタ・OS
 .DS_Store
