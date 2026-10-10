@@ -1,0 +1,1167 @@
+{
+  "kind": "evidence-transcript",
+  "file": "20261010-transcript-[000000] リーグザカセン [000004.md",
+  "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は価値責任者から 2026-10-10 に受け取り(題名を oEmbed で確認)、source を時刻つきの URL に、origin を transcript:<動画の ID> に置き換えた。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身のチーム(同じ組織の別の階級を含む)についての発言。前処理の縮小: 39377 字 → 10954 字(27.8%)、区間 164 → 125、長さ 72 分",
+  "source": {
+    "title": "LTK Season: Finale の全チーム(DD・CC・LR・IT の順)のメンバー紹介と見立ての配信。文字起こしの先頭の語から『リーグザカセン』の名前で保存されたもの",
+    "url": "https://www.youtube.com/watch?v=zcWe0BfA49k",
+    "urlPending": false,
+    "speaker": "Enty(IT MASTERS SUP、IT NEXT 全体コーチ)。冒頭で自ら名乗っている(0:00・1:46)。確かさ 高。掛け合いの相手(視聴者のコメントや同席者)の発言が混ざる区間がある",
+    "retrievedAt": "2026-10-10",
+    "preprocessed": "data/transcript/structured/20261010-transcript-[000000] リーグザカセン [000004.json",
+    "preprocessedWith": "abc5e68"
+  },
+  "aiCheckBy": "Claude Opus 5.5 (claude-opus-5-5)",
+  "caveats": [
+    "自動字幕には話者の情報が無い。話者はファイル内の自称・自チームの呼び方から推定した(source.speaker)。相づちや同席者・視聴者のコメントの読み上げが混ざる可能性がある",
+    "配信の日付は不明(チーム分けの発表後、大会の開始前と推定)。各項目の date は 2026-10 とした",
+    "出典の URL は生の文字起こしに無く(機械で grep)、価値責任者が 2026-10-10 に示した URL を使った。前処理の出力の内容(どの階級チームの話が多いか)と動画の題名の対応を確かめた",
+    "名前が区間に無い項目は、前後の区間の名前や紹介の順序から人物を推定した。推定の確かさは各項目の note にある",
+    "unmapped には名簿の誰かと推定できる呼び名だけを残し、名簿外の人物・私生活・年齢や勤め先に当たる話題は書いていない"
+  ],
+  "matches": [],
+  "picks": {},
+  "shotcalling": {
+    "LR-MASTERS-JG": [
+      {
+        "summary": "あまり喋るタイプではないとの評価(チーム内の会話の懸念の文脈)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1944s",
+        "date": "2026-10",
+        "type": "配信者の評価(第三者)",
+        "direction": "-",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "32:24",
+        "selfTeam": false,
+        "note": "名前(ネスティ)は区間にある。話者は Enty(自称)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-JG": [
+      {
+        "summary": "CC は Rainbrain などから喋り、みんなよく喋ると評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1975s",
+        "date": "2026-10",
+        "type": "配信者の評価(第三者)",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "32:55",
+        "selfTeam": false,
+        "note": "『レインさん』と聞こえ、Rainbrain と推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-MID": [
+      {
+        "summary": "ゲーム中のコールは Recap が(担う)という趣旨(語尾は省略)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1975s",
+        "date": "2026-10",
+        "type": "配信者の評価(第三者)",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "32:55",
+        "selfTeam": false,
+        "note": "名前(リキャップ)は区間にある。発言が途中で切れている",
+        "aiCheck": "unclear",
+        "aiCheckNote": "コールとRecapの間が省略され、担うの述語が本文にない"
+      }
+    ],
+    "IT-CORE-ADC": [
+      {
+        "summary": "とてもコールすると評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2942s",
+        "date": "2026-10",
+        "type": "同じ IT の選手(全体コーチ)の発言",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "49:02",
+        "selfTeam": true,
+        "note": "『カネゴン』と聞こえ、ごんかねと推定(確かさ 高。40:29 でも ADC として挙がる)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-TOP": [
+      {
+        "summary": "コールすると評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2942s",
+        "date": "2026-10",
+        "type": "同じ IT の選手(全体コーチ)の発言",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "49:02",
+        "selfTeam": true,
+        "note": "『ミッチーさん』=mittiii(区間の p にある)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-MID": [
+      {
+        "summary": "苦手なサポートのロールでもあれだけコールでき、エンゲージもしていたと評価。ミッドになれば普通にキャリーするとの見方。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3055s",
+        "date": "2026-10",
+        "type": "同じ IT の選手(全体コーチ)の発言",
+        "direction": "+",
+        "strength": "中",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "50:55",
+        "selfTeam": true,
+        "note": "名前は区間に無く、前後(48:32・51:31)の『たかちゃん』の流れからたかやスペシャルと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-JG": [
+      {
+        "summary": "とてもコールするし上手いと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3245s",
+        "date": "2026-10",
+        "type": "同じ IT の選手(全体コーチ)の発言",
+        "direction": "+",
+        "strength": "弱",
+        "kind": "player",
+        "collectedBy": "ai",
+        "origin": "transcript:zcWe0BfA49k",
+        "timestamp": "54:05",
+        "selfTeam": true,
+        "note": "『アルファさんもか』の直後の発言で、ごんかねについての発言と区別しにくい(確かさ 低)",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "playerTraits": {
+    "IT-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "LoL を始めて半年でチャレンジャーになったと本人が述べた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=52s",
+        "timestamp": "0:52",
+        "selfTeam": true,
+        "note": "本人の発言",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-TOP": [
+      {
+        "trait": "mechanics",
+        "summary": "ソロキューで当たってもとても上手い。愛されキャラ。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=130s",
+        "timestamp": "2:10",
+        "selfTeam": false,
+        "note": "名前(和紙台)は 1:46 の末尾にあり、2:10 は紹介の続き",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-JG": [
+      {
+        "trait": "other",
+        "summary": "元プロと言ってよいほどだがプロではない。以前は解説やコーチングもしていた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=153s",
+        "timestamp": "2:33",
+        "selfTeam": false,
+        "note": "名前(シャルル)は 2:10 の末尾にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "macro",
+        "summary": "ゲーム理解度が高くとても上手い。優しい。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=162s",
+        "timestamp": "2:42",
+        "selfTeam": false,
+        "note": "名前(シャルさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "LoL も TFT もチャレンジャーで、ずっと高レート。ゲームが上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=226s",
+        "timestamp": "3:46",
+        "selfTeam": false,
+        "note": "名前(たぬき忍者)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-ADC": [
+      {
+        "trait": "pool",
+        "summary": "元プロ(LJL)の ADC。いろいろなチャンピオンが得意で安定している。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=272s",
+        "timestamp": "4:32",
+        "selfTeam": false,
+        "note": "名前(デイワンさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "去年か一昨年の LTK で優勝したサポート。上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=302s",
+        "timestamp": "5:02",
+        "selfTeam": false,
+        "note": "名前(ヘテル)は直前の 4:32 の末尾にあり、5:02 は紹介の続き(確かさ 中)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "seg9は優勝したとだけで、大会名(LTK)は本文にない"
+      }
+    ],
+    "DD-CORE-TOP": [
+      {
+        "trait": "other",
+        "summary": "前の LTK でもとても上手かった印象。最高レートはエメラルドで、マスター相当の実力と言われている。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=372s",
+        "timestamp": "6:12",
+        "selfTeam": false,
+        "note": "『坂よりそうま』と聞こえ、酒寄颯馬と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "めちゃくちゃ上手く、強いと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=404s",
+        "timestamp": "6:44",
+        "selfTeam": false,
+        "note": "名前は区間に無く、6:12 の酒寄颯馬の紹介の続き(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-CORE-JG": [
+      {
+        "trait": "other",
+        "summary": "FPS が得意な人気ストリーマー。ジャングル以外のロールもできるという趣旨。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=431s",
+        "timestamp": "7:11",
+        "selfTeam": false,
+        "note": "名前(きなこさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-CORE-MID": [
+      {
+        "trait": "other",
+        "summary": "チームのリーダー(主将)。LoL をずっとやっており、最近マスターになった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=462s",
+        "timestamp": "7:42",
+        "selfTeam": false,
+        "note": "『スタミジャパン』と聞こえ、スタンミじゃぱんと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "どんなゲームをやっても上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=492s",
+        "timestamp": "8:12",
+        "selfTeam": false,
+        "note": "名前(ジャスパー)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-CORE-SUP": [
+      {
+        "trait": "other",
+        "summary": "トップでマスターに到達。前回の LTK もサポートで出場し、普通に上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=523s",
+        "timestamp": "8:43",
+        "selfTeam": false,
+        "note": "名前は区間に無く、DD CORE の紹介順(じゃすぱーの次)から神楽めあと推定(確かさ 中)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "seg17±3に神楽めあの名・p・cがなく順序推定のみ"
+      }
+    ],
+    "DD-NEXT-TOP": [
+      {
+        "trait": "pool",
+        "summary": "今回はトップ。ADC やミッド(サイオン)の印象が強いが、昔から LoL をやっていてチャンピオンプールがとても広い。CS がとても上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=596s",
+        "timestamp": "9:56",
+        "selfTeam": false,
+        "note": "名前(シャカさん)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "DD NEXT のリーダー(主将)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=660s",
+        "timestamp": "11:00",
+        "selfTeam": false,
+        "note": "『釈迦さん』と聞こえ、SHAKA と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-TOP": [
+      {
+        "trait": "mechanics",
+        "summary": "LoL のプロとして優勝経験があり、他ゲームでも日本トップの実績。ADC 以外ならおそらく一番上手く、MASTERS で一番 LoL が上手いと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=826s",
+        "timestamp": "13:46",
+        "selfTeam": false,
+        "note": "名前(ゆたぽん)は 13:29 の末尾にあり、13:46 は紹介の続き",
+        "aiCheck": "unclear",
+        "aiCheckNote": "一番ロル上手いの範囲は本文になく、MASTERSは補い"
+      },
+      {
+        "trait": "mental",
+        "summary": "VC の雰囲気作りが上手い(同じチームになった経験から)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=857s",
+        "timestamp": "14:17",
+        "selfTeam": false,
+        "note": "『ポンさん』=Yutapon(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-JG": [
+      {
+        "trait": "macro",
+        "summary": "ミクロもマクロもある元プロのジャングラー。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=915s",
+        "timestamp": "15:15",
+        "selfTeam": false,
+        "note": "名前(レインブレイン)は 14:17 の末尾にあり、15:15 は紹介の続き",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "元プロのミッドで、日本のミッドのレジェンド。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=915s",
+        "timestamp": "15:15",
+        "selfTeam": false,
+        "note": "名前(セロス)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "日本で一番上手かったミッドレーナーと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=945s",
+        "timestamp": "15:45",
+        "selfTeam": false,
+        "note": "名前(セロスさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-ADC": [
+      {
+        "trait": "macro",
+        "summary": "マクロもある。MASTERS の ADC の中で一番上手いと評価。LoL も続けている。以前わしだい・hetel と同じチームだった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=975s",
+        "timestamp": "16:15",
+        "selfTeam": false,
+        "note": "名前は区間に無く、CC MASTERS の紹介順(Ceros の次)から Yuhi と推定(確かさ 中)。『コアのコーチ』とも聞こえる",
+        "aiCheck": "unclear",
+        "aiCheckNote": "seg30にYuhiの名・p・cなし。同チーム歴の主語も不明"
+      }
+    ],
+    "CC-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "解説などの仕事をしており、最近 LoL をやっておらず少し下手になっていると本人が言っていたとのこと。それでも上手いサポート。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1006s",
+        "timestamp": "16:46",
+        "selfTeam": false,
+        "note": "名前は区間に無く、紹介順(Yuhi の次)から Nemoh と推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "pool",
+        "summary": "スレッシュが上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1042s",
+        "timestamp": "17:22",
+        "selfTeam": false,
+        "note": "名前は区間に無く、紹介順から Nemoh と推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "最近 LoL ができていなかった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3739s",
+        "timestamp": "1:02:19",
+        "selfTeam": false,
+        "note": "『ネモくん』と聞こえ、Nemoh と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-CORE-TOP": [
+      {
+        "trait": "other",
+        "summary": "(他ゲームの)大会で優勝したと聞いた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1042s",
+        "timestamp": "17:22",
+        "selfTeam": false,
+        "note": "『ゆきおさん』と聞こえ、YUKIO と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "最高レートはマスター 150LP とのこと。Apex で日本一上手かった元プロで、トップも普通に上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1076s",
+        "timestamp": "17:56",
+        "selfTeam": false,
+        "note": "名前は区間に無く、17:22 の YUKIO の紹介の続き(確かさ 中)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "トップも普通にの後が省略され、上手いは本文にない"
+      }
+    ],
+    "CC-CORE-JG": [
+      {
+        "trait": "mechanics",
+        "summary": "とても上手いと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1193s",
+        "timestamp": "19:53",
+        "selfTeam": false,
+        "note": "名前(河川)は 17:56 にあり、19:53 は主催者の紹介の続きと推定(確かさ 低)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "19:53の前約2分が欠落し、上手いの主語が決まらない"
+      }
+    ],
+    "CC-CORE-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "ADC も上手いと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1193s",
+        "timestamp": "19:53",
+        "selfTeam": false,
+        "note": "『竜巻一世』『ちーたま』と聞こえ、龍巻ちせと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-CORE-SUP": [
+      {
+        "trait": "other",
+        "summary": "サポートが上手いボットプレイヤー。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1334s",
+        "timestamp": "22:14",
+        "selfTeam": false,
+        "note": "名前(アリア)は 20:23・21:26 にある(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT-JG": [
+      {
+        "trait": "other",
+        "summary": "前回の LTK は CORE で優勝。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1396s",
+        "timestamp": "23:16",
+        "selfTeam": false,
+        "note": "名前(ゆふなさん)は区間にある",
+        "aiCheck": "unclear",
+        "aiCheckNote": "え、コアで優勝したよね?は疑問形で主語も省略"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "NEXT にいるべきでないほど上手いジャングラーと評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1459s",
+        "timestamp": "24:19",
+        "selfTeam": false,
+        "note": "名前(ユフナさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT-TOP": [
+      {
+        "trait": "other",
+        "summary": "実力は分からないとのこと。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1364s",
+        "timestamp": "22:44",
+        "selfTeam": false,
+        "note": "『ネクストのトップ』とだけ言い名前は無い(確かさ 低)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT-MID": [
+      {
+        "trait": "other",
+        "summary": "LTK に何回も出場。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1489s",
+        "timestamp": "24:49",
+        "selfTeam": false,
+        "note": "名前(アスミ、セナさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-NEXT-ADC": [
+      {
+        "trait": "other",
+        "summary": "カスタムに参加しているなら結構上手いという見方。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1559s",
+        "timestamp": "25:59",
+        "selfTeam": false,
+        "note": "名前は区間に無く、紹介順(空澄セナの次)から獅子堂あかりと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-TOP": [
+      {
+        "trait": "laning",
+        "summary": "ミクロがとても上手く、現役当時はレーンが本当に強いと言われていた。今は(あるチームの)コーチ。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1640s",
+        "timestamp": "27:20",
+        "selfTeam": false,
+        "note": "『アパさん』と聞こえ、apaMEN と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-JG": [
+      {
+        "trait": "other",
+        "summary": "(NEXT の)コーチとしては絶対に無理と冗談めかして評価。バンピックを担うことに不安(話者の見方)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1700s",
+        "timestamp": "28:20",
+        "selfTeam": false,
+        "note": "『ネスティ』と聞こえ、ねすてぃーと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "チャレンジャーで上手い元プロ。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1730s",
+        "timestamp": "28:50",
+        "selfTeam": false,
+        "note": "『ネスティ』=ねすてぃー(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mental",
+        "summary": "前回の LTK でとても緊張していた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1761s",
+        "timestamp": "29:21",
+        "selfTeam": false,
+        "note": "『続きましてリキャップ』より前の発言で、28:50 から続くねすてぃーの紹介の中(確認係の指摘で Recap から付け替え。確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-MID": [
+      {
+        "trait": "pool",
+        "summary": "今日本で一番上手い元プロと言われる。アーリが一番得意で、日本で一番上手いアーリ。チャレンジャー。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1794s",
+        "timestamp": "29:54",
+        "selfTeam": false,
+        "note": "名前(リキャップ)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "とても安定型の上手いプレイヤー。熱い男。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1822s",
+        "timestamp": "30:22",
+        "selfTeam": false,
+        "note": "名前(リキャップ)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-ADC": [
+      {
+        "trait": "pool",
+        "summary": "とても上手い。ソラカでチャレンジャーになった(トップのソラカ)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1913s",
+        "timestamp": "31:53",
+        "selfTeam": false,
+        "note": "『ハレッチ』と聞こえ、ハレっちと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-SUP": [
+      {
+        "trait": "other",
+        "summary": "もともとトップレーナーで、途中からサポートになった。普通に上手い。話者と同じチームだったことがある。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1913s",
+        "timestamp": "31:53",
+        "selfTeam": false,
+        "note": "『ティントン』と聞こえ、てぃんとんと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-CORE-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "とても上手く、CORE のミッドで一番かもしれない。Ceros がベタ褒め。話者と大会で一緒に優勝した経験。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2144s",
+        "timestamp": "35:44",
+        "selfTeam": false,
+        "note": "『イヌイ殿』と聞こえ、乾伸一郎と推定(確かさ 高)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "一緒に優勝したのが話者かセロスか本文で決まらない"
+      }
+    ],
+    "LR-CORE-SUP": [
+      {
+        "trait": "macro",
+        "summary": "以前はジャングルもやっていたが今回はサポート。大会をよく見ていて理解度が高い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2257s",
+        "timestamp": "37:37",
+        "selfTeam": false,
+        "note": "『ウヒ』と聞こえ、千燈ゆうひと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-NEXT-TOP": [
+      {
+        "trait": "mechanics",
+        "summary": "『神』と呼ばれる。前回は CORE で出場し、MASTERS 相手にも普通に強い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2310s",
+        "timestamp": "38:30",
+        "selfTeam": false,
+        "note": "『ワークるさん』と聞こえ、狐白うると推定(確かさ 中。前処理も確信の低い候補として出す)",
+        "aiCheck": "unclear",
+        "aiCheckNote": "相手マスターが階級かランクか不明で、間も省略"
+      },
+      {
+        "trait": "other",
+        "summary": "見ていて上手いと感じる相手。ランクの階層と団体戦の実力は別物という持論を添えた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2340s",
+        "timestamp": "39:00",
+        "selfTeam": false,
+        "note": "名前は区間に無く、38:30 の続き(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-NEXT-JG": [
+      {
+        "trait": "other",
+        "summary": "以前はサポート。ゲームが上手い人。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2367s",
+        "timestamp": "39:27",
+        "selfTeam": false,
+        "note": "名前(アステルレダ)は 39:00 の末尾にある(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-NEXT-MID": [
+      {
+        "trait": "other",
+        "summary": "最近 LoL をしている。FPS がとても上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2412s",
+        "timestamp": "40:12",
+        "selfTeam": false,
+        "note": "名前(春茶)は 39:27 にある(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-MASTERS-TOP": [
+      {
+        "trait": "macro",
+        "summary": "言語化が上手く、LoL の理解力も高い。コーチをやれと言われるほど。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2548s",
+        "timestamp": "42:28",
+        "selfTeam": true,
+        "note": "名前(ライジン)は区間にある",
+        "aiCheck": "unclear",
+        "aiCheckNote": "お前がコーチやれの話し手と宛先が本文で決まらない"
+      }
+    ],
+    "IT-MASTERS-JG": [
+      {
+        "trait": "other",
+        "summary": "プロの経験があると思われる。ジャングルの研究会を主宰。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2696s",
+        "timestamp": "44:56",
+        "selfTeam": true,
+        "note": "名前(ユニカ君)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-MASTERS-MID": [
+      {
+        "trait": "other",
+        "summary": "元プロで、いろいろなコーチを務めてきた。ゆにかと同じチームだったことがある。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2726s",
+        "timestamp": "45:26",
+        "selfTeam": true,
+        "note": "名前(ユージオ)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-MASTERS-ADC": [
+      {
+        "trait": "other",
+        "summary": "複数のゲームでプロ経験があり、LoL のプロもやっていた。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2786s",
+        "timestamp": "46:26",
+        "selfTeam": true,
+        "note": "名前(ゼロスト)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "ソロランクは前のシーズンもやっておらず、スクリムを優先する。話者はとても上手いと思っている。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3801s",
+        "timestamp": "1:03:21",
+        "selfTeam": true,
+        "note": "名前(ゼロスト)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "teamfight",
+        "summary": "レーンは流して集団戦でキャリーする型(本人の弁の伝聞)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3834s",
+        "timestamp": "1:03:54",
+        "selfTeam": true,
+        "note": "名前は区間に無く、63:21 のゼロストの話の続き(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-TOP": [
+      {
+        "trait": "other",
+        "summary": "LoL をずっとやっている。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2877s",
+        "timestamp": "47:57",
+        "selfTeam": true,
+        "note": "『ミッチ』と聞こえ、mittiii と推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "pool",
+        "summary": "普通に上手く、チャンピオンプールが超広い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2972s",
+        "timestamp": "49:32",
+        "selfTeam": true,
+        "note": "『みっちぃさん』=mittiii(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-MID": [
+      {
+        "trait": "other",
+        "summary": "初めてのミッド。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2912s",
+        "timestamp": "48:32",
+        "selfTeam": true,
+        "note": "『たかちゃん』と聞こえ、たかやスペシャルと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mental",
+        "summary": "本番にとても弱いという見方と、本番でも普通に上手いという見方の両方が出た(複数の話者)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3055s",
+        "timestamp": "50:55",
+        "selfTeam": true,
+        "note": "名前は区間に無く、前後の『たかちゃん』の流れから推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-ADC": [
+      {
+        "trait": "other",
+        "summary": "絶対にキャリーしなければならない立場との見方。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2942s",
+        "timestamp": "49:02",
+        "selfTeam": true,
+        "note": "『カネゴン』=ごんかね(確かさ 高)",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "mechanics",
+        "summary": "とても上手く、本気でやればチャレンジャーに行ける実力と評価。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3245s",
+        "timestamp": "54:05",
+        "selfTeam": true,
+        "note": "『カネゴン』=ごんかね(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-JG": [
+      {
+        "trait": "other",
+        "summary": "本来はトップ・ミッドで、練習が必要なのは AlphaAzur との見方。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2972s",
+        "timestamp": "49:32",
+        "selfTeam": true,
+        "note": "名前(アルファさん)は区間にある",
+        "aiCheck": "not-refuted"
+      },
+      {
+        "trait": "other",
+        "summary": "ジャングルは初心者。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3009s",
+        "timestamp": "50:09",
+        "selfTeam": true,
+        "note": "名前(アルファさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE-SUP": [
+      {
+        "trait": "other",
+        "summary": "前回の LTK では話者と LR で同じチームだった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3288s",
+        "timestamp": "54:48",
+        "selfTeam": true,
+        "note": "名前(レグルシュライオンハート)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-TOP": [
+      {
+        "trait": "other",
+        "summary": "以前は ADC で、今回はトップ(ショーダウンでトップになった)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3355s",
+        "timestamp": "55:55",
+        "selfTeam": true,
+        "note": "名前(ひなのさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-JG": [
+      {
+        "trait": "other",
+        "summary": "IT NEXT のリーダー(主将)。前回もジャングルで出場。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3405s",
+        "timestamp": "56:45",
+        "selfTeam": true,
+        "note": "名前(アリケンさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-MID": [
+      {
+        "trait": "mechanics",
+        "summary": "Eugeo がとても上手いと言っていた(伝聞)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3509s",
+        "timestamp": "58:29",
+        "selfTeam": true,
+        "note": "『舞茸さん』と聞こえ、まいたけと推定(確かさ 高)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-ADC": [
+      {
+        "trait": "mechanics",
+        "summary": "ADC がとても上手いという記憶。白那しずくとデュオボットでよく一緒にやっている。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3540s",
+        "timestamp": "59:00",
+        "selfTeam": true,
+        "note": "名前(天帝フォルテさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT-SUP": [
+      {
+        "trait": "pool",
+        "summary": "レルがとても上手い。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3654s",
+        "timestamp": "1:00:54",
+        "selfTeam": true,
+        "note": "名前(白なしずくさん)は 60:24 にある(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "teamMacro": {
+    "IT-NEXT": [
+      {
+        "text": "JG と SUP の土台ができて初めて、ADC の火力、MID の動き、TOP のサイドの仕事が成り立つという考え(全体コーチの方針)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3570s",
+        "timestamp": "59:30",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "teamStyle": {
+    "CC-MASTERS": [
+      {
+        "aspect": "communication",
+        "summary": "Rainbrain などから喋り、みんなよく喋る。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1975s",
+        "timestamp": "32:55",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-MASTERS": [
+      {
+        "aspect": "communication",
+        "summary": "みんな結構喋る。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1975s",
+        "timestamp": "32:55",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "ゆにかと Eugeo は以前同じチームだった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2726s",
+        "timestamp": "45:26",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS": [
+      {
+        "aspect": "communication",
+        "summary": "強さとは別に、ねすてぃーがあまり喋るタイプでないことなどからチーム内の会話を心配。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1944s",
+        "timestamp": "32:24",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "communication",
+        "summary": "ゲーム内は強いが、ゲーム外が少し心配。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2005s",
+        "timestamp": "33:25",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-CORE": [
+      {
+        "aspect": "chemistry",
+        "summary": "焼きパン・Killin9Hit・乾伸一郎(・千燈ゆうひ)は LTK1 か 2 で同じチームだった。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2257s",
+        "timestamp": "37:37",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "aspect": "chemistry",
+        "summary": "LTK2 の優勝チームのメンバー。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2287s",
+        "timestamp": "38:07",
+        "selfTeam": false,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-CORE": [
+      {
+        "aspect": "carry",
+        "summary": "強いと思うが、誰がキャリーするかが課題。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2912s",
+        "timestamp": "48:32",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-NEXT": [
+      {
+        "aspect": "chemistry",
+        "summary": "ADC とサポート(天帝フォルテ・白那しずく)はデュオでよく一緒にやっている。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3540s",
+        "timestamp": "59:00",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "coaches": {
+    "IT-MASTERS-SUP": [
+      {
+        "summary": "IT NEXT の全体コーチを担当(本人)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=0s",
+        "timestamp": "0:00",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "summary": "JG と SUP を土台にして、そこから他のロールへ広げるコーチングの順序(本人の方針)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3570s",
+        "timestamp": "59:30",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      },
+      {
+        "summary": "全体コーチは初めてで、言語化・バンピックは得意でないと自認。現役プロチームのコーチからコーチングを受ける予定(70:42)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=4203s",
+        "timestamp": "1:10:03",
+        "selfTeam": true,
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "DD-MASTERS-MID": [
+      {
+        "summary": "ミッドを担当しながら DD NEXT のコーチも務める。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=242s",
+        "timestamp": "4:02",
+        "selfTeam": false,
+        "note": "名前(たぬき忍者)は 3:46 にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "CC-MASTERS-MID": [
+      {
+        "summary": "CC CORE のコーチを務める。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=945s",
+        "timestamp": "15:45",
+        "selfTeam": false,
+        "note": "名前(セロスさん)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-JG": [
+      {
+        "summary": "LR NEXT の(全体)コーチでバンピックも担うことになり、話者は心配している。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1700s",
+        "timestamp": "28:20",
+        "selfTeam": false,
+        "note": "『コアのコーチじゃなかった … ネクスト』から NEXT のコーチと推定(確かさ 中)",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "LR-MASTERS-MID": [
+      {
+        "summary": "LR CORE のコーチを務める(と聞いた)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1822s",
+        "timestamp": "30:22",
+        "selfTeam": false,
+        "note": "名前(リキャップ)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ],
+    "IT-MASTERS-MID": [
+      {
+        "summary": "IT NEXT に教えに来てくれる(伝聞)。",
+        "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3509s",
+        "timestamp": "58:29",
+        "selfTeam": true,
+        "note": "名前(ユージオ)は区間にある",
+        "aiCheck": "not-refuted"
+      }
+    ]
+  },
+  "overall": [
+    {
+      "target": "DD-CORE",
+      "summary": "DD CORE は強いのではないかと評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "7:42",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=462s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "LR-MASTERS",
+      "summary": "強さとは別に(チーム内の会話が)大丈夫かと心配。",
+      "direction": "-",
+      "strength": "弱",
+      "timestamp": "32:24",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=1944s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "LR-MASTERS",
+      "summary": "ゲーム内は強いが、ゲーム外が少し心配との見立て。",
+      "direction": "-",
+      "strength": "弱",
+      "timestamp": "33:25",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2005s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "LR-CORE",
+      "summary": "LTK2 の優勝メンバーが揃い、とても強い CORE と評価。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "38:07",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2287s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "IT-CORE",
+      "summary": "IT CORE はとても強いと思うが、誰がキャリーするかが課題との見方。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "48:32",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2912s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高",
+      "selfTeam": true
+    },
+    {
+      "target": "IT-MASTERS",
+      "summary": "IT MASTERS に自信があると述べた。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "1:02:19",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3739s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高",
+      "selfTeam": true
+    },
+    {
+      "target": "CC-MASTERS",
+      "summary": "Yutapon・Ceros でさすがに強いが、Nemoh が最近 LoL をできていなかったことが影響しうるとの見方。",
+      "direction": "+",
+      "strength": "中",
+      "timestamp": "1:02:19",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3739s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "MASTERS(全体)",
+      "summary": "全部強い。DD・LR の MASTERS も強いとの見方。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "1:02:50",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=3770s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "NEXT の ADC(全体)",
+      "summary": "(NEXT の)ADC はみんなレベルが高い。ごんかね・龍巻ちせも上手いとの評価。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "40:29",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2429s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    },
+    {
+      "target": "全体",
+      "summary": "どこも強く、いい勝負になるとの見立て。",
+      "direction": "+",
+      "strength": "弱",
+      "timestamp": "1:08:30",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=4110s",
+      "speaker": "Enty(自称)",
+      "speakerConfidence": "高"
+    }
+  ],
+  "unmapped": [
+    {
+      "heard": "(名前なし。11:00 の『天の川ねるさん』の直後)",
+      "guess": "DD-NEXT-MID(天ノ川ねる)。確かさ 低",
+      "summary": "2〜3 年前に LoL を始め、当初は上がらないと言われていたがエメラルドまで上がったという趣旨(誰の話かは不確か)。",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=720s",
+      "timestamp": "12:00"
+    },
+    {
+      "heard": "(名前なし。乾伸一郎の次の紹介)",
+      "guess": "LR-CORE-ADC(大御所にゅん子)。確かさ 低",
+      "summary": "エズリアル・ベイガーが得意か。最高レートはマスター 200(LP)とのこと。",
+      "source": "https://www.youtube.com/watch?v=zcWe0BfA49k&t=2227s",
+      "timestamp": "37:07"
+    }
+  ],
+  "preprocessingNotes": [
+    "辞書に無い呼び名(p に出ない): 『カネゴン』(ごんかね)、『ウヒ』(千燈ゆうひ)、『ワークる』(狐白うる)、『チータマ/ちーたま』『竜巻一世』(龍巻ちせ)、『アパさん』(apaMEN)、『ポンさん』(Yutapon)、『ネモくん』(Nemoh)、『和紙台』(わしだい)、『イヌイ殿』(乾伸一郎)、『スタミジャパン』(スタンミじゃぱん)、『坂よりそうま』(酒寄颯馬)、『釈迦さん』(SHAKA)、『ハレッチ』(ハレっち)、『ティントン』(てぃんとん)、『ネスティ』(ねすてぃー。29:21 以降は p に出ない)、『舞茸』(まいたけ)、『みっちぃ』(mittiii)",
+    "紹介の形式では名前の出た区間の次の区間に評価の本文が来るため、p が付かない区間が多い(人物の対応づけを前後の区間に頼った)",
+    "『エコアのコーチ』(16:15)など、階級名の直前の断片で手がかりが崩れている",
+    "『リーグザカセン』『リーグザ河川』が LTK の表記として拾われていない",
+    "名簿外の人物(話者の家族・コスプレイヤー・他のコーチ)や私生活の話題が本文に残っている(評価には使わない)"
+  ]
+}
