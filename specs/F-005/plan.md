@@ -8,7 +8,7 @@
 
 | ID | 内容 | 対応する受入基準 | 変更の対象パス | 依存 | 並列可 |
 | --- | --- | --- | --- | --- | --- |
-| Task-1 | 勝率の土台: 評価設定、β の決め方、事前の勝率、ステージ補正、S を計算できないときの 50.0%、F-001 の勝率表の出力 | 1, 2, 3, 6, 7, 16 | `src/winrate/core.ts`、`src/winrate/config.json`、`tests/winrate/core.test.ts` | F-010 Task-2・Task-3 | 不可 |
+| Task-1 | 勝率の土台: 評価設定、β の決め方、事前の勝率、ステージ補正、S を計算できないときの 50.0%、F-001 の勝率表の出力 | 1, 2, 3, 6, 7, 16 | `src/winrate/core.ts`、`src/winrate/config.json`、`tests/winrate/core.test.ts`、`src/collect/aggregate-cli.ts`(2026-10-10 追記: 勝率表 `data/public/winrates.json` の書き出し。基準7 の出力の置き場) | F-010 Task-2・Task-3(2026-10-10: どちらも取り込み済み。PR #60・#66) | 不可 |
 | Task-2 | 結果による θ の当て直し(Bradley-Terry と事前分布、本番とスクリムの重み)と、80% の区間(1,000 回の抽出、乱数の種) | 4, 7b | `src/winrate/update.ts`、`src/winrate/interval.ts`、`tests/winrate/update.test.ts` | Task-1 | 不可 |
 | Task-3 | 仕上がりの項(共同プレイ歴・メタの近さ(チャンピオンの近さと戦い方の近さ)・τ)と気持ちの補正、ドラフトの優位の項(F-006 の出力を読む)と寄与の切り詰め | 9, 10, 11, 13, 14 | `src/winrate/dynamics.ts`、`tests/winrate/dynamics.test.ts` | Task-1 | 可 |
 | Task-4 | S1〜S3 での当てはまりの確認の命令と記録、常識の検査 K-08・K-09(反したら勝率表を書かずに失敗) | 13, 15 | `scripts/winrate-backtest.mjs`、`src/winrate/checks.ts`、`src/rating/known-facts.json`、`tests/winrate/checks.test.ts` | Task-2, Task-3 | 不可 |

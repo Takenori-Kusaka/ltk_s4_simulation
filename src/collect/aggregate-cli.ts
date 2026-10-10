@@ -10,6 +10,9 @@ import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.t
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
 import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
+import { computePriorWinrates, type TierTeamS } from '../winrate/core.ts';
+import winrateConfig from '../winrate/config.json' with { type: 'json' };
+import { createHash } from 'node:crypto';
 import { loadMetaGuide } from '../meta/load.ts';
 import { ROSTER } from '../data/roster.ts';
 import { evaluateTeams } from '../team/evaluate.ts';
@@ -82,6 +85,19 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   const teamPath = join(publicDir, 'team-evaluation.json');
   writeFileSync(teamPath, JSON.stringify({ kind: 'team-evaluation', computedAt: now.toISOString(), configVersion: configVersion(), tierTeams: ev.tierTeams, overall: ev.overall, beta: ev.beta }, null, 2) + '\n');
   out(`チームの評価を書いた: ${teamPath}`);
+  // F-005 Task-1: 事前の勝率表(F-001 の入力の形式)。S を計算できない階級チームは理由つきで null(基準16)
+  const rated = new Set(ratings.map((r) => r.playerId));
+  const tierTeams: TierTeamS[] = ev.tierTeams.map((t) => {
+    const unrated = ROSTER.filter((p) => p.team === t.team && p.tier === t.tier && !rated.has(p.id)).map((p) => p.name);
+    return unrated.length
+      ? { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: null, reason: `評価の無い選手: ${unrated.join('・')}` }
+      : { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: t.S };
+  });
+  const winrates = computePriorWinrates(tierTeams);
+  const winratePath = join(publicDir, 'winrates.json');
+  const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
+  writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');
+  out(`勝率表を書いた: ${winratePath}(β NEXT ${winrates.beta.NEXT} / CORE ${winrates.beta.CORE} / MASTERS ${winrates.beta.MASTERS})`);
   return errors.length ? 1 : 0;
 }
 
