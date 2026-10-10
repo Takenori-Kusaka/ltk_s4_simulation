@@ -1,7 +1,7 @@
 // F-003 Task-2: 受入基準 2(選手・チャンピオンごとの集計)・6(公開物は集計値だけ)・10(Data Dragon の版と一覧)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validatePlayerFile } from '../../src/data/validate.ts';
@@ -309,4 +309,43 @@ test('コマンド: Data Dragon が失敗しても選手の集計は書き、1 �
   assert.equal(code, 1);
   assert.ok(existsSync(join(publicDir, 'players', 'DD-CORE-TOP.json')));
   assert.ok(lines.some((l) => /Data Dragon/.test(l)));
+});
+
+// F-005 Task-6(再判定 2): 外部の見立ての読み込みと、M の内訳(連携の厚み・司令塔)
+interface WinratesFile {
+  betaExt: Record<string, number>;
+  teams: { key: string; E: number; externalCount: number; macroParts: { key: string }[] }[];
+}
+
+test('コマンド: groundsDir の external-views.json を勝率表の E に入れ、形の違う項目は理由を出して除く。ファイルが無ければ E = 0', async () => {
+  const { root, rawDir, publicDir, snapshotsDir } = setupRaw();
+  const groundsDir = join(root, 'grounds');
+  mkdirSync(groundsDir, { recursive: true });
+  for (const f of ['shotcalling.json', 'tournament.json']) copyFileSync(join('docs/research/grounds/normalized', f), join(groundsDir, f));
+  const lines: string[] = [];
+  const opts = { rawDir, publicDir, snapshotsDir, groundsDir, fetch: fakeDdragon().fetch, now: NOW, out: (l: string) => lines.push(l) };
+  await main(opts);
+  const before = JSON.parse(readFileSync(join(publicDir, 'winrates.json'), 'utf8')) as WinratesFile;
+  assert.ok(before.teams.every((t) => t.E === 0 && t.externalCount === 0));
+  assert.equal(before.betaExt.CORE, 0);
+  assert.ok(!lines.some((l) => /外部の見立て/.test(l)));
+  assert.deepEqual(before.teams.find((t) => t.key === 'DD-CORE')?.macroParts.map((p) => p.key), ['synergy', 'shotcalling']);
+
+  const item = (target: string, direction: '+' | '-', strength: string) =>
+    ({ target, direction, strength, speaker: '解説者', speakerKind: 'analyst', summary: '見立て', source: 'https://example.com/x', date: '2026-10-10' });
+  writeFileSync(join(groundsDir, 'external-views.json'), JSON.stringify({
+    kind: 'external-views',
+    // 強 1.5 − 弱 0.5 + 自チームの中 1.0 × 0.5 = 1.5(3 件)。ZZ-CORE は階級チームではないため除く
+    items: [item('DD-CORE', '+', '強'), item('DD-CORE', '-', '弱'), { ...item('DD-CORE', '+', '中'), selfTeam: true }, item('ZZ-CORE', '+', '強')],
+  }));
+  lines.length = 0;
+  await main(opts);
+  const after = JSON.parse(readFileSync(join(publicDir, 'winrates.json'), 'utf8')) as WinratesFile;
+  const dd = after.teams.find((t) => t.key === 'DD-CORE');
+  assert.equal(dd?.E, 1.5);
+  assert.equal(dd?.externalCount, 3);
+  assert.ok(after.teams.filter((t) => t.key !== 'DD-CORE').every((t) => t.E === 0 && t.externalCount === 0));
+  assert.ok(after.betaExt.CORE > 0);
+  assert.equal(after.betaExt.NEXT, 0);
+  assert.ok(lines.some((l) => /外部の見立て/.test(l) && /items\[3\]/.test(l) && /ZZ-CORE/.test(l)));
 });

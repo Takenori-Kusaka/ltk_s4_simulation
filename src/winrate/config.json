@@ -1,6 +1,8 @@
 {
   "_comment": "F-005 勝率の評価設定。初期値は AI の起案(specs/F-005/spec.md)。価値責任者・技術判断者が変えてよい。stage は階級チーム(例 DD-NEXT)ごとの対数オッズの加算値",
   "beta": { "targetSd": 0.35 },
+  "macro": { "targetSd": 0.25 },
+  "external": { "targetSd": 0.2, "strength": { "強": 1.5, "中": 1.0, "弱": 0.5 }, "clip": 3.0, "selfTeam": 0.5 },
   "stage": { "regular": {}, "masters": {}, "playoffs": {} },
   "stageBasis": "初期値 0。S1〜S3 でステージ別の差を示すデータが無い(docs/design/team-model-algorithm.md 節3)",
   "theta": { "priorSd": 0.58 },

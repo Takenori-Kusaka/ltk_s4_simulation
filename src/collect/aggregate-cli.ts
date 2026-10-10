@@ -1,6 +1,6 @@
 // F-003: 集計のコマンド。収集(src/collect/cli.ts)の後に `node src/collect/aggregate-cli.ts` で実行する
 // Riot API は呼ばない(保存済みの data/raw/ を読む)。Data Dragon だけをネットワークから取る
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { writePublicData } from './aggregate.ts';
@@ -10,7 +10,8 @@ import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.t
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
 import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
-import { computePriorWinrates, type TierTeamS } from '../winrate/core.ts';
+import { computePriorWinrates, MACRO_KEYS, readExternalViews, type MacroPart, type TierTeamS } from '../winrate/core.ts';
+import { TIERS } from '../sim/types.ts';
 import winrateConfig from '../winrate/config.json' with { type: 'json' };
 import { createHash } from 'node:crypto';
 import { loadMetaGuide } from '../meta/load.ts';
@@ -58,7 +59,8 @@ export async function main(opts: AggregateMainOptions = {}): Promise<number> {
 /** F-009 基準21・22: 評価を計算し、常識の一覧を検査して、反しなければ ratings.json を書く */
 function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void): number {
   const now = (opts.now ?? (() => new Date()))();
-  const { inputs, errors } = loadRatingInputs({ rawDir: opts.rawDir ?? 'data/raw', groundsDir: opts.groundsDir ?? 'docs/research/grounds/normalized' });
+  const groundsDir = opts.groundsDir ?? 'docs/research/grounds/normalized';
+  const { inputs, errors } = loadRatingInputs({ rawDir: opts.rawDir ?? 'data/raw', groundsDir });
   for (const e of errors) out(`評価の入力のエラー: ${e}`);
   const ratings = buildRatings(inputs, now.getTime());
   const report = checkKnownFacts(ratings, inputs, now.getTime(), { recompute: () => buildRatings(inputs, now.getTime()), facts: opts.facts });
@@ -86,18 +88,33 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   writeFileSync(teamPath, JSON.stringify({ kind: 'team-evaluation', computedAt: now.toISOString(), configVersion: configVersion(), tierTeams: ev.tierTeams, overall: ev.overall, beta: ev.beta }, null, 2) + '\n');
   out(`チームの評価を書いた: ${teamPath}`);
   // F-005 Task-1: 事前の勝率表(F-001 の入力の形式)。S を計算できない階級チームは理由つきで null(基準16)
+  // F-005 Task-6: マクロの点数 M の内訳は F-010 のチームの軸「連携の厚み」「司令塔」の素点(相対評価の前の値)
   const rated = new Set(ratings.map((r) => r.playerId));
   const tierTeams: TierTeamS[] = ev.tierTeams.map((t) => {
     const unrated = ROSTER.filter((p) => p.team === t.team && p.tier === t.tier && !rated.has(p.id)).map((p) => p.name);
-    return unrated.length
-      ? { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: null, reason: `評価の無い選手: ${unrated.join('・')}` }
-      : { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], S: t.S };
+    const macroParts: MacroPart[] = MACRO_KEYS.flatMap((key) => {
+      const axis = t.axes.find((a) => a.key === key);
+      return axis ? [{ key, label: axis.label, raw: axis.raw }] : [];
+    });
+    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts };
+    return unrated.length ? { ...base, S: null, reason: `評価の無い選手: ${unrated.join('・')}` } : { ...base, S: t.S };
   });
-  const winrates = computePriorWinrates(tierTeams);
+  // 外部の見立て(groundsDir の external-views.json)。無ければ項は 0
+  const externalPath = join(groundsDir, 'external-views.json');
+  let externalRaw: unknown = null;
+  try {
+    if (existsSync(externalPath)) externalRaw = JSON.parse(readFileSync(externalPath, 'utf8'));
+  } catch (e) {
+    out(`外部の見立ての入力: ${externalPath}: ${(e as Error).message}`);
+  }
+  const external = readExternalViews(externalRaw);
+  for (const e of external.errors) out(`外部の見立ての入力: ${e}`);
+  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items });
   const winratePath = join(publicDir, 'winrates.json');
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
   writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');
-  out(`勝率表を書いた: ${winratePath}(β NEXT ${winrates.beta.NEXT} / CORE ${winrates.beta.CORE} / MASTERS ${winrates.beta.MASTERS})`);
+  const scales = TIERS.map((tier) => `${tier} β ${winrates.beta[tier]} / β_macro ${winrates.betaMacro[tier]} / β_ext ${winrates.betaExt[tier]}`).join('、');
+  out(`勝率表を書いた: ${winratePath}(${scales})`);
   return errors.length ? 1 : 0;
 }
 
