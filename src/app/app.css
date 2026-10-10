@@ -1094,6 +1094,12 @@ h1[tabindex='-1']:focus {
   color: var(--ivory);
   border: 1px solid var(--line);
 }
+/* 額縁の中の文字が四隅の飾りと重ならないよう、額縁には余白を付ける */
+.compare-head,
+.compare-body,
+.compare-add {
+  padding: 18px 20px;
+}
 .compare-body {
   min-width: 0;
 }
@@ -1289,6 +1295,11 @@ a.mark {
 }
 .hero-links {
   margin: 12px 0 0;
+}
+/* 中央寄せの導線の札は幅いっぱいの帯にしない(.fav-go と同じ) */
+.hero-links .chip,
+.forecast-links .chip {
+  display: inline-flex;
 }
 .meta-sub {
   margin: 14px 0 6px;
