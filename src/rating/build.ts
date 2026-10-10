@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { ROSTER } from '../data/roster.ts';
 import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
 import { extractGame, loadEngineConfig, populationMatch } from './engine.ts';
-import {
+import { roleSwitchDiscount,
   readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
 } from './evidence.ts';
@@ -18,6 +18,8 @@ import knownFacts from './known-facts.json' with { type: 'json' };
 
 /** 大会のロール(名簿の表記)→ teamPosition */
 export const POSITION: Record<string, string> = { TOP: 'TOP', JG: 'JUNGLE', MID: 'MIDDLE', ADC: 'BOTTOM', SUP: 'UTILITY' };
+/** ポジション → LTK の出場記録のロールの記法 */
+export const ROLE_OF: Record<string, string> = Object.fromEntries(Object.entries(POSITION).map(([k, v]) => [v, k]));
 
 export interface PlayerRatingInput {
   playerId: string;
@@ -104,20 +106,22 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
   return inputs.players.map((p, i) => {
     const form = formFactor(formGames(p.games), p.league, now);
     const show = (base: number) => round2(applyForm(base, form.coefficient));
+    // 基準31: ロール転向の割引(LTK の出場シーズンのうち今のロール以外の割合 × 設定の値)をデータの軸から引く
+    const discount = roleSwitchDiscount(p.tournament, ROLE_OF[p.position], cfg.roleSwitchPenalty ?? 0);
     const data = rateDataAxes(ratingPlayers[i], ctx).map((a): AxisRating => ({
       key: a.key,
       label: a.label,
-      base: round2(a.base),
-      display: show(a.base),
+      base: round2(Math.max(0, a.base - discount.value)),
+      display: show(Math.max(0, a.base - discount.value)),
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
       reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.bonusReason]
         .filter(Boolean)
-        .join('。'),
+        .join('。') + (discount.reason ? `。${discount.reason}` : ''),
       data: a,
     }));
-    const evidence = [shotcallingAxis(p.shotcalling), tournamentAxis(p.tournament)].map((e): AxisRating => ({
+    const evidence = [shotcallingAxis(p.shotcalling), tournamentAxis(p.tournament, undefined, ROLE_OF[p.position])].map((e): AxisRating => ({
       key: e.key,
       label: e.label,
       base: e.score,

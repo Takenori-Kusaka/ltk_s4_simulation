@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import {
+import { roleSwitchDiscount,
   shotcallingAxis,
   tournamentAxis,
   readShotcallingSnapshot,
@@ -308,4 +308,25 @@ test('スナップショット: 調査の訂正(しゃるるは元プロでな�
   assert.equal(tourSnap.players[idOf('しゃるる')].pro.length, 0);
   const t = tourSnap.players[idOf('たぬき忍者')].pro;
   assert.ok(t.length > 0 && t.every((x) => x.league !== 'LJL'));
+});
+
+
+// --- 2026-10-10 基準12 の改訂・基準31: ロール転向 ---
+test('基準12(改訂): 今のロール以外の出場は 0.5、NEXT の出場は 0.75 で数える(シーズンの点は補間)', () => {
+  const wc = { ...tc, roleOtherWeight: 0.5, tierWeights: { MASTERS: 1, CORE: 1, NEXT: 0.75 } };
+  const adc = { ...S('S1', null, null), role: 'ADC' };
+  assert.equal(tournamentAxis({ ...empty, ltk: [S('S1', null, null)] }, wc, 'TOP').score, 4.0);
+  assert.equal(tournamentAxis({ ...empty, ltk: [adc] }, wc, 'TOP').score, 3.0);
+  assert.equal(tournamentAxis({ ...empty, ltk: [{ ...S('S1', null, null), tier: 'NEXT' }] }, wc, 'TOP').score, 3.5);
+  // ロールを渡さなければロールの重みは掛けない
+  assert.equal(tournamentAxis({ ...empty, ltk: [adc] }, wc).score, 4.0);
+});
+
+test('基準31: ロール転向の割引は LTK の出場シーズンのうち今のロール以外の割合 × 設定の値。出場歴が無ければ 0', () => {
+  const adc = (s: string) => ({ ...S(s, null, null), role: 'ADC' });
+  assert.equal(roleSwitchDiscount(empty, 'TOP', 0.5).value, 0);
+  assert.equal(roleSwitchDiscount({ ...empty, ltk: [S('S1', null, null)] }, 'TOP', 0.5).value, 0);
+  assert.equal(roleSwitchDiscount({ ...empty, ltk: [adc('S1'), adc('S2')] }, 'TOP', 0.5).value, 0.5);
+  assert.ok(Math.abs(roleSwitchDiscount({ ...empty, ltk: [adc('S1'), adc('S2'), S('S3', null, null)] }, 'TOP', 0.5).value - (0.5 * 2) / 3) < 1e-12);
+  assert.equal(roleSwitchDiscount({ ...empty, ltk: [adc('S1')] }, undefined, 0.5).value, 0);
 });

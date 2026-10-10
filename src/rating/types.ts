@@ -74,6 +74,10 @@ export interface EngineConfig {
   k: number;
   /** 補正 1 標準偏差あたりの点数 */
   perfScale: number;
+  /** ロール転向の割引(基準31。LTK の出場シーズンのうち今のロール以外の割合 × この値をデータの軸から引く。初期値 0.5) */
+  roleSwitchPenalty?: number;
+  /** 元プロの下限(基準29 の改訂): 経歴の水準(lol.highestLevel)ごとのランクの基準の下限。default は水準に無いとき */
+  exProFloor?: Record<string, number>;
   zClip: number;
   confidence: { high: number; mid: number };
 }
