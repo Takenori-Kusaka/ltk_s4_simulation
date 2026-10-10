@@ -162,8 +162,6 @@
     "DD-NEXT-MID": {
       "name": "天ノ川ねる",
       "evidence": [
-        {"summary":"S3 で、SHAKA が襲われたとき BOT 側から「誰か助けろよ！」と怒り、こく兄も「SHAKA見ろって言ってんだろ！」と叱られたと語る。それまで言わなかったが、ついに言うようになったと評される。","source":"https://fistbump-news.jp/article/2026/06/24/2594.html","date":"2026-06-24","type":"チームメイトの発言","direction":"+","strength":"中","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
-        {"summary":"本人のチャンネルの切り抜きの題名が「コールを無視してフラッシュインで敵に突っ込む天ノ川ねる」(カスタム)。コールに従わない場面がある。","source":"https://www.youtube.com/watch?v=czahN03y3wM","date":"2025-06-20","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"}
       ]
     },
     "DD-NEXT-ADC": {

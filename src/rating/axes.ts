@@ -80,6 +80,8 @@ interface Stat {
 }
 
 export interface RatedAxis extends DataAxisResult {
+  /** 形の補正(点)。直近成績の補正の 6 軸の平均からのずれ × 縮小 × (shapeScale − perfScale)。設定に shapeScale が無ければ付かない */
+  shapeAdj?: number;
   bonusReason?: string;
   poolDetail?: { champions: number; winRate: number | null; list: { championId: number; games: number; winRate: number }[] };
   consistencySd?: number | null;
@@ -194,7 +196,7 @@ export function rateDataAxes(p: RatingPlayerInput, ctx: RatingContext): RatedAxi
         : 'LTK の参加なし: +0.0'
       : undefined;
 
-  return CONF.axes.map((axis): RatedAxis => {
+  const results = CONF.axes.map((axis): RatedAxis => {
     if (axis.key === 'pool') return ratePool(p, ctx, axis);
     const r = scoreDataAxis(axis, input, population, cfg, now, bonusFor(axis.key));
     if (axis.key !== 'stability') return { ...r, bonusReason: reason(axis.key) };
@@ -204,6 +206,24 @@ export function rateDataAxes(p: RatingPlayerInput, ctx: RatingContext): RatedAxi
     const P = zc === null ? r.correction : CONF.stability.deathsWeight * r.correction + CONF.stability.consistencyWeight * zc;
     const base = clamp(r.anchor * axis.rankWeight + 5 * (1 - axis.rankWeight) + P * r.shrink * cfg.perfScale + r.bonus, 0, 10);
     return { ...r, base, correction: P, consistencySd: sd, bonusReason: reason(axis.key) };
+  });
+  return splitLevelAndShape(results, cfg);
+}
+
+/**
+ * 直近成績の補正を「水準」と「形」に分ける(2026-10-10)。水準 = ピックプールを除く軸の補正の平均(係数 perfScale)、
+ * 形 = 各軸の補正の平均からのずれ(係数 shapeScale)。基礎の点数には差分 (補正 − 平均) × 縮小 × (shapeScale − perfScale) を足す。
+ * ピックプールは自分の指標(チャンピオンの数と勝率)で形を持つので対象にしない。shapeScale が無ければ何もしない
+ */
+export function splitLevelAndShape(results: RatedAxis[], cfg: { perfScale: number; shapeScale?: number }): RatedAxis[] {
+  if (cfg.shapeScale === undefined) return results;
+  const target = results.filter((r) => r.key !== 'pool' && Number.isFinite(r.correction) && !r.estimated);
+  if (target.length < 2) return results;
+  const mean = target.reduce((s, r) => s + r.correction, 0) / target.length;
+  return results.map((r) => {
+    if (!target.includes(r)) return r;
+    const shapeAdj = (r.correction - mean) * r.shrink * (cfg.shapeScale! - cfg.perfScale);
+    return { ...r, base: clamp(r.base + shapeAdj, 0, 10), shapeAdj };
   });
 }
 
