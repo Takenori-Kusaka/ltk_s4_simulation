@@ -32,6 +32,7 @@
       </tbody>
     </table>
   </div>
+  <p class="st-note">{view.note}</p>
 </section>
 
 <style>
@@ -55,4 +56,5 @@
   .emb { display: inline-flex; width: 1.4rem; height: 1.4rem; vertical-align: middle; margin-right: 0.5rem; }
   .emb :global(svg) { width: 100%; height: 100%; }
   td.total { font-weight: 700; color: var(--gold-hi); }
+  .st-note { margin: 0.5rem 0 0; font-size: 0.78rem; color: var(--ivory-dim); }
 </style>

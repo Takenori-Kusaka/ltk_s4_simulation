@@ -138,5 +138,5 @@
   </section>
 
   <!-- F-014 基準15・18: 「<選手名> は勝てるのか」(直近の試合・対面の選手と比較ページ・階級チームの試合の一覧と期待勝ち数) -->
-  <FanSection kind="player" title={`${player.name} は勝てるのか`} team={player.team} {notice} next={fan?.next ?? null} facing={opponent} tiers={fan?.tiers ?? []} />
+  <FanSection kind="player" title={`${player.name}${/^[A-Za-z0-9]/.test(player.name) ? ' ' : ''}は勝てるのか`} team={player.team} {notice} next={fan?.next ?? null} facing={opponent} tiers={fan?.tiers ?? []} />
 </article>

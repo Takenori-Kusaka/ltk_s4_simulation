@@ -8,6 +8,8 @@ import { TEAM_INFO, compareHref } from '../lib/index.ts';
 export interface EvidenceSource {
   text: string;
   source?: string;
+  url?: string;
+  marks?: string[];
 }
 export interface AxisLike {
   key: string;
@@ -71,6 +73,8 @@ export interface EvidenceItem {
   strength: string;
   text: string;
   source: string;
+  /** 基準28: 評価のファイルの印(例「AI 収集」)。表示は「未確認(AI 収集)」 */
+  marks: string[];
 }
 export interface EvidenceView {
   id: string;
@@ -106,13 +110,13 @@ export const EVEN = 0.1;
 /** 基準23: 固定の文 */
 export const INCLUDED = [
   '選手の 8 軸(ソロランクの基準・対面との差・LTK の経験・コール力と大会経験の出典つき根拠)',
-  'コーチの評価(戦力の 0.15。MASTERS には無い)',
+  'コーチの評価(戦力の 15%。MASTERS には無い)',
 ];
 export const EXCLUDED = [
-  { text: 'チームの仕上がり(共同プレイ歴・メタの近さ)', feature: 'F-005 Task-3 で入る' },
-  { text: 'スクリムと本番の結果', feature: 'F-004 と F-005 Task-2 で入る' },
-  { text: 'ドラフト(NEXT のプロテクトで CORE が使えなくなるピック)', feature: 'F-006 と F-005 Task-3 で入る' },
-  { text: '連敗の気持ちの補正', feature: 'F-005 Task-3 で入る' },
+  { text: 'チームの仕上がり(共同プレイ歴・メタの近さ)', feature: '今後の更新で入る予定(F-005 Task-3)' },
+  { text: 'スクリムと本番の結果', feature: '今後の更新で入る予定(F-004・F-005 Task-2)' },
+  { text: 'ドラフト(NEXT のプロテクトで CORE が使えなくなるピック)', feature: '今後の更新で入る予定(F-006・F-005 Task-3)' },
+  { text: '連敗の気持ちの補正', feature: '今後の更新で入る予定(F-005 Task-3)' },
 ];
 
 /** F-010 の選手の総合 O(playerOverall と同じ式: 5 + 8 軸の表示の点数の 5 からの差の平均) */
@@ -128,19 +132,29 @@ export function sizeOf(contribution: number): '大' | '中' | '小' {
 const f1 = (x: number) => x.toFixed(1);
 const STRENGTH_ORDER: Record<string, number> = { 強: 0, 中: 1, 弱: 2 };
 
-/** 基準22: 出典つきの肯定の根拠を強さの順に最大 2 件(コール力・大会経験の軸から) */
+const isHttps = (u: string | undefined): u is string => typeof u === 'string' && u.startsWith('https://');
+
+/** 基準22・28: 出典つきの根拠。コール力は肯定の根拠を強さの順に最大 2 件、大会経験は本文のまま(url が出典)最大 2 件。各根拠に評価のファイルの印 */
 export function positiveEvidence(p: PlayerLike | undefined, max = 2): EvidenceItem[] {
   if (!p) return [];
-  const items: EvidenceItem[] = [];
+  const calls: EvidenceItem[] = [];
+  const tournament: EvidenceItem[] = [];
   for (const ax of p.axes) {
-    if (ax.key !== 'shotcalling' && ax.key !== 'tournament') continue;
     for (const e of ax.evidence?.evidence ?? []) {
-      const m = /^肯定・(強|中|弱)・([^:：]+)[:：]\s*(.+)$/.exec(e.text ?? '');
-      if (!m || !e.source || !/^https:\/\//.test(e.source)) continue;
-      items.push({ kind: m[2], strength: m[1], text: m[3], source: e.source });
+      const marks = e.marks ?? [];
+      if (ax.key === 'shotcalling') {
+        const m = /^肯定・(強|中|弱)・([^:：]+)[:：]\s*(.+)$/.exec(e.text ?? '');
+        if (!m || !isHttps(e.source)) continue;
+        calls.push({ kind: m[2], strength: m[1], text: m[3], source: e.source, marks });
+      } else if (ax.key === 'tournament') {
+        const src = isHttps(e.url) ? e.url : isHttps(e.source) ? e.source : null;
+        if (!src || !e.text) continue;
+        tournament.push({ kind: '大会経験', strength: '', text: e.text, source: src, marks });
+      }
     }
   }
-  return items.sort((x, y) => STRENGTH_ORDER[x.strength] - STRENGTH_ORDER[y.strength]).slice(0, max);
+  calls.sort((x, y) => STRENGTH_ORDER[x.strength] - STRENGTH_ORDER[y.strength]);
+  return [...calls.slice(0, max), ...tournament.slice(0, max)];
 }
 
 const sideOf = (id: string | null, name: string, score: number | null): SideScore => ({
@@ -218,9 +232,10 @@ export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknow
   const favoredName = TEAM_INFO[favored].name;
   const favoredP = f1(favored === input.a ? input.pA : input.pB);
   const top = rows.slice(0, 2);
+  // 基準27(再判定 3): 「いちばん効いているのは」。両チームの勝率は「vs」でつなぐ
   const headline = even
-    ? `ほぼ互角(${TEAM_INFO[input.a].name} ${f1(input.pA)}% − ${TEAM_INFO[input.b].name} ${f1(input.pB)}%)。差が出るとすれば ${top.map(describe).join('、次に ')}`
-    : `${favoredName} が有利(${favoredP}%)。いちばんの差は ${describe(top[0])}${top[1] ? `、次に ${describe(top[1])}` : ''}`;
+    ? `ほぼ互角(${TEAM_INFO[input.a].name} ${f1(input.pA)}% vs ${TEAM_INFO[input.b].name} ${f1(input.pB)}%)。差が出るとすれば ${top.map(describe).join('、次に ')}`
+    : `${favoredName} が有利(${favoredP}%)。いちばん効いているのは ${describe(top[0])}${top[1] ? `、次に ${describe(top[1])}` : ''}`;
 
   // 基準22: 上位 2 つの項の両側の人の根拠
   const evidence: EvidenceView[] = [];

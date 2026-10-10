@@ -130,6 +130,19 @@ export interface StandingRowView {
 export interface StandingsView {
   label: string;
   rows: StandingRowView[];
+  /** 基準26: 順位表の直下の注記 */
+  note: string;
+}
+
+export const STANDINGS_NOTE = '勝ち数とポイントは、各試合で勝率の高い側が勝ったとした予想の結果。優勝確率は Playoffs を含む 10,000 回のシミュレーションの値で、順位と前後することがある';
+
+/** 基準30: ホームの見出し。最後の日程の日より後は「最後の試合日の予想」と Playoffs の案内 */
+export function forecastHeading(now: Date): { title: string; note: string | null; past: boolean } {
+  const days = allDays();
+  const past = jstDate(now) > days[days.length - 1].date;
+  return past
+    ? { title: '最後の試合日の予想', note: 'Regular Stage と MASTERS CUP は終了。Playoffs は 11/21(土)・11/22(日)', past }
+    : { title: '次の試合日の予想', note: null, past };
 }
 
 /** 用語: 期待勝ち数 = その階級の Regular Stage 6 試合の勝率の和(階級チームの試合の一覧で使う) */
@@ -234,5 +247,5 @@ export function standings(file: WinratesFile, sim: SimOutput): StandingsView {
   }))
     .sort((x, y) => y.totalNum - x.totalNum || y.rsNum - x.rsNum || y.championNum - x.championNum)
     .map(({ totalNum: _t, rsNum: _r, championNum: _c, ...r }, i) => ({ no: i + 1, first: i === 0, ...r }));
-  return { label: file.results ? '結果を反映' : '予想(開幕前)', rows };
+  return { label: file.results ? '結果を反映' : '予想(開幕前)', rows, note: STANDINGS_NOTE };
 }

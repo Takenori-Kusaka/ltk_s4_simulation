@@ -101,6 +101,27 @@ test('基準14(b)(データ不足): S を計算できない階級チームの行
   assert.equal(tierTeamMatches(missing, 'CC', 'NEXT').rows[0].dataMissing, null);
 });
 
+test('基準29(再判定 3): 言い回しと英語のチーム名(予想 pt・乱数の種・推しボタン・日程の箱・順位表の副題)', () => {
+  const read = (p: string) => readFileSync(new URL(p, import.meta.url), 'utf8');
+  const fan = read('../../src/app/schedule/FanSection.svelte');
+  assert.match(fan, /予想 pt\(RS\+MASTERS CUP\)/);
+  assert.ok(!/期待 pt/.test(fan));
+  const sim = read('../../src/app/sim/SimPage.svelte');
+  assert.match(sim, /乱数の種/);
+  assert.match(sim, /SEASON FORECAST · 全日程の予想/);
+  const home = read('../../src/app/components/Home.svelte');
+  assert.match(home, /\{team\} · \{TEAM_INFO\[team\]\.name\}/);
+  assert.match(home, /SEASON FORECAST · 全日程の予想/);
+  assert.match(home, /forecastHeading/);
+  const day = read('../../src/app/schedule/DayBox.svelte');
+  assert.match(day, /class="full">\{r\.blue\.name\}/);
+  assert.match(day, /class="full">\{r\.red\.name\}/);
+  const board = read('../../src/app/schedule/StandingsBoard.svelte');
+  assert.match(board, /\{view\.note\}/);
+  const sheet = read('../../src/app/components/PlayerSheet.svelte');
+  assert.match(sheet, /A-Za-z0-9/);
+});
+
 test('基準14(a): チームの直近の試合日の箱は、その日の箱からそのチームのカードだけを残す(ブルー・レッドの配置は公式のまま)', () => {
   const ref = { kind: 'regular', day: 1, date: '2026-10-15' } as const;
   const b = teamDayBox(file, 'LR', ref);

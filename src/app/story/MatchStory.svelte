@@ -15,7 +15,7 @@
     <div class="scroll">
       <table class="breakdown">
         <thead>
-          <tr><th>項目</th><th>{input.a}</th><th>{input.b}</th><th>差</th><th>効き</th><th>差の大きい軸</th><th></th></tr>
+          <tr><th>項目</th><th>{input.a}</th><th>{input.b}</th><th>差</th><th>影響</th><th>差の大きい軸</th><th></th></tr>
         </thead>
         <tbody>
           {#each story.rows as r (r.key)}
@@ -39,7 +39,7 @@
           {#if e.items.length}
             <ul>
               {#each e.items as it}
-                <li><span class="tag">{it.kind}・{it.strength}</span> {it.text} <a href={it.source} target="_blank" rel="noopener noreferrer">出典</a></li>
+                <li><span class="tag">{it.kind}{it.strength ? `・${it.strength}` : ''}</span> {it.text} <a href={it.source} target="_blank" rel="noopener noreferrer">出典</a>{#if it.marks.length}<span class="unv">未確認({it.marks.join('・')})</span>{/if}</li>
               {/each}
             </ul>
           {:else}
@@ -81,6 +81,7 @@
   .ev li { margin: 0.15rem 0; }
   .ev li a { color: var(--gold-hi); margin-left: 0.3rem; }
   .tag { font-size: 0.72rem; color: var(--gold); margin-right: 0.3rem; }
+  .unv { font-size: 0.7rem; color: var(--muted); margin-left: 0.3rem; }
   .muted { color: var(--ivory-dim); margin: 0; }
   .scope { margin-top: 0.6rem; display: grid; grid-template-columns: 1fr; gap: 0.2rem 1rem; }
   @media (min-width: 720px) { .scope { grid-template-columns: 1fr 1fr; } .scope .scope-title:nth-of-type(2) { grid-column: 2; grid-row: 1; } }
