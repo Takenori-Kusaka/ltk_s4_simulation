@@ -134,3 +134,23 @@ test('常識: ソロランクの無い選手の出発点は、同じ階級の選
   assert.equal(ground.anchorSource, '母集団の中央値');
   assert.ok(ground.anchor < 5, `NEXT の中央値に近いはず: ${ground.anchor}`);
 });
+
+// F-009 Task-11: 受入基準 29(元プロの下限)がピックプールを含む6軸で同じに効く
+test('AC29: 元プロの下限と「ソロランクと最高ランクの高い方」は、ピックプールを含む6軸で同じ基準と出どころになる', () => {
+  const games = Array.from({ length: 12 }, () => g('MIDDLE', 'Ahri', true));
+  const ex = player('EX', 'MIDDLE', games, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, exPro: { level: 'LJL-starter', source: 'https://example.test/wiki/A' } });
+  const ctx = buildRatingContext([ex], [], cfg, NOW);
+  for (const r of rateDataAxes(ex, ctx)) {
+    assert.equal(r.anchor, 8, r.key);
+    assert.equal(r.anchorSource, '元プロの下限', r.key);
+    // 指標の無い軸(この試合の記録ではレーン戦・集団戦・連携)は推定なので「低」が正しい。確度の降格だけを見る
+    if (!r.estimated) assert.notEqual(r.confidence, '低', `${r.key}: ソロランクがあるので確度は下げない`);
+  }
+  const pk = player('PK', 'MIDDLE', games, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank: { tier: 'MASTER', division: 'I', lp: 750, source: 'https://example.test/opgg/pk' } });
+  const ctx2 = buildRatingContext([pk], [], cfg, NOW);
+  for (const r of rateDataAxes(pk, ctx2)) {
+    assert.equal(r.anchor, 9, r.key);
+    assert.equal(r.anchorSource, '最高ランク', r.key);
+    if (!r.estimated) assert.notEqual(r.confidence, '低', r.key);
+  }
+});

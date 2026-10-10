@@ -121,7 +121,7 @@ function dataAxis(a: AxisRating, coefficient: number): Pick<RatingAxisView, 'det
   const d = a.data!;
   const cfg = loadEngineConfig();
   const details: DetailRow[] = [
-    { label: 'ランクの基準', value: `${d.anchor.toFixed(2)}(${d.anchorSource})` },
+    { label: 'ランクの基準', value: `${d.anchor.toFixed(2)}(${d.anchorSource}${d.anchorNote ? `: ${d.anchorNote}` : ''})` },
     { label: '補正', value: `${signed(d.correction)}(母集団の標準偏差の単位)` },
     { label: '縮小の割合', value: `${pct(d.shrink)}(有効な試合数 n ÷ (n + ${cfg.k}))` },
     { label: 'LTK の経験の項', value: a.data?.bonusReason ?? (d.bonus ? `+${d.bonus.toFixed(1)}` : 'この軸には加えない') },

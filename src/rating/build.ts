@@ -7,11 +7,11 @@ import { ROSTER } from '../data/roster.ts';
 import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
 import { extractGame, loadEngineConfig, populationMatch } from './engine.ts';
 import {
-  readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
+  readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
 } from './evidence.ts';
 import { applyForm, formFactor, type FormGame, type FormResult, type LeagueSnapshot } from './form.ts';
-import type { Confidence, GameRecord, MatchForPopulation, RankEntry } from './types.ts';
+import type { Confidence, ExProCareer, GameRecord, MatchForPopulation, RankEntry } from './types.ts';
 import axesConfig from './axes.json' with { type: 'json' };
 import ratingConfig from './config.json' with { type: 'json' };
 import knownFacts from './known-facts.json' with { type: 'json' };
@@ -27,6 +27,10 @@ export interface PlayerRatingInput {
   /** 大会のロール(teamPosition の値) */
   position: string;
   rank: RankEntry | null;
+  /** 出典つきの最高ランク(経歴の記録 career.json の peak.allTime。基準28) */
+  peakRank?: RankEntry | null;
+  /** 出典つきのプロの経歴(経歴の記録の lol.highestLevel。基準29) */
+  exPro?: ExProCareer | null;
   games: GameRecord[];
   league: LeagueSnapshot[];
   masteryScore?: number;
@@ -86,6 +90,8 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     tier: p.tier,
     position: p.position,
     rank: p.rank,
+    peakRank: p.peakRank ?? null,
+    exPro: p.exPro ?? null,
     games: p.games,
     ltkSeasons: new Set(p.tournament.ltk.map((x) => x.season)).size,
     ltkSeasonNames: [...new Set(p.tournament.ltk.map((x) => x.season))].sort(),
@@ -103,7 +109,7 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
-      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.bonusReason]
+      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.bonusReason]
         .filter(Boolean)
         .join('。'),
       data: a,
@@ -139,7 +145,7 @@ interface RawRecord {
 
 export interface LoadOptions {
   rawDir: string;
-  /** 根拠の正規化した記録の置き場(shotcalling.json・tournament.json) */
+  /** 根拠の正規化した記録の置き場(shotcalling.json・tournament.json。career.json はあれば読む) */
   groundsDir: string;
 }
 
@@ -156,7 +162,10 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
   };
   const sc = readShotcallingSnapshot(read(join(opts.groundsDir, 'shotcalling.json')));
   const tr = readTournamentSnapshot(read(join(opts.groundsDir, 'tournament.json')));
-  errors.push(...sc.errors, ...tr.errors);
+  // 経歴の記録(基準28)。無ければ従来どおり(ソロランク、無ければ母集団の中央値)
+  const careerPath = join(opts.groundsDir, 'career.json');
+  const cr: ReturnType<typeof readCareerSnapshot> = existsSync(careerPath) ? readCareerSnapshot(read(careerPath)) : { players: {}, errors: [] };
+  errors.push(...sc.errors, ...tr.errors, ...cr.errors);
 
   const infos = new Map<string, unknown>();
   const matchInfo = (id: string) => {
@@ -186,6 +195,8 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       tier: r.tier,
       position: POSITION[r.role],
       rank: solo ? { tier: solo.tier, division: solo.rank, lp: solo.leaguePoints } : null,
+      peakRank: cr.players[r.id]?.peakRank ?? null,
+      exPro: cr.players[r.id]?.exPro ?? null,
       games,
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],
       masteryScore: typeof ms === 'number' ? ms : typeof ms?.data === 'number' ? ms.data : undefined,

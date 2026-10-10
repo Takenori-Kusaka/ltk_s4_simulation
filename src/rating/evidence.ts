@@ -1,6 +1,6 @@
 // F-009 Task-3: 根拠の軸(コール力・大会経験)。ADR-0004 決定5・7、docs/design/rating-model.md 節2
 // 入力は出典つきの根拠と評価設定だけ。ランク・ソロキューのデータ・データの軸は受け取らない(基準13)
-import type { Confidence } from './types.ts';
+import type { Confidence, ExProCareer, RankEntry } from './types.ts';
 import defaults from './config.json' with { type: 'json' };
 
 export type Strength = '強' | '中' | '弱';
@@ -256,6 +256,48 @@ export function readTournamentSnapshot(raw: unknown): { players: Record<string, 
       pro: take<ProCareer>('pro', (x) => str(x.league) && typeof x.years === 'number' && x.years >= 0),
       other: take<OtherTournament>('other', (x) => str(x.name)),
     };
+  }
+  return { players: out, errors };
+}
+
+// --- 経歴の記録の読み込み(docs/research/grounds/normalized/career.json。基準28〜30) ---
+
+/** 評価の入力に使う経歴: 出典つきの最高ランクと、出典つきのプロの経歴 */
+export interface CareerInput {
+  peakRank: RankEntry | null;
+  exPro: ExProCareer | null;
+}
+
+/** 基準29: 元プロとして扱う lol.highestLevel の区分 */
+export const PRO_LEVELS: readonly string[] = ['overseas-major', 'LJL-starter', 'LJL-sub', 'overseas-minor', 'LJL CS-starter', 'LJL CS-sub', 'academy'];
+/** 経歴の記録の division(1〜4。Master 以上は null)→ ランクの表記 */
+const DIVISION_TEXT: Record<string, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' };
+
+/**
+ * 経歴の記録を読む。最高ランクは peak.allTime(tier・division・lp・出典)、プロの経歴は lol.highestLevel と
+ * その出典(lol.statusSource。無ければ元の行 lol.basis)。出典の無いものは使わず、選手と項目をエラーに出す
+ */
+export function readCareerSnapshot(raw: unknown): { players: Record<string, CareerInput>; errors: string[] } {
+  const { players, errors } = readPlayers(raw, 'evidence-career-normalized');
+  const out: Record<string, CareerInput> = {};
+  for (const [id, p] of players) {
+    const entry: CareerInput = { peakRank: null, exPro: null };
+    const peak = isObj(p.peak) && isObj(p.peak.allTime) ? p.peak.allTime : null;
+    if (peak && str(peak.tier)) {
+      if (str(peak.source)) {
+        const division = DIVISION_TEXT[String(peak.division ?? '')] ?? (str(peak.division) ? String(peak.division).toUpperCase() : '');
+        entry.peakRank = { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source) };
+      } else errors.push(`${id}: 最高ランク(${String(peak.tier)})に出典が無い`);
+    }
+    const lol = isObj(p.lol) ? p.lol : null;
+    const level = lol && str(lol.highestLevel) ? String(lol.highestLevel) : 'none';
+    if (lol && PRO_LEVELS.includes(level)) {
+      const basis = (Array.isArray(lol.basis) ? lol.basis : []).filter(str).map(String);
+      const source = str(lol.statusSource) ? String(lol.statusSource) : basis.length ? `経歴の記録(career.json)の ${basis.join('・')}` : null;
+      if (source) entry.exPro = { level, source };
+      else errors.push(`${id}: プロの経歴(${level})に出典が無い`);
+    }
+    out[id] = entry;
   }
   return { players: out, errors };
 }

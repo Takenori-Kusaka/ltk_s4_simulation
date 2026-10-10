@@ -7,6 +7,7 @@ import {
   metricDiff,
   rankAnchor,
   recencyWeight,
+  resolveAnchor,
   scoreDataAxis,
   selectGames,
 } from './engine.ts';
@@ -15,6 +16,7 @@ import type {
   DataAxisDef,
   DataAxisResult,
   EngineConfig,
+  ExProCareer,
   GameRecord,
   MatchForPopulation,
   Population,
@@ -47,7 +49,10 @@ export interface RatingPlayerInput {
   /** 大会のロール(teamPosition の値) */
   position: string;
   rank: RankEntry | null;
+  /** 出典つきの最高ランク(経歴の記録)。ソロランクとの高い方を基準にする(基準28) */
   peakRank?: RankEntry | null;
+  /** 出典つきのプロの経歴(経歴の記録)。基準の下限を 8.0 にする(基準29) */
+  exPro?: ExProCareer | null;
   games: GameRecord[];
   ltkSeasons: number;
   ltkSeasonNames?: string[];
@@ -178,7 +183,7 @@ const downgrade = (c: Confidence): Confidence => (c === '高' ? '中' : '低');
 export function rateDataAxes(p: RatingPlayerInput, ctx: RatingContext): RatedAxis[] {
   const { cfg, now, population } = ctx;
   const medianAnchor = (p.tier && ctx.tierMedianAnchor[p.tier]) ?? ctx.medianAnchor;
-  const input = { rank: p.rank, peakRank: p.peakRank, medianAnchor, games: p.games, position: p.position };
+  const input = { rank: p.rank, peakRank: p.peakRank, exPro: p.exPro, medianAnchor, games: p.games, position: p.position };
   const bonusFor = (key: string) => (CONF.ltkBonusAxes.includes(key) ? ltkBonus(p.ltkSeasons) : 0);
   const reason = (key: string) =>
     CONF.ltkBonusAxes.includes(key)
@@ -205,16 +210,9 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
   const { cfg, now } = ctx;
   const raw = poolRaw(p, cfg, now);
   const n = raw.games.reduce((s, g) => s + recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays), 0);
-  let anchor = rankAnchor(p.rank);
-  let anchorSource: DataAxisResult['anchorSource'] = 'ソロランク';
-  if (anchor === null) {
-    anchor = rankAnchor(p.peakRank);
-    anchorSource = '最高ランク';
-    if (anchor === null) {
-      anchor = (p.tier && ctx.tierMedianAnchor[p.tier]) ?? ctx.medianAnchor;
-      anchorSource = '母集団の中央値';
-    }
-  }
+  // ランクの基準はデータの他の軸と同じ決め方(基準6・9・28〜30)
+  const medianAnchor = (p.tier && ctx.tierMedianAnchor[p.tier]) ?? ctx.medianAnchor;
+  const { anchor, anchorSource, anchorNote, soloMissing } = resolveAnchor({ rank: p.rank, peakRank: p.peakRank, exPro: p.exPro, medianAnchor });
   const r = axis.rankWeight;
   const ps = ctx.poolStats[p.position];
   let correction: number;
@@ -233,7 +231,7 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
   }
   const base = clamp(anchor * r + 5 * (1 - r) + correction * shrink * cfg.perfScale, 0, 10);
   let confidence: Confidence = estimated ? '低' : confidenceOf(n, cfg);
-  if (!estimated && anchorSource !== 'ソロランク') confidence = downgrade(confidence);
+  if (!estimated && soloMissing) confidence = downgrade(confidence);
   const dates = raw.games.map((g) => g.endTime).sort((a, b) => b - a);
   const iso = (t: number) => new Date(t).toISOString().slice(0, 10);
   return {
@@ -244,6 +242,7 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
     estimated,
     anchor,
     anchorSource,
+    ...(anchorNote ? { anchorNote } : {}),
     correction,
     shrink,
     effectiveGames: n,
