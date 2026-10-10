@@ -56,16 +56,17 @@
 </section>
 
 <style>
-  .daybox { padding: 1rem; }
+  /* 基準11: 根拠の表の幅がグリッドの列を広げないよう、箱の最小幅を 0 にする */
+  .daybox { padding: 1rem; min-width: 0; }
   .day-head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--caps); letter-spacing: 0.08em; margin-bottom: 0.6rem; }
   .day-title { font-size: 1.15rem; color: var(--gold-hi); }
   .day-date { color: var(--ivory-dim); }
-  .card { border: 1px solid var(--line); border-radius: 6px; padding: 0.5rem 0.6rem 0.6rem; margin-top: 0.6rem; background: rgba(0, 0, 0, 0.18); }
+  .card { border: 1px solid var(--line); border-radius: 6px; padding: 0.5rem 0.6rem 0.6rem; margin-top: 0.6rem; background: rgba(0, 0, 0, 0.18); min-width: 0; overflow: hidden; }
   .side-labels { display: flex; justify-content: space-between; font-family: var(--caps); font-size: 0.62rem; letter-spacing: 0.14em; color: var(--muted); }
   .side-labels .vs { color: var(--ivory-dim); }
   .row { margin-top: 0.45rem; }
   /* 基準19: 行全体が押せるボタン。見た目は行のまま */
-  .row-btn { display: block; width: 100%; padding: 0.2rem 0.2rem 0.25rem; margin: 0; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
+  .row-btn { display: block; box-sizing: border-box; width: 100%; padding: 0.2rem 0.2rem 0.25rem; margin: 0; border: 0; border-radius: 6px; background: transparent; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
   .row-btn:hover, .row-btn:focus-visible { background: rgba(255, 255, 255, 0.05); outline: 1px solid var(--line); }
   .row-btn[aria-expanded='true'] { background: rgba(201, 162, 74, 0.08); }
   .hint { display: block; text-align: center; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted); margin-top: 0.25rem; }

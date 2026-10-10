@@ -61,7 +61,8 @@
   .story { margin: 0.5rem 0 0.4rem; padding: 0.7rem 0.8rem; border-left: 2px solid var(--gold-lo); background: rgba(0, 0, 0, 0.22); border-radius: 0 6px 6px 0; font-size: 0.88rem; }
   .headline { margin: 0 0 0.5rem; font-family: var(--serif-jp); font-size: 1rem; color: var(--ivory); }
   .story-none { margin: 0; color: var(--ivory-dim); }
-  .scroll { overflow-x: auto; }
+  /* 基準11: 表は横に送れる枠の中。枠の幅は親に合わせ、親を広げない */
+  .scroll { overflow-x: auto; max-width: 100%; min-width: 0; }
   .breakdown { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.84rem; }
   .breakdown th, .breakdown td { padding: 0.3rem 0.45rem; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); white-space: nowrap; vertical-align: top; }
   .breakdown thead th { color: var(--ivory-dim); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.08em; }
