@@ -133,3 +133,36 @@ test('AC29/AC30: 軸の説明にランクの基準の出どころ(ソロラン�
   assert.match(reason('SO'), /ランクの基準 \d\.\d\d\(ソロランク\)/);
   assert.match(reason('SE'), /ランクの基準 9\.41\(最高ランク\(今季\): Grandmaster 1060LP。出典: https:\/\/example\.test\/opgg\/se\)/);
 });
+
+// F-009 基準12 の追記: 読み込み時に、経歴の記録の年数と出場記録の年数の大きい方をプロの経歴にする
+test('基準12: career.json の lol.years が tournament.json の pro の年数より多い水準は、差分を足して評価の入力にし、理由の文に出る', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'f009-grounds-pro-'));
+  const src = 'docs/research/players-dd-cc.md';
+  writeFileSync(join(dir, 'shotcalling.json'), JSON.stringify({ kind: 'evidence-shotcalling', players: {} }));
+  writeFileSync(join(dir, 'tournament.json'), JSON.stringify({
+    kind: 'evidence-tournament',
+    players: {
+      'DD-MASTERS-TOP': { ltk: [], coach: [], pro: [{ league: 'LJL', team: 'V3 Esports', years: 1, source: src }, { league: 'LJL', team: 'QT DIG∞', years: 1, source: src }], other: [] },
+      'DD-MASTERS-MID': { ltk: [], coach: [], pro: [{ league: 'LJL CS', team: 'x', years: 1, source: src }], other: [] },
+    },
+  }));
+  const years = (o: Record<string, number>) => ({ 'overseas-major': 0, 'LJL-starter': 0, 'LJL-sub': 0, 'overseas-minor': 0, 'LJL CS-starter': 0, 'LJL CS-sub': 0, academy: 0, ...o });
+  writeFileSync(join(dir, 'career.json'), JSON.stringify({
+    kind: 'evidence-career-normalized',
+    players: {
+      'DD-MASTERS-TOP': { peak: { allTime: null, thisSeason: null }, lol: { highestLevel: 'LJL-starter', years: years({ 'LJL-starter': 5 }), basis: ['lolPro[0]'], statusSource: 'https://lol.fandom.com/wiki/Washidai' } },
+      'DD-MASTERS-MID': { peak: { allTime: null, thisSeason: null }, lol: { highestLevel: 'none', years: years({}), basis: [], statusSource: null } },
+    },
+  }));
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: dir });
+  assert.deepEqual(errors, []);
+  const top = find(inputs.players, 'DD-MASTERS-TOP').tournament.pro;
+  assert.deepEqual(top.map((x) => [x.league, x.team, x.years]), [['LJL', 'V3 Esports', 1], ['LJL', 'QT DIG∞', 1], ['LJL', '経歴の記録(career.json)', 3]]);
+  assert.equal(top[2].source, 'https://lol.fandom.com/wiki/Washidai');
+  // 出場記録の方が多い水準(経歴の記録 0 年 vs 出場記録 1 年)は変えない
+  assert.deepEqual(find(inputs.players, 'DD-MASTERS-MID').tournament.pro.map((x) => [x.league, x.years]), [['LJL CS', 1]]);
+  // 評価の理由の文に足した項目が出る
+  const rating = buildRatings(inputs, NOW).find((r) => r.playerId === 'DD-MASTERS-TOP')!;
+  const t = rating.axes.find((a) => a.key === 'tournament')!;
+  assert.ok(t.reason.includes('LJL 経歴の記録(career.json) 3 年'), t.reason);
+});

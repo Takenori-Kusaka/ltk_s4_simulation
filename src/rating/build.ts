@@ -7,7 +7,7 @@ import { ROSTER } from '../data/roster.ts';
 import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
 import { extractGame, loadEngineConfig, populationMatch } from './engine.ts';
 import { roleSwitchDiscount,
-  readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
+  mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
 } from './evidence.ts';
 import { applyForm, formFactor, type FormGame, type FormResult, type LeagueSnapshot } from './form.ts';
@@ -196,20 +196,23 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
         })
       : [];
     const ms = raw?.masteryScore;
+    const career = cr.players[r.id];
+    // 基準12 の追記: プロの年数は経歴の記録(career.json の lol.years)と出場記録(tournament.json)の大きい方
+    const record = tr.players[r.id] ?? EMPTY_RECORD;
     return {
       playerId: r.id,
       name: r.name,
       tier: r.tier,
       position: POSITION[r.role],
       rank: solo ? { tier: solo.tier, division: solo.rank, lp: solo.leaguePoints } : null,
-      peakRank: cr.players[r.id]?.peakRank ?? null,
-      seasonPeakRank: cr.players[r.id]?.seasonPeakRank ?? null,
-      exPro: cr.players[r.id]?.exPro ?? null,
+      peakRank: career?.peakRank ?? null,
+      seasonPeakRank: career?.seasonPeakRank ?? null,
+      exPro: career?.exPro ?? null,
       games,
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],
       masteryScore: typeof ms === 'number' ? ms : typeof ms?.data === 'number' ? ms.data : undefined,
       shotcalling: sc.players[r.id] ?? [],
-      tournament: tr.players[r.id] ?? EMPTY_RECORD,
+      tournament: { ...record, pro: mergeProYears(record.pro, career?.lol) },
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
