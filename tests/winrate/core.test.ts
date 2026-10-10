@@ -269,7 +269,8 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
 // ---- F-005 Task-6(再判定 2): 外部の見立ての項 ----
 
 test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強さの重み 強 1.5・中 1.0・弱 0.5)を ±clip(3.0)に切り詰めた値と件数。読み込みは形の違う項目を理由つきで除く', () => {
-  assert.deepEqual(baseConfig.external, { targetSd: 0.2, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0, selfTeam: 0.5 });
+  // 2026-10-10: 外部の見立ての重みの既定値を 0.20 → 0.35(レーンの β と同等)に変更
+  assert.deepEqual(baseConfig.external, { targetSd: 0.35, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0, selfTeam: 0.5 });
   const cfg = baseConfig.external;
   assert.deepEqual(externalOf(VIEWS, 'DD-NEXT', cfg), { E: 2.5, count: 2 });
   assert.deepEqual(externalOf(VIEWS, 'CC-NEXT', cfg), { E: -0.5, count: 1 });
@@ -307,8 +308,9 @@ test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強�
   assert.equal(readExternalViews({ kind: 'other', items: [] }).items.length, 0);
 });
 
-test('基準2・3: β_ext は 6 組の E の差の二乗平均平方根が external.targetSd(初期値 0.20)になる値。対数オッズに β_ext × (E_A − E_B) を足し、p_macro はマクロ項と外部の見立ての項の和、p_external は外部の見立ての項だけの勝率', () => {
-  const out = computePriorWinrates(teams({ NEXT: EXAMPLE }, { NEXT: EXAMPLE_M }), { externalViews: VIEWS });
+test('基準2・3: β_ext は 6 組の E の差の二乗平均平方根が external.targetSd になる値(数値例は 0.20 で検証)。対数オッズに β_ext × (E_A − E_B) を足し、p_macro はマクロ項と外部の見立ての項の和、p_external は外部の見立ての項だけの勝率', () => {
+  const cfg020 = { ...baseConfig, external: { ...baseConfig.external, targetSd: 0.2 } } as WinrateConfig;
+  const out = computePriorWinrates(teams({ NEXT: EXAMPLE }, { NEXT: EXAMPLE_M }), { config: cfg020, externalViews: VIEWS });
   assert.ok(Math.abs(out.betaExt.NEXT - 0.081) < 0.0015, `β_ext ${out.betaExt.NEXT}`);
   assert.match(out.betaExtBasis.NEXT, /6 組/);
   assert.match(out.betaExtBasis.NEXT, /2\.483/);
@@ -363,7 +365,7 @@ test('基準2・3: β_ext は 6 組の E の差の二乗平均平方根が exter
     assert.ok(Math.abs(x.logit - r3(x.laneLogit + x.macroLogit + x.extLogit + x.stageTerm)) < 0.002, `${x.tier} ${x.a} vs ${x.b} の対数オッズの和`);
   }
   assert.ok(Math.abs(validateWinTable(out.winTable)('NEXT', 'CC', 'DD') - 0.298) < 1e-9);
-  // external.targetSd を 0.4 にすると β_ext は 2 倍
+  // external.targetSd を 0.4 にすると β_ext は 0.20 のときの 2 倍
   const cfg = { ...baseConfig, external: { ...baseConfig.external, targetSd: 0.4 } } as WinrateConfig;
   const twice = computePriorWinrates(teams({ NEXT: EXAMPLE }, { NEXT: EXAMPLE_M }), { config: cfg, externalViews: VIEWS });
   assert.ok(Math.abs(twice.betaExt.NEXT - 0.161) < 0.0025, `β_ext ${twice.betaExt.NEXT}`);
