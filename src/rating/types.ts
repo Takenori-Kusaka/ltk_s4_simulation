@@ -20,7 +20,7 @@ export interface ExProCareer {
 }
 
 /** ランクの基準の出どころ(基準30) */
-export type AnchorSource = 'ソロランク' | '最高ランク' | '元プロの下限' | '母集団の中央値';
+export type AnchorSource = 'ソロランク' | '最高ランク' | '最高ランク(今季)' | '元プロの下限' | '母集団の中央値';
 
 /** 1試合の選手の記録。stats は participant の数値と challenges を平らにしたもの */
 export interface GameRecord {
@@ -83,8 +83,10 @@ export type Population = Record<string, Record<string, { mean: number; sd: numbe
 
 export interface PlayerAxisInput {
   rank: RankEntry | null;
-  /** 出典つきの最高ランク(経歴の記録)。ソロランクとの高い方を基準にする(基準6・28) */
+  /** 出典つきの歴代の最高ランク(経歴の記録 peak.allTime)。ソロランク・今季の最高ランクと合わせ、基準の値が最も高い記録を採る(基準6・28) */
   peakRank?: RankEntry | null;
+  /** 出典つきの今季の最高ランク(経歴の記録 peak.thisSeason) */
+  seasonPeakRank?: RankEntry | null;
   /** 出典つきのプロの経歴(経歴の記録)。あれば基準の下限を Challenger 0 LP(8.0)にする(基準29) */
   exPro?: ExProCareer | null;
   /** ランクが無く最高ランクも無いときの基準(60 選手の中央値など) */

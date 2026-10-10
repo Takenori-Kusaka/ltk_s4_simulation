@@ -219,3 +219,48 @@ test('AC28: 経歴の記録が無い選手は従来どおり(ソロランク、�
   assert.equal(none.anchorSource, '母集団の中央値');
   assert.equal(none.confidence, '中');
 });
+
+// F-009 Task-11 の追補: ランクの基準は、ソロランク・歴代の最高ランク・今季の最高ランクのうち基準の値が最も高い記録
+test('AC6/28 追補: 今季の最高ランクの基準が歴代より高ければ今季の記録を採り、出どころは「最高ランク(今季)」', () => {
+  const peakRank = { tier: 'Challenger', division: '', lp: 0, source: 'https://example.test/opgg/all' }; // LP 不明 → 0 LP = 8.0
+  const seasonPeakRank = { tier: 'Grandmaster', division: '', lp: 1060, source: 'https://example.test/opgg/season' }; // 9.41
+  const r = scoreDataAxis(axis, { rank: { tier: 'DIAMOND', division: 'I', lp: 50 }, peakRank, seasonPeakRank, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(r.anchor - (8 + (2 * 1060) / 1500)) < 1e-9, `${r.anchor}`);
+  assert.equal(r.anchorSource, '最高ランク(今季)');
+  assert.equal(r.confidence, '高');
+  assert.match(r.anchorNote ?? '', /Grandmaster 1060LP/);
+  assert.match(r.anchorNote ?? '', /https:\/\/example\.test\/opgg\/season/);
+});
+
+test('AC6/28 追補: 同じ tier でも LP のある記録が LP 不明(0 LP)の記録を上回る。歴代が高ければ歴代(「最高ランク」)', () => {
+  const noLp = { tier: 'Challenger', division: '', lp: 0, source: 'https://example.test/a' };
+  const withLp = { tier: 'Challenger', division: '', lp: 500, source: 'https://example.test/b' };
+  const season = scoreDataAxis(axis, { rank: null, peakRank: noLp, seasonPeakRank: withLp, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(season.anchor - (8 + 1000 / 1500)) < 1e-9, `${season.anchor}`);
+  assert.equal(season.anchorSource, '最高ランク(今季)');
+  const allTime = scoreDataAxis(axis, { rank: null, peakRank: withLp, seasonPeakRank: noLp, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(allTime.anchor - (8 + 1000 / 1500)) < 1e-9);
+  assert.equal(allTime.anchorSource, '最高ランク');
+  assert.equal(allTime.confidence, '中', 'ソロランクが無いので 1 段下げる(基準 9)');
+});
+
+test('AC6/28 追補: ソロランクが 3 つの中で最も高ければソロランク。同じ値なら ソロランク → 歴代 → 今季 の順', () => {
+  const master = { tier: 'MASTER', division: 'I', lp: 0, source: 'https://example.test/m' };
+  const solo = scoreDataAxis(axis, { rank: { tier: 'CHALLENGER', division: 'I', lp: 900 }, peakRank: master, seasonPeakRank: master, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(solo.anchorSource, 'ソロランク');
+  assert.equal(solo.anchorNote, undefined);
+  const tie = scoreDataAxis(axis, { rank: { tier: 'MASTER', division: 'I', lp: 0 }, peakRank: master, seasonPeakRank: master, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(tie.anchorSource, 'ソロランク');
+  const tie2 = scoreDataAxis(axis, { rank: null, peakRank: master, seasonPeakRank: master, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(tie2.anchorSource, '最高ランク');
+});
+
+test('AC29 追補: 元プロの下限は、3 つの記録の最大が 8.0 未満のときだけ効く', () => {
+  const peakRank = { tier: 'PLATINUM', division: 'I', lp: 0, source: 'https://example.test/a' };
+  const seasonPeakRank = { tier: 'EMERALD', division: 'IV', lp: 0, source: 'https://example.test/b' };
+  const r = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank, seasonPeakRank, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(r.anchor, 8);
+  assert.equal(r.anchorSource, '元プロの下限');
+  const high = scoreDataAxis(axis, { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, peakRank, seasonPeakRank: { tier: 'MASTER', division: '', lp: 300, source: 'https://example.test/c' }, exPro: EX_PRO, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(high.anchorSource, '最高ランク(今季)');
+});
