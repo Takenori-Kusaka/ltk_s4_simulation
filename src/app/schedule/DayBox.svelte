@@ -70,7 +70,8 @@
   .row-btn:hover, .row-btn:focus-visible { background: rgba(255, 255, 255, 0.05); outline: 1px solid var(--line); }
   .row-btn[aria-expanded='true'] { background: rgba(201, 162, 74, 0.08); }
   .hint { display: block; text-align: center; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--muted); margin-top: 0.25rem; }
-  .sides { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  /* 基準11: 左右の側の中身が収まるかを、画面幅ではなく行の幅(コンテナ)で判定する */
+  .sides { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; container: daybox-sides / inline-size; }
   .side { display: flex; align-items: center; gap: 0.4rem; min-width: 0; padding: 0.15rem 0.3rem; border-radius: 4px; }
   .side.red { flex-direction: row; }
   .side.hl { background: color-mix(in srgb, var(--team) 22%, transparent); outline: 1px solid var(--team); }
@@ -88,5 +89,15 @@
   @media (max-width: 420px) {
     .pct { font-size: 1.05rem; }
     .label { font-size: 0.72rem; }
+  }
+  /* 基準11: 行の幅が 400px 未満(幅 360px のスマホ)では、左右の側を「紋章+名前」の段と勝率の段の 2 段に組み、
+     中身が側の箱からはみ出して左右で重なったり、右側の紋章が切れたりしないようにする。チームの正式名は折り返す */
+  @container daybox-sides (max-width: 400px) {
+    .side { flex: 1 1 0; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'emb label' 'pct pct'; gap: 0.1rem 0.4rem; }
+    .side.red { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'label emb' 'pct pct'; text-align: right; }
+    .emb { grid-area: emb; }
+    .label { grid-area: label; white-space: normal; }
+    .side.red .label { align-items: flex-end; }
+    .pct { grid-area: pct; }
   }
 </style>
