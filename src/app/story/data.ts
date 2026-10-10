@@ -9,3 +9,9 @@ export function loadTeamEvaluation(): unknown {
   const m = import.meta.glob('../../../data/public/team-evaluation.json', { eager: true, import: 'default' });
   return Object.values(m)[0];
 }
+
+// F-014 Task-7 基準33: 外部の見立ての記録(F-005 の用語 E の元。正規化の記録は docs/ にある)。無ければ undefined(根拠の節は「外部の見立ては記録なし」を出す)
+export function loadExternalViews(): unknown {
+  const m = import.meta.glob('../../../docs/research/grounds/normalized/external-views.json', { eager: true, import: 'default' });
+  return Object.values(m)[0];
+}
