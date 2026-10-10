@@ -100,7 +100,7 @@
         <PlayerSheet {player} rating={ratings?.players.find((r) => r.playerId === player.id)} computedAt={ratings?.computedAt} />
       {/key}
     {:else}
-      <Home />
+      <Home {winrates} />
     {/if}
   </div>
 </main>

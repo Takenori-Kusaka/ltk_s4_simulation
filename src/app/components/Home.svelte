@@ -4,9 +4,23 @@
   import { TEAM_INFO, daysUntilOpening } from '../lib/index.ts';
   import Emblem from './Emblem.svelte';
   import RoleGlyph from './RoleGlyph.svelte';
+  // F-014 Task-1: 直近の試合日の予想と順位表(4 王家の一覧の上)
+  import DayBox from '../schedule/DayBox.svelte';
+  import StandingsBoard from '../schedule/StandingsBoard.svelte';
+  import { dayBox, nearestDay, standings } from '../schedule/view.ts';
+  import { noDataNotice, runSimulation, type WinratesFile } from '../sim/view.ts';
 
-  const days = daysUntilOpening(new Date());
+  let { winrates }: { winrates?: unknown } = $props();
+  const now = new Date();
+  const days = daysUntilOpening(now);
   const tiersTopDown = [...TIERS].reverse();
+  const notice = noDataNotice(winrates);
+  const file = notice ? null : (winrates as WinratesFile);
+  const ref = nearestDay(now);
+  const box = file ? dayBox(file, ref) : null;
+  // 基準2(非機能): シミュレーションは 1 回だけ
+  const table = file ? standings(file, runSimulation(file)) : null;
+  const sub = ref.kind === 'regular' ? `REGULAR STAGE / DAY - ${ref.day}` : `MASTERS CUP - ${ref.cup}`;
 </script>
 
 <section class="hero">
@@ -18,8 +32,19 @@
   {:else}
     <p class="countdown">大会 開催中</p>
   {/if}
-  <p class="hero-links"><a class="chip" href="#/sim">勝率とシミュレーション ›</a> <a class="chip" href="#/meta">いまのメタを知る ›</a></p>
+  <p class="hero-links"><a class="chip" href="#/sim">全試合の予想 ›</a> <a class="chip" href="#/meta">いまのメタを知る ›</a></p>
 </section>
+
+<div class="forecast">
+  <p class="eyebrow">Next match day · 次の試合日の予想</p>
+  {#if notice}
+    <section class="frame alert"><p>{notice}</p></section>
+  {:else if box && table}
+    <DayBox view={box} />
+    <StandingsBoard view={table} {sub} />
+    <p class="forecast-links"><a class="chip" href="#/sim">全試合の予想と優勝確率 ›</a></p>
+  {/if}
+</div>
 
 <div class="houses">
   {#each TEAMS as team, i}

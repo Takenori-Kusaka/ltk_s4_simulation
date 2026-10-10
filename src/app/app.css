@@ -1296,3 +1296,20 @@ a.mark {
   font-size: 0.95rem;
   color: var(--gold-hi);
 }
+
+/* F-014 Task-1: ホームの直近の試合日の予想と順位表(4 王家の一覧の上) */
+.forecast {
+  max-width: 64rem;
+  margin: 0 auto 1.6rem;
+  padding: 0 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+.forecast > .eyebrow {
+  text-align: center;
+  margin: 0;
+}
+.forecast-links {
+  text-align: center;
+  margin: 0;
+}
