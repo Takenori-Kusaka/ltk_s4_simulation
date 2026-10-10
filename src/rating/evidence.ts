@@ -283,15 +283,59 @@ export function readTournamentSnapshot(raw: unknown): { players: Record<string, 
 
 // --- 経歴の記録の読み込み(docs/research/grounds/normalized/career.json。基準28〜30) ---
 
-/** 評価の入力に使う経歴: 出典つきの最高ランク(歴代・今季)と、出典つきのプロの経歴 */
+/** 経歴の記録の lol のうち、大会経験に使う部分: 水準ごとの年数(lol.years)と出典(lol.statusSource) */
+export interface CareerLol {
+  years: Record<string, number>;
+  statusSource: string | null;
+}
+
+/** 評価の入力に使う経歴: 出典つきの最高ランク(歴代・今季)、出典つきのプロの経歴、プロの年数 */
 export interface CareerInput {
   peakRank: RankEntry | null;
   seasonPeakRank: RankEntry | null;
   exPro: ExProCareer | null;
+  lol: CareerLol | null;
 }
 
 /** 基準29: 元プロとして扱う lol.highestLevel の区分 */
 export const PRO_LEVELS: readonly string[] = ['overseas-major', 'LJL-starter', 'LJL-sub', 'overseas-minor', 'LJL CS-starter', 'LJL CS-sub', 'academy'];
+
+/** 基準12 の追記: 経歴の記録の水準 → 出場記録(tournament.json の pro)のリーグの区分 */
+export const PRO_LEAGUE_GROUP: Record<string, string> = {
+  'LJL-starter': 'LJL',
+  'LJL-sub': 'LJL',
+  'LJL CS-starter': 'LJL CS',
+  'LJL CS-sub': 'LJL CS',
+  'overseas-major': 'その他のプロ',
+  'overseas-minor': 'その他のプロ',
+  academy: 'その他のプロ',
+};
+const PRO_LEAGUES: readonly string[] = ['LJL', 'LJL CS', 'その他のプロ'];
+const CAREER_FILE = 'docs/research/grounds/normalized/career.json';
+
+/**
+ * 基準12 の追記(2026-10-11): プロの年数は、経歴の記録(lol.years)と出場記録(pro)のリーグの区分ごとの大きい方。
+ * 経歴の記録の方が多い区分だけ、差分を「経歴の記録(career.json)」の項として足す(出典は lol.statusSource、無ければ記録のファイル)。
+ * 出場記録の項は変えず、減らさない。経歴の記録が無ければ出場記録のまま
+ */
+export function mergeProYears(tournamentPro: readonly ProCareer[], careerLol: CareerLol | null | undefined): ProCareer[] {
+  if (!careerLol) return [...tournamentPro];
+  const career: Record<string, number> = {};
+  for (const [level, y] of Object.entries(careerLol.years ?? {})) {
+    const league = PRO_LEAGUE_GROUP[level];
+    if (league && Number.isFinite(y) && y > 0) career[league] = (career[league] ?? 0) + y;
+  }
+  const recorded: Record<string, number> = {};
+  for (const x of tournamentPro) recorded[x.league] = (recorded[x.league] ?? 0) + x.years;
+  const url = careerLol.statusSource?.split(/\s*;\s*/).find((s) => /^https?:\/\//.test(s));
+  const added: ProCareer[] = [];
+  for (const league of PRO_LEAGUES) {
+    const diff = (career[league] ?? 0) - (recorded[league] ?? 0);
+    if (diff <= 0) continue;
+    added.push({ league, team: '経歴の記録(career.json)', years: diff, note: '出場記録より多い年数の差', source: careerLol.statusSource || CAREER_FILE, ...(url ? { url } : {}) });
+  }
+  return [...tournamentPro, ...added];
+}
 /** 経歴の記録の division(1〜4。Master 以上は null)→ ランクの表記 */
 const DIVISION_TEXT: Record<string, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' };
 
@@ -313,9 +357,15 @@ export function readCareerSnapshot(raw: unknown): { players: Record<string, Care
       const division = DIVISION_TEXT[String(peak.division ?? '')] ?? (str(peak.division) ? String(peak.division).toUpperCase() : '');
       return { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source) };
     };
-    const entry: CareerInput = { peakRank: readPeak('allTime', '最高ランク'), seasonPeakRank: readPeak('thisSeason', '最高ランク(今季)'), exPro: null };
+    const entry: CareerInput = { peakRank: readPeak('allTime', '最高ランク'), seasonPeakRank: readPeak('thisSeason', '最高ランク(今季)'), exPro: null, lol: null };
     const lol = isObj(p.lol) ? p.lol : null;
     const level = lol && str(lol.highestLevel) ? String(lol.highestLevel) : 'none';
+    if (lol) {
+      // 基準12 の追記: 水準ごとの年数(数でない値は捨てる)と出典。プロの経歴が無い選手は年数 0
+      const years: Record<string, number> = {};
+      for (const [k, v] of Object.entries(isObj(lol.years) ? lol.years : {})) if (Number.isFinite(Number(v))) years[k] = Number(v);
+      entry.lol = { years, statusSource: str(lol.statusSource) ? String(lol.statusSource) : null };
+    }
     if (lol && PRO_LEVELS.includes(level)) {
       const basis = (Array.isArray(lol.basis) ? lol.basis : []).filter(str).map(String);
       const source = str(lol.statusSource) ? String(lol.statusSource) : basis.length ? `経歴の記録(career.json)の ${basis.join('・')}` : null;
