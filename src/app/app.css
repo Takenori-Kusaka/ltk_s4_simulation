@@ -1313,3 +1313,41 @@ a.mark {
   text-align: center;
   margin: 0;
 }
+
+/* F-014 Task-3: 推しチームの選択(ホーム)と「は勝てるのか」の節の配置 */
+.fav-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 8px;
+}
+.fav-label {
+  font-family: var(--caps);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--ivory-dim);
+}
+button.chip {
+  font: inherit;
+  font-family: var(--serif-jp);
+  font-size: 0.86rem;
+  color: inherit;
+  cursor: pointer;
+}
+.chip.on {
+  background: color-mix(in srgb, var(--team) 28%, transparent);
+  border-color: var(--team);
+  color: var(--gold-hi);
+}
+.chip.clear {
+  border-left-color: var(--muted);
+  color: var(--ivory-dim);
+}
+.fav-go {
+  display: inline-flex;
+}
+/* 選手のページでは 2 列のグリッドの下に、幅いっぱいで置く */
+.sheet > .fan {
+  grid-column: 1 / -1;
+}

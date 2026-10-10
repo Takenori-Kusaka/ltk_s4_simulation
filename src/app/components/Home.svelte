@@ -9,6 +9,9 @@
   import StandingsBoard from '../schedule/StandingsBoard.svelte';
   import { dayBox, nearestDay, standings } from '../schedule/view.ts';
   import { noDataNotice, runSimulation, type WinratesFile } from '../sim/view.ts';
+  // F-014 Task-3 基準16・17: 推しチーム(そのブラウザの localStorage にだけ保存し、外部へ送らない)
+  import { readFavorite, writeFavorite } from '../schedule/fan.ts';
+  import type { TeamId } from '../../sim/types.ts';
 
   let { winrates }: { winrates?: unknown } = $props();
   const now = new Date();
@@ -21,7 +24,27 @@
   // 基準2(非機能): シミュレーションは 1 回だけ
   const table = file ? standings(file, runSimulation(file)) : null;
   const sub = ref.kind === 'regular' ? `REGULAR STAGE / DAY - ${ref.day}` : `MASTERS CUP - ${ref.cup}`;
+  // 基準16: localStorage が無効(プライベートモード等)なら保存先を null にし、選択は画面の中だけで有効
+  const storage = (() => {
+    try {
+      return typeof localStorage === 'undefined' ? null : localStorage;
+    } catch {
+      return null;
+    }
+  })();
+  let favorite = $state<TeamId | null>(readFavorite(storage));
+  const choose = (team: TeamId | null) => {
+    favorite = team;
+    writeFavorite(storage, team);
+  };
 </script>
+
+{#snippet favLink()}
+  <!-- 基準16: 「<英語のチーム名> は勝てるのか」への導線(推しチームを選んでいる間だけ、箱の近く) -->
+  {#if favorite}
+    <p class="forecast-links"><a class="chip fav-go" href={`#/team/${favorite}`} style={`--team:${TEAM_INFO[favorite].color}`}>{TEAM_INFO[favorite].name} は勝てるのか ›</a></p>
+  {/if}
+{/snippet}
 
 <section class="hero">
   <p class="eyebrow">League The k4sen · 2026.10.15 — 11.22</p>
@@ -37,11 +60,23 @@
 
 <div class="forecast">
   <p class="eyebrow">Next match day · 次の試合日の予想</p>
+  <!-- F-014 基準16: 推しチームの選択と解除(保存はこのブラウザの中だけ。選んでいる間は箱の側と順位表の行を強調) -->
+  <div class="fav-picker" role="group" aria-label="推しチーム">
+    <span class="fav-label">推しチーム</span>
+    {#each TEAMS as team}
+      <button type="button" class="chip fav" class:on={favorite === team} aria-pressed={favorite === team} style={`--team:${TEAM_INFO[team].color}`} onclick={() => choose(team)}>推し: {team}</button>
+    {/each}
+    {#if favorite}
+      <button type="button" class="chip fav clear" onclick={() => choose(null)}>解除</button>
+    {/if}
+  </div>
   {#if notice}
     <section class="frame alert"><p>{notice}</p></section>
+    {@render favLink()}
   {:else if box && table}
-    <DayBox view={box} />
-    <StandingsBoard view={table} {sub} />
+    <DayBox view={box} highlight={favorite ?? undefined} />
+    {@render favLink()}
+    <StandingsBoard view={table} {sub} highlight={favorite ?? undefined} />
     <p class="forecast-links"><a class="chip" href="#/sim">全試合の予想と優勝確率 ›</a></p>
   {/if}
 </div>

@@ -6,17 +6,23 @@
   import Radar from './Radar.svelte';
   import Emblem from './Emblem.svelte';
   import RoleGlyph from './RoleGlyph.svelte';
-  import { jstDate, nextOpponent, opponentCompareHref, sameRoleAllHref } from '../compare/opponent.ts';
+  import { sameRoleAllHref } from '../compare/opponent.ts';
+  // F-014 Task-3 基準15・18: 「<選手名> は勝てるのか」(勝率表は data.ts で読む)。F-008 の「対面と比較」もこの節へ寄せる
+  import FanSection from '../schedule/FanSection.svelte';
+  import { loadWinrates } from '../schedule/data.ts';
+  import { facing, playerNext, tierTeamMatches } from '../schedule/fan.ts';
+  import { noDataNotice, type WinratesFile } from '../sim/view.ts';
 
   let { player, rating, computedAt }: { player: Player; rating: PlayerRating | undefined; computedAt?: string } = $props();
   const axes = $derived(ratingAxesView(rating));
   const form = $derived(formView(rating));
-  const opponent = $derived.by(() => {
-    const now = new Date();
-    const o = nextOpponent(player.id, jstDate(now));
-    const href = opponentCompareHref(player.id, now);
-    return o && href ? { ...o, href } : null;
-  });
+  const now = new Date();
+  // F-008 基準15・16 / F-014 基準15(b): 直近の試合の対面の選手と比較ページ(試合日が残っていなければ出さない)
+  const opponent = $derived(facing(player, now));
+  const winrates = loadWinrates();
+  const notice = noDataNotice(winrates);
+  const file = notice ? null : (winrates as WinratesFile);
+  const fan = $derived(file ? { next: playerNext(file, player, now), tiers: [tierTeamMatches(file, player.team, player.tier)] } : null);
   const allFour = $derived(sameRoleAllHref(player.id));
   const avatar = $derived(placeholderAvatar(player));
   const info = $derived(TEAM_INFO[player.team]);
@@ -53,10 +59,7 @@
           <span class="form-why">評価のファイルにこの選手の評価が無い</span>
         {/if}
       </div>
-      <!-- F-008 基準15・16: 次に当たる対面と比較(試合日が残っていなければ出さない) -->
-      {#if opponent}
-        <a class="chip compare-entry" href={opponent.href}>対面と比較 · {opponent.date.slice(5).replace('-', '/')} vs {opponent.team}</a>
-      {/if}
+      <!-- F-008 基準15・16: 「対面と比較」は下の「は勝てるのか」の節(FanSection)に置く(F-014 基準15(b)。重複させない) -->
       <!-- F-008 基準17b: 同じ階級・同じロールの4チームの4人を一度に比べる -->
       {#if allFour}
         <a class="chip compare-entry" href={allFour}>{player.tier} {player.role} の4人と比較</a>
@@ -133,4 +136,7 @@
       {/each}
     </ul>
   </section>
+
+  <!-- F-014 基準15・18: 「<選手名> は勝てるのか」(直近の試合・対面の選手と比較ページ・階級チームの試合の一覧と期待勝ち数) -->
+  <FanSection kind="player" title={`${player.name} は勝てるのか`} team={player.team} {notice} next={fan?.next ?? null} facing={opponent} tiers={fan?.tiers ?? []} />
 </article>

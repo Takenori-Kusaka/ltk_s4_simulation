@@ -9,6 +9,12 @@
   import type { Role } from '../../data/roster.ts';
   import { teamCompareEntries, tierAllHref } from '../compare/opponent.ts';
   import { TIERS } from '../../sim/types.ts';
+  // F-014 Task-3 基準14・18: 「<英語のチーム名> は勝てるのか」(勝率表は data.ts で読む。シミュレーションはこのページで 1 回)
+  import FanSection from '../schedule/FanSection.svelte';
+  import { loadWinrates } from '../schedule/data.ts';
+  import { teamDayBox, teamOutlook, tierTeamMatches } from '../schedule/fan.ts';
+  import { nearestDay } from '../schedule/view.ts';
+  import { noDataNotice, runSimulation, type WinratesFile } from '../sim/view.ts';
 
   let { team, ratings }: { team: TeamId; ratings: RatingsFile | undefined } = $props();
   const info = $derived(TEAM_INFO[team]);
@@ -17,6 +23,15 @@
   const nameOf = (id: string) => ROSTER.find((p) => p.id === id)?.name ?? id;
   const whole = $derived(v.radars[0]);
   const tiers = $derived(v.radars.slice(1).reverse());
+  const winrates = loadWinrates();
+  const notice = noDataNotice(winrates);
+  const file = notice ? null : (winrates as WinratesFile);
+  const sim = file ? runSimulation(file) : null;
+  const fan = $derived(
+    file && sim
+      ? { box: teamDayBox(file, team, nearestDay(new Date())), tiers: TIERS.map((t) => tierTeamMatches(file, team, t)), outlook: teamOutlook(file, sim, team) }
+      : null,
+  );
 </script>
 
 <article class="court" style={`--team:${info.color}`}>
@@ -39,6 +54,9 @@
       {#each TIERS as t}<a class="chip" href={tierAllHref(t)}>{t} の4チームと比較</a>{/each}
     </nav>
   </header>
+
+  <!-- F-014 基準14・18: 「<英語のチーム名> は勝てるのか」(レーダーの節の前) -->
+  <FanSection kind="team" title={`${info.name} は勝てるのか`} {team} {notice} box={fan?.box ?? null} tiers={fan?.tiers ?? []} outlook={fan?.outlook ?? null} />
 
   <section class="frame court-whole">
     <p class="eyebrow">チーム全体 · 3階級の平均</p>
