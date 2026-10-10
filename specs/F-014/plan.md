@@ -12,7 +12,7 @@
 | Task-2 | `#/sim` の作り替え: 優勝候補の要約、順位表、Day 1〜6 の日程の箱、MASTERS CUP の 3 日の組み合わせ、「開幕前の予想」と種・試行・計算日時、「計算の根拠」の折りたたみ(β・S・6 組の表) | 8, 9, 10, 11, 13 | `src/app/sim/**`、`tests/app/sim.test.ts` | Task-1 | 可 |
 | Task-3 | 推しチーム・推し選手の視点: チームのページの「勝てるのか」の節(直近の試合の箱・階級チームの試合の一覧・シーズンの見通し)、選手のページの「勝てるのか」の節(直近の試合・対面と比較ページへのリンク・試合の一覧)、ホームの推しチームの選択(localStorage・強調・導線・解除)、データが無いときの表示 | 14, 15, 16, 17, 18 | `src/app/schedule/**`、`src/app/team/**`、`src/app/components/PlayerSheet.svelte`、`src/app/components/Home.svelte`、`src/app/app.css`、`tests/app/favorite.test.ts` | Task-1 | 可 |
 | Task-4 | (2026-10-10 追加。再判定)試合の根拠のストーリー: 日程の箱の行を押して開く根拠の節(結論の一文、寄与の内訳の表、出典つきの根拠、入っているもの・入っていないもの、材料が無いときの表示)。評価のファイルとチームの評価のファイルの読み込み | 19, 20, 21, 22, 23, 24, 25 | `src/app/story/**`、`src/app/schedule/DayBox.svelte`、`src/app/app.css`、`tests/app/story.test.ts` | Task-1 | 可 |
-| Task-5 | (2026-10-10 追加。再判定 2)順位表を予想の結果(整数の勝ち数・負け数・ポイント)にする: 各試合で勝率の高い側が勝ったとした結果の集計(Regular Stage のポイントの規則、MASTERS CUP の決勝・3 位決定戦とポイント)、TOTAL の並び(同点の扱い)、見出しの文言 | 4, 5, 13 | `src/app/schedule/view.ts`、`src/app/schedule/StandingsBoard.svelte`、`src/app/components/Home.svelte`、`src/app/sim/SimPage.svelte`、`tests/app/schedule.test.ts` | Task-1 | 可 |
+| Task-5 | (2026-10-10 追加。再判定 2)順位表を予想の結果(整数の勝ち数・負け数・ポイント)にする: 各試合で勝率の高い側が勝ったとした結果の集計(Regular Stage のポイントの規則、MASTERS CUP の決勝・3 位決定戦とポイント)、TOTAL の並び(同点の扱い)、見出しの文言、MASTERS CUP の M3・M4 の予想の組み合わせの箱(基準 1・8) | 1, 4, 5, 8, 13 | `src/app/schedule/view.ts`、`src/app/schedule/StandingsBoard.svelte`、`src/app/schedule/DayBox.svelte`、`src/app/components/Home.svelte`、`src/app/sim/SimPage.svelte`、`tests/app/schedule.test.ts` | Task-1 | 可 |
 
 ## 粒度の確認
 
