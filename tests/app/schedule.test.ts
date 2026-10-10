@@ -5,7 +5,8 @@ import { readFileSync } from 'node:fs';
 import { computePriorWinrates, type TierTeamS } from '../../src/winrate/core.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../../src/sim/index.ts';
 import { runSimulation, type WinratesFile } from '../../src/app/sim/view.ts';
-import { allDays, dateLabel, dayBox, nearestDay, standings, jstDate } from '../../src/app/schedule/view.ts';
+import { allDays, dateLabel, dayBox, nearestDay, standings, jstDate, predictedResult, predictedWinner } from '../../src/app/schedule/view.ts';
+import { REGULAR_DAYS } from '../../src/sim/schedule.ts';
 
 const S: Record<Tier, Record<TeamId, number | null>> = {
   NEXT: { DD: 5.7, CC: 5.3, IT: 5.0, LR: 5.2 },
@@ -53,17 +54,32 @@ test('基準1・3・12・13: Regular Stage の日の箱は 2 カード × NEXT/C
   assert.equal(box.placeholders.length, 0);
 });
 
-test('基準1・3: MASTERS CUP の日の箱は準決勝の 2 箱(MASTERS の行)と、M3・M4 の「準決勝の勝者・敗者」の箱', () => {
+test('基準1・3: MASTERS CUP の日の箱は準決勝の 2 箱と、予想の結果で決まる M3(敗者どうし)・M4(勝者どうし)の組み合わせの箱(勝率つき)', () => {
   const box = dayBox(file, { kind: 'masters', cup: 1, date: '2026-10-20' });
   assert.equal(box.title, 'MASTERS CUP 1');
-  assert.equal(box.boxes.length, 2);
+  assert.equal(box.boxes.length, 4);
   assert.deepEqual(box.boxes[0].rows.map((r) => r.tier), ['MASTERS']);
   assert.equal(box.boxes[0].rows[0].blue.team, 'DD');
   assert.equal(box.boxes[0].rows[0].red.team, 'CC');
   const m = file.matches.find((x) => x.stage === 'masters' && x.cup === 1 && x.a === 'DD')!;
   assert.equal(box.boxes[0].rows[0].blue.p, m.pA.toFixed(1));
-  assert.deepEqual(box.placeholders.map((p) => p.label), ['M3', 'M4']);
-  assert.match(box.placeholders[1].text, /準決勝の勝者/);
+  assert.equal(box.placeholders.length, 0);
+  const pr = predictedResult(file).cups.find((c) => c.cup === 1)!;
+  const m3 = box.boxes[2], m4 = box.boxes[3];
+  assert.match(m3.label, /^M3 .*予想の組み合わせ/);
+  assert.match(m4.label, /^M4 .*予想の組み合わせ/);
+  assert.deepEqual([m3.rows[0].blue.team, m3.rows[0].red.team].sort(), [...pr.semiLosers].sort());
+  assert.deepEqual([m4.rows[0].blue.team, m4.rows[0].red.team].sort(), [...pr.semiWinners].sort());
+  for (const b of [m3, m4]) {
+    const r = b.rows[0];
+    assert.equal(r.tier, 'MASTERS');
+    assert.equal(Math.round((r.blue.pNum + r.red.pNum) * 10), 1000);
+    const key = r.blue.team + '>' + r.red.team;
+    assert.equal(r.blue.p, (file.winTable.MASTERS[key] * 100).toFixed(1));
+    assert.equal(r.dataMissing, null);
+  }
+  const txt = JSON.stringify(box);
+  assert.ok(!/どうし/.test(txt), '仮置きの文が無い');
 });
 
 test('基準3・5(データ不足): S を計算できない階級チームの行は「データ不足」と理由を持つ', () => {
@@ -76,7 +92,7 @@ test('基準3・5(データ不足): S を計算できない階級チームの行
   assert.match(row.dataMissing ?? '', /ハレっち/);
 });
 
-test('基準4・5・13: 順位表は期待勝ち数(6 試合の勝率の和)と期待 pt で埋め、TOTAL の高い順、1 位の印、「予想(開幕前)」', () => {
+test('基準4・5・13: 順位表は予想の結果(整数の勝ち数・負け数・ポイント)で埋め、TOTAL の高い順(同点は RS のポイント → 優勝確率)、1 位の印、「予想(開幕前)」', () => {
   const sim = runSimulation(file);
   const t = standings(file, sim);
   assert.equal(t.label, '予想(開幕前)');
@@ -84,25 +100,67 @@ test('基準4・5・13: 順位表は期待勝ち数(6 試合の勝率の和)と�
   assert.deepEqual(t.rows.map((r) => r.no), [1, 2, 3, 4]);
   assert.equal(t.rows[0].first, true);
   assert.equal(t.rows[1].first, false);
-  for (let i = 1; i < 4; i++) assert.ok(Number(t.rows[i - 1].total) >= Number(t.rows[i].total));
+  const pr = predictedResult(file);
+  for (let i = 1; i < 4; i++) {
+    const a = t.rows[i - 1], b = t.rows[i];
+    const ta = pr.total[a.team], tb = pr.total[b.team];
+    assert.ok(ta > tb || (ta === tb && (pr.rsPoints[a.team] > pr.rsPoints[b.team] || (pr.rsPoints[a.team] === pr.rsPoints[b.team] && sim.championProbability[a.team] >= sim.championProbability[b.team]))));
+  }
   for (const r of t.rows) {
-    let next = 0, core = 0;
-    for (const m of file.matches) {
-      if (m.stage !== 'regular') continue;
-      const p = m.a === r.team ? m.pA : m.b === r.team ? m.pB : null;
-      if (p === null) continue;
-      if (m.tier === 'NEXT') next += p / 100;
-      else core += p / 100;
-    }
-    assert.equal(r.nextWL, `${next.toFixed(1)} - ${(6 - next).toFixed(1)}`);
-    assert.equal(r.coreWL, `${core.toFixed(1)} - ${(6 - core).toFixed(1)}`);
-    assert.equal(r.masters, sim.expectedMastersPoints[r.team].toFixed(1));
-    assert.equal(r.total, (sim.expectedRegularPoints[r.team] + sim.expectedMastersPoints[r.team]).toFixed(1));
+    assert.match(r.coreWL, /^[0-6] - [0-6]$/);
+    assert.match(r.nextWL, /^[0-6] - [0-6]$/);
+    assert.match(r.masters, /^\d+$/);
+    assert.match(r.total, /^\d+$/);
+    assert.equal(r.coreWL, `${pr.wins[r.team].CORE} - ${6 - pr.wins[r.team].CORE}`);
+    assert.equal(r.nextWL, `${pr.wins[r.team].NEXT} - ${6 - pr.wins[r.team].NEXT}`);
+    assert.equal(r.masters, String(pr.mcPoints[r.team]));
+    assert.equal(r.total, String(pr.rsPoints[r.team] + pr.mcPoints[r.team]));
     assert.equal(r.champion, (sim.championProbability[r.team] * 100).toFixed(1));
-    assert.match(r.nextWL, /^\d\.\d - \d\.\d$/);
+    assert.ok(!/\./.test(r.coreWL + r.nextWL + r.masters + r.total), '順位表に小数が無い');
   }
   const withResults = standings({ ...file, results: { regular: [] } }, sim);
   assert.notEqual(withResults.label, '予想(開幕前)');
+});
+
+test('用語「予想の結果」: 勝率の高い側が勝ち、各階級の勝ち数の合計は 12。1 勝 1pt と同日の両勝ちの +1pt、MASTERS CUP は 3/2/1/0pt で合計 6pt × 3 回', () => {
+  const pr = predictedResult(file);
+  for (const tier of ['NEXT', 'CORE'] as const) assert.equal(TEAMS.reduce((s, t) => s + pr.wins[t][tier], 0), 12);
+  // 各試合の勝者は勝率の高い側
+  for (const m of file.matches.filter((x) => x.stage === 'regular')) {
+    const w = predictedWinner(file, m.tier, m.a, m.b, m.pA, m.pB);
+    assert.equal(w, m.pA > m.pB ? m.a : m.pB > m.pA ? m.b : w);
+  }
+  // RS のポイント = 勝ち数 + 両方勝った日の数
+  for (const t of TEAMS) {
+    let bonus = 0;
+    for (const d of REGULAR_DAYS) {
+      let dayWins = 0;
+      for (const card of d.cards) for (const tier of ['NEXT', 'CORE'] as const) {
+        const m = file.matches.find((x) => x.stage === 'regular' && x.day === d.day && x.tier === tier)!;
+        const mm = file.matches.find((x) => x.stage === 'regular' && x.day === d.day && x.tier === tier && x.a === card.blue && x.b === card.red) ?? m;
+        if (predictedWinner(file, tier, card.blue, card.red, mm.pA, mm.pB) === t) dayWins++;
+      }
+      if (dayWins === 2) bonus++;
+    }
+    assert.equal(pr.rsPoints[t], pr.wins[t].NEXT + pr.wins[t].CORE + bonus);
+    assert.equal(pr.total[t], pr.rsPoints[t] + pr.mcPoints[t]);
+  }
+  assert.equal(pr.cups.length, 3);
+  for (const c of pr.cups) {
+    assert.equal(c.placing.length, 4);
+    assert.deepEqual([...c.placing].sort(), [...TEAMS].sort());
+    assert.ok(c.semiWinners.includes(c.final!));
+    assert.ok(c.semiLosers.includes(c.third!));
+  }
+  assert.equal(TEAMS.reduce((s, t) => s + pr.mcPoints[t], 0), 18);
+});
+
+test('用語「予想の結果」: 勝率が同じなら戦力 S の高い側、それも同じならブルーサイド', () => {
+  assert.equal(predictedWinner(file, 'NEXT', 'CC', 'DD', 50, 50), 'DD'); // S: DD 5.7 > CC 5.3
+  assert.equal(predictedWinner(file, 'NEXT', 'DD', 'CC', 50, 50), 'DD');
+  const same: WinratesFile = { ...file, teams: file.teams.map((t) => (t.tier === 'NEXT' ? { ...t, S: 5.5 } : t)) };
+  assert.equal(predictedWinner(same, 'NEXT', 'CC', 'DD', 50, 50), 'CC');
+  assert.equal(predictedWinner(file, 'NEXT', 'CC', 'DD', 49.9, 50.1), 'DD');
 });
 
 test('基準6・7・12: ホームは勝率のデータが無いときの文を持ち、直近の試合日の箱と順位表を 4 王家の一覧の上に置く', () => {

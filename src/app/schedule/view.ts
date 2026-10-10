@@ -1,5 +1,5 @@
 // F-014 Task-1: ファン向けの見せ方の論理(基準 1〜7・12・13)。直近の試合日、公式の形の日程の箱、順位表
-// 計算は足さない(勝率は F-005 の winrates.json、シミュレーションは F-001。期待勝ち数だけ勝率の和で作る)
+// 計算は足さない(勝率は F-005 の winrates.json、シミュレーションは F-001。期待勝ち数は勝率の和、予想の結果は勝率の高い側が勝ったとした集計だけ)
 import { MASTERS_CUPS, REGULAR_DAYS } from '../../sim/schedule.ts';
 import { TEAMS, type SimOutput, type TeamId, type Tier } from '../../sim/index.ts';
 import { TEAM_INFO } from '../lib/index.ts';
@@ -91,16 +91,26 @@ export function dayBox(file: WinratesFile, ref: DayRef): DayBoxView {
     label: `M${i + 1}`,
     rows: [row('MASTERS', a, b, file.matches.find((m) => m.stage === 'masters' && m.cup === ref.cup && m.a === a && m.b === b))],
   }));
-  return {
-    ref,
-    title: `MASTERS CUP ${ref.cup}`,
-    dateLabel: dateLabel(ref.date),
-    boxes,
-    placeholders: [
-      { label: 'M3', text: 'THIRD-PLACE · 準決勝の敗者どうし' },
-      { label: 'M4', text: 'FINALS · 準決勝の勝者どうし(BO3)' },
-    ],
-  };
+  // 基準1(再判定 2): M3・M4 は予想の結果(準決勝で勝率の高い側が勝つ)で決まる組み合わせを、勝率つきで示す
+  const predicted = predictedResult(file).cups.find((c) => c.cup === ref.cup);
+  if (predicted && predicted.semiLosers.length === 2 && predicted.semiWinners.length === 2) {
+    const pair = (label: string, x: TeamId, y: TeamId): CardBoxView => {
+      const [a, b] = x < y ? [x, y] : [y, x];
+      const p = mastersPercent(file, a, b);
+      return { label, rows: [{ tier: 'MASTERS', blue: side(a, p), red: side(b, 100 - p), dataMissing: null }] };
+    };
+    boxes.push(pair('M3 THIRD-PLACE · 予想の組み合わせ', predicted.semiLosers[0], predicted.semiLosers[1]));
+    boxes.push(pair('M4 FINALS · 予想の組み合わせ', predicted.semiWinners[0], predicted.semiWinners[1]));
+  }
+  return { ref, title: `MASTERS CUP ${ref.cup}`, dateLabel: dateLabel(ref.date), boxes, placeholders: [] };
+}
+
+/** MASTERS の勝率表(ステージ補正つき)から a の勝率(%)を引く。a < b の向きで持つ */
+function mastersPercent(file: WinratesFile, a: TeamId, b: TeamId): number {
+  const table = file.stageWinTables?.masters ?? file.winTable;
+  const direct = table.MASTERS[`${a}>${b}`];
+  const p = direct !== undefined ? direct : 1 - (table.MASTERS[`${b}>${a}`] ?? 0.5);
+  return Math.round(p * 1000) / 10;
 }
 
 export interface StandingRowView {
@@ -122,7 +132,7 @@ export interface StandingsView {
   rows: StandingRowView[];
 }
 
-/** 用語: 期待勝ち数 = その階級の Regular Stage 6 試合の勝率の和 */
+/** 用語: 期待勝ち数 = その階級の Regular Stage 6 試合の勝率の和(階級チームの試合の一覧で使う) */
 export function expectedWins(file: WinratesFile, team: TeamId, tier: 'NEXT' | 'CORE'): number {
   let wins = 0;
   for (const m of file.matches) {
@@ -133,27 +143,96 @@ export function expectedWins(file: WinratesFile, team: TeamId, tier: 'NEXT' | 'C
   return wins;
 }
 
-const wl = (wins: number) => `${wins.toFixed(1)} - ${(6 - wins).toFixed(1)}`;
+/** 用語「予想の結果」: 勝率の高い側が勝つ。同率なら戦力 S の高い側、それも同じならブルーサイド(a) */
+export function predictedWinner(file: WinratesFile, tier: Tier, a: TeamId, b: TeamId, pA: number, pB: number): TeamId {
+  if (pA !== pB) return pA > pB ? a : b;
+  const S = (t: TeamId) => file.teams.find((x) => x.team === t && x.tier === tier)?.S ?? null;
+  const sa = S(a), sb = S(b);
+  if (sa !== null && sb !== null && sa !== sb) return sa > sb ? a : b;
+  return a;
+}
 
-/** 基準4・5・13: 公式のシーズン3の STANDINGS と同じ列。結果が無い間は期待値で埋める */
+export interface PredictedCup {
+  cup: number;
+  semiWinners: TeamId[];
+  semiLosers: TeamId[];
+  final: TeamId | null;
+  third: TeamId | null;
+  /** 1 位から 4 位 */
+  placing: TeamId[];
+}
+
+export interface PredictedResult {
+  wins: Record<TeamId, { NEXT: number; CORE: number }>;
+  rsPoints: Record<TeamId, number>;
+  mcPoints: Record<TeamId, number>;
+  total: Record<TeamId, number>;
+  cups: PredictedCup[];
+}
+
+const zero = () => Object.fromEntries(TEAMS.map((t) => [t, 0])) as Record<TeamId, number>;
+const MC_POINTS = [3, 2, 1, 0];
+
+/** 用語「予想の結果」の集計。Regular Stage は 1 勝 1pt と同日の両勝ち +1pt、MASTERS CUP は 3/2/1/0pt */
+export function predictedResult(file: WinratesFile): PredictedResult {
+  const wins = Object.fromEntries(TEAMS.map((t) => [t, { NEXT: 0, CORE: 0 }])) as PredictedResult['wins'];
+  const rsPoints = zero(), mcPoints = zero(), total = zero();
+  for (const d of REGULAR_DAYS) {
+    const dayWins = zero();
+    for (const card of d.cards) {
+      for (const tier of ['NEXT', 'CORE'] as const) {
+        const m = file.matches.find((x) => x.stage === 'regular' && x.day === d.day && x.tier === tier && x.a === card.blue && x.b === card.red);
+        if (!m) continue;
+        const w = predictedWinner(file, tier, card.blue, card.red, m.pA, m.pB);
+        wins[w][tier] += 1;
+        rsPoints[w] += 1;
+        dayWins[w] += 1;
+      }
+    }
+    for (const t of TEAMS) if (dayWins[t] === 2) rsPoints[t] += 1;
+  }
+  const pOf = (x: TeamId, y: TeamId) => mastersPercent(file, x, y);
+  const cups: PredictedCup[] = [];
+  for (const c of MASTERS_CUPS) {
+    const semiWinners: TeamId[] = [], semiLosers: TeamId[] = [];
+    for (const [a, b] of c.semis) {
+      const m = file.matches.find((x) => x.stage === 'masters' && x.cup === c.cup && x.a === a && x.b === b);
+      const w = m ? predictedWinner(file, 'MASTERS', a, b, m.pA, m.pB) : predictedWinner(file, 'MASTERS', a, b, pOf(a, b), pOf(b, a));
+      semiWinners.push(w);
+      semiLosers.push(w === a ? b : a);
+    }
+    const pick = (x: TeamId, y: TeamId) => predictedWinner(file, 'MASTERS', x, y, pOf(x, y), pOf(y, x));
+    const final = semiWinners.length === 2 ? pick(semiWinners[0], semiWinners[1]) : null;
+    const third = semiLosers.length === 2 ? pick(semiLosers[0], semiLosers[1]) : null;
+    const placing: TeamId[] = [];
+    if (final && third) {
+      placing.push(final, semiWinners.find((t) => t !== final)!, third, semiLosers.find((t) => t !== third)!);
+      placing.forEach((t, i) => (mcPoints[t] += MC_POINTS[i]));
+    }
+    cups.push({ cup: c.cup, semiWinners, semiLosers, final, third, placing });
+  }
+  for (const t of TEAMS) total[t] = rsPoints[t] + mcPoints[t];
+  return { wins, rsPoints, mcPoints, total, cups };
+}
+
+/** 基準4・5・13: 公式のシーズン3の STANDINGS と同じ列。結果が無い間は予想の結果(整数)で埋める */
 export function standings(file: WinratesFile, sim: SimOutput): StandingsView {
-  const rows = TEAMS.map((team) => {
-    const total = sim.expectedRegularPoints[team] + sim.expectedMastersPoints[team];
-    return {
-      team,
-      name: TEAM_INFO[team].name,
-      color: TEAM_INFO[team].color,
-      petals: TEAM_INFO[team].petals,
-      coreWL: wl(expectedWins(file, team, 'CORE')),
-      nextWL: wl(expectedWins(file, team, 'NEXT')),
-      masters: sim.expectedMastersPoints[team].toFixed(1),
-      total: total.toFixed(1),
-      totalNum: total,
-      champion: (sim.championProbability[team] * 100).toFixed(1),
-      championNum: sim.championProbability[team],
-    };
-  })
-    .sort((x, y) => y.totalNum - x.totalNum || y.championNum - x.championNum)
-    .map(({ totalNum: _t, championNum: _c, ...r }, i) => ({ no: i + 1, first: i === 0, ...r }));
+  const pr = predictedResult(file);
+  const rows = TEAMS.map((team) => ({
+    team,
+    name: TEAM_INFO[team].name,
+    color: TEAM_INFO[team].color,
+    petals: TEAM_INFO[team].petals,
+    coreWL: `${pr.wins[team].CORE} - ${6 - pr.wins[team].CORE}`,
+    nextWL: `${pr.wins[team].NEXT} - ${6 - pr.wins[team].NEXT}`,
+    masters: String(pr.mcPoints[team]),
+    total: String(pr.total[team]),
+    totalNum: pr.total[team],
+    rsNum: pr.rsPoints[team],
+    champion: (sim.championProbability[team] * 100).toFixed(1),
+    championNum: sim.championProbability[team],
+  }))
+    .sort((x, y) => y.totalNum - x.totalNum || y.rsNum - x.rsNum || y.championNum - x.championNum)
+    .map(({ totalNum: _t, rsNum: _r, championNum: _c, ...r }, i) => ({ no: i + 1, first: i === 0, ...r }));
   return { label: file.results ? '結果を反映' : '予想(開幕前)', rows };
 }
