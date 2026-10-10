@@ -68,7 +68,8 @@ test('基準21: 内訳の行は 5 ロール+コーチ(MASTERS はロールだけ
   const sum = s.rows.reduce((a, r) => a + r.contribution, 0);
   const sa = teamEval.tierTeams[0].S, sb = teamEval.tierTeams[1].S;
   assert.ok(Math.abs(sum - (sa - sb)) < 1e-9, `寄与の和 ${sum} と S の差 ${sa - sb}`);
-  for (let i = 1; i < s.rows.length; i++) assert.ok(Math.abs(s.rows[i - 1].contribution) >= Math.abs(s.rows[i].contribution));
+  // 2026-10-10 基準21 の改訂: 行はロールの順(コーチは最後)。寄与の大きい順ではない
+  assert.deepEqual(s.rows.map((r) => r.key), ['TOP', 'JG', 'MID', 'ADC', 'SUP', 'COACH']);
   const jg = s.rows.find((r) => r.key === 'JG')!;
   assert.ok(Math.abs(jg.contribution - PLAYER_SHARE * W.JG * (O('CC-CORE-JG') - O('DD-CORE-JG'))) < 1e-12);
   assert.equal(jg.left.name, ROSTER.find((p) => p.id === 'CC-CORE-JG')!.name);
@@ -107,7 +108,9 @@ test('基準20: 結論の一文は有利なチームと勝率、寄与の上位 
   assert.equal(s.favored, 'CC');
   assert.equal(s.even, false);
   assert.match(s.headline, /^Camellia Crown が有利\(63\.9%\)。いちばん効いているのは /);
-  assert.match(s.headline, new RegExp(`${s.rows[0].label}: ${s.rows[0].left.name} ${s.rows[0].left.score} vs ${s.rows[0].right.name} ${s.rows[0].right.score}`));
+  // 2026-10-10 基準21 の改訂で行はロールの順になった。結論の項は寄与の絶対値の順で選ぶ
+  const top = [...s.rows].sort((x, y) => Math.abs(y.contribution) - Math.abs(x.contribution))[0];
+  assert.match(s.headline, new RegExp(`${top.label}: ${top.left.name} ${top.left.score} vs ${top.right.name} ${top.right.score}`));
   assert.match(s.headline, /、次に /);
   assert.equal(EVEN, 0.1);
   const close: TeamEvalLike = { tierTeams: teamEval.tierTeams.map((t) => (t.team === 'DD' && t.tier === 'CORE' ? { ...t, S: teamEval.tierTeams[0].S - 0.05 } : t)) };
