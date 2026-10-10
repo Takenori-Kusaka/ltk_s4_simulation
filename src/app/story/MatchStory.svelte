@@ -2,6 +2,7 @@
   // F-014 Task-4: 試合の根拠の節(基準 20〜25)。日程の箱の行の直下に開く
   // F-014 Task-7: 結論の直後に 3 行の勝率(基準31。勝率表のファイルに無ければ出さない)と p_ext の添え書き(基準33)、
   // 内訳は「レーン(個人)」「マクロ(チーム)」の 2 層(基準32)。マクロの層に外部の見立ての小節(基準33)
+  // F-005 Task-3(基準12): 3 行の下にその試合日の勝率の行、外部の見立ての後に仕上がりの小節(行が仕上がりを渡したときだけ)
   import { matchStory, type StoryInput } from './story.ts';
   import { loadExternalViews, loadRatings, loadTeamEvaluation } from './data.ts';
 
@@ -26,6 +27,7 @@
             {#if story.layers.macro.pExt !== null}<small class="sub">うち外部の見立てだけなら {story.layers.macro.pExt}%</small>{/if}
           </li>
           <li>掛け合わせた試合の勝率 <b>{story.layers.combined.p}%</b></li>
+          {#if story.layers.maturation}<li>仕上がりを加えた、この試合日の勝率 <b>{story.layers.maturation.pDay}%</b><small class="sub">仕上がりの差 {story.layers.maturation.shift}(確度 低)。内訳は下の「仕上がり」</small></li>{/if}
         </ul>
       </div>
     {/if}
@@ -111,6 +113,36 @@
         </div>
       {/each}
     </div>
+    {#if story.layers.maturation}
+      {@const mt = story.layers.maturation}
+      <h4 class="layer-title">仕上がり(試合日で変わる強さ)</h4>
+      <p class="mat-summary">{mt.summary}</p>
+      <div class="scroll">
+        <table class="breakdown macro">
+          <thead>
+            <tr><th>項目</th><th>{input.a}</th><th>{input.b}</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">経過した試合日</th><td>{mt.a.d} 日</td><td>{mt.b.d} 日</td></tr>
+            <tr class="m-total"><th scope="row">仕上がりの項</th><td><b>{mt.a.term}</b></td><td><b>{mt.b.term}</b></td></tr>
+            <tr><th scope="row">仕上がりの速さ τ</th><td>{mt.a.tau} 試合日</td><td>{mt.b.tau} 試合日</td></tr>
+            <tr>
+              <th scope="row">共同プレイ歴 c</th>
+              <td><b>{mt.a.c}</b><span class="reason">{mt.a.cPairs.length ? `同じシーズンに同じチームだった組: ${mt.a.cPairs.join('、')}` : '同じシーズンに同じチームだった組はない'}</span></td>
+              <td><b>{mt.b.c}</b><span class="reason">{mt.b.cPairs.length ? `同じシーズンに同じチームだった組: ${mt.b.cPairs.join('、')}` : '同じシーズンに同じチームだった組はない'}</span></td>
+            </tr>
+            <tr>
+              <th scope="row">メタの近さ m</th>
+              <td><b>{mt.a.m}</b><span class="reason">チャンピオンの近さ m_pool {mt.a.mPool}。{mt.a.mPoolHits.length ? `メタの重要チャンピオンに当たる得意ピック: ${mt.a.mPoolHits.join(' / ')}` : 'メタの重要チャンピオンに当たる得意ピックはない'}</span></td>
+              <td><b>{mt.b.m}</b><span class="reason">チャンピオンの近さ m_pool {mt.b.mPool}。{mt.b.mPoolHits.length ? `メタの重要チャンピオンに当たる得意ピック: ${mt.b.mPoolHits.join(' / ')}` : 'メタの重要チャンピオンに当たる得意ピックはない'}</span></td>
+            </tr>
+            <tr><th scope="row">気持ちの補正</th><td>{mt.a.mood}</td><td>{mt.b.mood}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">仕上がりの差 {mt.shift} を加えて、{input.a} の勝率は {mt.pPrior}% → <b>{mt.pDay}%</b>(確度 {mt.confidence})</p>
+      <ul class="mat-notes">{#each mt.notes as n}<li>{n}</li>{/each}</ul>
+    {/if}
     <div class="scope">
       <p class="scope-title">この予想に入っているもの</p>
       <ul>{#each story.included as t}<li>{t}</li>{/each}</ul>
@@ -140,6 +172,11 @@
   .m-total th, .m-total td { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
   .reason { display: block; margin-top: 0.1rem; font-size: 0.74rem; color: var(--ivory-dim); }
   .note { margin: 0.3rem 0 0; font-size: 0.74rem; color: var(--ivory-dim); }
+  .note b { color: var(--gold-hi); }
+  /* F-005 基準12: 仕上がりの小節の要約と固定の文 */
+  .mat-summary { margin: 0 0 0.3rem; font-family: var(--serif-jp); font-size: 0.88rem; color: var(--ivory); }
+  .mat-notes { margin: 0.2rem 0 0; padding-left: 1.1rem; font-size: 0.74rem; color: var(--ivory-dim); }
+  .mat-notes li { margin: 0.1rem 0; }
   /* 基準33: p_ext の添え書きと、外部の見立ての小節 */
   .sub { display: block; font-size: 0.74rem; color: var(--ivory-dim); }
   .ext-title { margin: 0.6rem 0 0.3rem; font-size: 0.78rem; letter-spacing: 0.06em; color: var(--gold); }

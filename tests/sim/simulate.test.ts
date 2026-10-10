@@ -108,3 +108,25 @@ test('AC9: 既定の試行回数は 10,000 回', () => {
   const r = simulate({ winTable: even, seed: 1 });
   assert.equal(r.trials, 10000);
 });
+
+// F-005 Task-3(仕上がりの項): 試合日ごとの勝率表
+test('F-005 基準9: dayWinTables で日(Regular Stage)とカップ(MASTERS CUP)ごとの勝率表を与えると、その日の試合だけがその表に従い、無い日はステージの表を使う', () => {
+  const plain = simulate(base());
+  // 第1日だけ DD が全階級で必ず勝つ(ほかの日は互角)
+  const day1 = simulate(base({ dayWinTables: { regular: { 1: ddStrong(1) } } }));
+  assert.ok(day1.expectedRegularPoints.DD > plain.expectedRegularPoints.DD + 1.5, `${day1.expectedRegularPoints.DD}`);
+  assert.deepEqual(day1.expectedMastersPoints, plain.expectedMastersPoints, 'MASTERS CUP は変わらない');
+  // 第1日の表を全日に与えたときと、ステージの表に与えたときは同じ結果
+  const all = simulate(base({ dayWinTables: { regular: { 1: ddStrong(1), 2: ddStrong(1), 3: ddStrong(1), 4: ddStrong(1), 5: ddStrong(1), 6: ddStrong(1) } } }));
+  assert.deepEqual(all, simulate(base({ stageWinTables: { regular: ddStrong(1) } })));
+  // CUP 1 だけ DD が必ず勝つ: CUP 1 の 3pt は確定、ほかは互角
+  const cup1 = simulate(base({ dayWinTables: { masters: { 1: ddStrong(1) } } }));
+  assert.ok(cup1.expectedMastersPoints.DD > plain.expectedMastersPoints.DD + 1, `${cup1.expectedMastersPoints.DD}`);
+  assert.deepEqual(cup1.expectedRegularPoints, plain.expectedRegularPoints, 'Regular Stage は変わらない');
+  // 日の表も検証する(AC12 と同じ)
+  const bad = uniformWinTable(0.5);
+  bad.NEXT['DD>CC'] = 1.5;
+  assert.throws(() => simulate(base({ dayWinTables: { regular: { 2: bad } } })), /NEXT.*DD vs CC/);
+  // 同じ入力と種なら同じ結果
+  assert.deepEqual(simulate(base({ dayWinTables: { regular: { 3: ddStrong(0.9) } } })), simulate(base({ dayWinTables: { regular: { 3: ddStrong(0.9) } } })));
+});

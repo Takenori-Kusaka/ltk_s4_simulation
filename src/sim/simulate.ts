@@ -22,6 +22,8 @@ export interface SimInput {
   playoffPolicy?: TierPolicy;
   /** 基準15: 階級ごとのブルーサイド補正(対数オッズへ加える値)。RS だけに適用 */
   blueSideBias?: Partial<Record<Tier, number>>;
+  /** F-005 基準9(仕上がりの項): 試合日ごとの勝率表。Regular Stage は day、MASTERS CUP は cup をキーにし、その日の試合にだけ使う。無い日はステージの表 */
+  dayWinTables?: { regular?: Record<number, WinTable>; masters?: Record<number, WinTable> };
 }
 
 export interface SimOutput {
@@ -47,6 +49,9 @@ export function simulate(input: SimInput): SimOutput {
     masters: validateWinTable(input.stageWinTables?.masters ?? input.winTable),
     playoffs: validateWinTable(input.stageWinTables?.playoffs ?? input.winTable),
   };
+  const byDay = (tables?: Record<number, WinTable>) => new Map(Object.entries(tables ?? {}).map(([k, t]) => [Number(k), validateWinTable(t)]));
+  const regularByDay = byDay(input.dayWinTables?.regular);
+  const mastersByCup = byDay(input.dayWinTables?.masters);
   const results = input.results ?? {};
   validateResults(results);
   // 基準15・16: ステージごとに乱数の列を分け、あるステージの入力が他のステージの乱数を動かさないようにする
@@ -65,7 +70,7 @@ export function simulate(input: SimInput): SimOutput {
     const fixed = results.regular?.find((x) => x.day === day && x.tier === tier && x.teams.includes(blue) && x.teams.includes(red));
     const r = rngRs(); // 確定の有無に依らず1つ消費し、乱数の列をそろえる
     if (fixed) return fixed.winner;
-    let p = prob.regular(tier, blue, red);
+    let p = (regularByDay.get(day) ?? prob.regular)(tier, blue, red);
     const bias = input.blueSideBias?.[tier] ?? 0;
     if (bias !== 0 && p > 0 && p < 1) p = sigmoid(logit(p) + bias);
     return r < p ? blue : red;
@@ -74,7 +79,7 @@ export function simulate(input: SimInput): SimOutput {
     const fixed = results.masters?.find((x) => x.cup === cup && x.match === match);
     const r = [rngMc(), rngMc(), rngMc()];
     if (fixed) return fixed.winner;
-    const p = prob.masters('MASTERS', a, b);
+    const p = (mastersByCup.get(cup) ?? prob.masters)('MASTERS', a, b);
     if (!bo3) return r[0] < p ? a : b;
     // 決勝は BO3(2勝先取)
     const wins = (r[0] < p ? 1 : 0) + (r[1] < p ? 1 : 0);

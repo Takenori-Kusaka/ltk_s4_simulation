@@ -156,7 +156,9 @@ test('基準23・24: 固定の文(入っているもの・入っていないも�
   assert.deepEqual(s.excluded, EXCLUDED);
   assert.ok(INCLUDED.some((t) => /コーチ/.test(t) && /15%/.test(t) && !/0\.15/.test(t)));
   assert.ok(EXCLUDED.every((x) => /今後の更新で入る予定/.test(x.feature)));
-  assert.ok(EXCLUDED.some((x) => /チームの仕上がり/.test(x.text) && /F-005/.test(x.feature)));
+  // F-005 Task-3 でチームの仕上がり(共同プレイ歴・メタの近さ)が入った。入っているものへ移り、まだ入っていないものには残らない
+  assert.ok(INCLUDED.some((t) => /チームの仕上がり/.test(t) && /共同プレイ歴/.test(t)));
+  assert.ok(!EXCLUDED.some((x) => /チームの仕上がり/.test(x.text)));
   assert.ok(EXCLUDED.some((x) => /結果/.test(x.text) && /F-004/.test(x.feature)));
   const text = JSON.stringify(s);
   for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!text.includes(w), w);

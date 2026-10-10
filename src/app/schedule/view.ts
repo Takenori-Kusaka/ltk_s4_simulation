@@ -1,11 +1,13 @@
 // F-014 Task-1: ファン向けの見せ方の論理(基準 1〜7・12・13)。直近の試合日、公式の形の日程の箱、順位表
 // 計算は足さない(勝率は F-005 の winrates.json、シミュレーションは F-001。期待勝ち数は勝率の和、予想の結果は勝率の高い側が勝ったとした集計だけ)
+// F-005 Task-3(基準9): 行・順位表・期待勝ち数・M3/M4 の勝率は、その試合日の値(事前の勝率に、両チームの仕上がりの項の差を加えた値。dynamics.ts の関数)
 import { MASTERS_CUPS, REGULAR_DAYS } from '../../sim/schedule.ts';
 import { TEAMS, type SimOutput, type TeamId, type Tier } from '../../sim/index.ts';
 import { TEAM_INFO } from '../lib/index.ts';
 import type { MatchPrior } from '../../winrate/core.ts';
+import { dayWinrate, percentPair } from '../../winrate/dynamics.ts';
 import type { WinratesFile } from '../sim/view.ts';
-import type { MacroPartRaw, TeamLayer } from '../story/story.ts';
+import type { MacroPartRaw, MatchMaturation, TeamLayer } from '../story/story.ts';
 
 export type DayRef = { kind: 'regular'; day: number; date: string } | { kind: 'masters'; cup: number; date: string };
 
@@ -58,6 +60,22 @@ export interface MatchRowView {
   pLane?: number;
   pMacro?: number;
   pExt?: number;
+  /** F-005 基準12: この試合日の仕上がり(根拠の節へ渡す)。勝率表のファイルに仕上がりが無い、または戦力 S が無ければ undefined */
+  maturation?: MatchMaturation;
+}
+
+export interface DayPercent {
+  pA: number;
+  pB: number;
+  maturation: MatchMaturation | undefined;
+}
+
+/** F-005 基準9: その試合日(date)の両チームの勝率(0.1% 単位、和が 100.0)。prior は A の事前の勝率(0〜1)。仕上がりを加えたときだけ内訳を持つ */
+export function dayPercent(file: WinratesFile, tier: Tier, a: TeamId, b: TeamId, prior: number, date: string): DayPercent {
+  const d = dayWinrate(file.teams, tier, a, b, prior, date);
+  const [pA, pB] = percentPair(d.p);
+  const maturation = d.applied && d.a && d.b ? { dA: d.dA, dB: d.dB, termA: d.termA, termB: d.termB, shift: d.shift, pPriorA: percentPair(prior)[0], a: d.a, b: d.b } : undefined;
+  return { pA, pB, maturation };
 }
 
 export interface CardBoxView {
@@ -103,11 +121,13 @@ const teamLayer = (file: WinratesFile, team: TeamId, tier: Tier): TeamLayer | un
 
 const side = (team: TeamId, p: number, layer?: TeamLayer): SideView => ({ team, name: TEAM_INFO[team].name, color: TEAM_INFO[team].color, petals: TEAM_INFO[team].petals, p: p.toFixed(1), pNum: p, layer });
 
-function row(file: WinratesFile, tier: Tier, blue: TeamId, red: TeamId, m: MatchPrior | undefined): MatchRowView {
+/** 行の勝率はその試合日(date)の値 */
+function row(file: WinratesFile, tier: Tier, blue: TeamId, red: TeamId, m: MatchPrior | undefined, date: string): MatchRowView {
   const lb = teamLayer(file, blue, tier), lr = teamLayer(file, red, tier);
   if (!m) return { tier, blue: side(blue, 50, lb), red: side(red, 50, lr), dataMissing: '勝率表にこの試合が無い' };
   const x = m as MatchPrior & LayerFields;
-  return { tier, blue: side(blue, m.pA, lb), red: side(red, m.pB, lr), dataMissing: m.dataMissing, pLane: finite(x.pLaneA), pMacro: finite(x.pMacroA), pExt: finite(x.pExtA) };
+  const day = dayPercent(file, tier, blue, red, m.pA / 100, date);
+  return { tier, blue: side(blue, day.pA, lb), red: side(red, day.pB, lr), dataMissing: m.dataMissing, pLane: finite(x.pLaneA), pMacro: finite(x.pMacroA), pExt: finite(x.pExtA), maturation: day.maturation };
 }
 
 /** 基準1・3: 日程の箱(公式の Regular Stage の画像の形。左がブルー、右がレッド) */
@@ -117,7 +137,7 @@ export function dayBox(file: WinratesFile, ref: DayRef): DayBoxView {
     const boxes: CardBoxView[] = (day?.cards ?? []).map((card, i) => ({
       label: `CARD ${i + 1}`,
       rows: (['NEXT', 'CORE'] as const).map((tier) =>
-        row(file, tier, card.blue, card.red, file.matches.find((m) => m.stage === 'regular' && m.day === ref.day && m.tier === tier && m.a === card.blue && m.b === card.red)),
+        row(file, tier, card.blue, card.red, file.matches.find((m) => m.stage === 'regular' && m.day === ref.day && m.tier === tier && m.a === card.blue && m.b === card.red), ref.date),
       ),
     }));
     return { ref, title: `DAY ${ref.day}`, dateLabel: dateLabel(ref.date), boxes, placeholders: [] };
@@ -125,15 +145,15 @@ export function dayBox(file: WinratesFile, ref: DayRef): DayBoxView {
   const cup = MASTERS_CUPS.find((c) => c.cup === ref.cup);
   const boxes: CardBoxView[] = (cup?.semis ?? []).map(([a, b], i) => ({
     label: `M${i + 1}`,
-    rows: [row(file, 'MASTERS', a, b, file.matches.find((m) => m.stage === 'masters' && m.cup === ref.cup && m.a === a && m.b === b))],
+    rows: [row(file, 'MASTERS', a, b, file.matches.find((m) => m.stage === 'masters' && m.cup === ref.cup && m.a === a && m.b === b), ref.date)],
   }));
-  // 基準1(再判定 2): M3・M4 は予想の結果(準決勝で勝率の高い側が勝つ)で決まる組み合わせを、勝率つきで示す
+  // 基準1(再判定 2): M3・M4 は予想の結果(準決勝で勝率の高い側が勝つ)で決まる組み合わせを、そのカップの日の勝率つきで示す
   const predicted = predictedResult(file).cups.find((c) => c.cup === ref.cup);
   if (predicted && predicted.semiLosers.length === 2 && predicted.semiWinners.length === 2) {
     const pair = (label: string, x: TeamId, y: TeamId): CardBoxView => {
       const [a, b] = x < y ? [x, y] : [y, x];
-      const p = mastersPercent(file, a, b);
-      return { label, rows: [{ tier: 'MASTERS', blue: side(a, p, teamLayer(file, a, 'MASTERS')), red: side(b, 100 - p, teamLayer(file, b, 'MASTERS')), dataMissing: null }] };
+      const p = dayPercent(file, 'MASTERS', a, b, mastersPrior(file, a, b), ref.date);
+      return { label, rows: [{ tier: 'MASTERS', blue: side(a, p.pA, teamLayer(file, a, 'MASTERS')), red: side(b, p.pB, teamLayer(file, b, 'MASTERS')), dataMissing: null, maturation: p.maturation }] };
     };
     boxes.push(pair('M3 THIRD-PLACE · 予想の組み合わせ', predicted.semiLosers[0], predicted.semiLosers[1]));
     boxes.push(pair('M4 FINALS · 予想の組み合わせ', predicted.semiWinners[0], predicted.semiWinners[1]));
@@ -141,12 +161,11 @@ export function dayBox(file: WinratesFile, ref: DayRef): DayBoxView {
   return { ref, title: `MASTERS CUP ${ref.cup}`, dateLabel: dateLabel(ref.date), boxes, placeholders: [] };
 }
 
-/** MASTERS の勝率表(ステージ補正つき)から a の勝率(%)を引く。a < b の向きで持つ */
-function mastersPercent(file: WinratesFile, a: TeamId, b: TeamId): number {
+/** MASTERS の勝率表(ステージ補正つき)から a の事前の勝率(0〜1)を引く。片方向だけあれば 1 − 逆 */
+function mastersPrior(file: WinratesFile, a: TeamId, b: TeamId): number {
   const table = file.stageWinTables?.masters ?? file.winTable;
   const direct = table.MASTERS[`${a}>${b}`];
-  const p = direct !== undefined ? direct : 1 - (table.MASTERS[`${b}>${a}`] ?? 0.5);
-  return Math.round(p * 1000) / 10;
+  return direct !== undefined ? direct : 1 - (table.MASTERS[`${b}>${a}`] ?? 0.5);
 }
 
 export interface StandingRowView {
@@ -181,13 +200,17 @@ export function forecastHeading(now: Date): { title: string; note: string | null
     : { title: '次の試合日の予想', note: null, past };
 }
 
-/** 用語: 期待勝ち数 = その階級の Regular Stage 6 試合の勝率の和(階級チームの試合の一覧で使う) */
+/** 用語: 期待勝ち数 = その階級の Regular Stage 6 試合の、試合日の勝率の和(階級チームの試合の一覧で使う) */
 export function expectedWins(file: WinratesFile, team: TeamId, tier: 'NEXT' | 'CORE'): number {
   let wins = 0;
-  for (const m of file.matches) {
-    if (m.stage !== 'regular' || m.tier !== tier) continue;
-    if (m.a === team) wins += m.pA / 100;
-    else if (m.b === team) wins += m.pB / 100;
+  for (const d of REGULAR_DAYS) {
+    for (const card of d.cards) {
+      if (card.blue !== team && card.red !== team) continue;
+      const m = file.matches.find((x) => x.stage === 'regular' && x.day === d.day && x.tier === tier && x.a === card.blue && x.b === card.red);
+      if (!m) continue;
+      const p = dayPercent(file, tier, card.blue, card.red, m.pA / 100, d.date);
+      wins += (card.blue === team ? p.pA : p.pB) / 100;
+    }
   }
   return wins;
 }
@@ -222,7 +245,7 @@ export interface PredictedResult {
 const zero = () => Object.fromEntries(TEAMS.map((t) => [t, 0])) as Record<TeamId, number>;
 const MC_POINTS = [3, 2, 1, 0];
 
-/** 用語「予想の結果」の集計。Regular Stage は 1 勝 1pt と同日の両勝ち +1pt、MASTERS CUP は 3/2/1/0pt */
+/** 用語「予想の結果」の集計(各試合はその試合日の勝率で判定)。Regular Stage は 1 勝 1pt と同日の両勝ち +1pt、MASTERS CUP は 3/2/1/0pt */
 export function predictedResult(file: WinratesFile): PredictedResult {
   const wins = Object.fromEntries(TEAMS.map((t) => [t, { NEXT: 0, CORE: 0 }])) as PredictedResult['wins'];
   const rsPoints = zero(), mcPoints = zero(), total = zero();
@@ -232,7 +255,8 @@ export function predictedResult(file: WinratesFile): PredictedResult {
       for (const tier of ['NEXT', 'CORE'] as const) {
         const m = file.matches.find((x) => x.stage === 'regular' && x.day === d.day && x.tier === tier && x.a === card.blue && x.b === card.red);
         if (!m) continue;
-        const w = predictedWinner(file, tier, card.blue, card.red, m.pA, m.pB);
+        const p = dayPercent(file, tier, card.blue, card.red, m.pA / 100, d.date);
+        const w = predictedWinner(file, tier, card.blue, card.red, p.pA, p.pB);
         wins[w][tier] += 1;
         rsPoints[w] += 1;
         dayWins[w] += 1;
@@ -240,13 +264,14 @@ export function predictedResult(file: WinratesFile): PredictedResult {
     }
     for (const t of TEAMS) if (dayWins[t] === 2) rsPoints[t] += 1;
   }
-  const pOf = (x: TeamId, y: TeamId) => mastersPercent(file, x, y);
   const cups: PredictedCup[] = [];
   for (const c of MASTERS_CUPS) {
+    const pOf = (x: TeamId, y: TeamId) => dayPercent(file, 'MASTERS', x, y, mastersPrior(file, x, y), c.date).pA;
     const semiWinners: TeamId[] = [], semiLosers: TeamId[] = [];
     for (const [a, b] of c.semis) {
       const m = file.matches.find((x) => x.stage === 'masters' && x.cup === c.cup && x.a === a && x.b === b);
-      const w = m ? predictedWinner(file, 'MASTERS', a, b, m.pA, m.pB) : predictedWinner(file, 'MASTERS', a, b, pOf(a, b), pOf(b, a));
+      const p = dayPercent(file, 'MASTERS', a, b, m ? m.pA / 100 : mastersPrior(file, a, b), c.date);
+      const w = predictedWinner(file, 'MASTERS', a, b, p.pA, p.pB);
       semiWinners.push(w);
       semiLosers.push(w === a ? b : a);
     }

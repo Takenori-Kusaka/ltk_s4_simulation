@@ -1,6 +1,6 @@
 // F-011 Task-4: 勝率の計算がメタをどう使うかの説明(受入基準9)。DOM に依存しない
-// 勝率の計算(F-005)は仕様が承認済みで、まだ実装されていない。実装されるまでは「メタを使っていない」ことと、
-// 現在の入力(F-009 のピックプールの軸)を示し、F-005 の予定(メタの近さ m)を仕様の所在とともに示す
+// 勝率の計算(F-005)の仕上がりの項(Task-3)がメタの近さ m(チャンピオンの近さ m_pool)を使う。winRateImplemented が false の間は
+// 「メタを使っていない」ことと現在の入力(F-009 のピックプールの軸)を示し、F-005 の予定(メタの近さ m)を仕様の所在とともに示す
 import axes from '../../rating/axes.json' with { type: 'json' };
 import engine from '../../rating/config.json' with { type: 'json' };
 
@@ -31,13 +31,19 @@ export function winRateMetaView(opts: { winRateImplemented: boolean } = { winRat
   const pool = (axes as unknown as { pool: PoolConfig }).pool;
   const days = (engine as unknown as { engine: { windowDays: number } }).engine.windowDays;
   const half = pool.winRatePriorGames / 2;
+  const on = opts.winRateImplemented;
   return {
-    status: opts.winRateImplemented ? '使用中' : '未使用',
-    headline: opts.winRateImplemented
-      ? '勝率の計算は、下の「予定」の式でメタの近さを使っています'
+    status: on ? '使用中' : '未使用',
+    headline: on
+      ? '勝率の計算は、チームの仕上がりの速さ(τ)を通してメタの近さ m を使っています。いまはチャンピオンの近さ m_pool(5 人の得意ピックと、この一覧の重要チャンピオンの突き合わせ)だけ'
       : '勝率の計算はメタを使っていない(勝率の計算 F-005 はまだ実装されていません)',
     current: [
-      { label: 'メタに関わる現在の入力', value: '選手の評価(F-009)のピックプールの軸だけ。メタの一覧は、この軸の計算には使っていない' },
+      {
+        label: 'メタに関わる現在の入力',
+        value: on
+          ? '選手の評価(F-009)のピックプールの軸(メタの一覧は、この軸の計算には使っていない)と、勝率の計算のチャンピオンの近さ m_pool(この一覧の重要チャンピオンとの突き合わせ)'
+          : '選手の評価(F-009)のピックプールの軸だけ。メタの一覧は、この軸の計算には使っていない',
+      },
       { label: '使う試合', value: `直近 ${days} 日の評価の試合のうち、大会のロールの試合` },
       { label: '数えるチャンピオン', value: `チャンピオンごとに ${pool.minGamesPerChampion} 試合以上` },
       { label: 'チャンピオンの勝率', value: `(勝ち数 + ${half}) / (試合数 + ${pool.winRatePriorGames})(試合数で縮小)` },
@@ -46,7 +52,7 @@ export function winRateMetaView(opts: { winRateImplemented: boolean } = { winRat
         value: `${pool.countWeight} × (チャンピオンの数の、同じロールの選手の中での標準化) + ${pool.winRateWeight} × (勝率の平均の標準化)`,
       },
     ],
-    plannedLabel: '勝率の計算(F-005)で予定しているメタの使い方(予定。未実装)',
+    plannedLabel: on ? '勝率の計算(F-005)でのメタの使い方(仕上がりの速さ τ に入る)' : '勝率の計算(F-005)で予定しているメタの使い方(予定。未実装)',
     planned: [
       { label: 'メタの近さ', value: 'm = 0.5 × m_pool + 0.5 × m_style(0〜1)。チームが早く仕上がるほど勝率に効く(仕上がりの速さ τ に入る)' },
       {

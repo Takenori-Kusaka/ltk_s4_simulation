@@ -1,5 +1,6 @@
 // F-014 Task-3: 推しチーム・推し選手の視点の論理(基準 14〜18)。DOM に依存しない。
 // 計算は足さない(勝率は F-005 の winrates.json の matches、見通しは F-001 のシミュレーション。期待勝ち数だけ勝率の和で作る)
+// F-005 Task-3(基準9): 試合の一覧の勝率と期待勝ち数は、その試合日の値(view.ts の dayPercent)
 import { MASTERS_CUPS, REGULAR_DAYS } from '../../sim/schedule.ts';
 import { TEAMS, type SimOutput, type TeamId, type Tier } from '../../sim/index.ts';
 import { ROSTER, type Player } from '../../data/roster.ts';
@@ -7,7 +8,7 @@ import { TEAM_INFO } from '../lib/index.ts';
 import { nextOpponent, opponentCompareHref } from '../compare/opponent.ts';
 import type { MatchPrior } from '../../winrate/core.ts';
 import type { WinratesFile } from '../sim/view.ts';
-import { dateLabel, dayBox, jstDate, standings, type DayBoxView, type DayRef } from './view.ts';
+import { dateLabel, dayBox, dayPercent, jstDate, standings, type DayBoxView, type DayRef } from './view.ts';
 
 /** 用語「階級チームの試合の一覧」の 1 行 */
 export interface TeamMatchRow {
@@ -38,8 +39,9 @@ export interface TierMatchesView {
 
 const MISSING = '勝率表にこの試合が無い';
 
-function matchRow(tier: Tier, label: string, date: string, team: TeamId, opponent: TeamId, side: TeamMatchRow['side'], m: MatchPrior | undefined): TeamMatchRow {
-  const p = m ? (m.a === team ? m.pA : m.pB) : 50;
+function matchRow(file: WinratesFile, tier: Tier, label: string, date: string, team: TeamId, opponent: TeamId, side: TeamMatchRow['side'], m: MatchPrior | undefined): TeamMatchRow {
+  const day = m ? dayPercent(file, tier, m.a, m.b, m.pA / 100, date) : null;
+  const p = m && day ? (m.a === team ? day.pA : day.pB) : 50;
   return {
     tier,
     label,
@@ -57,7 +59,7 @@ function matchRow(tier: Tier, label: string, date: string, team: TeamId, opponen
 
 /**
  * 基準14(b)・15(c)・13: NEXT・CORE は Regular Stage の 6 試合(Day・相手・サイド・勝率)、MASTERS は MASTERS CUP の準決勝 3 試合(日・相手・勝率)。
- * 勝率は matches の pA・pB そのもの。期待勝ち数は勝率表にある試合の勝率の和(順位表の expectedWins と同じ数え方)
+ * 勝率は matches の pA・pB にその試合日の仕上がりを加えた値(F-005 Task-3)。期待勝ち数は勝率表にある試合の勝率の和(順位表の expectedWins と同じ数え方)
  */
 export function tierTeamMatches(file: WinratesFile, team: TeamId, tier: Tier): TierMatchesView {
   const rows: TeamMatchRow[] = [];
@@ -72,7 +74,7 @@ export function tierTeamMatches(file: WinratesFile, team: TeamId, tier: Tier): T
       if (!semi) continue;
       const [a, b] = semi;
       const m = file.matches.find((x) => x.stage === 'masters' && x.cup === cup.cup && x.a === a && x.b === b);
-      push(matchRow(tier, `MASTERS CUP ${cup.cup}`, cup.date, team, a === team ? b : a, null, m), m);
+      push(matchRow(file, tier, `MASTERS CUP ${cup.cup}`, cup.date, team, a === team ? b : a, null, m), m);
     }
   } else {
     for (const day of REGULAR_DAYS) {
@@ -80,7 +82,7 @@ export function tierTeamMatches(file: WinratesFile, team: TeamId, tier: Tier): T
       if (!card) continue;
       const m = file.matches.find((x) => x.stage === 'regular' && x.day === day.day && x.tier === tier && x.a === card.blue && x.b === card.red);
       const blue = card.blue === team;
-      push(matchRow(tier, `DAY ${day.day}`, day.date, team, blue ? card.red : card.blue, blue ? 'BLUE' : 'RED', m), m);
+      push(matchRow(file, tier, `DAY ${day.day}`, day.date, team, blue ? card.red : card.blue, blue ? 'BLUE' : 'RED', m), m);
     }
   }
   rows.sort((x, y) => (x.date < y.date ? -1 : x.date > y.date ? 1 : 0));
