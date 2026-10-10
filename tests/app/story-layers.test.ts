@@ -268,22 +268,37 @@ const S: Record<Tier, Record<TeamId, number>> = {
 const teams: TierTeamS[] = TIERS.flatMap((tier) => TEAMS.map((team) => ({ team, tier, S: S[tier][team] })));
 const base = computePriorWinrates(teams);
 type Layered = MatchPrior & { pLaneA?: number; pLaneB?: number; pMacroA?: number; pMacroB?: number; pExtA?: number; pExtB?: number };
+// 実装(computePriorWinrates)が 3b の欄を全試合・全チームに付けるようになっても土台が変わらないよう、いったん明示的に消してから付け直す
+const MATCH_3B = ['pLaneA', 'pLaneB', 'pMacroA', 'pMacroB', 'pExtA', 'pExtB'] as const;
+const TEAM_3B = ['M', 'macroParts', 'E', 'externalCount'] as const;
+const strip = <T extends object>(o: T, keys: readonly string[]): T => {
+  const c = { ...o } as Record<string, unknown>;
+  for (const k of keys) delete c[k];
+  return c as T;
+};
 const file: WinratesFile = {
   ...base,
-  matches: base.matches.map((m): Layered => (m.stage === 'regular' && m.day === 1 ? { ...m, pLaneA: 58.0, pLaneB: 42.0, pMacroA: 55.0, pMacroB: 45.0, pExtA: 52.0, pExtB: 48.0 } : m)),
-  teams: base.teams.map((t) =>
-    t.team === 'CC' && t.tier === 'CORE'
-      ? { ...t, M: 6.54, macroParts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }], E: 1.5, externalCount: 4 }
-      : t.team === 'IT' && t.tier === 'CORE'
-        ? { ...t, E: -0.5, macroParts: 'x' }
-        : t,
-  ),
+  matches: base.matches.map((m): Layered => {
+    const bare = strip(m, MATCH_3B);
+    return m.stage === 'regular' && m.day === 1 ? { ...bare, pLaneA: 58.0, pLaneB: 42.0, pMacroA: 55.0, pMacroB: 45.0, pExtA: 52.0, pExtB: 48.0 } : bare;
+  }),
+  teams: base.teams.map((t) => {
+    const bare = strip(t, TEAM_3B);
+    if (t.team === 'CC' && t.tier === 'CORE') return { ...bare, M: 6.54, macroParts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }], E: 1.5, externalCount: 4 };
+    if (t.team === 'IT' && t.tier === 'CORE') return { ...bare, E: -0.5, macroParts: 'x' };
+    return bare;
+  }),
   computedAt: '2026-10-10T10:00:00.000Z',
   configVersion: 'abcdef012345',
   results: null,
 };
 
 test('基準31・33(日程の箱): 行は勝率表のファイルの試合の pLaneA・pMacroA・pExtA(ブルー側の値)と、階級チームの M・E・件数を持ち、無ければ undefined', () => {
+  // 土台の確認: 第 2 日の試合と DD-CORE には 3b の欄が無い(実装の出力に依らない)
+  const m2 = file.matches.find((m) => m.stage === 'regular' && m.day === 2)!;
+  for (const k of MATCH_3B) assert.ok(!(k in m2), `第 2 日の試合に ${k}`);
+  const ddCore = file.teams.find((t) => t.team === 'DD' && t.tier === 'CORE')!;
+  for (const k of TEAM_3B) assert.ok(!(k in ddCore), `DD-CORE に ${k}`);
   const day1 = dayBox(file, { kind: 'regular', day: 1, date: REGULAR_DAYS[0].date });
   const rows1 = day1.boxes.flatMap((b) => b.rows);
   assert.equal(rows1.length, 4);
