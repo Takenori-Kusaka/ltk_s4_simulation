@@ -43,7 +43,7 @@
           {#if r.dataMissing}<p class="missing">{r.dataMissing}</p>{/if}
           {#if open === key}
             <div id={`story-${view.title}-${key}`}>
-              <MatchStory input={{ tier: r.tier, a: r.blue.team, b: r.red.team, pA: r.blue.pNum, pB: r.red.pNum, pLane: r.pLane, pMacro: r.pMacro, mA: r.blue.M, mB: r.red.M }} />
+              <MatchStory input={{ tier: r.tier, a: r.blue.team, b: r.red.team, pA: r.blue.pNum, pB: r.red.pNum, pLane: r.pLane, pMacro: r.pMacro, pExt: r.pExt, teamA: r.blue.layer, teamB: r.red.layer }} />
             </div>
           {/if}
         </div>

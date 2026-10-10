@@ -5,6 +5,7 @@ import { TEAMS, type SimOutput, type TeamId, type Tier } from '../../sim/index.t
 import { TEAM_INFO } from '../lib/index.ts';
 import type { MatchPrior } from '../../winrate/core.ts';
 import type { WinratesFile } from '../sim/view.ts';
+import type { TeamLayer } from '../story/story.ts';
 
 export type DayRef = { kind: 'regular'; day: number; date: string } | { kind: 'masters'; cup: number; date: string };
 
@@ -44,8 +45,8 @@ export interface SideView {
   /** 勝率(0.1% 単位の文字列) */
   p: string;
   pNum: number;
-  /** F-014 基準32: 勝率表のファイルの階級チームのマクロの点数 M(F-005 基準 3b)。無ければ undefined */
-  M?: number;
+  /** F-014 基準32・33: 勝率表のファイルの階級チームの M・E・件数(F-005 基準 3b)。どれも無ければ undefined */
+  layer?: TeamLayer;
 }
 
 export interface MatchRowView {
@@ -53,9 +54,10 @@ export interface MatchRowView {
   blue: SideView;
   red: SideView;
   dataMissing: string | null;
-  /** F-014 基準31: 勝率表のファイルの試合ごとのレーン相対・マクロ相対の勝率(%。ブルー側から見た値。F-005 基準 3b)。無ければ undefined */
+  /** F-014 基準31・33: 勝率表のファイルの試合ごとのレーン相対・マクロ相対・外部の見立てだけの勝率(%。ブルー側から見た値。F-005 基準 3b)。無ければ undefined */
   pLane?: number;
   pMacro?: number;
+  pExt?: number;
 }
 
 export interface CardBoxView {
@@ -73,18 +75,26 @@ export interface DayBoxView {
 }
 
 const finite = (x: unknown): number | undefined => (typeof x === 'number' && Number.isFinite(x) ? x : undefined);
-/** F-005 基準 3b の項目(試合ごとの pLane・pMacro、階級チームごとの M)。勝率表のファイルに無ければ undefined(F-005 側の型の定義を待たず、任意の項目として読む) */
-type LayerFields = { pLane?: unknown; pMacro?: unknown };
-const teamM = (file: WinratesFile, team: TeamId, tier: Tier): number | undefined =>
-  finite((file.teams.find((t) => t.team === team && t.tier === tier) as { M?: unknown } | undefined)?.M);
+/** F-005 基準 3b の項目(試合ごとの pLaneA・pMacroA・pExtA、階級チームごとの M・E・externalCount)。勝率表のファイルに無ければ undefined(F-005 側の型の定義を待たず、任意の項目として読む) */
+type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown };
+type TeamFields = { M?: unknown; E?: unknown; externalCount?: unknown };
+const teamLayer = (file: WinratesFile, team: TeamId, tier: Tier): TeamLayer | undefined => {
+  const t = file.teams.find((x) => x.team === team && x.tier === tier) as TeamFields | undefined;
+  const layer: TeamLayer = {};
+  const M = finite(t?.M), E = finite(t?.E), externalCount = finite(t?.externalCount);
+  if (M !== undefined) layer.M = M;
+  if (E !== undefined) layer.E = E;
+  if (externalCount !== undefined) layer.externalCount = externalCount;
+  return Object.keys(layer).length ? layer : undefined;
+};
 
-const side = (team: TeamId, p: number, M?: number): SideView => ({ team, name: TEAM_INFO[team].name, color: TEAM_INFO[team].color, petals: TEAM_INFO[team].petals, p: p.toFixed(1), pNum: p, M });
+const side = (team: TeamId, p: number, layer?: TeamLayer): SideView => ({ team, name: TEAM_INFO[team].name, color: TEAM_INFO[team].color, petals: TEAM_INFO[team].petals, p: p.toFixed(1), pNum: p, layer });
 
 function row(file: WinratesFile, tier: Tier, blue: TeamId, red: TeamId, m: MatchPrior | undefined): MatchRowView {
-  const mb = teamM(file, blue, tier), mr = teamM(file, red, tier);
-  if (!m) return { tier, blue: side(blue, 50, mb), red: side(red, 50, mr), dataMissing: '勝率表にこの試合が無い' };
-  const layer = m as MatchPrior & LayerFields;
-  return { tier, blue: side(blue, m.pA, mb), red: side(red, m.pB, mr), dataMissing: m.dataMissing, pLane: finite(layer.pLane), pMacro: finite(layer.pMacro) };
+  const lb = teamLayer(file, blue, tier), lr = teamLayer(file, red, tier);
+  if (!m) return { tier, blue: side(blue, 50, lb), red: side(red, 50, lr), dataMissing: '勝率表にこの試合が無い' };
+  const x = m as MatchPrior & LayerFields;
+  return { tier, blue: side(blue, m.pA, lb), red: side(red, m.pB, lr), dataMissing: m.dataMissing, pLane: finite(x.pLaneA), pMacro: finite(x.pMacroA), pExt: finite(x.pExtA) };
 }
 
 /** 基準1・3: 日程の箱(公式の Regular Stage の画像の形。左がブルー、右がレッド) */
@@ -110,7 +120,7 @@ export function dayBox(file: WinratesFile, ref: DayRef): DayBoxView {
     const pair = (label: string, x: TeamId, y: TeamId): CardBoxView => {
       const [a, b] = x < y ? [x, y] : [y, x];
       const p = mastersPercent(file, a, b);
-      return { label, rows: [{ tier: 'MASTERS', blue: side(a, p, teamM(file, a, 'MASTERS')), red: side(b, 100 - p, teamM(file, b, 'MASTERS')), dataMissing: null }] };
+      return { label, rows: [{ tier: 'MASTERS', blue: side(a, p, teamLayer(file, a, 'MASTERS')), red: side(b, 100 - p, teamLayer(file, b, 'MASTERS')), dataMissing: null }] };
     };
     boxes.push(pair('M3 THIRD-PLACE · 予想の組み合わせ', predicted.semiLosers[0], predicted.semiLosers[1]));
     boxes.push(pair('M4 FINALS · 予想の組み合わせ', predicted.semiWinners[0], predicted.semiWinners[1]));

@@ -1,11 +1,13 @@
 <script lang="ts">
   // F-014 Task-4: 試合の根拠の節(基準 20〜25)。日程の箱の行の直下に開く
-  // F-014 Task-7: 結論の直後に 3 行の勝率(基準31。勝率表のファイルに無ければ出さない)、内訳は「レーン(個人)」「マクロ(チーム)」の 2 層(基準32)
+  // F-014 Task-7: 結論の直後に 3 行の勝率(基準31。勝率表のファイルに無ければ出さない)と p_ext の添え書き(基準33)、
+  // 内訳は「レーン(個人)」「マクロ(チーム)」の 2 層(基準32)。マクロの層に外部の見立ての小節(基準33)
   import { matchStory, type StoryInput } from './story.ts';
-  import { loadRatings, loadTeamEvaluation } from './data.ts';
+  import { loadExternalViews, loadRatings, loadTeamEvaluation } from './data.ts';
 
   let { input }: { input: StoryInput } = $props();
-  const story = $derived(matchStory(input, loadRatings(), loadTeamEvaluation()));
+  const story = $derived(matchStory(input, loadRatings(), loadTeamEvaluation(), loadExternalViews()));
+  const external = $derived(story.ok ? [{ team: input.a, ex: story.layers.macro.external.a }, { team: input.b, ex: story.layers.macro.external.b }] : []);
 </script>
 
 <div class="story" role="region" aria-label="この予想の根拠">
@@ -18,7 +20,10 @@
         <p class="layers-cap">{input.a} の勝率の 2 層</p>
         <ul>
           <li>レーン(個人)の相対勝率 <b>{story.layers.lane.p}%</b></li>
-          <li>マクロ(チーム)の相対勝率 <b>{story.layers.macro.p}%</b></li>
+          <li>
+            マクロ(チーム)の相対勝率 <b>{story.layers.macro.p}%</b>
+            {#if story.layers.macro.pExt !== null}<small class="sub">うち外部の見立てだけなら {story.layers.macro.pExt}%</small>{/if}
+          </li>
           <li>掛け合わせた試合の勝率 <b>{story.layers.combined.p}%</b></li>
         </ul>
       </div>
@@ -82,7 +87,29 @@
         </tbody>
       </table>
     </div>
-    <p class="note">M は連携の厚み・司令塔・継続性の素点の平均。素点はチームの評価の相対評価の前の値</p>
+    <p class="note">M は連携の厚み・司令塔の素点の平均。素点はチームの評価の相対評価の前の値</p>
+    <p class="ext-title">外部の見立て(元プロ・解説)</p>
+    <div class="ext">
+      {#each external as { team, ex } (team)}
+        <div class="ext-side">
+          <p class="ext-head">{team} <span class="ext-e">E <b>{ex.E}</b></span><span class="ext-count">({ex.count} 件)</span></p>
+          {#if ex.items.length}
+            <ul>
+              {#each ex.items as it}
+                <li>
+                  <span class="tag">{it.direction}{it.strength ? `・${it.strength}` : ''}</span>
+                  {it.speakerKind ? `${it.speakerKind} ` : ''}{it.speaker}: {it.summary}
+                  {#if it.url}<a href={it.url} target="_blank" rel="noopener noreferrer">出典</a>{:else if it.source}<span class="unv">({it.source})</span>{/if}
+                  {#if it.date}<span class="unv">{it.date}</span>{/if}
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <p class="muted">外部の見立ては記録なし</p>
+          {/if}
+        </div>
+      {/each}
+    </div>
     <div class="scope">
       <p class="scope-title">この予想に入っているもの</p>
       <ul>{#each story.included as t}<li>{t}</li>{/each}</ul>
@@ -110,6 +137,18 @@
   .m-total th, .m-total td { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
   .reason { display: block; margin-top: 0.1rem; font-size: 0.74rem; color: var(--ivory-dim); }
   .note { margin: 0.3rem 0 0; font-size: 0.74rem; color: var(--ivory-dim); }
+  /* 基準33: p_ext の添え書きと、外部の見立ての小節 */
+  .sub { display: block; font-size: 0.74rem; color: var(--ivory-dim); }
+  .ext-title { margin: 0.6rem 0 0.3rem; font-size: 0.78rem; letter-spacing: 0.06em; color: var(--gold); }
+  .ext { display: grid; grid-template-columns: 1fr; gap: 0.4rem 1rem; }
+  @media (min-width: 720px) { .ext { grid-template-columns: 1fr 1fr; } }
+  .ext-head { margin: 0 0 0.2rem; font-weight: 600; }
+  .ext-e { margin-left: 0.4rem; font-weight: 400; color: var(--ivory-dim); }
+  .ext-e b { color: var(--gold-hi); margin-left: 0.2rem; font-variant-numeric: tabular-nums; }
+  .ext-count { margin-left: 0.3rem; font-weight: 400; font-size: 0.74rem; color: var(--ivory-dim); }
+  .ext ul { margin: 0; padding-left: 1.1rem; }
+  .ext li { margin: 0.15rem 0; }
+  .ext li a { color: var(--gold-hi); margin-left: 0.3rem; }
   /* 基準11: 表は横に送れる枠の中。枠の幅は親に合わせ、親を広げない */
   .scroll { overflow-x: auto; max-width: 100%; min-width: 0; }
   .breakdown { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.84rem; }

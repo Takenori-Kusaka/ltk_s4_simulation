@@ -1,7 +1,7 @@
 // F-014 Task-4: 試合の根拠のストーリー(基準 20〜25)。文章は固定の形で組み立て、生成 AI は使わない
 // 寄与は F-010 の戦力 S の式(S = 0.85 × Σ w_r × O_r + 0.15 × C。MASTERS は S = Σ w_r × O_r)の項ごとの両チームの差。新しい計算ではなく S の差の内訳
-// F-014 Task-7: 根拠の 2 層(基準 31・32)。レーン(個人)の層は上の表、マクロ(チーム)の層はマクロの点数 M(F-005: 連携の厚み・司令塔・継続性の素点の平均)と各軸の理由
-// 3 行の勝率(レーン相対・マクロ相対・掛け合わせ)は勝率表のファイルの値をそのまま出す。ここでは計算しない
+// F-014 Task-7: 根拠の 2 層(基準 31〜33)。レーン(個人)の層は上の表、マクロ(チーム)の層はマクロの点数 M(F-005: 連携の厚み・司令塔の素点の平均)と各軸の理由、外部の見立て(E と記録)
+// 3 行の勝率(レーン相対・マクロ相対・掛け合わせ)と外部の見立てだけの勝率は勝率表のファイルの値をそのまま出す。ここでは計算しない
 import { ROSTER, type Role } from '../../data/roster.ts';
 import teamConfig from '../../team/config.json' with { type: 'json' };
 import type { TeamId, Tier } from '../../sim/types.ts';
@@ -57,12 +57,21 @@ export interface StoryInput {
   /** 両チームの勝率(%) */
   pA: number;
   pB: number;
-  /** 基準31: 勝率表のファイルの試合ごとのレーン相対・マクロ相対の勝率(%。A から見た値。F-005 基準 3b)。無い勝率表のファイルでは undefined */
+  /** 基準31・33: 勝率表のファイルの試合ごとのレーン相対・マクロ相対・外部の見立てだけの勝率(%。A から見た値。F-005 基準 3b)。無い勝率表のファイルでは undefined */
   pLane?: number;
   pMacro?: number;
-  /** 基準32: 勝率表のファイルの階級チームごとのマクロの点数 M(F-005 基準 3b)。あれば 3 軸の素点の平均より優先する */
-  mA?: number | null;
-  mB?: number | null;
+  pExt?: number;
+  /** 基準32・33: 勝率表のファイルの両チームの M・E・件数(F-005 基準 3b) */
+  teamA?: TeamLayer;
+  teamB?: TeamLayer;
+}
+/** F-005 基準 3b の階級チームごとの項目(勝率表のファイルの teams[])。無い項目は入れない */
+export interface TeamLayer {
+  /** マクロの点数 M。あれば 2 軸の素点の平均より優先する */
+  M?: number;
+  /** 外部の見立ての点数 E(−3〜+3)と件数 */
+  E?: number;
+  externalCount?: number;
 }
 
 export interface SideScore {
@@ -110,10 +119,29 @@ export interface MacroPart {
   reasonA: string;
   reasonB: string;
 }
-/** 基準31・32: 根拠の 2 層。勝率は 0.1% 単位の文字列(勝率表のファイルに無ければ null)。M は小数第二位(計算できなければ「—」) */
+/** 基準33: 外部の見立て(元プロ・解説・選手)の記録の 1 件 */
+export interface ExternalItem {
+  /** 「肯定」「否定」(記録の向き ± を言い換える。他の表記はそのまま) */
+  direction: string;
+  strength: string;
+  speaker: string;
+  speakerKind: string;
+  summary: string;
+  source: string;
+  /** 出典が https の URL のときだけ */
+  url: string | null;
+  date: string;
+}
+export interface ExternalSide {
+  /** 外部の見立ての点数 E(符号つき小数第二位)。勝率表のファイルに無ければ「—」 */
+  E: string;
+  count: string;
+  items: ExternalItem[];
+}
+/** 基準31〜33: 根拠の 2 層。勝率は 0.1% 単位の文字列(勝率表のファイルに無ければ null)。M は小数第二位(計算できなければ「—」) */
 export interface StoryLayers {
   lane: { p: string | null };
-  macro: { p: string | null; M: { a: string; b: string }; parts: MacroPart[] };
+  macro: { p: string | null; pExt: string | null; M: { a: string; b: string }; parts: MacroPart[]; external: { a: ExternalSide; b: ExternalSide } };
   combined: { p: string };
 }
 export type StoryView =
@@ -170,26 +198,65 @@ const f2 = (x: number) => x.toFixed(2);
 const STRENGTH_ORDER: Record<string, number> = { 強: 0, 中: 1, 弱: 2 };
 const finite = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
 
-/** 用語「マクロの点数 M」の 3 軸(F-005): チームの評価のファイルの軸の key と名前(ファイルに名前があればそれを使う) */
+/** 用語「マクロの点数 M」の 2 軸(F-005 再判定 2 で継続性を外した): チームの評価のファイルの軸の key と名前(ファイルに名前があればそれを使う) */
 export const MACRO_AXES: { key: string; label: string }[] = [
   { key: 'synergy', label: '連携の厚み' },
   { key: 'shotcalling', label: '司令塔' },
-  { key: 'continuity', label: '継続性' },
 ];
 const rawOf = (t: TierTeamLike, key: string): number | null => {
   const r = t.axes?.find((x) => x.key === key)?.raw;
   return finite(r) ? r : null;
 };
-/** 用語「マクロの点数 M」: 3 軸の素点の平均。素点の無い軸は除いて平均し、すべて無ければ null(F-005 の定義と同じ) */
+/** 用語「マクロの点数 M」: 2 軸の素点の平均。素点の無い軸は除いて平均し、すべて無ければ null(F-005 の定義と同じ) */
 export function macroScore(t: TierTeamLike): number | null {
   const xs = MACRO_AXES.map((ax) => rawOf(t, ax.key)).filter((x): x is number => x !== null);
   return xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : null;
 }
 
-/** 基準31・32: 根拠の 2 層。3 行の勝率は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 3 軸の素点の平均 */
-function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike): StoryLayers {
+/** 基準33: 外部の見立ての記録から 1 階級チームにつき示す上限 */
+export const EXTERNAL_MAX = 3;
+export const NO_EXTERNAL = '外部の見立ては記録なし';
+const DIRECTION: Record<string, string> = { '+': '肯定', '-': '否定', '−': '否定', 肯定: '肯定', 否定: '否定', positive: '肯定', negative: '否定' };
+const str = (x: unknown): string => (typeof x === 'string' ? x : typeof x === 'number' ? String(x) : '');
+/** 記録の target(階級チーム。"CC-CORE" の文字列か { team, tier })を "CC-CORE" の形に揃える */
+const targetKey = (t: unknown): string | null => {
+  if (typeof t === 'string') return t.trim().toUpperCase().replace(/[\s_/]+/g, '-');
+  if (t && typeof t === 'object') {
+    const o = t as { team?: unknown; tier?: unknown; tierTeam?: unknown };
+    if (typeof o.tierTeam === 'string') return targetKey(o.tierTeam);
+    if (typeof o.team === 'string' && typeof o.tier === 'string') return `${o.team}-${o.tier}`.toUpperCase();
+  }
+  return null;
+};
+/** 基準33: 外部の見立ての記録(normalized/external-views.json)から、その階級チームについての項目を新しい順に最大 max 件。記録が無い・壊れていれば空 */
+export function externalItems(views: unknown, team: string, tier: string, max = EXTERNAL_MAX): ExternalItem[] {
+  const items = (views as { items?: unknown } | undefined)?.items;
+  if (!Array.isArray(items)) return [];
+  const key = `${team}-${tier}`.toUpperCase();
+  const out: ExternalItem[] = [];
+  for (const raw of items) {
+    if (!raw || typeof raw !== 'object') continue;
+    const it = raw as Record<string, unknown>;
+    if (targetKey(it.target) !== key) continue;
+    const summary = str(it.summary);
+    if (!summary) continue;
+    const d = it.direction;
+    const direction = typeof d === 'number' ? (d > 0 ? '肯定' : d < 0 ? '否定' : '') : (DIRECTION[str(d)] ?? str(d));
+    const source = str(it.source);
+    out.push({ direction, strength: str(it.strength), speaker: str(it.speaker), speakerKind: str(it.speakerKind), summary, source, url: isHttps(source) ? source : null, date: str(it.date) });
+  }
+  // 新しい順(日付の無い記録は最後)。強さで選ばない(否定の記録を落とさないため)
+  out.sort((x, y) => (x.date < y.date ? 1 : x.date > y.date ? -1 : 0));
+  return out.slice(0, max);
+}
+
+const signed2 = (x: number) => (x < 0 ? '' : '+') + f2(x);
+
+/** 基準31〜33: 根拠の 2 層。3 行の勝率と p_ext は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 2 軸の素点の平均 */
+function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: unknown): StoryLayers {
   const pct = (p: number | undefined) => (finite(p) ? f1(p) : null);
-  const M = (t: TierTeamLike, given: number | null | undefined) => {
+  const M = (t: TierTeamLike, layer: TeamLayer | undefined) => {
+    const given = layer?.M;
     const m = finite(given) ? given : macroScore(t);
     return m === null ? '—' : f2(m);
   };
@@ -198,9 +265,19 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike): StoryLay
     const ra = rawOf(A, ax.key), rb = rawOf(B, ax.key);
     return { key: ax.key, label: xa?.label ?? xb?.label ?? ax.label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
   });
+  const ext = (team: string, layer: TeamLayer | undefined): ExternalSide => {
+    const e = layer?.E, c = layer?.externalCount;
+    return { E: finite(e) ? signed2(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier) };
+  };
   return {
     lane: { p: pct(input.pLane) },
-    macro: { p: pct(input.pMacro), M: { a: M(A, input.mA), b: M(B, input.mB) }, parts },
+    macro: {
+      p: pct(input.pMacro),
+      pExt: pct(input.pExt),
+      M: { a: M(A, input.teamA), b: M(B, input.teamB) },
+      parts,
+      external: { a: ext(input.a, input.teamA), b: ext(input.b, input.teamB) },
+    },
     combined: { p: f1(input.pA) },
   };
 }
@@ -240,7 +317,8 @@ const sideOf = (id: string | null, name: string, score: number | null): SideScor
 
 const describe = (r: StoryRow) => `${r.label}: ${r.left.name} ${r.left.score} vs ${r.right.name} ${r.right.score}`;
 
-export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknown): StoryView {
+/** externalViews は外部の見立ての記録(normalized/external-views.json)。無ければ undefined */
+export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknown, externalViews?: unknown): StoryView {
   const rs = ratings as RatingsLike | undefined;
   if (!rs || !Array.isArray(rs.players)) return { ok: false, reason: '評価のファイル(ratings.json)がありません' };
   const te = teamEval as TeamEvalLike | undefined;
@@ -318,5 +396,5 @@ export function matchStory(input: StoryInput, ratings: unknown, teamEval: unknow
       evidence.push({ id: s.id, name: s.name, items: positiveEvidence(rs.players.find((p) => p.playerId === s.id)) });
     }
   }
-  return { ok: true, favored, favoredName, favoredP, even, headline, layers: layersOf(input, A, B), rows, evidence, included: INCLUDED, excluded: EXCLUDED };
+  return { ok: true, favored, favoredName, favoredP, even, headline, layers: layersOf(input, A, B, externalViews), rows, evidence, included: INCLUDED, excluded: EXCLUDED };
 }
