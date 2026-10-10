@@ -196,13 +196,13 @@ test('基準33: 外部の見立ての項目は、記録の target がその階�
   assert.equal(externalItems({ items: [{ target: 'CC-CORE' }] }, 'CC', 'CORE').length, 0);
 });
 
-test('基準33: マクロ(チーム)の層の外部の見立ては、両チームの E(符号つき小数第二位)と件数、記録の項目。記録が無いチームは「外部の見立ては記録なし」', () => {
-  const s = matchStory({ ...input, teamA: { M: 6.54, E: 1.25, externalCount: 4 }, teamB: { E: -0.5, externalCount: 1 } }, ratings, teamEval, externalViews);
+test('基準33: マクロ(チーム)の層の外部の見立ては、両チームの E(符号つき小数第一位。勝率表のファイルの精度)と件数、記録の項目。記録が無いチームは「外部の見立ては記録なし」', () => {
+  const s = matchStory({ ...input, teamA: { M: 6.54, E: 1.5, externalCount: 4 }, teamB: { E: -0.5, externalCount: 1 } }, ratings, teamEval, externalViews);
   assert.ok(s.ok);
-  assert.equal(s.layers.macro.external.a.E, '+1.25');
+  assert.equal(s.layers.macro.external.a.E, '+1.5');
   assert.equal(s.layers.macro.external.a.count, '4');
   assert.equal(s.layers.macro.external.a.items.length, 3);
-  assert.equal(s.layers.macro.external.b.E, '-0.50');
+  assert.equal(s.layers.macro.external.b.E, '-0.5');
   assert.equal(s.layers.macro.external.b.count, '1');
   assert.equal(s.layers.macro.external.b.items.length, 1);
   assert.equal(NO_EXTERNAL, '外部の見立ては記録なし');
@@ -215,8 +215,12 @@ test('基準33: マクロ(チーム)の層の外部の見立ては、両チー�
   assert.deepEqual(n.layers.macro.external.b.items, []);
   const z = matchStory({ ...input, teamA: { E: 0, externalCount: 0 } }, ratings, teamEval, externalViews);
   assert.ok(z.ok);
-  assert.equal(z.layers.macro.external.a.E, '+0.00');
+  assert.equal(z.layers.macro.external.a.E, '+0.0');
   assert.equal(z.layers.macro.external.a.count, '0');
+  // 上限の ±3.0 もそのまま
+  const c = matchStory({ ...input, teamA: { E: 3 }, teamB: { E: -3 } }, ratings, teamEval);
+  assert.ok(c.ok);
+  assert.deepEqual([c.layers.macro.external.a.E, c.layers.macro.external.b.E], ['+3.0', '-3.0']);
 });
 
 test('基準31〜33(表示): 結論の直後に 3 行(両方そろうときだけ)と p_ext の添え書き、内訳は「レーン(個人)」と「マクロ(チーム)」の 2 層の見出し、外部の見立ての小節。β・対数オッズ・標準偏差の語は無い', () => {
@@ -250,7 +254,7 @@ test('基準31〜33(表示): 結論の直後に 3 行(両方そろうときだ�
   const data = src('../../src/app/story/data.ts');
   assert.match(data, /export function loadExternalViews/);
   assert.match(data, /docs\/research\/grounds\/normalized\/external-views\.json/);
-  const s = matchStory({ ...input, pLane: 58.0, pMacro: 55.0, pExt: 52.0, teamA: { M: 6.54, E: 1.25, externalCount: 4 } }, ratings, teamEval, externalViews);
+  const s = matchStory({ ...input, pLane: 58.0, pMacro: 55.0, pExt: 52.0, teamA: { M: 6.54, E: 1.5, externalCount: 4 } }, ratings, teamEval, externalViews);
   const text = JSON.stringify(s);
   for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!text.includes(w), w);
 });
@@ -269,7 +273,7 @@ const file: WinratesFile = {
   matches: base.matches.map((m): Layered => (m.stage === 'regular' && m.day === 1 ? { ...m, pLaneA: 58.0, pLaneB: 42.0, pMacroA: 55.0, pMacroB: 45.0, pExtA: 52.0, pExtB: 48.0 } : m)),
   teams: base.teams.map((t) =>
     t.team === 'CC' && t.tier === 'CORE'
-      ? { ...t, M: 6.54, macroParts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }], E: 1.25, externalCount: 4 }
+      ? { ...t, M: 6.54, macroParts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }], E: 1.5, externalCount: 4 }
       : t.team === 'IT' && t.tier === 'CORE'
         ? { ...t, E: -0.5, macroParts: 'x' }
         : t,
@@ -297,7 +301,7 @@ test('基準31・33(日程の箱): 行は勝率表のファイルの試合の pL
     assert.equal(r.pExt, undefined);
   }
   const core = [...rows1, ...rows2].filter((r) => r.tier === 'CORE').flatMap((r) => [r.blue, r.red]);
-  assert.deepEqual(core.find((x) => x.team === 'CC')!.layer, { M: 6.54, E: 1.25, externalCount: 4, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }] });
+  assert.deepEqual(core.find((x) => x.team === 'CC')!.layer, { M: 6.54, E: 1.5, externalCount: 4, parts: [{ key: 'synergy', label: '連携の厚み', raw: 6.52 }, { key: 'shotcalling', label: '司令塔', raw: 6.56 }] });
   // 壊れた macroParts は入れない
   assert.deepEqual(core.find((x) => x.team === 'IT')!.layer, { E: -0.5 });
   assert.equal(core.find((x) => x.team === 'DD')!.layer, undefined);

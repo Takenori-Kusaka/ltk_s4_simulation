@@ -143,7 +143,7 @@ export interface ExternalItem {
   self: boolean;
 }
 export interface ExternalSide {
-  /** 外部の見立ての点数 E(符号つき小数第二位)。勝率表のファイルに無ければ「—」 */
+  /** 外部の見立ての点数 E(符号つき小数第一位。勝率表のファイルの精度)。勝率表のファイルに無ければ「—」 */
   E: string;
   count: string;
   items: ExternalItem[];
@@ -263,7 +263,8 @@ export function externalItems(views: unknown, team: string, tier: string, max = 
   return out.slice(0, max);
 }
 
-const signed2 = (x: number) => (x < 0 ? '' : '+') + f2(x);
+/** E は勝率表のファイルで小数第一位(F-005)。符号を付けてそのまま */
+const signedE = (x: number) => (x < 0 ? '' : '+') + f1(x);
 
 /** 基準31〜33: 根拠の 2 層。3 行の勝率と p_ext は勝率表のファイルの値そのまま(無ければ null)。M は勝率表のファイルの値を優先し、無ければ 2 軸の素点の平均 */
 function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: unknown): StoryLayers {
@@ -286,7 +287,7 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
   });
   const ext = (team: string, layer: TeamLayer | undefined): ExternalSide => {
     const e = layer?.E, c = layer?.externalCount;
-    return { E: finite(e) ? signed2(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier) };
+    return { E: finite(e) ? signedE(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier) };
   };
   return {
     lane: { p: pct(input.pLane) },
