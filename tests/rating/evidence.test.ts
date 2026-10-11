@@ -190,8 +190,9 @@ test('スナップショット: 60 名全員の根拠があり、すべての根
   for (const list of Object.values(shotSnap.players)) for (const e of list) assert.ok(e.source.length > 0);
 });
 
+// 2026-10-11: 価値責任者の決定 Q3(B)(龍巻ちせの 2026-10-08 の確認を 10-11 の確認で置き換えて外す。叶は置き換える確認が無く据え置き)と Q5(A)(まいたけを足す)
 test('K-04: 価値責任者が「コールしない側」と確認した4名のコール力は 4.0 以下で、人の確認の根拠を持つ', () => {
-  for (const name of ['龍巻ちせ', '叶', '空澄セナ', '獅子堂あかり']) {
+  for (const name of ['叶', '空澄セナ', '獅子堂あかり', 'まいたけ']) {
     const list = shotSnap.players[idOf(name)];
     const r = shotcallingAxis(list, loadEvidenceConfig().shotcalling);
     assert.ok(r.score <= 4.0, `${name} ${r.score}`);
@@ -224,6 +225,32 @@ test('スナップショット: 叶は肯定の根拠があっても、価値責
   const r = shotcallingAxis(shotSnap.players[idOf('叶')], cfg);
   assert.ok(shotSnap.players[idOf('叶')].some((e) => e.direction === '+'));
   assert.ok(r.score <= cfg.negativeCap, String(r.score));
+});
+
+// 2026-10-11: 価値責任者の決定 Q3(B)。龍巻ちせの 2026-10-08 の確認「コールしない側」を 10-11 のレビューの肯定の確認で置き換えた(叶は置き換える確認が無く据え置き)
+test('スナップショット: 龍巻ちせに 2026-10-08 の「コールしない側」の確認は無く、2026-10-11 の肯定の確認がある', () => {
+  const list = shotSnap.players[idOf('龍巻ちせ')];
+  assert.ok(!list.some((e) => e.kind === 'owner-confirmation' && e.direction === '-'));
+  assert.ok(!list.some((e) => e.source.includes('2026-10-08')));
+  assert.ok(list.some((e) => e.kind === 'owner-confirmation' && e.direction === '+' && e.source.includes('2026-10-11')));
+});
+
+// 2026-10-11: 価値責任者の決定 Q4(B)。言語・喋り方を理由にした 10-11 のレビューの発言を否定の根拠(kind player・collectedBy human・強さ 中。「コールしない側」の確認ではないため上限はかけない)として入れ、監査で外した否定のうち規則に当たる 3 件を戻した
+test('スナップショット: ねすてぃー・Recap に 2026-10-11 の人の否定(player・中)があり、ねすてぃー・Killin9Hit・天帝フォルテに戻した否定が元の出典つきである', () => {
+  for (const name of ['ねすてぃー', 'Recap']) {
+    const list = shotSnap.players[idOf(name)];
+    assert.ok(list.some((e) => e.kind === 'player' && e.collectedBy === 'human' && e.direction === '-' && e.strength === '中' && e.source.includes('2026-10-11')), name);
+    assert.ok(!list.some((e) => e.kind === 'owner-confirmation' && e.direction === '-'), name);
+  }
+  const restored: [string, RegExp, string][] = [
+    ['ねすてぃー', /日本語・滑舌の問題で意図が伝わりにくい/, 'xdsbfDbaqRU'],
+    ['Killin9Hit', /試合中の日本語でのコミュニケーションを課題/, 'EMad3J7DPa0'],
+    ['天帝フォルテ', /喋ってない/, '6cUq6njtOdE'],
+  ];
+  for (const [name, re, videoId] of restored) {
+    const hit = shotSnap.players[idOf(name)].find((e) => e.direction === '-' && re.test(e.summary));
+    assert.ok(hit && hit.source.includes(videoId) && hit.collectedBy === 'ai', name);
+  }
 });
 
 // --- 基準12: 大会経験 ---
