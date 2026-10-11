@@ -8,7 +8,7 @@
     "話者は価値責任者本人のため発言は『価値責任者の確認』として扱えるが、記録を書き起こしたのは AI。価値責任者が PR で各項目を確認するまでは仮の記録",
     "価値責任者の『期待する順位・点数』そのものと、他の選手との順位づけの発言(4 番手・一番弱いなど)は記録しない",
     "個人情報に触れる発言は記録しない: 勤め方に関わる言及(11:41)、職業に関わる言及(16:33)",
-    "ねすてぃー(言語・滑舌)と Recap(喋りのテンポ)のコール力についての否定の発言は、2026-10-10 の分類の規則(言語・滑舌・言い方の記述はコール力の否定に数えない)に当たるため正規化の記録へは入れず、表 C に置いた(2026-10-11 の価値責任者の決定 Q4(B) で規則を改め、否定の確認(強さ 中)として入れた)",
+    "ねすてぃー(言語・滑舌)と Recap(喋りのテンポ)のコール力についての否定の発言は、2026-10-10 の分類の規則(言語・滑舌・言い方の記述はコール力の否定に数えない)に当たるため正規化の記録へは入れず、表 C に置いた(2026-10-11 の価値責任者の決定 Q4(B) で規則を改め、否定の根拠(kind player、強さ 中)として入れた)",
     "自動の文字起こしのため固有名詞に誤変換がある(例: ケイジ・KH = Killin9Hit、井上新一郎 = 乾伸一郎、大御初任子・ニュンコ = 大御所にゅん子、鮮度由比・センドユヒ・千歳 = 千燈ゆうひ、コハクウル・コアクール = 狐白うる、ハルチュ・ハルチャー = 春茶、トーコ・東子 = No.1005、リカップ・リカプ = Recap、ヤウジ = YUKIO)。名簿と照らして対応づけた"
   ],
   "related": { "reviewTable": "docs/research/grounds/owner-review-lr-20261011.md" },
@@ -19,10 +19,10 @@
       { "summary": "apaMEN はコール力が低く、そこから来る連携の弱さがあるとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:58])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "8:58", "selfTeam": false, "note": "程度の発言のため正規化の記録へは入れない(表 B)。現在の値(3.5)と向きは一致", "normalized": false }
     ],
     "LR-MASTERS-JG": [
-      { "summary": "ねすてぃーはコミュニケーション(言語・滑舌)に難がありコール力は本当に無いので、コール力をもっと下げてよいとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:22])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "-", "strength": "中", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "9:22", "selfTeam": false, "note": "2026-10-11 の価値責任者の決定 Q4(B) で分類の規則を改め(意図が伝わらない発言・試合中に喋らないことの記述は否定の根拠(弱〜中)に当たる)、否定の確認(強さ 中)として normalized/shotcalling.json へ入れた", "normalized": true }
+      { "summary": "ねすてぃーはコミュニケーション(言語・滑舌)に難がありコール力は本当に無いので、コール力をもっと下げてよいとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:22])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "中", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "9:22", "selfTeam": false, "note": "2026-10-11 の価値責任者の決定 Q4(B) で分類の規則を改め(意図が伝わらない発言・試合中に喋らないことの記述は否定の根拠(弱〜中)に当たる)、否定の根拠(kind player・collectedBy human、強さ 中)として normalized/shotcalling.json へ入れた(「コールしない側」の確認ではないため owner-confirmation にしない)", "normalized": true }
     ],
     "LR-MASTERS-MID": [
-      { "summary": "Recap はコールをやらざるを得ないがコール力はこんなに無く、もっと下げてよい。喋りがゆっくりで、チームの動きや考えに合わせる気が無いとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:39])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "-", "strength": "中", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "10:39", "selfTeam": false, "note": "0:48 でも『頑張ってコールするのは Recap だがテンポよく喋れない』。2026-10-11 の価値責任者の決定 Q4(B) で分類の規則を改め(意図が伝わらない発言・試合中に喋らないことの記述は否定の根拠(弱〜中)に当たる)、否定の確認(強さ 中)として normalized/shotcalling.json へ入れた", "normalized": true }
+      { "summary": "Recap はコールをやらざるを得ないがコール力はこんなに無く、もっと下げてよい。喋りがゆっくりで、チームの動きや考えに合わせる気が無いとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:39])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "中", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "10:39", "selfTeam": false, "note": "0:48 でも『頑張ってコールするのは Recap だがテンポよく喋れない』。2026-10-11 の価値責任者の決定 Q4(B) で分類の規則を改め(意図が伝わらない発言・試合中に喋らないことの記述は否定の根拠(弱〜中)に当たる)、否定の根拠(kind player・collectedBy human、強さ 中)として normalized/shotcalling.json へ入れた(「コールしない側」の確認ではないため owner-confirmation にしない)", "normalized": true }
     ],
     "LR-CORE-SUP": [
       { "summary": "価値責任者が「千燈ゆうひはコール力がとても高く、チーム全体と各ウェーブの状態を見て根拠を持って喋る、マクロコールに必要なことが全部できる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:18])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "4:18", "selfTeam": false, "note": "15:30 でも『コール力が最大級なのは妥当』。過去には Killin9Hit をコントロールする役。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
