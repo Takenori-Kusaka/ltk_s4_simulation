@@ -18,6 +18,8 @@ import { createHash } from 'node:crypto';
 import { loadMetaGuide } from '../meta/load.ts';
 import { ROSTER } from '../data/roster.ts';
 import { evaluateTeams } from '../team/evaluate.ts';
+import { readChampionList, type ChampionList } from '../results/champions.ts';
+import { DEFAULT_RESULTS_ROOT, formatResultError, loadResults, summarizeResults, type LoadedResults } from '../results/load.ts';
 
 export interface AggregateMainOptions {
   rawDir?: string;
@@ -30,11 +32,14 @@ export interface AggregateMainOptions {
   groundsDir?: string;
   /** 常識の一覧(既定は src/rating/known-facts.json) */
   facts?: KnownFact[];
+  /** F-004: 試合結果の記録の置き場の親(results/ と scrims/ を持つ)。省略時は記録を読まない。コマンドからの実行では docs/research/grounds */
+  resultsRoot?: string;
 }
 
 /**
  * 終了コード: 0 = 完了、1 = 一部の失敗(Data Dragon の取得、読めないファイル)。失敗しても書ける集計は書く
  * 2 = 評価が常識の一覧に反した(公開用の評価 ratings.json を書かない。基準22)
+ * 3 = 試合結果の記録が検証に反した(F-004 基準4。ratings.json・winrates.json・results.json のどれも書かない)
  */
 export async function main(opts: AggregateMainOptions = {}): Promise<number> {
   const out = opts.out ?? ((l: string) => console.log(l));
@@ -46,7 +51,7 @@ export async function main(opts: AggregateMainOptions = {}): Promise<number> {
   out(`集計のファイル ${written.length} 件を書いた`);
   for (const e of errors) out(`エラー: ${e}`);
   if (errors.length > 0) code = 1;
-  code = Math.max(code, writeRatings(opts, publicDir, out));
+  // チャンピオンの一覧は試合結果の記録の検証(F-004 基準2)にも使うため、評価の前に取る。失敗しても前回の一覧があれば使う
   try {
     const path = await saveDataDragon(publicDir, { fetch: opts.fetch, now: opts.now });
     out(`Data Dragon のチャンピオンの一覧を書いた: ${path}`);
@@ -54,7 +59,37 @@ export async function main(opts: AggregateMainOptions = {}): Promise<number> {
     out(`Data Dragon の取得に失敗: ${e instanceof Error ? e.message : String(e)}`);
     code = 1;
   }
+  // F-004 Task-1: 試合結果の記録(本番・スクリム)。反した記録があれば公開用の評価・勝率表を書かずに止める(基準4)
+  const results = readResults(opts, publicDir, out);
+  if (results && results.errors.length > 0) {
+    for (const e of results.errors) out(`試合結果の記録のエラー: ${formatResultError(e)}`);
+    out(`試合結果の記録が検証に反したため(${results.errors.length} 件)、評価と勝率表を書かない`);
+    return 3;
+  }
+  code = Math.max(code, writeRatings(opts, publicDir, out));
   return code;
+}
+
+/** F-004 基準1〜7: 記録を読んで検証し、読んだ件数・除いた記録・使わない選手の行を出す。resultsRoot が無ければ読まない */
+function readResults(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void): LoadedResults | null {
+  if (!opts.resultsRoot) return null;
+  let champions: ChampionList | null = null;
+  const championsPath = join(publicDir, 'champions.json');
+  if (existsSync(championsPath)) {
+    try {
+      const r = readChampionList(JSON.parse(readFileSync(championsPath, 'utf8')));
+      champions = r.list;
+      if (r.error) out(`チャンピオンの一覧: ${r.error}`);
+    } catch (e) {
+      out(`チャンピオンの一覧: ${championsPath}: ${(e as Error).message}`);
+    }
+  }
+  if (!champions) out('チャンピオンの一覧(champions.json)が無いため、試合結果の記録の champion の検証を省いた');
+  const loaded = loadResults({ root: opts.resultsRoot, champions });
+  out(summarizeResults(loaded));
+  for (const x of loaded.excluded) out(`試合結果の記録を除いた: ${x.file}[${x.index}] ${x.reason}(${x.detail})`);
+  for (const u of loaded.unconfirmed) out(`試合結果の記録の未確認: ${u.rosterName}(${u.file}[${u.index}] ${u.team} ${u.role})。この行は使わない`);
+  return loaded;
 }
 
 /** F-009 基準21・22: 評価を計算し、常識の一覧を検査して、反しなければ ratings.json を書く */
@@ -130,5 +165,5 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
 
 // 直接の実行の入口。テストは main を呼ぶ
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  process.exitCode = await main();
+  process.exitCode = await main({ resultsRoot: DEFAULT_RESULTS_ROOT });
 }
