@@ -280,3 +280,30 @@ test('AC29(改訂 2026-10-10): 元プロの下限は経歴の水準で決める�
   assert.equal(at('LJL CS-starter').anchor, 8);
   assert.equal(at('LJL-starter', 4).anchorSource, '元プロの下限');
 });
+
+// F-004 Task-2: 受入基準 13(スクリムの試合の重み)・15(確度の理由の文)
+test('F-004 AC13: スクリムの試合(kind scrim)は新しさの重み × scrimGameWeight で数え、有効な試合数 n・縮小・補正の重み付き平均・確度に効く', () => {
+  const gold = { tier: 'GOLD', division: 'IV', lp: 0 };
+  const cfgS: EngineConfig = { ...cfg, scrimGameWeight: 2 };
+  const solo = game({ ageDays: 0, me: { dmg: 21000 } }); // z = +1
+  const scrim: GameRecord = { ...game({ ageDays: 0, me: { dmg: 19000 } }), kind: 'scrim', queueId: 0 }; // z = −1
+  const r = scoreDataAxis(axis, { rank: gold, games: [solo, scrim], position: 'MIDDLE' }, population, cfgS, NOW);
+  assert.ok(Math.abs(r.effectiveGames - 3) < 1e-9, `n = 1 + 2 = 3(${r.effectiveGames})`);
+  assert.ok(Math.abs(r.correction - -1 / 3) < 1e-9, `補正 = (1 − 2) ÷ 3(${r.correction})`);
+  assert.ok(Math.abs(r.shrink - 3 / 11) < 1e-9);
+  assert.equal(r.scrimGames, 1);
+  assert.match(r.confidenceReason, /スクリム 1 試合\(重み 2\.0\)を含む/);
+  // 設定に scrimGameWeight が無ければ従来どおり 1 倍
+  const r1 = scoreDataAxis(axis, { rank: gold, games: [solo, scrim], position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(r1.effectiveGames - 2) < 1e-9);
+  assert.ok(Math.abs(r1.correction) < 1e-9);
+  // 確度の有効な試合数も重みで数える: スクリム 3 試合 × 2.0 = 6.0 → 中(重みが無ければ 3.0 → 低)
+  const three: GameRecord[] = [1, 2, 3].map((i) => ({ ...game({ ageDays: 0, matchId: `S${i}` }), kind: 'scrim', queueId: 0 }));
+  assert.equal(scoreDataAxis(axis, { rank: gold, games: three, position: 'MIDDLE' }, population, cfgS, NOW).confidence, '中');
+  assert.equal(scoreDataAxis(axis, { rank: gold, games: three, position: 'MIDDLE' }, population, cfg, NOW).confidence, '低');
+  // ソロランクだけなら文を出さない
+  const only = scoreDataAxis(axis, { rank: gold, games: [solo], position: 'MIDDLE' }, population, cfgS, NOW);
+  assert.equal(only.scrimGames, 0);
+  assert.doesNotMatch(only.confidenceReason, /スクリム/);
+  assert.match(only.confidenceReason, /有効な試合数/);
+});

@@ -166,3 +166,111 @@ test('基準12: career.json の lol.years が tournament.json の pro の年数�
   const t = rating.axes.find((a) => a.key === 'tournament')!;
   assert.ok(t.reason.includes('LJL 経歴の記録(career.json) 3 年'), t.reason);
 });
+
+// F-004 Task-2: 受入基準 12(評価の入力へ足す)・13・15(軸の説明と確度の理由)・16(ピックプール)・17(スクリムの文字起こしのコール力の根拠)
+import { collectResults, loadResults } from '../../src/results/load.ts';
+import { readChampionList } from '../../src/results/champions.ts';
+import { ROSTER } from '../../src/data/roster.ts';
+
+const NOW2 = Date.parse('2026-10-11T03:00:00Z');
+const SCRIM_FILE = '2026-10-10-lr-core-vs-dd-core.json';
+const F004_ROLES = ['TOP', 'JG', 'MID', 'ADC', 'SUP'] as const;
+const F004_CHAMP: Record<string, string> = { TOP: 'ヨリック', JG: 'パンテオン', MID: 'アカリ', ADC: 'ユナラ', SUP: 'ルル' };
+const F004_CHAMPS = readChampionList({ champions: { Yorick: 'ヨリック', Pantheon: 'パンテオン', Akali: 'アカリ', Yunara: 'ユナラ', Lulu: 'ルル' }, keys: { Yorick: 83, Pantheon: 80, Akali: 84, Yunara: 804, Lulu: 117 } }).list!;
+type Row = Record<string, unknown>;
+/** 階級チームの 5 人(JG のチャンピオンは null)。kills で両チームの差を付ける */
+const f004Team = (label: string, kills: number): Row => {
+  const [team, tier] = label.split(' ');
+  const players = F004_ROLES.map((role) => {
+    const p = ROSTER.find((x) => x.team === team && x.tier === tier && x.role === role)!;
+    return { role, rosterName: p.name, mappingConfidence: '確信', champion: role === 'JG' ? null : F004_CHAMP[role], kills, deaths: 2, assists: 4, gold: 10000, damage: 10000 };
+  });
+  return { kills: kills * 5, deaths: 10, assists: 20, gold: 50000, players };
+};
+const f004Scrim = (duration: string, winner: 'DD CORE' | 'LR CORE'): Row => ({
+  kind: 'scrim', date: '2026-10-10', listeners: false, source: { url: 'https://www.youtube.com/watch?v=x' }, duration, winner,
+  teams: { 'LR CORE': f004Team('LR CORE', winner === 'LR CORE' ? 3 : 1), 'DD CORE': f004Team('DD CORE', winner === 'DD CORE' ? 3 : 1) },
+});
+/** 評価の入力: 根拠は空、ソロランクの試合は無し、スクリムだけ */
+const f004Inputs = (raw: Row[]) => {
+  const r = collectResults([{ file: SCRIM_FILE, kind: 'scrim', raw }], { champions: F004_CHAMPS });
+  assert.deepEqual(r.errors, []);
+  return loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), scrims: r.games });
+};
+const axisOf = (ratings: ReturnType<typeof buildRatings>, id: string, key: string) => ratings.find((r) => r.playerId === id)!.axes.find((a) => a.key === key)!;
+
+test('F-004 AC12: loadRatingInputs は受け付けたスクリムの記録から作った試合の記録を、ソロランクの試合と同じ games に足す', () => {
+  const real = loadResults({ root: 'docs/research/grounds', champions: null });
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), scrims: real.games.filter((g) => g.file === SCRIM_FILE) });
+  assert.deepEqual(errors, []);
+  const adc = find(inputs.players, 'DD-CORE-ADC');
+  assert.equal(adc.games.length, 3);
+  assert.ok(adc.games.every((g) => g.kind === 'scrim' && g.queueId === 0 && g.position === 'BOTTOM'));
+  assert.equal(find(inputs.players, 'CC-MASTERS-TOP').games.length, 0);
+  assert.equal(inputs.matches.length, 0, 'スクリムは母集団(matches)に入れない');
+  // 渡さなければ従来どおり
+  assert.equal(find(loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds() }).inputs.players, 'DD-CORE-ADC').games.length, 0);
+});
+
+test('F-004 AC13/AC15: 軸の説明と確度の理由に「スクリム n 試合(重み 2.0)を含む」。有効な試合数は 2.0 倍。スクリムが効かない軸(レーン戦)には文を出さない', () => {
+  const { inputs } = f004Inputs([f004Scrim('40:00', 'DD CORE'), f004Scrim('35:00', 'DD CORE'), f004Scrim('30:00', 'LR CORE')]);
+  const ratings = buildRatings(inputs, NOW2);
+  const ground = axisOf(ratings, 'DD-CORE-ADC', 'ground');
+  assert.match(ground.reason, /スクリム 3 試合\(重み 2\.0\)を含む/);
+  assert.match(ground.data!.confidenceReason, /スクリム 3 試合\(重み 2\.0\)を含む/);
+  assert.equal(ground.data!.scrimGames, 3);
+  const w = 0.5 ** (1 / 45); // 2026-10-10 正午(JST)から基準日まで 1 日
+  assert.ok(Math.abs(ground.data!.effectiveGames - 6 * w) < 1e-6, `有効な試合数 ${ground.data!.effectiveGames}`);
+  const laning = axisOf(ratings, 'DD-CORE-ADC', 'laning');
+  assert.equal(laning.data!.scrimGames, 0);
+  assert.doesNotMatch(laning.reason, /スクリム/);
+  assert.doesNotMatch(laning.data!.confidenceReason, /スクリム/);
+  assert.equal(laning.estimated, true, '14 分の値が無いレーン戦は事前値のまま');
+  const none = axisOf(ratings, 'CC-MASTERS-TOP', 'ground');
+  assert.doesNotMatch(none.reason, /スクリム/);
+});
+
+test('F-004 AC16: ピックプールはスクリムの使用チャンピオンを 1 試合(勝敗つき)として数え(重みは掛けない)、champion が null の行は数えない', () => {
+  const { inputs } = f004Inputs([f004Scrim('40:00', 'DD CORE'), f004Scrim('35:00', 'DD CORE'), f004Scrim('30:00', 'LR CORE')]);
+  const ratings = buildRatings(inputs, NOW2);
+  const pool = axisOf(ratings, 'DD-CORE-ADC', 'pool');
+  assert.equal(pool.estimated, false);
+  assert.deepEqual(pool.data!.poolDetail?.list.map((c) => [c.championId, c.games]), [[804, 3]]);
+  assert.ok(Math.abs((pool.data!.poolDetail?.list[0].winRate ?? 0) - (2 + 2.5) / (3 + 5)) < 1e-9, '2 勝 1 敗を事前 5 試合で縮小');
+  const w = 0.5 ** (1 / 45);
+  assert.ok(Math.abs(pool.data!.effectiveGames - 3 * w) < 1e-6, 'ピックプールの有効な試合数には scrimGameWeight を掛けない');
+  assert.equal(pool.data!.scrimGames, 3);
+  const jg = axisOf(ratings, 'DD-CORE-JG', 'pool');
+  assert.equal(jg.estimated, true, 'champion が null の行は試合の数にも数えない');
+  assert.equal(jg.data!.effectiveGames, 0);
+  assert.equal(jg.data!.scrimGames, 0);
+});
+
+test('F-004 AC17: スクリムの文字起こしの根拠は speakerIdentified と時刻つきの URL が無ければ読まず警告し、読んだ根拠は確度「低」(確度の数に入れない)', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'f004-grounds-sc-'));
+  writeFileSync(join(dir, 'tournament.json'), JSON.stringify({ kind: 'evidence-tournament', players: {} }));
+  const item = (over: Record<string, unknown>) => ({ summary: '根拠', source: 'https://www.youtube.com/watch?v=AZbkNH5Z5-I&t=27865s', direction: '+', strength: '中', kind: 'player', collectedBy: 'human', ...over });
+  writeFileSync(join(dir, 'shotcalling.json'), JSON.stringify({
+    kind: 'evidence-shotcalling',
+    players: { 'DD-CORE-ADC': { evidence: [
+      item({ origin: 'scrim-transcript:2026-10-10', speakerIdentified: true }),
+      item({ origin: 'scrim-transcript:2026-10-10' }),
+      item({ origin: 'scrim-transcript:2026-10-10', speakerIdentified: true, source: 'https://www.youtube.com/watch?v=AZbkNH5Z5-I' }),
+      item({ origin: 'video:2026-10-01', source: 'https://example.test/talk' }),
+    ] } },
+  }));
+  const { inputs, errors, warnings } = loadRatingInputs({ rawDir: rawDir(), groundsDir: dir });
+  assert.deepEqual(errors, []);
+  assert.equal(warnings.length, 2, warnings.join('\n'));
+  assert.ok(warnings.every((w) => w.includes('DD-CORE-ADC')));
+  assert.ok(warnings.some((w) => /話者/.test(w)) && warnings.some((w) => /時刻/.test(w)), warnings.join('\n'));
+  const sc = find(inputs.players, 'DD-CORE-ADC').shotcalling;
+  assert.equal(sc.length, 2);
+  const axis = axisOf(buildRatings(inputs, NOW2), 'DD-CORE-ADC', 'shotcalling');
+  assert.equal(axis.base, 7, '肯定 中 2 件: 5.0 + 1.0 + 1.0');
+  assert.equal(axis.confidence, '中', '人が確認した根拠は 1 件(スクリムの文字起こしは確度に数えない)');
+  assert.match(axis.evidence!.confidenceReason, /スクリムの文字起こし/);
+  const scrimItem = axis.evidence!.evidence.find((e) => e.source.includes('t=27865s'))!;
+  assert.ok(scrimItem.marks.some((m) => /低/.test(m)), JSON.stringify(scrimItem.marks));
+  assert.equal(scrimItem.used, true);
+});

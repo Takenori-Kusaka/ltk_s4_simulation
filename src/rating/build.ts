@@ -4,8 +4,10 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROSTER } from '../data/roster.ts';
+import { scrimGameRecords } from '../results/to-games.ts';
+import type { MatchResult } from '../results/types.ts';
 import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
-import { extractGame, loadEngineConfig, populationMatch } from './engine.ts';
+import { extractGame, loadEngineConfig, populationMatch, scrimSentence } from './engine.ts';
 import { roleSwitchDiscount,
   mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
@@ -116,7 +118,8 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
-      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason]
+      // F-004 基準15: スクリムの試合を使った軸は、その数と重み(ピックプールは 1 試合として数えるため 1.0)を説明に示す
+      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1)]
         .filter(Boolean)
         .join('。') + (discount.reason ? `。${discount.reason}` : ''),
       data: a,
@@ -154,11 +157,14 @@ export interface LoadOptions {
   rawDir: string;
   /** 根拠の正規化した記録の置き場(shotcalling.json・tournament.json。career.json はあれば読む) */
   groundsDir: string;
+  /** F-004 基準12: 受け付けた試合結果の記録(src/results/load.ts)。スクリムの記録を選手の試合の記録に足す。無ければ足さない */
+  scrims?: readonly MatchResult[];
 }
 
-/** data/raw と根拠の記録から評価の入力を作る。読めないファイルは errors に出す */
-export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; errors: string[] } {
+/** data/raw と根拠の記録から評価の入力を作る。読めないファイルは errors に、読まなかった根拠は warnings に出す */
+export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; errors: string[]; warnings: string[] } {
   const errors: string[] = [];
+  const scrimGames = scrimGameRecords(opts.scrims ?? []);
   const read = <T>(path: string): T | null => {
     try {
       return readJson(path) as T;
@@ -173,6 +179,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
   const careerPath = join(opts.groundsDir, 'career.json');
   const cr: ReturnType<typeof readCareerSnapshot> = existsSync(careerPath) ? readCareerSnapshot(read(careerPath)) : { players: {}, errors: [] };
   errors.push(...sc.errors, ...tr.errors, ...cr.errors);
+  const warnings = [...sc.warnings];
 
   const infos = new Map<string, unknown>();
   const matchInfo = (id: string) => {
@@ -208,7 +215,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       peakRank: career?.peakRank ?? null,
       seasonPeakRank: career?.seasonPeakRank ?? null,
       exPro: career?.exPro ?? null,
-      games,
+      games: [...games, ...(scrimGames.get(r.id) ?? [])],
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],
       masteryScore: typeof ms === 'number' ? ms : typeof ms?.data === 'number' ? ms.data : undefined,
       shotcalling: sc.players[r.id] ?? [],
@@ -216,6 +223,6 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
-  return { inputs: { players, matches }, errors };
+  return { inputs: { players, matches }, errors, warnings };
 }
 
