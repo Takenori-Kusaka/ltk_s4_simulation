@@ -19,12 +19,14 @@
 | Task-9 | (2026-10-09 に旧 Task-6 から分割)画面(チームのページ): 全軸の相対評価のレーダーとチームの指標の表示 | 25 | `src/app/team/**`、`src/app/**`、`tests/app/**` | Task-6, Task-8 | 不可 |
 | Task-11 | (2026-10-10 追加。再判定 2)経歴の反映: 経歴の記録の読み込み(最高ランク・プロの経歴)、ランクの基準 = ソロランクと最高ランクの高い方、元プロの下限(Challenger 0 LP = 8.0)、基準の出どころの表示 | 6, 28, 29, 30 | `src/rating/engine.ts`、`src/rating/build.ts`、`src/rating/types.ts`、`src/rating/evidence.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-7 | 可 |
 | Task-10 | (2026-10-09 追加。価値責任者の依頼)根拠の収集の道具: 配信の文字起こしの前処理(生成 AI を使わない。自動字幕の重なりの除去、区間、LoL・LTK と無関係の区間の除去、選手の対応付け、コール・プレイスタンスの手がかりの数)。根拠の抜き出しは前処理の出力を読む | 12〜16 | `src/transcript/**`、`tests/transcript/**`、`docs/research/grounds/README.md` | — | 可 |
+| Task-12 | (2026-10-11 追加。再判定 4)大会経験の改訂: プロの経歴の加点の上限 `proMax` 3.0、国際大会の記録(経歴の記録の `lol.internationalEvents`。出典は `lol.statusSource`)の読み込みと加点(`internationalPer`・`internationalMax`)、他の大会との重複の除外(別名の表 `internationalAliases`。同じ大会名と年)、軸の説明と根拠の一覧への追加 | 12, 32 | `src/rating/evidence.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/rating/evidence.test.ts`、`tests/rating/build.test.ts` | Task-11 | 可(Task-13 と同じファイルに触るため、マージは順に) |
+| Task-13 | (2026-10-11 追加。再判定 4)到達点からのブランク: 到達の時点の読み方(`peak.allTime.when` の自由記述から最も遅い日付。年だけなら 7 月 1 日)と最終出場年(`lol.lastCompetitiveYear`)の読み込み、歴代の最高ランクと元プロの下限のブランクの減衰(`blankDecayPerYear`・`blankGraceYears`。下限は 8.0 を下回らない、現役の記録より下げない)、不明時の印と確度の 1 段下げ、ランクの基準の説明(到達・ブランク・減衰) | 6, 33, 34, 35, 36 | `src/rating/engine.ts`、`src/rating/types.ts`、`src/rating/evidence.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-11 | 可(Task-12 と同じファイルに触るため、マージは順に) |
 
 ## 粒度の確認
 
 | 項目 | 上限 | 見込み |
 | --- | --- | --- |
-| 変更行数 | 800 | Task-1 約600 / Task-2 約400 / Task-3 約400(データの初版を除く)/ Task-4 約300 / Task-5 約300 / Task-6 約600 |
+| 変更行数 | 800 | Task-1 約600 / Task-2 約400 / Task-3 約400(データの初版を除く)/ Task-4 約300 / Task-5 約300 / Task-6 約600 / Task-12 約250 / Task-13 約400(到達の時点の読み方のテストに実データの `when` 59 件を含む) |
 | 変更ファイル数 | 15 | 各 3〜10 |
 | レビュー所要時間 | 30分 | 各 20〜30 分 |
 
@@ -34,8 +36,10 @@
 | --- | --- | --- |
 | 1〜9, 23 | 単体(固定の試合の組で、期間外・短い試合の除外、ロールの絞り込み、重み、基準、標準化、縮小、確度、事前値) | `tests/rating/engine.test.ts` |
 | 10, 11 | 単体(LTK の経験の項と上限、ピックプールの計算がチャンピオンの総数に依らない) | `tests/rating/axes.test.ts` |
-| 12〜16 | 単体(根拠の無いコール力はデータなし、AI 収集の印と確度、否定の根拠は下げる向き) |
-| 17〜19 | 単体(係数の範囲、判断材料なし、表示の点数) | `tests/rating/form.test.ts` | `tests/rating/evidence.test.ts` |
+| 12〜16 | 単体(根拠の無いコール力はデータなし、AI 収集の印と確度、否定の根拠は下げる向き) | `tests/rating/evidence.test.ts` |
+| 12, 32(2026-10-11 の改訂) | 単体(プロの加点の上限 3.0、国際大会の加点と上限、出典の無い国際大会の記録は数えない、他の大会との重複の除外(別名・年の一致と不一致)、説明の文) | `tests/rating/evidence.test.ts`・`tests/rating/build.test.ts` |
+| 33〜36 | 単体(到達の時点の読み方を経歴の記録の `when` 59 件の全数で、減衰と猶予、下限 8.0 を下回らない、ソロランク・今季の最高より下げない、不明時の印と確度の 1 段下げ、同値なら不明でない候補、説明の形) | `tests/rating/engine.test.ts`・`tests/rating/build.test.ts` |
+| 17〜19 | 単体(係数の範囲、判断材料なし、表示の点数) | `tests/rating/form.test.ts` |
 | 21, 22 | 単体(条件に反するとファイルを書かずに失敗) | `tests/rating/known-facts.test.ts` |
 | 26, 27 | 単体(差し替えた fetch) | `tests/collect/collect.test.ts` |
 | 20, 24, 25 | 画面の論理の単体と、Chrome・Playwright での確認 | `tests/app/**` |
@@ -49,6 +53,7 @@
 | 3 | Task-7 | 層2 のマージ後の main | 常識の検査 |
 | 4 | Task-6・Task-8 | 層3 のマージ後の main | 選手のページ / チームの指標の計算(並列) |
 | 5 | Task-9 | 層4 のマージ後の main | チームのページ |
+| 6 | Task-12・Task-13 | Task-11 のマージ後の main | 大会経験の改訂 / 到達点からのブランク(別の関心事。同じファイルに触るため、マージは順に) |
 
 ## AI エージェントへ与える分割の指示
 
