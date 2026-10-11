@@ -6,13 +6,17 @@ import type { FetchLike } from './riot.ts';
 const BASE = 'https://ddragon.leagueoflegends.com';
 const LOCALE = 'ja_JP';
 
-/** data/public/champions.json の形。champions はチャンピオンの ID(match-v5 の championName と同じ)→ 日本語の名前 */
+/**
+ * data/public/champions.json の形。champions はチャンピオンの ID(match-v5 の championName と同じ)→ 日本語の名前。
+ * keys はチャンピオンの ID → 数値の key(match-v5 の championId と同じ。F-004 の試合結果の記録の champion を引く)
+ */
 export interface ChampionsFile {
   version: string;
   source: string;
   /** YYYY-MM-DD */
   retrievedAt: string;
   champions: Record<string, string>;
+  keys: Record<string, number>;
 }
 
 export interface DataDragonOptions {
@@ -33,11 +37,17 @@ export async function fetchDataDragon(opts: DataDragonOptions = {}): Promise<Cha
   // versions.json は新しい版から並ぶ
   if (!Array.isArray(versions) || typeof versions[0] !== 'string') throw new Error('Data Dragon の版の一覧が読めない');
   const version = versions[0];
-  const list = (await getJson(fetch, `${BASE}/cdn/${version}/data/${LOCALE}/champion.json`)) as { data?: Record<string, { id?: string; name?: string }> };
+  const list = (await getJson(fetch, `${BASE}/cdn/${version}/data/${LOCALE}/champion.json`)) as { data?: Record<string, { id?: string; key?: string; name?: string }> };
   const champions: Record<string, string> = {};
-  for (const c of Object.values(list?.data ?? {})) if (c?.id && c.name) champions[c.id] = c.name;
+  const keys: Record<string, number> = {};
+  for (const c of Object.values(list?.data ?? {})) {
+    if (!c?.id || !c.name) continue;
+    champions[c.id] = c.name;
+    const key = Number(c.key);
+    if (Number.isInteger(key) && key > 0) keys[c.id] = key;
+  }
   if (Object.keys(champions).length === 0) throw new Error(`Data Dragon ${version} のチャンピオンの一覧が空`);
-  return { version, source: `Riot Data Dragon ${version} (${LOCALE})`, retrievedAt: now().toISOString().slice(0, 10), champions };
+  return { version, source: `Riot Data Dragon ${version} (${LOCALE})`, retrievedAt: now().toISOString().slice(0, 10), champions, keys };
 }
 
 /** 取得に成功したときだけ `<publicDir>/champions.json` を書き、パスを返す */
