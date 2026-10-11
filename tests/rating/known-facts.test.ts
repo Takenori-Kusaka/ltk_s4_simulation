@@ -53,7 +53,7 @@ const SAMPLE = () =>
     p('LOW', { rank: { tier: 'GOLD', division: 'IV', lp: 0 }, shotcalling: [] }),
     p('PRO', { tier: 'MASTERS', tournament: { ...NO_RECORD, pro: [{ league: 'LJL', team: 'T', years: 3, source: 's' }] } }),
     p('ROOKIE', { tier: 'NEXT', position: 'TOP', games: [game('TOP'), game('MIDDLE')] }),
-    p('CC-NEXT-TOP', { tier: 'NEXT', shotcalling: [ev('+', '弱'), ev('-', '強', 'owner-confirmation')] }),
+    p('IT-NEXT-MID', { tier: 'NEXT', shotcalling: [ev('+', '弱'), ev('-', '強', 'owner-confirmation')] }),
   ]);
 
 test('評価: 全選手に 8 軸(データの6軸 + コール力・大会経験)と調子の係数が付き、表示の点数は 基礎 + (係数 − 1) × 5', () => {
@@ -104,11 +104,12 @@ test('AC21 K-03: 肯定の根拠が無いのに 2.5 を超える、否定が肯�
   assert.deepEqual(ids(report, 'K-03').map((v) => [v.playerId, v.axis]).sort(), [['LOW', 'コール力'], ['NEG', 'コール力']]);
 });
 
+// 2026-10-11: 価値責任者の決定 Q3(B)・Q5(A) で一覧が 空澄セナ・獅子堂あかり・まいたけ(IT-NEXT-MID)になった。見本の選手を一覧にある ID に合わせた
 test('AC21 K-04: 価値責任者が「コールしない側」と確認した選手のコール力が 4.0 を超えたら列挙し、チームのマクロは未計算と示す', () => {
   const report = run(SAMPLE(), (rs) => {
-    axis(rs.find((r) => r.playerId === 'CC-NEXT-TOP')!, 'shotcalling').base = 4.5;
+    axis(rs.find((r) => r.playerId === 'IT-NEXT-MID')!, 'shotcalling').base = 4.5;
   });
-  assert.deepEqual(ids(report, 'K-04').map((v) => [v.playerId, v.axis]), [['CC-NEXT-TOP', 'コール力']]);
+  assert.deepEqual(ids(report, 'K-04').map((v) => [v.playerId, v.axis]), [['IT-NEXT-MID', 'コール力']]);
   assert.match(report.results.find((r) => r.id === 'K-04')!.note ?? '', /マクロ/);
 });
 

@@ -190,8 +190,9 @@ test('スナップショット: 60 名全員の根拠があり、すべての根
   for (const list of Object.values(shotSnap.players)) for (const e of list) assert.ok(e.source.length > 0);
 });
 
-test('K-04: 価値責任者が「コールしない側」と確認した4名のコール力は 4.0 以下で、人の確認の根拠を持つ', () => {
-  for (const name of ['龍巻ちせ', '叶', '空澄セナ', '獅子堂あかり']) {
+// 2026-10-11: 価値責任者の決定 Q3(B)(龍巻ちせ・叶の 2026-10-08 の確認を外す)と Q5(A)(まいたけを足す)で、一覧は 3 名になった
+test('K-04: 価値責任者が「コールしない側」と確認した3名のコール力は 4.0 以下で、人の確認の根拠を持つ', () => {
+  for (const name of ['空澄セナ', '獅子堂あかり', 'まいたけ']) {
     const list = shotSnap.players[idOf(name)];
     const r = shotcallingAxis(list, loadEvidenceConfig().shotcalling);
     assert.ok(r.score <= 4.0, `${name} ${r.score}`);
@@ -218,12 +219,34 @@ test('スナップショット: 春茶は根拠が無く「コール役の実績
   assert.match(r.reason, /コール役の実績が見当たらない/);
 });
 
-// 2026-10-09: hetel の配信で叶に肯定の根拠が入った。価値責任者の「コールしない側」の確認により 4.0 以下に収まる(価値責任者がテストの変更を決定)
-test('スナップショット: 叶は肯定の根拠があっても、価値責任者の確認により 4.0 以下', () => {
-  const cfg = loadEvidenceConfig().shotcalling;
-  const r = shotcallingAxis(shotSnap.players[idOf('叶')], cfg);
-  assert.ok(shotSnap.players[idOf('叶')].some((e) => e.direction === '+'));
-  assert.ok(r.score <= cfg.negativeCap, String(r.score));
+// 2026-10-09: hetel の配信で叶に肯定の根拠が入り、価値責任者の「コールしない側」の確認で 4.0 以下に収めていた(価値責任者がテストの変更を決定)。
+// 2026-10-11: 価値責任者の決定 Q3(B) で龍巻ちせ・叶の 2026-10-08 の確認を外した(ちせは 10-11 のレビューの肯定の確認で置き換え、叶は確認なし)。前の検査を置き換える
+test('スナップショット: 龍巻ちせ・叶に 2026-10-08 の「コールしない側」の確認は無く、ちせには 2026-10-11 の肯定の確認、叶には価値責任者の確認が無い', () => {
+  for (const name of ['龍巻ちせ', '叶']) {
+    const list = shotSnap.players[idOf(name)];
+    assert.ok(!list.some((e) => e.kind === 'owner-confirmation' && e.direction === '-'), name);
+    assert.ok(!list.some((e) => e.source.includes('2026-10-08')), name);
+  }
+  assert.ok(shotSnap.players[idOf('龍巻ちせ')].some((e) => e.kind === 'owner-confirmation' && e.direction === '+' && e.source.includes('2026-10-11')));
+  assert.ok(!shotSnap.players[idOf('叶')].some((e) => e.kind === 'owner-confirmation'));
+});
+
+// 2026-10-11: 価値責任者の決定 Q4(B)。言語・喋り方を理由にした 10-11 のレビューの発言を否定の確認(強さ 中)として入れ、監査で外した否定のうち規則に当たる 3 件を戻した
+test('スナップショット: ねすてぃー・Recap に 2026-10-11 の否定の確認(中)があり、ねすてぃー・Killin9Hit・天帝フォルテに戻した否定が元の出典つきである', () => {
+  for (const name of ['ねすてぃー', 'Recap']) {
+    const list = shotSnap.players[idOf(name)];
+    assert.ok(list.some((e) => e.kind === 'owner-confirmation' && e.direction === '-' && e.strength === '中' && e.source.includes('2026-10-11')), name);
+    assert.ok(shotcallingAxis(list, loadEvidenceConfig().shotcalling).score <= loadEvidenceConfig().shotcalling.negativeCap, name);
+  }
+  const restored: [string, RegExp, string][] = [
+    ['ねすてぃー', /日本語・滑舌の問題で意図が伝わりにくい/, 'xdsbfDbaqRU'],
+    ['Killin9Hit', /試合中の日本語でのコミュニケーションを課題/, 'EMad3J7DPa0'],
+    ['天帝フォルテ', /喋ってない/, '6cUq6njtOdE'],
+  ];
+  for (const [name, re, videoId] of restored) {
+    const hit = shotSnap.players[idOf(name)].find((e) => e.direction === '-' && re.test(e.summary));
+    assert.ok(hit && hit.source.includes(videoId) && hit.collectedBy === 'ai', name);
+  }
 });
 
 // --- 基準12: 大会経験 ---
