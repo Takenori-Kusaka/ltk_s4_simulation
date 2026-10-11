@@ -1,0 +1,148 @@
+{
+  "kind": "evidence-transcript",
+  "file": "owner-review/20261011-lr-review.md",
+  "description": "価値責任者本人が公開ページを見ながら LR の 3 階級チーム 15 名の点数について話した音声の文字起こし(data/transcript/owner-review/、リポジトリ外、話者は価値責任者 1 人、約 18 分)から、AI が発言を 4 種類(A 事実 / B 点数への意見 / C モデル・表示への指摘 / D 雑談)に分けて要約した記録。発言の全文は転記しない。A のうちコールの担い手についての明確な発言は normalized/shotcalling.json へ kind owner-confirmation として足した(normalized: true)。曖昧なもの(normalized: false)と B・C は docs/research/grounds/owner-review-lr-20261011.md の表にある。前処理と別の AI による反証の試みは行っていない",
+  "source": { "title": "価値責任者による LR(MASTERS・CORE・NEXT)の点数レビュー(2026-10-11 の録音の文字起こし)", "url": "", "urlPending": false, "speaker": "価値責任者(本人。確かさ 高)", "retrievedAt": "2026-10-11", "preprocessed": "", "preprocessedWith": "", "note": "内部の録音のため URL は無い。前処理はかけず AI が直接読んだ。終盤(17:31)で価値責任者が疲れを口にしており、後半の個人の意見は簡潔" },
+  "aiCheckBy": "",
+  "caveats": [
+    "話者は価値責任者本人のため発言は『価値責任者の確認』として扱えるが、記録を書き起こしたのは AI。価値責任者が PR で各項目を確認するまでは仮の記録",
+    "価値責任者の『期待する順位・点数』そのものと、他の選手との順位づけの発言(4 番手・一番弱いなど)は記録しない",
+    "個人情報に触れる発言は記録しない: 勤め方に関わる言及(11:41)、職業に関わる言及(16:33)",
+    "ねすてぃー(言語・滑舌)と Recap(喋りのテンポ)のコール力についての否定の発言は、2026-10-10 の分類の規則(言語・滑舌・言い方の記述はコール力の否定に数えない)に当たるため正規化の記録へは入れず、表 C に置いた",
+    "自動の文字起こしのため固有名詞に誤変換がある(例: ケイジ・KH = Killin9Hit、井上新一郎 = 乾伸一郎、大御初任子・ニュンコ = 大御所にゅん子、鮮度由比・センドユヒ・千歳 = 千燈ゆうひ、コハクウル・コアクール = 狐白うる、ハルチュ・ハルチャー = 春茶、トーコ・東子 = No.1005、リカップ・リカプ = Recap、ヤウジ = YUKIO)。名簿と照らして対応づけた"
+  ],
+  "related": { "reviewTable": "docs/research/grounds/owner-review-lr-20261011.md" },
+  "matches": [],
+  "picks": {},
+  "shotcalling": {
+    "LR-MASTERS-TOP": [
+      { "summary": "apaMEN はコール力が低く、そこから来る連携の弱さがあるとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:58])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "8:58", "selfTeam": false, "note": "程度の発言のため正規化の記録へは入れない(表 B)。現在の値(3.5)と向きは一致", "normalized": false }
+    ],
+    "LR-MASTERS-JG": [
+      { "summary": "ねすてぃーはコミュニケーション(言語・滑舌)に難がありコール力は本当に無いので、コール力をもっと下げてよいとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:22])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "9:22", "selfTeam": false, "note": "理由が言語・滑舌で、分類の規則(言語・滑舌の記述はコール力の否定に数えない)に当たるため正規化の記録へは入れない。規則との関係は価値責任者の判断(表 C)", "normalized": false }
+    ],
+    "LR-MASTERS-MID": [
+      { "summary": "Recap はコールをやらざるを得ないがコール力はこんなに無く、もっと下げてよい。喋りがゆっくりで、チームの動きや考えに合わせる気が無いとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:39])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "10:39", "selfTeam": false, "note": "0:48 でも『頑張ってコールするのは Recap だがテンポよく喋れない』。理由が喋り方・態度で、分類の規則に当たるため正規化の記録へは入れない(表 C)", "normalized": false }
+    ],
+    "LR-CORE-SUP": [
+      { "summary": "価値責任者が「千燈ゆうひはコール力がとても高く、チーム全体と各ウェーブの状態を見て根拠を持って喋る、マクロコールに必要なことが全部できる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:18])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "4:18", "selfTeam": false, "note": "15:30 でも『コール力が最大級なのは妥当』。過去には Killin9Hit をコントロールする役。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "LR-CORE-MID": [
+      { "summary": "価値責任者が「乾伸一郎はコール力がある」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:43])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "14:43", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "LR-CORE-JG": [
+      { "summary": "Killin9Hit はチームとしての引く・行くのターンの動きができず、味方から『なぜ行くのか、なぜ下がらないのか』と指摘されることがとても多い(S1 からの癖)との発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:16])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "2:16", "selfTeam": false, "note": "指示を受ける側であることをうかがわせるが、コールの有無の発言ではないため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "LR-NEXT-TOP": [
+      { "summary": "狐白うるはコール力が低い以外は今の値でよいとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:11])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "16:11", "selfTeam": false, "note": "程度の発言のため正規化の記録へは入れない(表 B)。現在の値(4.0)と向きは一致", "normalized": false }
+    ],
+    "LR-NEXT-JG": [
+      { "summary": "IGL をやるべきアステル・レダがやりきれず、集団戦の形を作るコールができる人が LR NEXT にいないとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:53])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "7:53", "selfTeam": false, "note": "見立ての発言のため正規化の記録へは入れない(表 B)", "normalized": false }
+    ],
+    "LR-NEXT-MID": [
+      { "summary": "春茶はチームゲームで急にコールしろと言われても無理との発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:03])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "8:03", "selfTeam": false, "note": "見立ての発言のため正規化の記録へは入れない(表 B)。現在の値は 2.5(肯定 0 件)", "normalized": false }
+    ],
+    "LR-NEXT-ADC": [
+      { "summary": "価値責任者が「なぎさっちはコールがちゃんとできる」と確認した", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:27])", "date": "2026-10-11", "type": "価値責任者の確認", "direction": "+", "strength": "強", "kind": "owner-confirmation", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "17:27", "selfTeam": false, "note": "文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮", "normalized": true }
+    ],
+    "LR-NEXT-SUP": [
+      { "summary": "No.1005 は他の人についていく立ち位置で、自分がやらなければと動き出してうまく回るかがポイントとの発言", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:00])", "date": "2026-10-11", "type": "価値責任者のレビューでの発言", "direction": "-", "strength": "弱", "kind": "player", "collectedBy": "human", "origin": "docs/research/grounds/evidence-owner-review-lr-20261011.json", "timestamp": "8:00", "selfTeam": false, "note": "見立ての発言のため正規化の記録へは入れない(表 B)。現在の値(4.0)と向きは一致", "normalized": false }
+    ]
+  },
+  "playerTraits": {
+    "LR-MASTERS-TOP": [
+      { "trait": "mechanics", "summary": "過去に国内屈指のトップレーナーだったので地力は高くてよい。集団戦でやるべきことはできる。ブランクが長いのでピックプール・大会経験はこんなもん。評価はかなり妥当", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:08:41])", "timestamp": "8:41", "category": "B", "note": "他の選手との比較は記録しない。normalized/career.json(LJL-starter 10 年、retired)" }
+    ],
+    "LR-MASTERS-JG": [
+      { "trait": "mechanics", "summary": "地力とレーン戦はもっと高くてよく、集団戦のパフォーマンスも高い。フィジカルでどれだけ活躍できるか", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:16])", "timestamp": "9:16", "category": "B" },
+      { "trait": "other", "summary": "連携が弱く、ジャングルの位置関係やミッドが離れたことを伝えられずキャッチされる場面が前期は多かった。連携と安定感は低め", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:09:40])", "timestamp": "9:40", "category": "B" }
+    ],
+    "LR-MASTERS-MID": [
+      { "trait": "mechanics", "summary": "日本代表として出るほどのミッドで、地力・レーン戦・集団戦・安定感・連携はすべて高く、もっと上げてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:10:07])", "timestamp": "10:07", "category": "B", "note": "Ceros との比較は記録しない。normalized/tournament.json(アジア大会 杭州)と整合" },
+      { "trait": "other", "summary": "自分のロールのポリシーに忠実で、チームの動きや考えに合わせる気が無いという意味で連携は低い。チームとはまれば LR MASTERS は勝てる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:02])", "timestamp": "11:02", "category": "B" }
+    ],
+    "LR-MASTERS-ADC": [
+      { "trait": "mechanics", "summary": "地力は高く、アウトプレイする ADC をよく見る。離れていた期間が長い。地力・レーン戦・集団戦・連携・安定性はこんなもん", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:30])", "timestamp": "11:30", "category": "B" }
+    ],
+    "LR-MASTERS-SUP": [
+      { "trait": "macro", "summary": "ハレっちと同様だが、ゲーム理解度と判断力が高いので集団戦と連携はもう少し伸ばしてよい。負けないボットだが勝てるボットにはなりにくい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:11:53])", "timestamp": "11:53", "category": "B" }
+    ],
+    "LR-CORE-TOP": [
+      { "trait": "mechanics", "summary": "トップをメインでやってきていないので小さなミスが目立つが、ADC でごんかねと張れるほどフィジカルが高く、経験不足を補っている。レーン戦と地力はやれる。集団戦の貢献やトップからチームへ波及させる動きは難しい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:31])", "timestamp": "1:31", "category": "B", "note": "normalized/career.json(S1・S2 TOP、S3 ADC)と整合" },
+      { "trait": "other", "summary": "トップ転向もあり全体的に評価が高すぎる。フィジカルでキルを取ることはできそう", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:12:56])", "timestamp": "12:56", "category": "B", "note": "CORE のトップ内の順位づけは記録しない" }
+    ],
+    "LR-CORE-JG": [
+      { "trait": "mental", "summary": "キルラインとスティール力が高く、どれだけ負けてもへこたれないメンタルの強さがある。ただしチームとしてのターンの動きができず、はまれば強いがそうでない時に咎められると崩れる。練習と本番の再現度の低さが悩み", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:04])", "timestamp": "2:04", "category": "B" },
+      { "trait": "teamfight", "summary": "レーン戦はジャングラーがいるべき所にいられない意味で低い。集団戦はジャーヴァンのアルティメットを全員に決めるなどアウトプレイ的なフィジカルと瞬発力があり高くしてもよい。連携と安定感は低い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:59])", "timestamp": "13:59", "category": "B" },
+      { "trait": "other", "summary": "大会経験はあり、地力もある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:13:52])", "timestamp": "13:52", "category": "B", "note": "normalized/career.json(LTK S1〜S3 出場)と一致" }
+    ],
+    "LR-CORE-MID": [
+      { "trait": "laning", "summary": "前期までは CORE 最強のミッドだったが、今回は相手が強く(スタンミ・葛葉・たかや)レーン戦は厳しそう。ただし大きく崩されるところまではいかない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:02:55])", "timestamp": "2:55", "category": "B", "note": "順位づけ(4 番手)は記録しない" },
+      { "trait": "teamfight", "summary": "大会経験があり地力もそこそこ高い。大きくキャリーするわけではないがミッドとしてコンスタントにダメージを出す。やるべきことをやるので平均的な点数で不思議はない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:14:43])", "timestamp": "14:43", "category": "B" }
+    ],
+    "LR-CORE-ADC": [
+      { "trait": "other", "summary": "最高ランクはマスターに触れた程度で、CORE の ADC の中ではレートが一番下。前期はより高いレートの相手にもソロキルするなどやれていたので、意外とやれるかもしれないが絶対に勝てるわけではない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:03:17])", "timestamp": "3:17", "category": "B", "note": "normalized/career.json(Master 218LP)と一致" },
+      { "trait": "other", "summary": "地力・レーン戦はまあまあ OK。集団戦と連携は新しいメンバーなので低めで OK。安定感はある。大会経験とコール力はこんなもん", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:07])", "timestamp": "15:07", "category": "B" }
+    ],
+    "LR-CORE-SUP": [
+      { "trait": "macro", "summary": "チーム全体の位置と各ウェーブの状態を見て根拠を持って喋れ、マクロコールに必要なことが全部できる。ソロランクで勝てる型ではなく、地力とレーン戦は低い(ダイヤで止まっている)", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:04:18])", "timestamp": "4:18", "category": "B", "note": "normalized/career.json(最高 Master、今季 Diamond)と整合" },
+      { "trait": "other", "summary": "今回は各 CORE のマクロが揃ってきて、視野の広さで確実な有利を取るのが難しく、各レーンのフィジカルで負けて試合に勝てないことが増えそう。神楽めあにはレーン戦で勝てず、昏昏アリア・龍巻ちせの連携にも勝てない。レグルシュとは五分、ごんかねのボットには負けない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:08])", "timestamp": "5:08", "category": "B" },
+      { "trait": "teamfight", "summary": "集団戦はぼちぼち、連携はかなりでき、安定感は高い。高いコール力と安定性が強みだが、それだけでは勝てないほど CORE のレベルが上がっている", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:35])", "timestamp": "15:35", "category": "B" }
+    ],
+    "LR-NEXT-TOP": [
+      { "trait": "mechanics", "summary": "NEXT のトップの中で地力は最上位で、レーン戦は確実に勝つ。大会経験があり、集団戦も連携(寄る力)もある", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:15:56])", "timestamp": "15:56", "category": "B", "note": "7:50 でも『確実に勝つ』。normalized/career.json(LTK S1〜S3、S3 は CORE)と整合" }
+    ],
+    "LR-NEXT-JG": [
+      { "trait": "other", "summary": "今回が初めてのジャングルで大会経験も乏しく、本当に読めない。全体的にもっと小さくてもよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:15])", "timestamp": "16:15", "category": "B", "note": "normalized/career.json(S1 MID、S3 TOP)と一致" },
+      { "trait": "laning", "summary": "レーン戦は苦しく、勝てるまではいかない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:43])", "timestamp": "7:43", "category": "B" }
+    ],
+    "LR-NEXT-MID": [
+      { "trait": "other", "summary": "大会経験はほぼ無く、点数は下限に貼り付けてよいくらい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:16:25])", "timestamp": "16:25", "category": "B", "note": "normalized/career.json(LTK 出場なし)と一致。現在の値は下限の 2.0" },
+      { "trait": "other", "summary": "ソロランクのミッドレーナーとしてはそこそこランクが高く、最高ランクはマスターと記憶(確かではない)。LoL の歴は長い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:18])", "timestamp": "7:18", "category": "A", "note": "normalized/career.json は Platinum IV 54LP。食い違いの候補(表 C)" },
+      { "trait": "laning", "summary": "ミッドでやっていけるが、チームゲームでは読めない。ピックプールは広く、安定感・連携・集団戦は低め、地力・レーン戦はなんとかなる", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:40])", "timestamp": "7:40", "category": "B" }
+    ],
+    "LR-NEXT-ADC": [
+      { "trait": "laning", "summary": "大会経験はあるが地力とレーン戦は頭打ちで、意外とこけがち", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:04])", "timestamp": "17:04", "category": "B", "note": "normalized/career.json(LTK S1〜S3 出場)と一致" },
+      { "trait": "teamfight", "summary": "集団戦で変なところに立つことがあり低め。連携はしようとしているが、ポカが無くならず安定性は低め。ピックプールは意外と狭い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:11])", "timestamp": "17:11", "category": "B" }
+    ],
+    "LR-NEXT-SUP": [
+      { "trait": "other", "summary": "まんべんなく少しずつできるが特筆する点はなく、ランク相当のサポート。ピックプールは狭い", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:17:37])", "timestamp": "17:37", "category": "B" }
+    ]
+  },
+  "teamMacro": {
+    "LR-MASTERS": [
+      { "text": "冷静な選手ばかりで熱血コールも IGL コールもできない。頑張ってコールするのは Recap になるがテンポよく喋れず、ねすてぃーのコミュニケーションにも難があり、ジャングル・ミッドの連携がコール面で厳しそう。誰がチームを取りまとめるのかが見えない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:31])", "timestamp": "0:31", "category": "A", "note": "12:21 の同趣旨を含む" }
+    ],
+    "LR-CORE": [
+      { "text": "千燈ゆうひがチーム全体を見てマクロコールを出す。今回は各 CORE のマクロが揃ってきて、視野の広さだけで有利を取るのは難しい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:08])", "timestamp": "5:08", "category": "A" }
+    ],
+    "LR-NEXT": [
+      { "text": "集団戦の形を作るコールができる人がいない(アステル・レダはやりきれず、No.1005 は追従する立ち位置、春茶は急にはできない)。No.1005 が自分でやり出してうまく回るかがポイント", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:53])", "timestamp": "7:53", "category": "A" }
+    ]
+  },
+  "teamStyle": {
+    "LR-MASTERS": [
+      { "aspect": "carry", "summary": "個人の地力はあるが、経験不足・練習時間不足でレーン戦で勝っている所を見たことがなく、合わせたきれいな集団戦も見たことがない。連携・安定性も微妙", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:08])", "timestamp": "0:08", "category": "B" },
+      { "aspect": "tournament", "summary": "大会経験はあるがプロから離れて長いので、このスコアでも不思議ではない。MASTERS のグラフはおおむね妥当", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:05])", "timestamp": "1:05", "category": "B" }
+    ],
+    "LR-CORE": [
+      { "aspect": "overall", "summary": "評価が低すぎるかもしれない。地力は相対的に低くレーン戦も厳しいが、集団戦・マクロ・コール力はもう少し伸ばしてよい。S1 の優勝メンバーが 4 人揃っていて連携はできる。ピックプールはみんな広い。地力とレーン戦がへこんで勝率が低めという全体の結果は変わらなさそう", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:26])", "timestamp": "1:26", "category": "B", "note": "6:03〜6:46 の同趣旨を含む" },
+      { "aspect": "bot", "summary": "ボットは神楽めあ・じゃすぱーの DD、昏昏アリア・龍巻ちせの CC には勝てないが、レグルシュ・ごんかねの IT には負けない", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:05:27])", "timestamp": "5:27", "category": "B" }
+    ],
+    "LR-NEXT": [
+      { "aspect": "overall", "summary": "狐白うるとボット(なぎさっち・No.1005)でどれだけ支えられるかが勝負。アステル・レダと春茶が明確な隙で、2 人の大会経験が乏しいので大会経験のスコアはもっと下げてよい", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:52])", "timestamp": "6:52", "category": "B" },
+      { "aspect": "lanes", "summary": "レーン戦は狐白うるが確実に勝つが、なぎさっちは意外とこけがちで、アステル・レダは苦しい。連携も厳しく、安定性はもっと低い。ピックプールはなぎさっち・No.1005 が狭く、こんなもん", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:07:33])", "timestamp": "7:33", "category": "B" }
+    ]
+  },
+  "coaches": {},
+  "overall": [
+    { "target": "LR-MASTERS", "summary": "個人は強いが、レーン戦・集団戦・連携・安定性が微妙で、コール力が本当に厳しい。グラフはおおむね妥当。", "direction": "-", "strength": "中", "timestamp": "0:08", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:00:08])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "LR-CORE", "summary": "評価が低すぎるかもしれないが、地力とレーン戦がへこんで勝率が低めという結果は変わらなさそう。", "direction": "-", "strength": "弱", "timestamp": "1:26", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:01:26])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" },
+    { "target": "LR-NEXT", "summary": "アステル・レダと春茶が明確な隙で、狐白うるとボットで支えられるかが勝負。", "direction": "-", "strength": "中", "timestamp": "6:52", "source": "価値責任者の確認(2026-10-11 のレビューの文字起こし [00:06:52])", "speaker": "価値責任者", "speakerConfidence": "高", "category": "B" }
+  ],
+  "unmapped": [],
+  "preprocessingNotes": [
+    "前処理はかけていない。価値責任者本人のレビューのため AI が直接読んだ",
+    "12:44〜12:56(焼きパンの集団戦・連携)、13:14〜13:28、13:36〜13:51(Killin9Hit の冒頭)、16:45〜16:52(春茶の続き)の一部が文字起こしで欠落している"
+  ]
+}
