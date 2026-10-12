@@ -25,6 +25,10 @@ scope: SC-P
 
 この仕様の数値(`scrimGameWeight` 2.0、F-005 の `weights.scrim` を 0 にする起案、キーマンの印の規則)は AI の起案であり、**価値責任者の確定を要する**。
 
+### LTKDB の 14 分の CS(2026-10-12 追記)
+
+非公式のファンサイト LTKDB(`/input-ltkdb` の取り込み元)は、スクリムの各選手の 14 分時点の CS(「14分CS」。計測した時刻は「計測秒」で、多くは 840 秒)を持つ(2026-10-12 時点で 310 行中 294 行)。結果画面には 14 分の値が無いため、これまでスクリムはレーン戦の軸に効かなかった。価値責任者の依頼(2026-10-12)で、この値をレーン戦の軸の材料にする(基準 25〜27)。
+
 ### 最初の事例(2026-10-10 のスクリム)
 
 LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I )の結果画面から、LR CORE 対 DD CORE のスクリム 3 試合(配信内の 4〜6 試合目。3 試合とも DD CORE の勝ち)を書き起こした(`data/scrim/2026-10-10-lr-core-vs-dd-core.json`。手法は `data/scrim/METHOD.md`)。各試合に勝敗・試合時間・10 人のチャンピオンと K/D/A・ゴールド・ダメージ、名簿との対応づけと確度がある。DD CORE の JG・MID・SUP のチャンピオンは顔出し枠で隠れて読めない試合があり、LR CORE ADC の対応づけは表示名が違うため「推定」である。この仕様の記録の形は、この JSON に合わせる。
@@ -45,6 +49,7 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 - **スクリムの重み `scrimGameWeight`**: F-009 の評価設定 `src/rating/config.json` の `engine.scrimGameWeight`。スクリムの試合の記録の新しさの重みに掛ける係数。初期値 2.0(ソロランク 1 試合の 2 倍。AI の起案、価値責任者の確定を要する)
 - **連敗の数 k・補正 θ・気持ちの補正**: F-005 の用語のとおり
 - **予測**: その試合について、試合日より前に計算した最新の勝率表(`data/public/winrates.json` の `computedAt` が試合日の 0 時(JST)より前のもの)の、その試合の両チームの勝率(`pA`・`pB`)
+- **14 分の CS** `cs14`: 選手の行の、試合開始から `cs14Sec` 秒の時点の CS(ミニオンとモンスターの合計)。`cs14Sec` は記録(試合)ごとに 1 つ
 - **キル関与**: (キル + アシスト) ÷ チームのキル。チームのキルが 0 なら 0
 - **キーマンの印**: スクリムで「ダメージ最多」「キル関与最多」だった試合の数から付ける表示だけの印。点数には入れない
 - **日程の順**: 同じ試合日の本番の試合の並び。Regular Stage は日程(`src/sim/schedule.ts` の `REGULAR_DAYS`)のカードの順に、各カードは NEXT → CORE。MASTERS CUP は semi1 → semi2 → third → final で、final は G1 → G2 → G3。Playoffs は upperFinal → lowerSemi(2026-11-21)、lowerFinal → grandFinal(2026-11-22)で、各マッチは G1 → G4
@@ -65,12 +70,13 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 | `level`(あれば) | `champLevel` | 記録として持つ |
 | 勝敗(`winner` がその選手のチームか) | `win`(1 / 0) | ピックプールの勝率 |
 | `champion`(日本語名 → チャンピオンの一覧の key) | `championId` | ピックプール |
+| `cs14` − 対面の `cs14`(TOP・MID・ADC で、両方の行に `cs14` があるとき) | `maxCsAdvantageOnLaneOpponent`(自分は差と 0 の大きい方、対面は差の符号を反転して 0 の大きい方) | レーン戦(基準 26) |
 
-対応表に無い指標(`soloKills`、`maxCsAdvantageOnLaneOpponent`、`laningPhaseGoldExpAdvantage`、`enemyChampionImmobilizations`、`pickKillWithAlly`、`damageTakenOnTeamPercentage`、視界の指標)は持たない。F-009 基準 8 の規則で、その指標はその試合で除外され、軸に使える指標が 1 つも無い試合はその軸で除外される。レーン戦の軸は 14 分の値を要するため、スクリムの試合は効かない。
+対応表に無い指標(`soloKills`、`laningPhaseGoldExpAdvantage`、`maxLevelLeadLaneOpponent`、`enemyChampionImmobilizations`、`pickKillWithAlly`、`damageTakenOnTeamPercentage`、視界の指標)は持たない。F-009 基準 8 の規則で、その指標はその試合で除外され、軸に使える指標が 1 つも無い試合はその軸で除外される。レーン戦の軸は、TOP・MID・ADC で `cs14` のある試合だけに効く(最大 CS 差の 1 指標。JG・SUP は効かない)。F-009 の母集団(ソロランク)の最大 CS 差の分布で標準化する(前提 7)。
 
 ## 入力の形
 
-既存のスクリムの JSON(`data/scrim/2026-10-10-lr-core-vs-dd-core.json`)の欄をそのまま許し、`kind`・`date`・`listeners` を足す。本番はさらに `stage`・`day`・`tier`・`match`・`game` を持つ。読まない欄(`matchFromLast`・`winnerBasis`・`championNote`・`notes` ほか)は無視する。
+既存のスクリムの JSON(`data/scrim/2026-10-10-lr-core-vs-dd-core.json`)の欄をそのまま許し、`kind`・`date`・`listeners` を足す。本番はさらに `stage`・`day`・`tier`・`match`・`game` を持つ。読まない欄(`matchFromLast`・`winnerBasis`・`championNote`・`notes` ほか)は無視する。スクリムの記録は任意で `cs14Sec`(記録に 1 つ)と選手の行の `cs14` を持てる(基準 25)。
 
 ```json
 [
@@ -127,6 +133,14 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 | 6 | 望ましくない事象 | `mappingConfidence` が「未確認」で始まる選手の行がある場合、システムはその選手の試合の記録を作らず、その選手を対面とする相手の記録の対面を無し(F-009 基準 8 で除外)とし、選手名と「未確認」を出力しなければならない。「確信」「推定」の行は使い、「推定」の行の数を出力に示す |
 | 7 | 望ましくない事象 | 同じ `date`・同じ 2 つの階級チーム・同じ `duration` のスクリムの記録が 2 件以上ある場合(2 本の配信から同じ試合を書き起こした場合)、システムはファイル名の辞書順で最初の 1 件だけを使い、残りのファイル名と要素の番号を「重複」として出力しなければならない |
 
+### 14 分の CS(2026-10-12 追記)
+
+| # | 型 | 受入基準 |
+| --- | --- | --- |
+| 25 | ユビキタス | システムはスクリムの記録が `cs14Sec` を持つ場合に 780 以上 900 以下の整数であること、選手の行が `cs14` を持つ場合に 0 以上の整数か null であること、`cs14` が null でない行がある記録は `cs14Sec` を持つことを検証し、反した記録を基準 4 のとおり扱わなければならない |
+| 26 | ユビキタス | システムはスクリムの試合の記録(基準 12)のうち、名簿のロールが TOP・MID・ADC で、自分と対面の行の両方に `cs14` がある試合に、指標 `maxCsAdvantageOnLaneOpponent` を、自分は (自分の `cs14` − 対面の `cs14`) と 0 の大きい方、対面の値は (対面の `cs14` − 自分の `cs14`) と 0 の大きい方として持たせなければならない。どちらかの `cs14` が null か無い試合、JG・SUP の試合には、この指標を持たせてはならない |
+| 27 | ユビキタス | システムはレーン戦の軸の説明と確度の理由の「スクリム n 試合(重み w)を含む」(基準 15)の n に、基準 26 の指標を持つスクリムの試合だけを数えなければならない(`cs14` の無いスクリムの試合はレーン戦の軸に使われず、数えない) |
+
 ### 本番の結果の使い方(F-005 の θ と k)
 
 | # | 型 | 受入基準 |
@@ -177,7 +191,9 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 - θ の当て直しそのもの(F-005 Task-2)と、試合の分析ページ(F-005 Task-5)
 - 結果画面の画像から数字を機械で読む処理、動画からの書き起こしの自動化(`/input-scrim` の手法は `data/scrim/METHOD.md`)
 - BAN・ピック順・プロテクトの記録(F-006)
-- 14 分の値・視界・オブジェクトの指標(結果画面に無い)と、F-010 の Finale の集計(LTK3 の形の 14 分の値を要する)
+- 14 分の CS 以外の 14 分の値(ゴールド差・経験値差。LTKDB の「ゴールド@15」「15分ゴールド優勢」は 2026-10-12 時点で空)、視界・オブジェクトの指標(結果画面に無い)と、F-010 の Finale の集計(LTK3 の形の 14 分の値を要する)
+- `cs14Sec` が 840 でない試合の値の 840 秒への換算(780〜900 秒の値をそのまま使う)
+- LTKDB の BAN・ピックの順(F-006 の変更として起案する)
 - リスナー参加のスクリム、1 対 1、ソロキュー、他のチームとの試合(大会の 12 の階級チーム以外)
 - スクリムの文字起こしからの戦い方・外部の見立て・コール力の抜き出しそのもの(`/input-ts`)。この機能は基準 17 の印を検証するだけ
 - F-005 の評価設定 `weights.scrim` の値の変更(価値責任者の確定の後、F-005 の変更として扱う)
@@ -191,6 +207,7 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 | 3 | F-009 の母集団(ソロランクの対面との差の分布)をスクリムの標準化にそのまま使う。スクリムは 5 対 5 の組織戦で分布が違う可能性がある | 基準 23 の当てはまりの確認で見る。悪化すれば `scrimGameWeight` を下げる(価値責任者) |
 | 4 | 公式の日程が `src/sim/schedule.ts` のとおり | 運営が変えた場合、日程と基準 3 の検証を直す |
 | 5 | 記録の置き場は公開リポジトリで、置くと公開になる。記録の中身は配信から読める数字と名簿の選手名だけ(未確定事項 4) | 価値責任者が受容しない場合、置き場を git の無視の対象へ変える |
+| 7 | 14 分の CS の対面との差は、ソロランクの最大 CS 差(`maxCsAdvantageOnLaneOpponent`。試合中の最大の CS の差)と同じ分布で標準化してよい。14 分の差は最大の差以下になりやすく、標準化した値は小さく出る向きに偏る | 基準 23 の当てはまりの確認で見る。別の指標キーと母集団を持つ案は未確定事項(技術判断) |
 | 6 | 大会で使われるチャンピオンが Data Dragon ja_JP の一覧にあり、記録の `champion` が一覧の日本語名と一致する | 一致しない名前は基準 2・4 で止まる |
 
 ## 非機能の要求
@@ -284,6 +301,8 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 | D2 | リスナー参加のスクリムはデータとして扱わない | 価値責任者(2026-10-11) |
 | D3 | スクリムの文字起こしからのコール力は、本人を特定できる箇所だけ確度「低」 | 価値責任者(2026-10-11) |
 | D4 | 本番の結果は F-005 の θ と連敗 k の入力にする | 価値責任者(2026-10-11) |
+| D5 | LTKDB の 14 分の CS をスクリムのレーン戦の材料にする | 価値責任者(2026-10-12。「14分CS」と「BAN・ピック」の両方を起案する選択) |
+| — | `cs14`・`cs14Sec` の欄、最大 CS 差への対応づけ、`cs14Sec` の範囲 780〜900 | AI の起案(2026-10-12。価値責任者・技術判断者が変えてよい) |
 | — | 記録の形と置き場、指標の対応表、`scrimGameWeight` 2.0、`weights.scrim` を 0 にする起案、キーマンの印の規則(2 試合以上・半分以上)、予測の凍結の規則、重複の規則、試合 ID の形、チャンピオンの一覧に `keys` を足すこと | AI の起案(価値責任者・技術判断者が変えてよい) |
 
 ## 未確定事項
@@ -291,6 +310,7 @@ LR CORE SUP 千燈ゆうひの配信(https://www.youtube.com/watch?v=AZbkNH5Z5-I
 - [NEEDS CLARIFICATION] 価値責任者が確定する値: `scrimGameWeight`(起案 2.0)、F-005 の `weights.scrim`(起案 0。選択肢 0.25)、キーマンの印を表示するか(起案: 表示する。点数には入れない)
 - [NEEDS CLARIFICATION] 本番の試合を個人の評価(F-009 の試合の記録)にも入れるか。入れるなら重み(価値判断。この仕様は入れない)
 - [NEEDS CLARIFICATION] チャンピオンの一覧の持ち方(技術判断。`state:needs-tech`)。起案は F-003 の `data/public/champions.json` に `keys` を足す(既存の欄は変えない追加)。別の案は、この機能が Data Dragon の一覧を別に持つ
+- [NEEDS CLARIFICATION] 14 分の CS 差の標準化(技術判断。`state:needs-tech`)。起案は前提 7 のとおりソロランクの最大 CS 差の分布を使う。別の案は (a) 新しい指標キー `csDiffAt14` を足し、名簿の階級チーム同士のスクリムだけで母集団を作る(試合が少ない間は分布が不安定)、(b) LTK3 の 14 分の値から分布を作る(LTK3 は CS でなくゴールドの差を持つ)
 - [NEEDS CLARIFICATION] 記録を公開リポジトリ(`docs/research/grounds/`)に置くことの受容(価値責任者)。置くだけで公開になる
 
 ## コア指定

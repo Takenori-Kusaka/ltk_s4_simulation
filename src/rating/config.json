@@ -15,7 +15,7 @@
     }
   },
   "evidence": {
-    "_comment": "根拠の軸(基準12〜16)。kindWeights・confidence の点数・tournament の coach・proPerYear の LJL 以外・otherPer は AI の起案で、価値責任者の確定を要する",
+    "_comment": "根拠の軸(基準12〜16)。kindWeights・confidence の点数・tournament の coach・proPerYear の LJL 以外・otherPer は AI の起案で、価値責任者の確定を要する。tournament の proMax 3.0(LJL のスタメン 6 年分)・internationalPer・internationalMax・internationalAliases(基準32 の重複の判定に使う別名の表)は 2026-10-11 の改訂(G-4 再判定 4)",
     "shotcalling": {
       "base": 5,
       "max": 9.5,
@@ -60,7 +60,15 @@
         "LJL CS": 0.25,
         "その他のプロ": 0.25
       },
-      "proMax": 2,
+      "proMax": 3,
+      "internationalPer": 0.5,
+      "internationalMax": 1,
+      "internationalAliases": {
+        "LCP P&R": ["入れ替え戦", "Promotion"],
+        "Worlds": ["世界大会", "World Championship"],
+        "MSI": ["Mid-Season Invitational"],
+        "アジア競技大会": ["Asian Games"]
+      },
       "otherPer": 0.5,
       "otherMax": 1, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }, "roleOtherWeight": 0.5, "tierWeights": { "MASTERS": 1, "CORE": 1, "NEXT": 0.75 }
     }

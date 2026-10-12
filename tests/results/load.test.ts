@@ -320,20 +320,22 @@ test('集計: resultsRoot の記録を読み、件数と除外の理由を 1 行
   assert.ok(env2.lines.every((l) => !/試合結果の記録/.test(l)));
 });
 
-test('既存の記録: docs/research/grounds/scrims の 2026-10-10 のスクリム 3 試合(DD CORE の 3 勝)を読める。対応づけは全員「確信」(2026-10-11 に価値責任者が ADC と SUP を確認)', () => {
+test('既存の記録: docs/research/grounds/scrims の 2026-10-09 のスクリム 3 試合(DD CORE の 3 勝)を読める。対応づけは全員「確信」(2026-10-11 に価値責任者が ADC と SUP を確認)', () => {
+  // 試合日は LTKDB の 2026-10-09(価値責任者の確認 2026-10-12。配信の日付は 10-10)
+  const REAL_FILE = '2026-10-09-lr-core-vs-dd-core.json';
   const champPath = 'data/public/champions.json';
   const champions = existsSync(champPath) ? readChampionList(JSON.parse(readFileSync(champPath, 'utf8'))).list : null;
   const r = loadResults({ root: 'docs/research/grounds', champions });
   assert.deepEqual(r.errors.map(formatResultError), []);
-  const scrims = r.games.filter((g) => g.kind === 'scrim' && g.date === '2026-10-10' && g.file === SCRIM_FILE);
+  const scrims = r.games.filter((g) => g.kind === 'scrim' && g.date === '2026-10-09' && g.file === REAL_FILE);
   assert.deepEqual(scrims.map((g) => g.winner), ['DD-CORE', 'DD-CORE', 'DD-CORE']);
   assert.deepEqual(scrims.map((g) => g.duration), ['32:50', '43:44', '37:31'], '配信内の順(4〜6 試合目)');
-  assert.deepEqual(scrims.map((g) => g.matchId), ['SC-20261010-DD-CORE-LR-CORE-G1', 'SC-20261010-DD-CORE-LR-CORE-G2', 'SC-20261010-DD-CORE-LR-CORE-G3']);
+  assert.deepEqual(scrims.map((g) => g.matchId), ['SC-20261009-DD-CORE-LR-CORE-G1', 'SC-20261009-DD-CORE-LR-CORE-G2', 'SC-20261009-DD-CORE-LR-CORE-G3']);
   assert.ok(scrims.every((g) => g.source.url === 'https://www.youtube.com/watch?v=AZbkNH5Z5-I' && typeof g.source.resultScreenSec === 'number'));
   assert.deepEqual(scrims.map((g) => [g.stats['LR-CORE'].kills, g.stats['DD-CORE'].kills]), [[3, 21], [13, 21], [16, 24]]);
   // 2026-10-11: 価値責任者が ADC(大御所にゅん子)と 4 試合目の SUP(神楽めあ)を確認したため、未確認の行は無い
-  assert.deepEqual(r.unconfirmed.filter((u) => u.file === SCRIM_FILE), []);
+  assert.deepEqual(r.unconfirmed.filter((u) => u.file === REAL_FILE), []);
   assert.ok(scrims.every((g) => g.stats['LR-CORE'].players.find((p) => p.role === 'ADC')?.use === true));
-  assert.equal(r.excluded.filter((x) => x.file === SCRIM_FILE).length, 0);
-  assert.ok(r.files.includes(`scrims/${SCRIM_FILE}`));
+  assert.equal(r.excluded.filter((x) => x.file === REAL_FILE).length, 0);
+  assert.ok(r.files.includes(`scrims/${REAL_FILE}`));
 });

@@ -28,7 +28,7 @@ const tc: TournamentConfig = {
   coachPerSeason: 0.5,
   coachMax: 1.0,
   proPerYear: { LJL: 0.5, 'LJL CS': 0.25, 'その他のプロ': 0.25 },
-  proMax: 2.0,
+  proMax: 3.0,
   otherPer: 0.5,
   otherMax: 1.0,
 };
@@ -279,10 +279,11 @@ test('基準12: 勝率は使わない(試合数が同じなら勝敗に依らず
   assert.equal(a.score, b.score);
 });
 
-test('基準12: プロの経歴(LJL の年数、上限 +2.0)と他の大会(上限 +1.0)を出典つきで加える', () => {
+// 2026-10-11 基準12 の改訂(再判定 4): プロの経歴の加点の上限 2.0 → 3.0
+test('基準12: プロの経歴(LJL の年数、上限 +3.0)と他の大会(上限 +1.0)を出典つきで加える', () => {
   const ljl = (years: number) => ({ league: 'LJL', team: 't', years, source: 'docs/research/players-dd-cc.md', url: 'https://example.invalid/p' });
   assert.equal(tournamentAxis({ ...empty, pro: [ljl(2)] }, tc).score, 3.0);
-  assert.equal(tournamentAxis({ ...empty, pro: [ljl(10)] }, tc).score, 4.0);
+  assert.equal(tournamentAxis({ ...empty, pro: [ljl(10)] }, tc).score, 5.0);
   const o = { name: 'Worlds', source: 'docs/research/players-dd-cc.md', url: 'https://example.invalid/w' };
   assert.equal(tournamentAxis({ ...empty, other: [o] }, tc).score, 2.5);
   assert.equal(tournamentAxis({ ...empty, other: [o, o, o, o] }, tc).score, 3.0);
@@ -356,4 +357,104 @@ test('基準31: ロール転向の割引は LTK の出場シーズンのうち�
   assert.equal(roleSwitchDiscount({ ...empty, ltk: [adc('S1'), adc('S2')] }, 'TOP', 0.5).value, 0.5);
   assert.ok(Math.abs(roleSwitchDiscount({ ...empty, ltk: [adc('S1'), adc('S2'), S('S3', null, null)] }, 'TOP', 0.5).value - (0.5 * 2) / 3) < 1e-12);
   assert.equal(roleSwitchDiscount({ ...empty, ltk: [adc('S1')] }, undefined, 0.5).value, 0);
+});
+
+// --- 2026-10-11 基準12 の改訂・基準32(再判定 4): プロの加点の上限 3.0、国際大会の加点、他の大会との重複の除外 ---
+const DEF = loadEvidenceConfig().tournament;
+const intl = (event: string, year: number) => ({ event, year, source: 'https://lol.fandom.com/wiki/X', ref: 'lolPro[0]' });
+const other = (name: string) => ({ name, source: 'docs/research/players-dd-cc.md', url: 'https://example.invalid/o' });
+const ljlPro = (years: number) => ({ league: 'LJL', team: 't', years, source: 'docs/research/players-dd-cc.md', url: 'https://example.invalid/p' });
+
+test('基準12(改訂): 評価設定の初期値は proMax 3.0、国際大会 1 大会 0.5・上限 1.0、別名の表は仕様の 4 組', () => {
+  assert.equal(DEF.proMax, 3);
+  assert.equal(DEF.internationalPer, 0.5);
+  assert.equal(DEF.internationalMax, 1);
+  assert.deepEqual(DEF.internationalAliases, {
+    'LCP P&R': ['入れ替え戦', 'Promotion'],
+    Worlds: ['世界大会', 'World Championship'],
+    MSI: ['Mid-Season Invitational'],
+    'アジア競技大会': ['Asian Games'],
+  });
+});
+
+test('基準12(改訂): プロの経歴の加点の上限は 3.0(LJL のスタメン 6 年分)', () => {
+  assert.equal(tournamentAxis({ ...empty, pro: [ljlPro(5)] }, DEF).score, 4.5);
+  assert.equal(tournamentAxis({ ...empty, pro: [ljlPro(6)] }, DEF).score, 5.0);
+  assert.equal(tournamentAxis({ ...empty, pro: [ljlPro(10)] }, DEF).score, 5.0);
+});
+
+test('基準12(改訂): 国際大会の記録を 1 大会 +0.5 で足し、上限 +1.0 で止める。説明と根拠の一覧に出典つきで出す', () => {
+  const one = tournamentAxis({ ...empty, international: [intl('IWCI', 2016)] }, DEF);
+  assert.equal(one.score, 2.5);
+  const two = tournamentAxis({ ...empty, international: [intl('Asia Masters', 2025), intl('LCP P&R', 2025)] }, DEF);
+  assert.equal(two.score, 3.0);
+  const seven = tournamentAxis({ ...empty, international: [2015, 2016, 2017, 2018, 2019, 2021, 2022].map((y) => intl('Worlds', y)) }, DEF);
+  assert.equal(seven.score, 3.0);
+  assert.match(seven.reason, /国際大会 7 件/);
+  assert.match(two.reason, /国際大会 2 件/);
+  assert.match(two.reason, /Asia Masters 2025/);
+  const items = two.evidence.filter((e) => e.text.includes('国際大会'));
+  assert.equal(items.length, 2);
+  assert.ok(items.every((e) => e.source === 'https://lol.fandom.com/wiki/X' && e.used));
+  assert.equal(two.confidence, '高');
+  // 同じ大会名と年の記録は 1 大会
+  assert.equal(tournamentAxis({ ...empty, international: [intl('Worlds', 2018), intl('Worlds', 2018)] }, DEF).score, 2.5);
+  // 国際大会の記録が無ければ従来どおり
+  assert.equal(tournamentAxis(empty, DEF).score, 2.0);
+  assert.equal(tournamentAxis({ ...empty, international: [] }, DEF).score, 2.0);
+});
+
+test('基準12(改訂): 国際大会の加点と上限は評価設定から読む(設定に無ければ足さない)', () => {
+  const rec = { ...empty, international: [intl('MSI', 2019), intl('Worlds', 2019), intl('Worlds', 2018)] };
+  assert.equal(tournamentAxis(rec, { ...DEF, internationalPer: 0.25, internationalMax: 2 }).score, 2.75);
+  assert.equal(tournamentAxis(rec, { ...DEF, internationalMax: 2 }).score, 3.5);
+  assert.equal(tournamentAxis(rec, tc).score, 2.0);
+});
+
+test('基準32: 他の大会の名前が国際大会の記録と同じ大会名・同じ年を指すなら他の大会として数えず、「国際大会の項で数えた」と示す', () => {
+  const r = tournamentAxis({ ...empty, international: [intl('Worlds', 2018)], other: [other('Worlds 2018(DFM)')] }, DEF);
+  assert.equal(r.score, 2.5, '国際大会 +0.5 だけ(他の大会 +0.5 を重ねない)');
+  assert.match(r.reason, /国際大会の項で数えた/);
+  assert.match(r.reason, /他の大会 0 件/);
+  const item = r.evidence.find((e) => e.text.includes('Worlds 2018(DFM)'))!;
+  assert.equal(item.used, false);
+  assert.match(item.text, /国際大会の項で数えた/);
+  // 年が違えば別の大会として数える
+  const diff = tournamentAxis({ ...empty, international: [intl('Worlds', 2018)], other: [other('Worlds 2021(DFM、ベスト16)')] }, DEF);
+  assert.equal(diff.score, 3.0);
+  assert.doesNotMatch(diff.reason, /国際大会の項で数えた/);
+  assert.ok(diff.evidence.every((e) => e.used));
+  // 名前に 4 桁の年が無ければ大会名だけで判定する
+  assert.equal(tournamentAxis({ ...empty, international: [intl('Worlds', 2018)], other: [other('Worlds(DFM)')] }, DEF).score, 2.5);
+  // 大会名が違えば、同じ年でも数える
+  assert.equal(tournamentAxis({ ...empty, international: [intl('Worlds', 2018)], other: [other('JCG の大会 2018')] }, DEF).score, 3.0);
+  // 国際大会の記録が無ければ、他の大会は従来どおり数える
+  assert.equal(tournamentAxis({ ...empty, other: [other('Worlds 2018(DFM)')] }, DEF).score, 2.5);
+});
+
+test('基準32: 別名の表(internationalAliases)にある別名も同じ大会と判定する。表に無い名前は数える', () => {
+  const lcp = [intl('Asia Masters', 2025), intl('LCP P&R', 2025)];
+  const dup = tournamentAxis({ ...empty, international: lcp, other: [other('LCP 入れ替え戦 2025(QT DIG∞)')] }, DEF);
+  assert.equal(dup.score, 3.0, '国際大会 2 件 +1.0 だけ');
+  assert.match(dup.reason, /国際大会の項で数えた/);
+  // 別名の表に無い言い方(昇格戦)は同じ大会と判定しない
+  assert.equal(tournamentAxis({ ...empty, international: lcp, other: [other('LCP 昇格戦 2025(QT DIG∞)')] }, DEF).score, 3.5);
+  // 別名でも年が違えば数える
+  assert.equal(tournamentAxis({ ...empty, international: lcp, other: [other('LCP 入れ替え戦 2024')] }, DEF).score, 3.5);
+  // 別名の表が空なら大会名だけで判定する
+  assert.equal(tournamentAxis({ ...empty, international: lcp, other: [other('LCP 入れ替え戦 2025(QT DIG∞)')] }, { ...DEF, internationalAliases: {} }).score, 3.5);
+  // ほかの別名: 世界大会 = Worlds、Mid-Season Invitational = MSI、Asian Games = アジア競技大会
+  const three = [intl('Worlds', 2019), intl('MSI', 2019), intl('アジア競技大会', 2022)];
+  const r = tournamentAxis({ ...empty, international: three, other: [other('世界大会 2019'), other('Mid-Season Invitational 2019'), other('Asian Games 2022')] }, DEF);
+  assert.equal(r.score, 3.0);
+  assert.equal(r.evidence.filter((e) => !e.used).length, 3);
+});
+
+test('基準12・32 の計算の例(Ceros の形): LJL 9 年・国際大会 7 件・他の大会「Worlds 2018(DFM)」で、改訂前の設定(上限 2.0・国際大会なし)より +1.5', () => {
+  const events = ([['IWCI', 2015], ['IWCT', 2015], ['IWCI', 2016], ['Rift Rivals', 2017], ['Worlds', 2018], ['MSI', 2019], ['Worlds', 2019]] as [string, number][]).map(([e, y]) => intl(e, y));
+  const rec = { ...empty, pro: [ljlPro(9)], other: [other('Worlds 2018(DFM)')] };
+  const before = tournamentAxis(rec, { ...DEF, proMax: 2 }).score; // 2 + 2.0 + 0.5
+  const after = tournamentAxis({ ...rec, international: events }, DEF).score; // 2 + 3.0 + 国際大会 1.0 + 他の大会 0
+  assert.equal(before, 4.5);
+  assert.equal(after, 6.0);
 });
