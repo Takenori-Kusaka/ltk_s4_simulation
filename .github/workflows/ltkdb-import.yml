@@ -9,7 +9,7 @@ name: ltkdb-import
 
 on:
   schedule:
-    - cron: '45 23 * * *' # 毎日 8:45 JST
+    - cron: '45 22 * * *' # 毎日 7:45 JST(8:15 の site-deploy の前)
   workflow_dispatch:
 
 permissions:

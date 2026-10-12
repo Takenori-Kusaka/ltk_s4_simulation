@@ -1,6 +1,6 @@
 ---
 name: input-ltkdb
-description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめから、名簿の階級チーム同士のスクリムを F-004 の試合結果の記録(`docs/research/grounds/scrims/`)へ機械で取り込む。`/input-ltkdb`。毎日 8:45 JST に GitHub Actions(`.github/workflows/ltkdb-import.yml`)が同じ変換を流す。リスナー参加・スコアの無い試合・既存の記録と同じ試合は取り込まない。共通の原則は /data-update。
+description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめから、名簿の階級チーム同士のスクリムを F-004 の試合結果の記録(`docs/research/grounds/scrims/`)へ機械で取り込む。`/input-ltkdb`。毎日 7:45 JST に GitHub Actions(`.github/workflows/ltkdb-import.yml`)が同じ変換を流す。リスナー参加・スコアの無い試合・既存の記録と同じ試合は取り込まない。共通の原則は /data-update。
 ---
 
 # LTKDB からスクリムの試合結果を取り込む
