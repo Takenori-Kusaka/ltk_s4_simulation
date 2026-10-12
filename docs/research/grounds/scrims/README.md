@@ -24,7 +24,7 @@
 
 - 出典: 非公式のファンサイト LTKDB(LTK Schedule & Status、https://demo-lab0110.github.io/ltk-schedule-status-site/ )。データは同サイトのリポジトリの `site-data.json`(https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json 、`updatedAt` 2026-10-12T13:56:51Z)の「対戦結果まとめ」「リザルト詳細」。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。取り込んだ試合の確認状態はすべて「承認済」
 - 信頼性の確かめ: LTKDB の LR CORE vs DD CORE の 3 試合(`SCRIM_20261009_CORE_LR_DD_*`)と、配信から独立に書き起こした `2026-10-10-lr-core-vs-dd-core.json` を突き合わせ、読めた 173 個の値(10 人 × 3 試合の K/D/A・ゴールド・ダメージ・チャンピオン)がすべて一致した
-- 取り込んだのは名簿の階級チーム同士の試合だけ。LTKDB にあるリスナー参加のスクリム(LR CORE・CC CORE・IT CORE・DD NEXT の対リスナー、計 21 試合)は F-004 決定 D2 により取り込んでいない
+- 取り込んだのは名簿の階級チーム同士の試合だけ。LTKDB にあるリスナー参加のスクリム(LR CORE・CC CORE・IT CORE・DD NEXT の対リスナー、計 20 試合)は F-004 決定 D2 により取り込んでいない
 - 記録の `source.url` は LTKDB のページ、`source.ltkdbMatchId` が LTKDB の試合 ID。`goldPerMin` は 5 人のゴールド ÷ 試合時間(分)で計算した。チームの K/D/A は 5 人の和で、LTKDB のチームの KDA と一致することを確かめた
 - 日付の食い違い: LTKDB と同サイトの予定では LR CORE vs DD CORE は 2026-10-09 20:00 だが、既存の記録 `2026-10-10-lr-core-vs-dd-core.json` は配信の日付の 2026-10-10 を試合日にしている。直すかは価値責任者の判断(直さない間、試合 ID は SC-20261010-…)
 
