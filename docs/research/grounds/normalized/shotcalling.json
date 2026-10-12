@@ -638,7 +638,8 @@
       "name": "アステル・レダ",
       "evidence": [
         {"summary":"S3 DD NEXT の配信の関連動画に、切り抜きの題名「コールが出るおしず、キャリーのアステルに感動」が出ていた。コール役は白那しずく、アステルはキャリー役として扱われている。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"不明","type":"視聴者の声","direction":"-","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
-        {"summary":"S3 DD NEXT Day5 前の打ち合わせで、「アステルさんのあれ聞けば」とアステルの声を合図にする場面があった。部分的に合図役を担っていた可能性がある(スニペットで確認)。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"2026-06","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"}
+        {"summary":"S3 DD NEXT Day5 前の打ち合わせで、「アステルさんのあれ聞けば」とアステルの声を合図にする場面があった。部分的に合図役を担っていた可能性がある(スニペットで確認)。","source":"https://www.youtube.com/watch?v=BDpE0X_lMNo","date":"2026-06","type":"チームメイトの発言","direction":"+","strength":"弱","kind":"player","kindBy":"機械で推定","collectedBy":"ai","origin":"docs/research/grounds/evidence-it-lr.json"},
+        {"summary":"価値責任者が「コミュニケーションの要は JG のアステルさんで、マクロコールは彼からしか出ていない」と確認した(スクリムの見立て)","source":"価値責任者の確認(2026-10-12 のプロジェクトのスレッドでの発言)","date":"2026-10-12","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","note":"2026-10-12 の価値責任者の決定(決定カードで「加える」を選択)で追加した"}
       ]
     },
     "LR-NEXT-MID": {
