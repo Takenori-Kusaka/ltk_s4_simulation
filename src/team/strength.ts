@@ -6,6 +6,7 @@ import { loadEngineConfig, selectGames } from '../rating/engine.ts';
 import { loadEvidenceConfig } from '../rating/evidence.ts';
 import type { PlayerRating, PlayerRatingInput } from '../rating/build.ts';
 import type { Confidence } from '../rating/types.ts';
+import { loadOwnerViewConfig, ownerViewAdjust, ownerViewSentence, type OwnerView, type OwnerViewAdjust } from '../rating/owner-views.ts';
 import conf from './config.json' with { type: 'json' };
 
 const CFG = conf as unknown as {
@@ -35,6 +36,8 @@ export interface StrengthAxis {
   display: number | null;
   confidence: Confidence | null;
   reason: string;
+  /** 基準23・26: 価値責任者の見立ての加点(素点に含めた値)。項目が無ければ持たない */
+  ownerView?: OwnerViewAdjust;
 }
 
 export interface TierTeamStrength {
@@ -143,6 +146,8 @@ export interface StrengthInput {
   now: number;
   /** 階級チーム(例: DD-CORE)ごとのコーチの総合 C(Task-3)。無ければ仕様 5c の事前値で推定する */
   coachC?: Record<string, number>;
+  /** 基準23: 階級チーム(例: DD-CORE)ごとの価値責任者の見立て(src/team/owner-views.ts の splitTeamViews) */
+  ownerViews?: Record<string, OwnerView[]>;
 }
 
 /** 基準1〜6b: 12 の階級チームの戦力 S と強さの軸 */
@@ -154,6 +159,7 @@ export function computeStrength(input: StrengthInput): TierTeamStrength[] {
       id: p.id, role: p.role, rating: ratingOf.get(p.id)!, input: inputOf.get(p.id),
     }));
   const favSet = (ms: Member[]) => new Set(ms.flatMap((m) => favorites(m, input.now)));
+  const ovCfg = loadOwnerViewConfig();
 
   const teams = TEAMS.flatMap((team) =>
     TIERS.map((tier) => {
@@ -203,6 +209,15 @@ export function computeStrength(input: StrengthInput): TierTeamStrength[] {
           confidence: minConf(ms.map((m) => axisOf(m.rating, 'pool')?.confidence)),
           reason: `勝てるチャンピオン(3 試合以上・勝率 50% 以上)の数の少ない方から ${wins.length} 人: ${wins.join('・')}` },
       ];
+      // 基準23: 連携の厚み・司令塔の素点に価値責任者の見立ての加点を加える(相対評価の前。F-005 の M もこの素点から作る)
+      for (const a of axes) {
+        if ((a.key !== 'synergy' && a.key !== 'shotcalling') || a.raw === null) continue;
+        const ov = ownerViewAdjust(input.ownerViews?.[key] ?? [], a.key, ovCfg);
+        if (!ov) continue;
+        a.raw = a.raw! + ov.value;
+        a.reason += `。${ownerViewSentence(ov)}`;
+        a.ownerView = ov;
+      }
       return { team, tier, S, coachC, coachEstimated: coachC !== null && given === undefined, coachId, overlap, axes };
     }),
   );

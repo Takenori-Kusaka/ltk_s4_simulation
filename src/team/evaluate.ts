@@ -9,6 +9,8 @@ import { computeCoaches, readCoachSnapshot, type CoachSnapshot } from './coach.t
 import { computeStyle } from './style.ts';
 import { computeOverall } from './overall.ts';
 import { validateLtk3Snapshot, type Ltk3Snapshot } from './ltk3.ts';
+import { splitTeamViews, withCoachViews } from './owner-views.ts';
+import type { OwnerView } from '../rating/owner-views.ts';
 
 export interface TeamEvaluationInput {
   ratings: readonly PlayerRating[];
@@ -18,6 +20,8 @@ export interface TeamEvaluationInput {
   now: number;
   /** evidence-coach.json と ltk3-aggregate.json の置き場(既定は data/snapshots) */
   snapshotsDir: string;
+  /** 基準23〜25: 価値責任者の見立てのうち階級チーム・コーチを対象とする項目(loadRatingInputs の teamViews) */
+  ownerViews?: readonly OwnerView[];
 }
 
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, 'utf8'));
@@ -52,14 +56,15 @@ export function evaluateTeams(input: TeamEvaluationInput) {
     else ltk3 = raw as Ltk3Snapshot;
   }
 
+  const views = splitTeamViews(input.ownerViews ?? []);
   const records = Object.fromEntries(input.inputs.map((p) => [p.playerId, p.tournament]));
-  const coaches = computeCoaches(coachSnap, records, input.ratings);
-  const strength = computeStrength({ ratings: input.ratings, inputs: input.inputs, now: input.now, coachC: coaches.coachC });
+  const coaches = computeCoaches(withCoachViews(coachSnap, views.coach), records, input.ratings);
+  const strength = computeStrength({ ratings: input.ratings, inputs: input.inputs, now: input.now, coachC: coaches.coachC, ownerViews: views.team });
   const style = computeStyle({ ratings: input.ratings, inputs: input.inputs, now: input.now, ltk3, teamIndicators: input.teamIndicators, matches: input.matches });
   const overall = computeOverall({ strength, coaching: coaches.teams, style, inputs: input.inputs, coachWeakSideEvidence: coachWeakSideEvidence(coachSnap) });
   const tierTeams = strength.map((s) => {
     const key = `${s.team}-${s.tier}`;
     return { ...s, coaching: coaches.teams[key], style: style.find((x) => x.team === s.team && x.tier === s.tier) ?? null };
   });
-  return { tierTeams, overall: overall.teams, beta: overall.beta, errors };
+  return { tierTeams, overall: overall.teams, beta: overall.beta, errors, warnings: views.warnings };
 }

@@ -15,6 +15,8 @@
 | Task-5 | 総合の軸(RS の期待得点・MASTERS CUP の力・均衡・コーチングの活用・一体感・チーム設計)と F-001 との接続、ratings.json への書き出し | 14, 14b, 15, 16, 17, 18, 18b | `src/team/overall.ts`、`src/collect/aggregate-cli.ts`、`tests/team/overall.test.ts` | Task-3, Task-4 | 不可 |
 | Task-6 | 階級チームのページ(コーチの枠のレーダー・強さの軸・特性・根拠)と比較 | 5e, 19b, 20, 22 | `src/app/team/**`、`src/app/app.css`、`tests/app/team-eval.test.ts` | Task-5 | 不可 |
 | Task-7 | 全階級チームのページ(総合の軸と、勝率の表は F-005 までデータなし) | 19 | `src/app/**`、`tests/app/all-tier.test.ts` | Task-6 | 不可 |
+| Task-8 | (2026-10-12 追加)価値責任者の見立て: 階級チーム・コーチを対象とする項目の振り分けと検査、連携の厚み・司令塔の素点への加点(相対評価の前。F-005 の M に効く)、コーチの評価軸の根拠への追加、集計のコマンドの警告。軸の説明の文に加点を出す(試合の分析ページの M の内訳に出る) | 23, 24, 25 | `src/team/owner-views.ts`、`src/team/strength.ts`、`src/team/evaluate.ts`、`src/rating/build.ts`、`src/collect/aggregate-cli.ts`、`tests/team/owner-views.test.ts` | F-009 Task-14 | 可 |
+| Task-9 | (2026-10-12 追加)見立ての表示と重みの比較: 階級チームのページの「価値責任者の見立て」の欄(原文・日付・強さ・切り詰め)、当てはまりの確認の 3 通りの比較 | 26, 27 | `src/app/team/**`、F-004 基準23 の命令の置き場 | Task-6、Task-8、F-004 基準23 の実装 | 可 |
 
 ## 粒度の確認
 

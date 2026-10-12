@@ -121,8 +121,9 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, meta), null, 2) + '\n');
   out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}`);
   // F-010: 階級チームの評価と全階級チームの総合の軸
-  const ev = evaluateTeams({ ratings, inputs: inputs.players, matches: inputs.matches, teamIndicators: teams, now: now.getTime(), snapshotsDir: opts.snapshotsDir ?? 'data/snapshots' });
+  const ev = evaluateTeams({ ratings, inputs: inputs.players, matches: inputs.matches, teamIndicators: teams, now: now.getTime(), snapshotsDir: opts.snapshotsDir ?? 'data/snapshots', ownerViews: inputs.teamViews });
   for (const e of ev.errors) out(`チームの評価の入力: ${e}`);
+  for (const w of ev.warnings) out(`チームの評価の入力の警告: ${w}`);
   const teamPath = join(publicDir, 'team-evaluation.json');
   writeFileSync(teamPath, JSON.stringify({ kind: 'team-evaluation', computedAt: now.toISOString(), configVersion: configVersion(), tierTeams: ev.tierTeams, overall: ev.overall, beta: ev.beta }, null, 2) + '\n');
   out(`チームの評価を書いた: ${teamPath}`);

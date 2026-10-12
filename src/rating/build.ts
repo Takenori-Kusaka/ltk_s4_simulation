@@ -50,6 +50,8 @@ export interface PlayerRatingInput {
 export interface RatingInputs {
   players: PlayerRatingInput[];
   matches: MatchForPopulation[];
+  /** 価値責任者の見立てのうち階級チーム・コーチを対象とする項目(F-010 基準23〜25 が使う) */
+  teamViews?: OwnerView[];
 }
 
 export interface AxisRating {
@@ -240,6 +242,6 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
-  return { inputs: { players, matches }, errors, warnings };
+  return { inputs: { players, matches, teamViews: ov.others }, errors, warnings };
 }
 
