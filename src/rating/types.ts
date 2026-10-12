@@ -11,6 +11,20 @@ export interface RankEntry {
   lp: number;
   /** 出典(経歴の記録の最高ランクに付く。Riot API の現在値には無い) */
   source?: string;
+  /** 到達の時点(歴代の最高ランクの記録 peak.allTime.when から読んだ最も遅い日付。'2021'・'2024-01'・'2025-07-28' の形)。無ければ不明(基準35) */
+  reachedAt?: string;
+  /** 到達の時点から計算の基準日までのブランク(基準33)。評価の組み立て(build.ts)が歴代の最高ランクへ載せる。無い記録は減衰しない */
+  blank?: BlankInfo;
+}
+
+/**
+ * 到達点からのブランク(基準33〜36)。at は到達の時点(元プロの下限では最終出場年)、years はブランク b(年)、decay はブランクの減衰(点)。
+ * 到達の時点が不明なら at・years は null、decay は 0(減衰なし。基準35)
+ */
+export interface BlankInfo {
+  at: string | null;
+  years: number | null;
+  decay: number;
 }
 
 /** LoL のプロの経歴(経歴の記録の lol.highestLevel が LJL・海外・CS・アカデミーのいずれか。出典つき。基準29) */
@@ -19,6 +33,10 @@ export interface ExProCareer {
   source: string;
   /** その水準での年数(経歴の記録の lol.years[水準]。下限の計算に使う。無ければ 0) */
   years?: number;
+  /** 最終出場年(経歴の記録の lol.lastCompetitiveYear。時点はその年の 7 月 1 日)。無ければ不明(基準35) */
+  lastYear?: number;
+  /** 最終出場年から計算の基準日までのブランク(基準34)。評価の組み立て(build.ts)が載せる。無い経歴は減衰しない */
+  blank?: BlankInfo;
 }
 
 /** ランクの基準の出どころ(基準30) */
@@ -88,6 +106,10 @@ export interface EngineConfig {
   confidence: { high: number; mid: number };
   /** スクリム 1 試合の重み(F-004 基準13。新しさの重みに掛ける。省略時 1) */
   scrimGameWeight?: number;
+  /** ブランク 1 年あたりの減衰(点。基準33・34。初期値 0.3。省略時 0 = 減衰しない) */
+  blankDecayPerYear?: number;
+  /** 減衰しない猶予の年数(初期値 1。省略時 0) */
+  blankGraceYears?: number;
 }
 
 /** 母集団の分布: ロール → 指標のキーとモード → 平均と標準偏差 */
@@ -128,8 +150,10 @@ export interface DataAxisResult {
   estimated: boolean;
   anchor: number;
   anchorSource: AnchorSource;
-  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典)。ソロランク・中央値のときは無い */
+  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典、到達の時点・ブランク・減衰)。ソロランク・中央値のときは無い */
   anchorNote?: string;
+  /** 到達の時点が不明な記録をランクの基準に採った(基準35: 確度を 1 段下げる)。採っていなければ無い */
+  anchorWhenUnknown?: boolean;
   /** 補正 P */
   correction: number;
   /** 縮小の割合 n / (n + k) */
