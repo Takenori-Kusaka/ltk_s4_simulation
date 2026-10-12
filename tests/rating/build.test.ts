@@ -200,8 +200,10 @@ const f004Inputs = (raw: Row[]) => {
 const axisOf = (ratings: ReturnType<typeof buildRatings>, id: string, key: string) => ratings.find((r) => r.playerId === id)!.axes.find((a) => a.key === key)!;
 
 test('F-004 AC12: loadRatingInputs は受け付けたスクリムの記録から作った試合の記録を、ソロランクの試合と同じ games に足す', () => {
+  // 既存の記録の試合日は LTKDB の 2026-10-09(価値責任者の確認 2026-10-12)
+  const REAL_FILE = '2026-10-09-lr-core-vs-dd-core.json';
   const real = loadResults({ root: 'docs/research/grounds', champions: null });
-  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), scrims: real.games.filter((g) => g.file === SCRIM_FILE) });
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), scrims: real.games.filter((g) => g.file === REAL_FILE) });
   assert.deepEqual(errors, []);
   const adc = find(inputs.players, 'DD-CORE-ADC');
   assert.equal(adc.games.length, 3);

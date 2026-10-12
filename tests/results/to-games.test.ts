@@ -35,17 +35,20 @@ const load = (raw: Row[]) => {
   return scrimGameRecords(r.games);
 };
 
-test('基準12: 既存の記録(2026-10-10 の 3 試合)から、選手ごとに queueId 0・名簿のロールの teamPosition・正午(JST)・試合時間(分)の記録を作る', () => {
+test('基準12: 既存の記録(2026-10-09 の 3 試合)から、選手ごとに queueId 0・名簿のロールの teamPosition・正午(JST)・試合時間(分)の記録を作る', () => {
+  // 試合日は LTKDB の 2026-10-09(価値責任者の確認 2026-10-12。配信の日付は 10-10)
+  const REAL_FILE = '2026-10-09-lr-core-vs-dd-core.json';
+  const REAL_NOON_JST = Date.parse('2026-10-09T12:00:00+09:00');
   const r = loadResults({ root: 'docs/research/grounds', champions: null });
-  const by = scrimGameRecords(r.games.filter((g) => g.file === SCRIM_FILE));
+  const by = scrimGameRecords(r.games.filter((g) => g.file === REAL_FILE));
   assert.equal(by.size, 10, '10 人');
   const jasper = by.get('DD-CORE-ADC')!;
   assert.equal(jasper.length, 3);
-  const g6 = jasper.find((g) => g.matchId === 'SC-20261010-DD-CORE-LR-CORE-G3')!;
+  const g6 = jasper.find((g) => g.matchId === 'SC-20261009-DD-CORE-LR-CORE-G3')!;
   assert.equal(g6.kind, 'scrim');
   assert.equal(g6.queueId, 0);
   assert.equal(g6.position, 'BOTTOM');
-  assert.equal(g6.endTime, NOON_JST);
+  assert.equal(g6.endTime, REAL_NOON_JST);
   assert.ok(Math.abs(g6.durationMin - (37 * 60 + 31) / 60) < 1e-9);
   // 6 試合目: じゃすぱー 44,348 ダメージ・573 G/分・10/5/8、チームのキル 24、チームのダメージ合計 101,063。対面は大御所にゅん子 32,700・435・3/5/8、チームのキル 16
   assert.equal(g6.me.totalDamageDealtToChampions, 44348);
@@ -64,7 +67,7 @@ test('基準12: 既存の記録(2026-10-10 の 3 試合)から、選手ごとに
     assert.equal(k in g6.me, false, k);
   }
   // 5 試合目は CS がある
-  const g5 = jasper.find((g) => g.matchId === 'SC-20261010-DD-CORE-LR-CORE-G2')!;
+  const g5 = jasper.find((g) => g.matchId === 'SC-20261009-DD-CORE-LR-CORE-G2')!;
   assert.equal(g5.me.totalMinionsKilled, 489);
   // 負けた側は win 0、全員が 3 試合
   assert.ok([...by.values()].every((gs) => gs.length === 3));
