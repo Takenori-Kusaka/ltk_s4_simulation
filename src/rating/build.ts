@@ -12,6 +12,7 @@ import { roleSwitchDiscount,
   mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
 } from './evidence.ts';
+import { loadOwnerViewConfig, ownerViewAdjust, ownerViewSentence, readOwnerViews, type OwnerView, type OwnerViewAdjust } from './owner-views.ts';
 import { applyForm, formFactor, type FormGame, type FormResult, type LeagueSnapshot } from './form.ts';
 import type { Confidence, ExProCareer, GameRecord, MatchForPopulation, RankEntry } from './types.ts';
 import axesConfig from './axes.json' with { type: 'json' };
@@ -42,6 +43,8 @@ export interface PlayerRatingInput {
   masteryScore?: number;
   shotcalling: ShotcallingEvidence[];
   tournament: TournamentRecord;
+  /** 価値責任者の見立て(基準37。owner-views.json の選手を対象とする項目) */
+  ownerViews?: OwnerView[];
 }
 
 export interface RatingInputs {
@@ -63,6 +66,8 @@ export interface AxisRating {
   reason: string;
   data?: RatedAxis;
   evidence?: EvidenceAxisResult;
+  /** 価値責任者の見立ての加点(基準37・39)。項目が無ければ持たない */
+  ownerView?: OwnerViewAdjust;
 }
 
 export interface PlayerRating {
@@ -105,25 +110,32 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     masteryScore: p.masteryScore,
   }));
   const ctx = buildRatingContext(ratingPlayers, inputs.matches, cfg, now);
+  const ovCfg = loadOwnerViewConfig();
   return inputs.players.map((p, i) => {
     const form = formFactor(formGames(p.games), p.league, now);
     const show = (base: number) => round2(applyForm(base, form.coefficient));
     // 基準31: ロール転向の割引(LTK の出場シーズンのうち今のロール以外の割合 × 設定の値)をデータの軸から引く
     const discount = roleSwitchDiscount(p.tournament, ROLE_OF[p.position], cfg.roleSwitchPenalty ?? 0);
-    const data = rateDataAxes(ratingPlayers[i], ctx).map((a): AxisRating => ({
+    const data = rateDataAxes(ratingPlayers[i], ctx).map((a): AxisRating => {
+      // 基準37: 価値責任者の見立ての加点を、ロール転向の割引の後・調子の前に加える
+      const ov = ownerViewAdjust(p.ownerViews ?? [], a.key, ovCfg);
+      const base = Math.min(10, Math.max(0, a.base - discount.value + (ov?.value ?? 0)));
+      return {
       key: a.key,
       label: a.label,
-      base: round2(Math.max(0, a.base - discount.value)),
-      display: show(Math.max(0, a.base - discount.value)),
+      base: round2(base),
+      display: show(base),
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
       // F-004 基準15: スクリムの試合を使った軸は、その数と重み(ピックプールは 1 試合として数えるため 1.0)を説明に示す
       reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1)]
         .filter(Boolean)
-        .join('。') + (discount.reason ? `。${discount.reason}` : ''),
+        .join('。') + (discount.reason ? `。${discount.reason}` : '') + (ov ? `。${ownerViewSentence(ov)}` : ''),
       data: a,
-    }));
+      ...(ov ? { ownerView: ov } : {}),
+      };
+    });
     const evidence = [shotcallingAxis(p.shotcalling), tournamentAxis(p.tournament, undefined, ROLE_OF[p.position])].map((e): AxisRating => ({
       key: e.key,
       label: e.label,
@@ -179,7 +191,10 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
   const careerPath = join(opts.groundsDir, 'career.json');
   const cr: ReturnType<typeof readCareerSnapshot> = existsSync(careerPath) ? readCareerSnapshot(read(careerPath)) : { players: {}, errors: [] };
   errors.push(...sc.errors, ...tr.errors, ...cr.errors);
-  const warnings = [...sc.warnings];
+  // 基準37・38: 価値責任者の見立て。無ければ加点しない。使えない項目は警告にする
+  const ovPath = join(opts.groundsDir, 'owner-views.json');
+  const ov = readOwnerViews(existsSync(ovPath) ? read(ovPath) : null, new Set(ROSTER.map((r) => r.id)));
+  const warnings = [...sc.warnings, ...ov.warnings];
 
   const infos = new Map<string, unknown>();
   const matchInfo = (id: string) => {
@@ -221,6 +236,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       shotcalling: sc.players[r.id] ?? [],
       // 基準12 の改訂(2026-10-11): 国際大会の記録(career.json の lol.internationalEvents。出典つき)を大会経験の入力に加える
       tournament: { ...record, pro: mergeProYears(record.pro, career?.lol), international: career?.lol?.international ?? [] },
+      ownerViews: ov.players[r.id] ?? [],
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);

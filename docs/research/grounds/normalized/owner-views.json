@@ -1,0 +1,296 @@
+{
+  "kind": "owner-views",
+  "description": "価値責任者の見立て(F-009 基準37・F-010 基準23〜24・F-005 基準17〜18)。原文は発言の該当部分をそのまま引用する。軸・向き・強さへの対応づけは AI の起案で、価値責任者が変えてよい。重みは src/rating/config.json の ownerView",
+  "views": [
+    {
+      "targetKind": "player",
+      "target": "DD-CORE-TOP",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "topの酒寄さんが普通に対面に勝つことがあり、4番手topの下馬評を覆している",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:28:59 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 1)"
+    },
+    {
+      "targetKind": "player",
+      "target": "DD-NEXT-TOP",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "想定以上にshakaさんがtopで戦えていて、隙になっていない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:44:37 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 3)"
+    },
+    {
+      "targetKind": "player",
+      "target": "DD-NEXT-ADC",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "botsupのぶいすぽ二人が他のbotレーンを圧倒しており、スノーボールしている",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:44:37 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 3)"
+    },
+    {
+      "targetKind": "player",
+      "target": "DD-NEXT-SUP",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "botsupのぶいすぽ二人が他のbotレーンを圧倒しており、スノーボールしている",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:44:37 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 3)"
+    },
+    {
+      "targetKind": "player",
+      "target": "CC-NEXT-ADC",
+      "axis": "laning",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "獅子堂さんは低ランク初参加枠として明確な隙になっており、レーン戦と集団戦パフォーマンスの低さ",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:46:09 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 4)"
+    },
+    {
+      "targetKind": "player",
+      "target": "CC-NEXT-ADC",
+      "axis": "teamfight",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "獅子堂さんは低ランク初参加枠として明確な隙になっており、レーン戦と集団戦パフォーマンスの低さ",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:46:09 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 4)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-TOP",
+      "axis": "synergy",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "想定以上にtopの橘さんがtopのプレイに集中していてチームへの還元ができていない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-JG",
+      "axis": "stability",
+      "direction": "-",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "jg/midが不安定",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-MID",
+      "axis": "stability",
+      "direction": "-",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "jg/midが不安定",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-SUP",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "supが相変わらず強い",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-SUP",
+      "axis": "teamfight",
+      "direction": "+",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "supが相変わらず強い",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "IT-NEXT-ADC",
+      "axis": "laning",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "botの天帝フォルテが負け癖のためかレーン負け前提プレイが目立ち、結果的にbotキャリーになれていない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-TOP",
+      "axis": "laning",
+      "direction": "+",
+      "strength": "強",
+      "date": "2026-10-12",
+      "quote": "topのうるさんは相変わらずcoreレベルで対面圧倒しており、カウンターピックを覆せる実力がある",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-JG",
+      "axis": "ground",
+      "direction": "+",
+      "strength": "強",
+      "date": "2026-10-12",
+      "quote": "jg適正は高くjgとしてのパフォーマンスはnext jgの中では2,3番手になりそう",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:55:49 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 7)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-JG",
+      "axis": "teamfight",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "チャンピオン練度不足によるフィジカル不足で集団戦貢献力が低め",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:55:49 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 7)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-JG",
+      "axis": "growth",
+      "direction": "+",
+      "strength": "強",
+      "date": "2026-10-12",
+      "quote": "練習すれば伸びる部分で後半解消されそう",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:55:49 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 7)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-MID",
+      "axis": "laning",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "ワンテンポ遅れてmidのcsを失ったりしていた",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-MID",
+      "axis": "growth",
+      "direction": "+",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "この短期間でどこまでついていけるか。ちょっと時間がかかりそうではあった",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-ADC",
+      "axis": "growth",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "なぎさっちととおこは二人とも実力が上限に達していて他のチームのnext botより伸びしろが少ない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "player",
+      "target": "LR-NEXT-SUP",
+      "axis": "growth",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "なぎさっちととおこは二人とも実力が上限に達していて他のチームのnext botより伸びしろが少ない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "team",
+      "target": "DD-CORE",
+      "axis": "synergy",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "midjgからもbotsupからもチームをキャリーできる",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:28:59 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 1)"
+    },
+    {
+      "targetKind": "team",
+      "target": "CC-NEXT",
+      "axis": "synergy",
+      "direction": "+",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "チーム全体としては動きやすそう",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:46:09 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 4)"
+    },
+    {
+      "targetKind": "team",
+      "target": "IT-NEXT",
+      "axis": "synergy",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "チーム全体が動きにくそう",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:47:41 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 5)"
+    },
+    {
+      "targetKind": "team",
+      "target": "LR-NEXT",
+      "axis": "shotcalling",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "マクロコールは彼からしか出ていない。そのためjgにプレッシャーがかかるとチームが崩壊しかねない",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:51:58 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 6)"
+    },
+    {
+      "targetKind": "team",
+      "target": "DD-NEXT",
+      "axis": "momentum",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "大会が短いのでその勢いのまま行く可能性がありそう",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:44:37 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 3)"
+    },
+    {
+      "targetKind": "coach",
+      "target": "DD-CORE",
+      "axis": "tactics",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "DD Coreはコールが全員から出てるから全員ノリノリになれるように個人のパフォーマンス最大化するためのフィードバックと個人コーチング",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:42:14 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 2)"
+    },
+    {
+      "targetKind": "coach",
+      "target": "CC-CORE",
+      "axis": "tactics",
+      "direction": "+",
+      "strength": "弱",
+      "date": "2026-10-12",
+      "quote": "CC Coreはまだ未知数ですが基本的に葛葉のブランク解消でフィジカル集中できるようにjg/bot/supのコール連携を前期から継続で活かす",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:42:14 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 2)"
+    },
+    {
+      "targetKind": "coach",
+      "target": "IT-CORE",
+      "axis": "tactics",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "IT Coreは要のたかやスペシャルが負け癖になってmid有利をチーム還元できていないからそこの強化と、midがスノーボールしやすくするためのtop or bot有利の構築、bot の安定性強化",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:42:14 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 2)"
+    },
+    {
+      "targetKind": "coach",
+      "target": "LR-CORE",
+      "axis": "tactics",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-12",
+      "quote": "LR Coreはコールがmid/sup偏重だから、全員で同じ目線を持つためのマクロ共通認識と考え方の意思統一と再現性強化",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-12 22:42:14 UTC。docs/research/grounds/owner-review-scrims-20261012.md の発言 2)"
+    }
+  ]
+}
