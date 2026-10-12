@@ -35,6 +35,8 @@ export interface GameRecord {
   me: Record<string, number>;
   /** 同じ試合の同じロールの相手。いなければ null */
   opp: Record<string, number> | null;
+  /** 記録の種類。scrim = スクリムの記録(F-004。重み scrimGameWeight)。省略時は Riot API の試合 */
+  kind?: 'scrim';
 }
 
 /** 母集団の構築に使う試合(全参加者) */
@@ -84,6 +86,8 @@ export interface EngineConfig {
   exProFloor?: Record<string, number | { base: number; perYear: number; max: number }>;
   zClip: number;
   confidence: { high: number; mid: number };
+  /** スクリム 1 試合の重み(F-004 基準13。新しさの重みに掛ける。省略時 1) */
+  scrimGameWeight?: number;
 }
 
 /** 母集団の分布: ロール → 指標のキーとモード → 平均と標準偏差 */
@@ -139,4 +143,8 @@ export interface DataAxisResult {
   oldest: string | null;
   bonus: number;
   metrics: AxisMetricResult[];
+  /** この軸に使ったスクリムの試合の数(F-004 基準15) */
+  scrimGames: number;
+  /** 確度の理由(有効な試合数。スクリムを含む軸はその数と重み) */
+  confidenceReason: string;
 }
