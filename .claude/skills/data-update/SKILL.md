@@ -12,7 +12,7 @@ description: 評価の土台になるデータ(配信の文字起こし・試合
 | コマンド | 取り込むもの | 状態 |
 | --- | --- | --- |
 | `/input-ts` | 配信・動画の文字起こし(YouTube・Twitch) | あり(`.claude/skills/input-ts/SKILL.md`) |
-| `/input-ltkdb` | スクリムの試合結果(非公式のファンサイト LTKDB のまとめ。名簿の階級チーム同士の試合だけ) | あり(`.claude/skills/input-ltkdb/SKILL.md`。毎日の定期実行から呼ばれる) |
+| `/input-ltkdb` | スクリムの試合結果(非公式のファンサイト LTKDB のまとめ。名簿の階級チーム同士の試合だけ) | あり(`.claude/skills/input-ltkdb/SKILL.md`。毎日のGitHub Actions の ltkdb-import ワークフローが毎日流す) |
 | `/input-result` | 試合結果(公式の発表、配信の結果画面のスクリーンショット)。スクリムの結果を含む | 予定。F-004(結果の入力)の仕様が承認されてから作る。スクリーンショットの扱い(機械の前処理が無い素材を AI が読むか)もそのときに決める。それまでは `/input-ts` の `matches` に記録を残す |
 | (収集) | Riot API のソロキューの試合とランク | あり(`node --env-file=scripts/.env src/collect/cli.ts` → `node src/collect/aggregate-cli.ts`) |
 | (経歴の調べ直し) | 選手の最高ランク・プロ歴・他ゲームのプロ歴・競技活動 | 予定(ブランチ `docs/career-research` のマージ後に手順を足す) |
