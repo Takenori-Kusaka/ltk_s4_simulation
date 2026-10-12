@@ -81,6 +81,7 @@ jobs:
           git worktree add pages origin/gh-pages
           find pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -r dist/. pages/
+          touch pages/.nojekyll
           cd pages
           git add -A
           if git diff --cached --quiet; then echo '変更なし'; exit 0; fi
