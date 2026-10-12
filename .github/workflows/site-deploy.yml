@@ -1,0 +1,88 @@
+# ソロランクの収集・集計・ビルド・GitHub Pages(gh-pages)への公開を、作者の PC に頼らずに行う
+#
+# 価値責任者の指示(2026-10-12): 手元の環境が壊れたら更新できなくなる仕組みにしない。git と GitHub Actions で回す。
+# - 収集(src/collect/cli.ts)は Riot API を呼ぶ。キーはリポジトリの Secret `RIOT_API_KEY` からだけ渡す
+# - data/raw は公開リポジトリへ入れない(他のプレイヤーの puuid を含むため)。Actions のキャッシュで実行をまたいで持ち越す。
+#   キャッシュが消えたときは収集が全件を取り直す(時間はかかるが、手元のデータに依存しない)
+# - 集計(src/collect/aggregate-cli.ts)の終了コード 2・3(常識の一覧・試合結果の検証に反した)では公開しない
+
+name: site-deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '15 23 * * *' # 毎日 8:15 JST(7:45 の ltkdb-import の後)
+  workflow_dispatch:
+    inputs:
+      collect:
+        description: Riot API からソロランクを収集する
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: site-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+
+      - name: data/raw を前回の実行から持ち越す
+        uses: actions/cache/restore@v4
+        with:
+          path: data/raw
+          key: ltk-raw-${{ github.run_id }}
+          restore-keys: ltk-raw-
+
+      - name: ソロランクを収集する
+        id: collect
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect) || hashFiles('data/raw/players/*.json') == ''
+        env:
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+        run: |
+          rm -f data/raw/collect.lock
+          node src/collect/cli.ts
+
+      - name: data/raw を次の実行へ残す
+        if: steps.collect.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: data/raw
+          key: ltk-raw-${{ github.run_id }}
+
+      - name: 集計する
+        run: |
+          set +e
+          node src/collect/aggregate-cli.ts | tee aggregate.log
+          code=${PIPESTATUS[0]}
+          set -e
+          { echo '## 集計'; echo; echo '```'; tail -n 40 aggregate.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          # 1 = 一部の失敗(書ける集計は書いた)。2・3 = 公開用の評価を書かない検証の違反
+          if [ "$code" -ge 2 ]; then exit "$code"; fi
+
+      - name: ビルドする
+        run: npm run build
+
+      - name: gh-pages へ公開する
+        run: |
+          sha=$(git rev-parse --short HEAD)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898+github-actions[bot]@users.noreply.github.com'
+          git fetch --depth=1 origin gh-pages:refs/remotes/origin/gh-pages
+          git worktree add pages origin/gh-pages
+          find pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r dist/. pages/
+          cd pages
+          git add -A
+          if git diff --cached --quiet; then echo '変更なし'; exit 0; fi
+          git commit -m "deploy: main ${sha} (${{ github.event_name }})"
+          git push origin HEAD:gh-pages
