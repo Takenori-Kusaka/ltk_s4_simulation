@@ -1,5 +1,6 @@
 // F-009 Task-3: 根拠の軸(コール力・大会経験)。ADR-0004 決定5・7、docs/design/rating-model.md 節2
 // 入力は出典つきの根拠と評価設定だけ。ランク・ソロキューのデータ・データの軸は受け取らない(基準13)
+import { reachTime } from './engine.ts';
 import type { Confidence, ExProCareer, RankEntry } from './types.ts';
 import defaults from './config.json' with { type: 'json' };
 
@@ -404,9 +405,39 @@ export function mergeProYears(tournamentPro: readonly ProCareer[], careerLol: Ca
 /** 経歴の記録の division(1〜4。Master 以上は null)→ ランクの表記 */
 const DIVISION_TEXT: Record<string, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' };
 
+/** 到達の時点に読む西暦の年の範囲(LoL の公開の年から。LP などの 4 桁の数を年と読まないため) */
+const REACH_YEAR_MIN = 2009;
+const REACH_YEAR_MAX = 2099;
+
+/**
+ * 到達の時点の読み方(用語): 歴代の最高ランクの記録の自由記述(peak.allTime.when)から、西暦 4 桁の年(2019・2024-01・2026年9月・2020-02-15 の形)と
+ * S<n>(n は 1〜20。2010 + n 年)を拾い、最も遅い日付を '2019'・'2024-01'・'2020-02-15' の形で返す
+ * (年だけなら 7 月 1 日、年月だけならその月の 1 日として比べる)。どちらも書かれていなければ null(不明)
+ */
+export function readReachedAt(when: unknown): string | null {
+  if (typeof when !== 'string') return null;
+  const found: string[] = [];
+  const two = (n: string) => n.padStart(2, '0');
+  const isYear = (y: string) => Number(y) >= REACH_YEAR_MIN && Number(y) <= REACH_YEAR_MAX;
+  // 年月日・年月(2020-02-15、2024-01、2026年9月)。拾った所は、年だけの読みと重ならないように除く
+  const rest = when.replace(/(?<!\d)(\d{4})(?:-(\d{1,2})(?:-(\d{1,2}))?(?!\d)|年(\d{1,2})月(?:(\d{1,2})日)?)/g, (all: string, y: string, m1?: string, d1?: string, m2?: string, d2?: string) => {
+    const month = m1 ?? m2 ?? '';
+    const day = d1 ?? d2;
+    if (!isYear(y) || Number(month) < 1 || Number(month) > 12) return all;
+    found.push(day && Number(day) >= 1 && Number(day) <= 31 ? `${y}-${two(month)}-${two(day)}` : `${y}-${two(month)}`);
+    return ' ';
+  });
+  for (const m of rest.matchAll(/(?<!\d)(\d{4})(?!\d)/g)) if (isYear(m[1])) found.push(m[1]);
+  for (const m of when.matchAll(/(?<![A-Za-z0-9])S(\d{1,2})(?!\d)/g)) if (Number(m[1]) >= 1 && Number(m[1]) <= 20) found.push(String(2010 + Number(m[1])));
+  let latest: string | null = null;
+  for (const at of found) if (latest === null || (reachTime(at) ?? -Infinity) > (reachTime(latest) ?? -Infinity)) latest = at;
+  return latest;
+}
+
 /**
  * 経歴の記録を読む。最高ランクは peak.allTime(歴代)と peak.thisSeason(今季)の tier・division・lp・出典(LP 不明は 0 LP)、
- * プロの経歴は lol.highestLevel とその出典(lol.statusSource。無ければ元の行 lol.basis)。出典の無いものは使わず、選手と項目をエラーに出す
+ * プロの経歴は lol.highestLevel とその出典(lol.statusSource。無ければ元の行 lol.basis)。出典の無いものは使わず、選手と項目をエラーに出す。
+ * 歴代の最高ランクには到達の時点(peak.allTime.when から読む)、プロの経歴には最終出場年(lol.lastCompetitiveYear)を付ける。読めなければ付けない(不明。基準35)
  */
 export function readCareerSnapshot(raw: unknown): { players: Record<string, CareerInput>; errors: string[] } {
   const { players, errors } = readPlayers(raw, 'evidence-career-normalized');
@@ -420,7 +451,9 @@ export function readCareerSnapshot(raw: unknown): { players: Record<string, Care
         return null;
       }
       const division = DIVISION_TEXT[String(peak.division ?? '')] ?? (str(peak.division) ? String(peak.division).toUpperCase() : '');
-      return { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source) };
+      // 基準33: 到達の時点は歴代の最高ランクだけに付ける(今季の最高ランクは減衰しない)
+      const reachedAt = key === 'allTime' ? readReachedAt(peak.when) : null;
+      return { tier: String(peak.tier), division, lp: typeof peak.lp === 'number' ? peak.lp : 0, source: String(peak.source), ...(reachedAt ? { reachedAt } : {}) };
     };
     const entry: CareerInput = { peakRank: readPeak('allTime', '最高ランク'), seasonPeakRank: readPeak('thisSeason', '最高ランク(今季)'), exPro: null, lol: null };
     const lol = isObj(p.lol) ? p.lol : null;
@@ -446,7 +479,9 @@ export function readCareerSnapshot(raw: unknown): { players: Record<string, Care
       const basis = (Array.isArray(lol.basis) ? lol.basis : []).filter(str).map(String);
       const source = str(lol.statusSource) ? String(lol.statusSource) : basis.length ? `経歴の記録(career.json)の ${basis.join('・')}` : null;
       const years = lol.years && typeof lol.years === 'object' && Number.isFinite(Number((lol.years as Record<string, unknown>)[level])) ? Number((lol.years as Record<string, unknown>)[level]) : 0;
-      if (source) entry.exPro = { level, source, years };
+      // 基準34: 最終出場年(選手として公式戦に出た最後の年)。無ければ付けない(不明)
+      const lastYear = typeof lol.lastCompetitiveYear === 'number' && Number.isInteger(lol.lastCompetitiveYear) ? lol.lastCompetitiveYear : null;
+      if (source) entry.exPro = { level, source, years, ...(lastYear !== null ? { lastYear } : {}) };
       else errors.push(`${id}: プロの経歴(${level})に出典が無い`);
     }
     out[id] = entry;
