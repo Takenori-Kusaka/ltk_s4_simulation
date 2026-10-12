@@ -219,7 +219,8 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],
       masteryScore: typeof ms === 'number' ? ms : typeof ms?.data === 'number' ? ms.data : undefined,
       shotcalling: sc.players[r.id] ?? [],
-      tournament: { ...record, pro: mergeProYears(record.pro, career?.lol) },
+      // 基準12 の改訂(2026-10-11): 国際大会の記録(career.json の lol.internationalEvents。出典つき)を大会経験の入力に加える
+      tournament: { ...record, pro: mergeProYears(record.pro, career?.lol), international: career?.lol?.international ?? [] },
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
