@@ -99,7 +99,7 @@
         {"summary":"S1 の FISTBUMP 記事は、正確なエンゲージと相手の仕掛けを潰すプレイを評価した。コールについての記述はない。","source":"https://fistbump-news.jp/article/2025/07/30/1384.html","date":"2025-07-30","type":"記事","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","collectedBy":"ai","origin":"docs/research/grounds/evidence-dd-cc.json"},
         {"summary":"CR 公式プロフィールが、ゲーム IQ が高く IGL を務めることが多いと紹介(FPS)","source":"https://crazyraccoon.jp/member/kinako","date":"不明","type":"大会での役割","direction":"+","strength":"中","kind":"other-game","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
         {"summary":"LTK S1 振り返りで、自分が相手の一番の脅威だったと述べた(役割の認識でコールではない)","source":"https://www.youtube.com/watch?v=_PhWnFdReic","date":"2025-09-10","type":"本人の発言","direction":"+","strength":"弱","kind":"player","kindBy":"調査の分類","typeBy":"機械で推定","collectedBy":"ai","origin":"career-research-2026-10-10"},
-        {"summary":"価値責任者が「きなこはチャンピオンとロールの理解度が低くコールがちゃんとできず、味方のコールを受けて動く側」と確認した","source":"価値責任者の確認(2026-10-11 のレビューの文字起こし [00:21:39])","date":"2026-10-11","type":"価値責任者の確認","direction":"-","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","origin":"docs/research/grounds/evidence-owner-review-dd-20261011.json","note":"22:01『味方のコールをもらって動く』。9:16 では神楽めあのマクロに意見を出す側としても言及。文字起こしから AI が書き起こした記録。価値責任者が PR で確認するまで仮"}
+        {"summary":"価値責任者が「きなこさんとすたんみさんがちゃんとコールしてチームを動かせている」と確認した(スクリムの見立て)","source":"価値責任者の確認(2026-10-12 のプロジェクトのスレッドでの発言)","date":"2026-10-12","type":"価値責任者の確認","direction":"+","strength":"強","kind":"owner-confirmation","kindBy":"価値責任者","collectedBy":"human","note":"2026-10-12 の価値責任者の決定で、2026-10-11 のレビューの確認「コールがちゃんとできず、味方のコールを受けて動く側」(否定・強)をこの確認で置き換えた"}
       ]
     },
     "DD-CORE-MID": {
