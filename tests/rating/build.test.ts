@@ -276,3 +276,74 @@ test('F-004 AC17: スクリムの文字起こしの根拠は speakerIdentified �
   assert.ok(scrimItem.marks.some((m) => /低/.test(m)), JSON.stringify(scrimItem.marks));
   assert.equal(scrimItem.used, true);
 });
+
+// F-009 Task-12: 受入基準 12(2026-10-11 の改訂: 国際大会の記録)・32(他の大会との重複の除外)
+import { ROLE_OF } from '../../src/rating/build.ts';
+import { loadEvidenceConfig, tournamentAxis } from '../../src/rating/evidence.ts';
+
+test('基準12(改訂): career.json の lol.internationalEvents を出典つきで読み(出典は lol.statusSource、無ければ ref の行)、どちらも無い項目は数えずエラーに出す。大会経験の説明と根拠の一覧に出る', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'f009-grounds-intl-'));
+  const src = 'docs/research/players-dd-cc.md';
+  writeFileSync(join(dir, 'shotcalling.json'), JSON.stringify({ kind: 'evidence-shotcalling', players: {} }));
+  writeFileSync(join(dir, 'tournament.json'), JSON.stringify({
+    kind: 'evidence-tournament',
+    players: { 'DD-MASTERS-TOP': { ltk: [], coach: [], pro: [], other: [{ name: 'LCP 入れ替え戦 2025(QT DIG∞)', source: src }] } },
+  }));
+  const status = 'https://lol.fandom.com/wiki/Washidai ; https://x.com/Washidai_';
+  writeFileSync(join(dir, 'career.json'), JSON.stringify({
+    kind: 'evidence-career-normalized',
+    players: {
+      'DD-MASTERS-TOP': {
+        peak: { allTime: null, thisSeason: null },
+        lol: {
+          highestLevel: 'LJL-starter', years: { 'LJL-starter': 5 }, basis: ['lolPro[0]'], statusSource: status,
+          internationalEvents: [{ event: 'Asia Masters', year: 2025, ref: 'competitiveActivity[6]' }, { event: 'LCP P&R', year: 2025, ref: 'lolPro[4]' }],
+        },
+      },
+      'DD-MASTERS-MID': {
+        peak: { allTime: null, thisSeason: null },
+        lol: { highestLevel: 'none', years: {}, basis: [], statusSource: null, internationalEvents: [{ event: 'IWCI', year: 2016, ref: 'lolPro[2]' }, { event: 'MSI', year: 2019 }] },
+      },
+    },
+  }));
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: dir });
+  const top = find(inputs.players, 'DD-MASTERS-TOP').tournament.international ?? [];
+  assert.deepEqual(top.map((x) => [x.event, x.year, x.source]), [['Asia Masters', 2025, status], ['LCP P&R', 2025, status]]);
+  // 出典(statusSource)が無ければ ref が指す経歴の記録の行。どちらも無い MSI 2019 は数えない
+  const mid = find(inputs.players, 'DD-MASTERS-MID').tournament.international ?? [];
+  assert.deepEqual(mid.map((x) => [x.event, x.year]), [['IWCI', 2016]]);
+  assert.match(mid[0].source, /lolPro\[2\]/);
+  assert.equal(errors.length, 1, errors.join('\n'));
+  assert.ok(errors[0].includes('DD-MASTERS-MID') && errors[0].includes('国際大会'), errors[0]);
+  // 記録に無い選手は空
+  assert.deepEqual(find(inputs.players, 'CC-MASTERS-TOP').tournament.international ?? [], []);
+  // 評価: プロ LJL 5 年 2.5 + 国際大会 2 件 1.0。他の大会「LCP 入れ替え戦 2025」は LCP P&R 2025 と同じ大会のため数えない(基準32)
+  const ratings = buildRatings(inputs, NOW);
+  const t = axisOf(ratings, 'DD-MASTERS-TOP', 'tournament');
+  assert.equal(t.base, 5.5);
+  assert.match(t.reason, /国際大会 2 件/);
+  assert.match(t.reason, /国際大会の項で数えた/);
+  assert.ok(t.evidence!.evidence.some((e) => e.text.includes('Asia Masters 2025') && e.source === status && e.used));
+  assert.equal(axisOf(ratings, 'DD-MASTERS-MID', 'tournament').base, 2.5);
+});
+
+test('基準12・32 の計算の例(経歴の記録と出場記録の実データ): 改訂前の設定(上限 2.0・国際大会なし)との差は Ceros +1.5、わしだい +1.0、Enty +2.0、たぬき忍者 0。下がる選手はいない', () => {
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: 'docs/research/grounds/normalized' });
+  assert.deepEqual(errors, []);
+  const cfg = loadEvidenceConfig().tournament;
+  const delta = (p: PlayerRatingInput) => {
+    const role = ROLE_OF[p.position];
+    const after = tournamentAxis(p.tournament, cfg, role).score;
+    const before = tournamentAxis({ ...p.tournament, international: [] }, { ...cfg, proMax: 2 }, role).score;
+    return Math.round((after - before) * 100) / 100;
+  };
+  const of = (id: string) => delta(find(inputs.players, id));
+  assert.equal(of('CC-MASTERS-MID'), 1.5, 'Ceros: プロ +1.0、国際大会 7 件 +1.0、他の大会「Worlds 2018(DFM)」−0.5');
+  assert.equal(of('DD-MASTERS-TOP'), 1.0, 'わしだい: プロ +0.5、国際大会 2 件 +1.0、他の大会「LCP 入れ替え戦 2025」−0.5');
+  assert.equal(of('IT-MASTERS-SUP'), 2.0, 'Enty: プロ +1.0、国際大会 5 件 +1.0');
+  assert.equal(of('DD-MASTERS-MID'), 0, 'たぬき忍者: LJL CS 1 年、国際大会 0 件');
+  for (const p of inputs.players) assert.ok(delta(p) >= 0, `${p.name} ${delta(p)}`);
+  // 国際大会の記録は全項目に出典がある
+  for (const p of inputs.players) for (const e of p.tournament.international ?? []) assert.ok(e.source.length > 0, `${p.name} ${e.event}`);
+  assert.equal(find(inputs.players, 'CC-MASTERS-MID').tournament.international?.length, 7);
+});

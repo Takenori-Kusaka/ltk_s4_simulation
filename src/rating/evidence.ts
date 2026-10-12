@@ -55,7 +55,16 @@ export interface LtkAppearance {
 export interface CoachSeason { season: string; team: string; source: string; url?: string }
 export interface ProCareer { league: string; team: string; years: number; note?: string; source: string; url?: string }
 export interface OtherTournament { name: string; source: string; url?: string }
-export interface TournamentRecord { ltk: LtkAppearance[]; coach: CoachSeason[]; pro: ProCareer[]; other: OtherTournament[] }
+/** 国際大会の記録(経歴の記録 career.json の lol.internationalEvents)。出典は lol.statusSource、無ければ ref が指す経歴の記録の行(基準12 の改訂) */
+export interface InternationalEvent { event: string; year: number; source: string; url?: string; ref?: string }
+export interface TournamentRecord {
+  ltk: LtkAppearance[];
+  coach: CoachSeason[];
+  pro: ProCareer[];
+  other: OtherTournament[];
+  /** 国際大会の記録(出典つき)。省略時は無し */
+  international?: InternationalEvent[];
+}
 
 export interface TournamentConfig {
   /** 添字 = LTK の参加シーズン数。最後の値を超えたら最後の値 */
@@ -66,6 +75,12 @@ export interface TournamentConfig {
   coachMax: number;
   proPerYear: Record<string, number>;
   proMax: number;
+  /** 国際大会 1 大会の加点(基準12 の改訂。初期値 0.5。省略時 0) */
+  internationalPer?: number;
+  /** 国際大会の加点の上限(初期値 1.0。省略時 0) */
+  internationalMax?: number;
+  /** 基準32 の重複の判定に使う別名の表(大会名 → 別名。省略時は大会名だけで判定する) */
+  internationalAliases?: Record<string, string[]>;
   otherPer: number;
   otherMax: number;
   /** 今のロール以外での LTK の出場の重み(基準12 の改訂。初期値 0.5。省略時 1) */
@@ -191,6 +206,24 @@ export function roleSwitchDiscount(record: TournamentRecord, currentRole: string
   return { value, reason: value > 0 ? `ロール転向の割引 −${round(value)}(LTK の出場 ${same.size} シーズンのうち ${currentRole} は ${same.size - other})` : null };
 }
 
+const YEAR_IN_NAME = /(?<!\d)\d{4}(?!\d)/g;
+const sameName = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+
+/**
+ * 基準32: 他の大会の名前が指す国際大会の記録。名前が大会名(または別名の表にある別名)を含み、
+ * 名前の 4 桁の年が大会の年と同じなら同じ大会(名前に 4 桁の年が無ければ大会名だけで判定する)。無ければ null
+ */
+function internationalDuplicate(name: string, events: readonly InternationalEvent[], aliases: Record<string, string[]>): InternationalEvent | null {
+  const text = sameName(name);
+  const years = (name.match(YEAR_IN_NAME) ?? []).map(Number);
+  const groups = Object.entries(aliases).map(([k, v]) => [k, ...v].map(sameName));
+  return events.find((e) => {
+    if (years.length > 0 && !years.includes(e.year)) return false;
+    const key = sameName(e.event);
+    return [key, ...(groups.find((g) => g.includes(key)) ?? [])].some((k) => k.length > 0 && text.includes(k));
+  }) ?? null;
+}
+
 export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig = loadEvidenceConfig().tournament, currentRole?: string): EvidenceAxisResult {
   // 基準12 の改訂(2026-10-10): 今のロール以外での出場は roleOtherWeight、層ごとに tierWeights の重みで数える(シーズンの点は補間)
   const weightOf = (x: { tier: string; role: string }) => (currentRole && x.role !== currentRole ? cfg.roleOtherWeight ?? 1 : 1) * (cfg.tierWeights?.[x.tier] ?? 1);
@@ -206,8 +239,15 @@ export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig =
   const coachBonus = Math.min(cfg.coachMax, cfg.coachPerSeason * record.coach.length);
   const proRaw = record.pro.reduce((s, x) => s + (cfg.proPerYear[x.league] ?? 0) * x.years, 0);
   const proBonus = Math.min(cfg.proMax, proRaw);
-  const otherBonus = Math.min(cfg.otherMax, cfg.otherPer * record.other.length);
-  const score = clamp(seasonScore + gamesBonus + coachBonus + proBonus + otherBonus, 0, 10);
+  // 基準12 の改訂(2026-10-11): 国際大会の記録を 1 大会ごとに足す(同じ大会名と年は 1 大会。上限あり)
+  const international = [...new Map((record.international ?? []).map((x) => [`${sameName(x.event)} ${x.year}`, x])).values()];
+  const internationalBonus = Math.min(cfg.internationalMax ?? 0, (cfg.internationalPer ?? 0) * international.length);
+  // 基準32: 国際大会の記録と同じ大会(大会名または別名、同じ年)を指す他の大会は、他の大会として数えない
+  const isDuplicate = record.other.map((x) => internationalDuplicate(x.name, international, cfg.internationalAliases ?? {}) !== null);
+  const duplicated = record.other.filter((_, i) => isDuplicate[i]);
+  const countedOthers = record.other.length - duplicated.length;
+  const otherBonus = Math.min(cfg.otherMax, cfg.otherPer * countedOthers);
+  const score = clamp(seasonScore + gamesBonus + coachBonus + proBonus + internationalBonus + otherBonus, 0, 10);
 
   const list = (xs: string[]) => (xs.length ? xs.join('、') : 'なし');
   const reason = [
@@ -215,15 +255,17 @@ export function tournamentAxis(record: TournamentRecord, cfg: TournamentConfig =
     `LTK の出場 ${games} 試合で +${round(gamesBonus)}(勝率は使わない)`,
     `コーチ ${record.coach.length} シーズンで +${round(coachBonus)}`,
     `プロの経歴(${list(record.pro.map((x) => `${x.league} ${x.team} ${x.years} 年`))})で +${round(proBonus)}`,
-    `他の大会 ${record.other.length} 件で +${round(otherBonus)}`,
+    `国際大会 ${international.length} 件${international.length ? `(${international.map((x) => `${x.event} ${x.year}`).join('、')})` : ''}で +${round(internationalBonus)}`,
+    `他の大会 ${countedOthers} 件で +${round(otherBonus)}${duplicated.length ? `(${duplicated.map((x) => x.name).join('、')} は国際大会の項で数えた)` : ''}`,
   ].join('。');
 
-  const item = (text: string, x: { source: string; url?: string }): EvidenceItem => ({ text, source: x.source, url: x.url, marks: [AI_MARK], used: true });
+  const item = (text: string, x: { source: string; url?: string }, used = true): EvidenceItem => ({ text, source: x.source, url: x.url, marks: [AI_MARK], used });
   const evidence = [
     ...record.ltk.map((x) => item(`LTK ${x.season} ${x.team} ${x.tier} ${x.role}${x.wins !== null && x.losses !== null ? ` ${x.wins}-${x.losses}` : ''}`, x)),
     ...record.coach.map((x) => item(`LTK ${x.season} ${x.team} のコーチ`, x)),
     ...record.pro.map((x) => item(`${x.league} ${x.team} ${x.years} 年${x.note ? `(${x.note})` : ''}`, x)),
-    ...record.other.map((x) => item(x.name, x)),
+    ...international.map((x) => item(`国際大会 ${x.event} ${x.year}`, x)),
+    ...record.other.map((x, i) => (isDuplicate[i] ? item(`${x.name}(国際大会の項で数えた)`, x, false) : item(x.name, x))),
   ];
   const sourced = evidence.length > 0;
   return {
@@ -305,10 +347,11 @@ export function readTournamentSnapshot(raw: unknown): { players: Record<string, 
 
 // --- 経歴の記録の読み込み(docs/research/grounds/normalized/career.json。基準28〜30) ---
 
-/** 経歴の記録の lol のうち、大会経験に使う部分: 水準ごとの年数(lol.years)と出典(lol.statusSource) */
+/** 経歴の記録の lol のうち、大会経験に使う部分: 水準ごとの年数(lol.years)、出典(lol.statusSource)、国際大会の記録(lol.internationalEvents。出典つき) */
 export interface CareerLol {
   years: Record<string, number>;
   statusSource: string | null;
+  international?: InternationalEvent[];
 }
 
 /** 評価の入力に使う経歴: 出典つきの最高ランク(歴代・今季)、出典つきのプロの経歴、プロの年数 */
@@ -386,7 +429,18 @@ export function readCareerSnapshot(raw: unknown): { players: Record<string, Care
       // 基準12 の追記: 水準ごとの年数(数でない値は捨てる)と出典。プロの経歴が無い選手は年数 0
       const years: Record<string, number> = {};
       for (const [k, v] of Object.entries(isObj(lol.years) ? lol.years : {})) if (Number.isFinite(Number(v))) years[k] = Number(v);
-      entry.lol = { years, statusSource: str(lol.statusSource) ? String(lol.statusSource) : null };
+      const statusSource = str(lol.statusSource) ? String(lol.statusSource) : null;
+      // 基準12 の改訂: 国際大会の記録。出典は lol.statusSource、無ければ ref が指す経歴の記録の行。どちらも無い項目は数えない
+      const international: InternationalEvent[] = [];
+      (Array.isArray(lol.internationalEvents) ? lol.internationalEvents : []).forEach((x: unknown, i) => {
+        if (!isObj(x) || !str(x.event) || typeof x.year !== 'number' || !Number.isFinite(x.year)) return void errors.push(`${id}: 国際大会の記録 ${i + 1} 件目に大会名または年が無い`);
+        const ref = str(x.ref) ? String(x.ref) : null;
+        const source = statusSource ?? (ref ? `経歴の記録(career.json)の ${ref}` : null);
+        if (!source) return void errors.push(`${id}: 国際大会の記録 ${i + 1} 件目(${String(x.event)} ${x.year})に出典が無い`);
+        const url = statusSource?.split(/\s*;\s*/).find((s) => /^https?:\/\//.test(s));
+        international.push({ event: String(x.event), year: x.year, source, ...(url ? { url } : {}), ...(ref ? { ref } : {}) });
+      });
+      entry.lol = { years, statusSource, international };
     }
     if (lol && PRO_LEVELS.includes(level)) {
       const basis = (Array.isArray(lol.basis) ? lol.basis : []).filter(str).map(String);
