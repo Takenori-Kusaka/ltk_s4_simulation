@@ -74,7 +74,7 @@ export interface DayPercent {
 export function dayPercent(file: WinratesFile, tier: Tier, a: TeamId, b: TeamId, prior: number, date: string): DayPercent {
   const d = dayWinrate(file.teams, tier, a, b, prior, date);
   const [pA, pB] = percentPair(d.p);
-  const maturation = d.applied && d.a && d.b ? { dA: d.dA, dB: d.dB, termA: d.termA, termB: d.termB, shift: d.shift, pPriorA: percentPair(prior)[0], a: d.a, b: d.b } : undefined;
+  const maturation = d.applied && d.a && d.b ? { dA: d.dA, dB: d.dB, termA: d.termA, termB: d.termB, ownerA: d.ownerA, ownerB: d.ownerB, shift: d.shift, pPriorA: percentPair(prior)[0], a: d.a, b: d.b } : undefined;
   return { pA, pB, maturation };
 }
 
