@@ -13,13 +13,19 @@ export interface RankEntry {
   source?: string;
   /** 到達の時点(歴代の最高ランクの記録 peak.allTime.when から読んだ最も遅い日付。'2021'・'2024-01'・'2025-07-28' の形)。無ければ不明(基準35) */
   reachedAt?: string;
-  /** 到達の時点から計算の基準日までのブランク(基準33)。評価の組み立て(build.ts)が歴代の最高ランクへ載せる。無い記録は減衰しない */
+  /**
+   * 到達の時点から計算の基準日までのブランク(基準33)。評価の組み立て(build.ts の buildRatings)が歴代の最高ランクへ載せる。
+   * 「欄が無い」と「不明」は別: blank の欄が無い記録は、ブランクの計算を経ていない入力(エンジンへ直接渡す記録)で、減衰・不明の印・確度の降格の対象にしない。
+   * 不明は blank.at が null の記録(reachedAt の無い記録を buildRatings が載せた結果)で、減衰せず、印を付け、採った軸の確度を 1 段下げる(基準35)
+   */
   blank?: BlankInfo;
 }
 
 /**
  * 到達点からのブランク(基準33〜36)。at は到達の時点(元プロの下限では最終出場年)、years はブランク b(年)、decay はブランクの減衰(点)。
- * 到達の時点が不明なら at・years は null、decay は 0(減衰なし。基準35)
+ * 到達の時点が不明なら at・years は null、decay は 0(減衰なし。基準35)。
+ * 載せるのは buildRatings(build.ts)だけで、経歴の記録から来た歴代の最高ランクとプロの経歴には必ず載る。「不明」かどうかは、載せるときに
+ * reachedAt・lastYear の有無で決まり(無ければ at: null)、読む側(engine.ts の resolveAnchor)は blank.at === null を不明として扱う
  */
 export interface BlankInfo {
   at: string | null;
@@ -35,7 +41,10 @@ export interface ExProCareer {
   years?: number;
   /** 最終出場年(経歴の記録の lol.lastCompetitiveYear。時点はその年の 7 月 1 日)。無ければ不明(基準35) */
   lastYear?: number;
-  /** 最終出場年から計算の基準日までのブランク(基準34)。評価の組み立て(build.ts)が載せる。無い経歴は減衰しない */
+  /**
+   * 最終出場年から計算の基準日までのブランク(基準34)。評価の組み立て(build.ts の buildRatings)が載せる。
+   * 欄が無い経歴(エンジンへ直接渡す記録)は減衰・不明の印・確度の降格の対象にしない。不明は blank.at が null の経歴(lastYear の無い経歴を載せた結果。基準35)
+   */
   blank?: BlankInfo;
 }
 
