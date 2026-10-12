@@ -7,6 +7,8 @@
     "k": 8,
     "perfScale": 0.5, "shapeScale": 1.5, "roleSwitchPenalty": 0.5, "exProFloor": { "default": 8, "LJL-starter": { "base": 8, "perYear": 0.5, "max": 10 }, "overseas-major": 10 },
     "zClip": 3,
+    "scrimGameWeight": 2.0,
+    "_scrimGameWeight": "F-004 基準13。スクリム 1 試合の重み(ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する",
     "confidence": {
       "high": 15,
       "mid": 6

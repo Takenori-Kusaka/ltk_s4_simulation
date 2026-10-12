@@ -280,3 +280,98 @@ test('AC29(改訂 2026-10-10): 元プロの下限は経歴の水準で決める�
   assert.equal(at('LJL CS-starter').anchor, 8);
   assert.equal(at('LJL-starter', 4).anchorSource, '元プロの下限');
 });
+
+// F-004 Task-2: 受入基準 13・14(スクリムの試合の重みと条件)。実装を読まずに受入基準から書いた
+import { loadEngineConfig } from '../../src/rating/engine.ts';
+
+/** スクリムの試合(queueId 0)。重みは weight */
+const scrim = (o: Parameters<typeof game>[0] & { weight?: number }): GameRecord => {
+  const { weight, ...rest } = o;
+  return { ...game({ queueId: 0, ...rest }), ...(weight === undefined ? {} : { weight }) } as GameRecord;
+};
+const GOLD = { tier: 'GOLD', division: 'IV', lp: 0 };
+const roleAxis: DataAxisDef = { ...axis, roleDependent: true };
+
+test('基準13: 評価設定の scrimGameWeight の初期値は 2.0', () => {
+  assert.equal((loadEngineConfig() as EngineConfig & { scrimGameWeight?: number }).scrimGameWeight, 2);
+});
+
+test('基準13: 重み 2 の試合 1 件は、有効な試合数 n・縮小 n/(n+k)・基礎の点数で、重み 1 の同じ試合 2 件と同じに数える', () => {
+  const one = scoreDataAxis(axis, { rank: GOLD, games: [scrim({ matchId: 'S1', ageDays: 1, weight: 2, me: { dmg: 22000 } })], position: 'MIDDLE' }, population, cfg, NOW);
+  const two = scoreDataAxis(axis, { rank: GOLD, games: [game({ matchId: 'R1', ageDays: 1, me: { dmg: 22000 } }), game({ matchId: 'R2', ageDays: 1, me: { dmg: 22000 } })], position: 'MIDDLE' }, population, cfg, NOW);
+  const w = 0.5 ** (1 / 45);
+  assert.ok(Math.abs(one.effectiveGames - 2 * w) < 1e-9, `${one.effectiveGames}`);
+  assert.ok(Math.abs(one.shrink - (2 * w) / (2 * w + 8)) < 1e-9, `${one.shrink}`);
+  assert.ok(Math.abs(one.effectiveGames - two.effectiveGames) < 1e-9);
+  assert.ok(Math.abs(one.shrink - two.shrink) < 1e-9);
+  assert.ok(Math.abs(one.base - two.base) < 1e-9, `${one.base} vs ${two.base}`);
+});
+
+test('基準13: 補正の重み付き平均は試合の重みで数える(重み 2 の z=2 と重み 1 の z=−1 → 1)', () => {
+  const r = scoreDataAxis(axis, {
+    rank: GOLD,
+    games: [scrim({ matchId: 'S1', ageDays: 3, weight: 2, me: { dmg: 22000 } }), game({ matchId: 'R1', ageDays: 3, me: { dmg: 19000 } })],
+    position: 'MIDDLE',
+  }, population, cfg, NOW);
+  assert.ok(Math.abs(r.metrics[0].z - 1) < 1e-9, `z ${r.metrics[0].z}(重みを数えなければ 0.5)`);
+  assert.ok(Math.abs(r.correction - 1) < 1e-9, `補正 ${r.correction}`);
+  const w = 0.5 ** (3 / 45);
+  assert.ok(Math.abs(r.effectiveGames - 3 * w) < 1e-9, `${r.effectiveGames}`);
+});
+
+test('基準13: 確度の有効な試合数 n は重みで数える(重み 2 の 8 試合 → n=16 で高。重み 1 なら n=8 で中)', () => {
+  const heavy = scoreDataAxis(axis, { rank: GOLD, games: Array.from({ length: 8 }, (_, i) => scrim({ matchId: `S${i}`, ageDays: 0, weight: 2 })), position: 'MIDDLE' }, population, cfg, NOW);
+  const light = scoreDataAxis(axis, { rank: GOLD, games: Array.from({ length: 8 }, (_, i) => game({ matchId: `R${i}`, ageDays: 0 })), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(heavy.effectiveGames - 16) < 1e-9, `${heavy.effectiveGames}`);
+  assert.equal(heavy.confidence, '高');
+  assert.ok(Math.abs(light.effectiveGames - 8) < 1e-9);
+  assert.equal(light.confidence, '中');
+});
+
+test('基準13: weight の無い試合(ソロランク)は従来どおり重み 1', () => {
+  const r = scoreDataAxis(axis, { rank: GOLD, games: [game({ ageDays: 0 }), game({ ageDays: 0 })], position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(r.effectiveGames - 2) < 1e-9);
+});
+
+test('基準13: scrimGames はその軸に使ったスクリムの試合(queueId 0)の数。使える指標の無い試合は数えない', () => {
+  const r = scoreDataAxis(axis, {
+    rank: GOLD,
+    games: [
+      scrim({ matchId: 'S1', weight: 2 }),
+      scrim({ matchId: 'S2', weight: 2 }),
+      scrim({ matchId: 'S3', weight: 2, opp: null }), // 対面がいない → 使える指標が無い
+      game({ matchId: 'R1' }),
+    ],
+    position: 'MIDDLE',
+  }, population, cfg, NOW);
+  assert.equal(r.scrimGames, 2);
+  const none = scoreDataAxis(axis, { rank: GOLD, games: [game({ matchId: 'R1' })], position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(none.scrimGames, 0);
+});
+
+test('基準14: スクリムの試合にもソロランクと同じ条件(120 日以内・10 分以上)を当てはめる', () => {
+  const gs = [scrim({ ageDays: 10, weight: 2 }), scrim({ ageDays: 121, weight: 2 }), scrim({ ageDays: 5, durationMin: 9, weight: 2 }), scrim({ ageDays: 119, weight: 2 })];
+  assert.equal(selectGames(gs, NOW, cfg, { roleOnly: false, position: 'MIDDLE' }).length, 2);
+});
+
+test('基準14: 古いスクリム・短いスクリムは点数・有効な試合数・scrimGames に効かない', () => {
+  const base = [game({ matchId: 'R1', ageDays: 2, me: { dmg: 21000 } })];
+  const withBad = [...base, scrim({ matchId: 'OLD', ageDays: 121, weight: 2, me: { dmg: 40000 } }), scrim({ matchId: 'SHORT', ageDays: 1, durationMin: 9, weight: 2, me: { dmg: 40000 } })];
+  const a = scoreDataAxis(axis, { rank: GOLD, games: base, position: 'MIDDLE' }, population, cfg, NOW);
+  const b = scoreDataAxis(axis, { rank: GOLD, games: withBad, position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(b.scrimGames, 0);
+  assert.equal(b.gamesUsed, a.gamesUsed);
+  assert.ok(Math.abs(b.effectiveGames - a.effectiveGames) < 1e-9);
+  assert.ok(Math.abs(b.base - a.base) < 1e-9);
+});
+
+test('基準14: ロールに依存する軸は、大会のロールでないスクリムの試合を使わない', () => {
+  const r = scoreDataAxis(roleAxis, {
+    rank: GOLD,
+    games: [scrim({ matchId: 'S-MID', position: 'MIDDLE', weight: 2 }), scrim({ matchId: 'S-TOP', position: 'TOP', weight: 2 })],
+    position: 'MIDDLE',
+  }, population, cfg, NOW);
+  assert.equal(r.gamesUsed, 1);
+  assert.equal(r.scrimGames, 1);
+  assert.equal(selectGames([scrim({ position: 'TOP' }), scrim({ position: 'MIDDLE' })], NOW, cfg, { roleOnly: true, position: 'MIDDLE' }).length, 1);
+});

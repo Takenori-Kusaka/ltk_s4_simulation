@@ -166,3 +166,229 @@ test('基準12: career.json の lol.years が tournament.json の pro の年数�
   const t = rating.axes.find((a) => a.key === 'tournament')!;
   assert.ok(t.reason.includes('LJL 経歴の記録(career.json) 3 年'), t.reason);
 });
+
+// F-004 Task-2: 受入基準 12・15・16・17(スクリムを個人の評価へ)。実装を読まずに受入基準から書いた
+import { readShotcallingSnapshot, shotcallingAxis } from '../../src/rating/evidence.ts';
+import type { GameRecord, MatchForPopulation } from '../../src/rating/types.ts';
+import type { LoadedResults, MatchResult, PlayerResult, TeamResult, TierTeamId } from '../../src/results/types.ts';
+import { ROSTER } from '../../src/data/roster.ts';
+
+const NOW2 = Date.parse('2026-10-12T00:00:00Z');
+const DAY = 86_400_000;
+
+/** スクリムの指標の対応表のキーをすべて持つ値(ADC) */
+const scrimStats = (o: Record<string, number> = {}): Record<string, number> => ({
+  totalDamageDealtToChampions: 20000, goldPerMinute: 400, deaths: 2, kills: 4, assists: 5, killParticipation: 0.6,
+  teamDamagePercentage: 0.3, goldEarned: 12000, totalMinionsKilled: 250, champLevel: 16, win: 1, championId: 51, ...o,
+});
+const scrimRecord = (id: string, o: { ageDays?: number; me?: Record<string, number>; opp?: Record<string, number> | null } = {}): GameRecord => ({
+  matchId: id,
+  endTime: NOW2 - (o.ageDays ?? 2) * DAY,
+  durationMin: 30,
+  queueId: 0,
+  position: 'BOTTOM',
+  me: o.me ?? scrimStats(),
+  opp: o.opp === undefined ? scrimStats({ totalDamageDealtToChampions: 15000, goldPerMinute: 350, deaths: 4, killParticipation: 0.5, teamDamagePercentage: 0.25, win: 0, championId: 22 }) : o.opp,
+  weight: 2,
+} as GameRecord);
+const rankedRecord = (id: string, championId: number, win: 0 | 1, ageDays = 3): GameRecord => ({
+  matchId: id,
+  endTime: NOW2 - ageDays * DAY,
+  durationMin: 30,
+  queueId: 420,
+  position: 'BOTTOM',
+  me: { ...scrimStats({ championId, win }), soloKills: 1 },
+  opp: { ...scrimStats({ totalDamageDealtToChampions: 18000, championId: 22, win: 1 - win }), soloKills: 0 },
+});
+/** 母集団: BOTTOM の対面の差がばらつく 4 試合 */
+const POP: MatchForPopulation[] = [0, 1, 2, 3].map((i) => ({
+  participants: [
+    { position: 'BOTTOM', teamId: 100, stats: { ...scrimStats({ totalDamageDealtToChampions: 18000 + 1000 * i, goldPerMinute: 380 + 10 * i, deaths: 2 + i, killParticipation: 0.4 + 0.05 * i, teamDamagePercentage: 0.25 + 0.02 * i }), soloKills: i } },
+    { position: 'BOTTOM', teamId: 200, stats: { ...scrimStats({ totalDamageDealtToChampions: 20000 - 1000 * i, goldPerMinute: 400 - 10 * i, deaths: 4 - i, killParticipation: 0.5 - 0.05 * i, teamDamagePercentage: 0.3 - 0.02 * i }), soloKills: 2 - i } },
+  ],
+}));
+const adcInput = (id: string, games: GameRecord[]): PlayerRatingInput => ({
+  playerId: id,
+  name: id,
+  tier: 'CORE',
+  position: 'BOTTOM',
+  rank: { tier: 'DIAMOND', division: 'IV', lp: 0 },
+  games,
+  league: [],
+  shotcalling: [],
+  tournament: { ltk: [], coach: [], pro: [], other: [] },
+});
+
+test('基準15: スクリムの試合を使ったデータの軸の説明に「スクリム n 試合(重み 2)を含む」を出し、0 件の軸と選手には出さない', () => {
+  const ranked = [rankedRecord('R1', 51, 1), rankedRecord('R2', 51, 0)];
+  const scrims = [scrimRecord('S1'), scrimRecord('S2'), scrimRecord('S3')];
+  const ratings = buildRatings({ players: [adcInput('WITH', [...ranked, ...scrims]), adcInput('WITHOUT', ranked)], matches: POP }, NOW2);
+  const axisOf = (pid: string, key: string) => ratings.find((r) => r.playerId === pid)!.axes.find((a) => a.key === key)!;
+  // 地力(ダメージ・GPM)・集団戦(BOTTOM のダメージ割合)・連携(キル関与)・安定感(デス)はスクリムの指標で計算できる
+  for (const key of ['ground', 'teamfight', 'synergy', 'stability']) {
+    const a = axisOf('WITH', key);
+    assert.equal(a.data?.scrimGames, 3, `${key} の scrimGames`);
+    assert.ok(a.reason.includes('スクリム 3 試合(重み 2)を含む'), `${key}: ${a.reason}`);
+  }
+  // レーン戦は 14 分の値を要する → スクリムは効かない
+  const laning = axisOf('WITH', 'laning');
+  assert.equal(laning.data?.scrimGames, 0);
+  assert.ok(!laning.reason.includes('スクリム'), laning.reason);
+  const without = ratings.find((r) => r.playerId === 'WITHOUT')!;
+  for (const a of without.axes) assert.ok(!a.reason.includes('スクリム'), `${a.key}: ${a.reason}`);
+});
+
+test('基準15: 説明の n はその軸に使った試合の数(期間外のスクリムは数えない)', () => {
+  const games = [rankedRecord('R1', 51, 1), scrimRecord('S1'), scrimRecord('S2'), scrimRecord('OLD', { ageDays: 121 })];
+  const r = buildRatings({ players: [adcInput('P', games)], matches: POP }, NOW2)[0];
+  const ground = r.axes.find((a) => a.key === 'ground')!;
+  assert.ok(ground.reason.includes('スクリム 2 試合(重み 2)を含む'), ground.reason);
+});
+
+test('基準16: ピックプールはスクリムの使用チャンピオンを 1 試合(重みを掛けない)として数え、championId の無い試合は数えない', () => {
+  const noChamp = scrimStats();
+  delete noChamp.championId;
+  const games = [
+    rankedRecord('R1', 51, 1), rankedRecord('R2', 51, 0), rankedRecord('R3', 51, 1),
+    scrimRecord('S1', { me: scrimStats({ championId: 51, win: 1 }) }),
+    scrimRecord('S2', { me: scrimStats({ championId: 51, win: 0 }) }),
+    scrimRecord('S3', { me: scrimStats({ championId: 202, win: 1 }) }),
+    scrimRecord('S4', { me: scrimStats({ championId: 202, win: 1 }) }),
+    scrimRecord('S5', { me: scrimStats({ championId: 202, win: 0 }) }),
+    scrimRecord('S6', { me: noChamp }),
+    scrimRecord('S7', { me: noChamp }),
+  ];
+  const r = buildRatings({ players: [adcInput('P', games)], matches: POP }, NOW2)[0];
+  const pool = r.axes.find((a) => a.key === 'pool')!.data!.poolDetail!;
+  const byId = Object.fromEntries(pool.list.map((x) => [x.championId, x.games]));
+  assert.equal(byId[51], 5, 'ソロランク 3 + スクリム 2(重み 2 を掛ければ 7)');
+  assert.equal(byId[202], 3, 'スクリムだけのチャンピオン 3 試合(重みを掛ければ 6)');
+  assert.deepEqual(Object.keys(byId).map(Number).sort((a, b) => a - b), [51, 202], 'championId の無い試合はチャンピオンに数えない');
+  assert.equal(pool.list.reduce((s, x) => s + x.games, 0), 8, 'championId の無い試合は試合数にも数えない');
+  assert.equal(pool.champions, 2);
+});
+
+test('基準16: スクリムの試合は勝敗つきで数える(同じ試合数で全勝と全敗の勝率が違う)', () => {
+  const make = (win: 0 | 1) => [0, 1, 2, 3].map((i) => scrimRecord(`S${i}`, { me: scrimStats({ championId: 202, win }) }));
+  const wins = buildRatings({ players: [adcInput('W', make(1))], matches: POP }, NOW2)[0].axes.find((a) => a.key === 'pool')!.data!.poolDetail!;
+  const losses = buildRatings({ players: [adcInput('L', make(0))], matches: POP }, NOW2)[0].axes.find((a) => a.key === 'pool')!.data!.poolDetail!;
+  const w = wins.list.find((x) => x.championId === 202)!;
+  const l = losses.list.find((x) => x.championId === 202)!;
+  assert.equal(w.games, 4);
+  assert.equal(l.games, 4);
+  assert.ok(w.winRate > l.winRate, `${w.winRate} vs ${l.winRate}`);
+});
+
+// --- 基準12: loadRatingInputs の results ---
+const ROLES5 = ['TOP', 'JG', 'MID', 'ADC', 'SUP'] as const;
+const resultTeam = (teamId: TierTeamId): TeamResult => {
+  const [team, tier] = teamId.split('-');
+  const players: PlayerResult[] = ROLES5.map((role) => {
+    const p = ROSTER.find((x) => x.team === team && x.tier === tier && x.role === role)!;
+    return {
+      playerId: p.id, rosterName: p.name, role, champion: 'アカリ', championId: 84,
+      kills: 2, deaths: 2, assists: 4, gold: 10000, damage: 10000, cs: 200, level: 15, goldPerMin: null,
+      mappingConfidence: '確信', use: true,
+    };
+  });
+  return { kills: 10, deaths: 10, assists: 20, gold: 50000, players };
+};
+const scrimResults = (): LoadedResults => {
+  const g: MatchResult = {
+    matchId: 'SC-20261010-DD-CORE-LR-CORE-G1', kind: 'scrim', date: '2026-10-10', file: '2026-10-10-lr-core-vs-dd-core.json', index: 0,
+    duration: '30:00', durationSec: 1800, teams: ['DD-CORE', 'LR-CORE'], winner: 'DD-CORE', sides: { blue: 'DD-CORE', red: 'LR-CORE' },
+    source: { url: 'https://www.youtube.com/watch?v=AZbkNH5Z5-I', resultScreenSec: 30135 }, official: null,
+    stats: { 'DD-CORE': resultTeam('DD-CORE'), 'LR-CORE': resultTeam('LR-CORE') },
+  };
+  return { games: [g], excluded: [], unconfirmed: [], estimated: 0, errors: [], files: ['scrims/2026-10-10-lr-core-vs-dd-core.json'] };
+};
+
+test('基準12: loadRatingInputs に results を渡すと、スクリムの試合を各選手の games(ソロランクと同じ配列)に足し、warnings を返す', () => {
+  const r = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), results: scrimResults() } as Parameters<typeof loadRatingInputs>[0]);
+  assert.ok(Array.isArray((r as { warnings?: unknown }).warnings), 'warnings は配列');
+  const adc = find(r.inputs.players, 'DD-CORE-ADC');
+  const sc = adc.games.filter((g) => g.queueId === 0);
+  assert.equal(sc.length, 1);
+  assert.equal(sc[0].matchId, 'SC-20261010-DD-CORE-LR-CORE-G1');
+  assert.equal(sc[0].position, 'BOTTOM');
+  assert.equal((sc[0] as GameRecord & { weight?: number }).weight, 2, '重みは評価設定の scrimGameWeight');
+  assert.equal(sc[0].me.win, 1);
+  assert.equal(find(r.inputs.players, 'LR-CORE-SUP').games.filter((g) => g.queueId === 0)[0]?.position, 'UTILITY');
+  // 記録に出ていない選手には足さない
+  assert.equal(find(r.inputs.players, 'CC-CORE-ADC').games.filter((g) => g.queueId === 0).length, 0);
+});
+
+test('基準12: results を渡さなければスクリムの試合は足さない', () => {
+  const r = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds() });
+  assert.ok(r.inputs.players.every((p) => p.games.every((g) => g.queueId !== 0)));
+});
+
+// --- 基準17: スクリムの文字起こしから作ったコール力の根拠 ---
+const scEv = (o: Record<string, unknown>) => ({ summary: 's', source: 'https://www.youtube.com/watch?v=abc&t=1234s', direction: '+', strength: '強', kind: 'player', collectedBy: 'human', ...o });
+const SCRIM_ORIGIN = 'scrim-transcript-2026-10-10';
+
+test('基準17: origin が scrim-transcript の根拠は、話者の特定(speakerIdentified: true)と時刻つきの URL が両方ある場合だけ読む', () => {
+  const r = readShotcallingSnapshot({
+    kind: 'evidence-shotcalling',
+    players: {
+      'DD-CORE-SUP': {
+        name: 'x',
+        evidence: [
+          scEv({ summary: 'ok-query', origin: SCRIM_ORIGIN, speakerIdentified: true }),
+          scEv({ summary: 'ok-short', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'https://youtu.be/abc?t=90' }),
+          scEv({ summary: 'ok-hash', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'https://www.youtube.com/watch?v=abc#t=90' }),
+          scEv({ summary: 'no-speaker', origin: SCRIM_ORIGIN }),
+          scEv({ summary: 'speaker-false', origin: SCRIM_ORIGIN, speakerIdentified: false }),
+          scEv({ summary: 'no-time', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'https://www.youtube.com/watch?v=abc' }),
+          scEv({ summary: 'not-url', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'data/transcript/scrim.txt' }),
+          scEv({ summary: 'other-origin', origin: 'career-research-2026-10-10', source: 'https://example.test/no-time' }),
+        ],
+      },
+    },
+  }) as ReturnType<typeof readShotcallingSnapshot> & { warnings?: string[] };
+  assert.deepEqual(r.players['DD-CORE-SUP'].map((e) => e.summary), ['ok-query', 'ok-short', 'ok-hash', 'other-origin']);
+  assert.deepEqual(r.errors, [], '読まない根拠はエラーではなく警告');
+  const warnings = r.warnings ?? [];
+  assert.ok(Array.isArray(r.warnings), 'warnings は配列');
+  assert.ok(warnings.length >= 4, warnings.join('\n'));
+  assert.ok(warnings.every((w) => w.includes('DD-CORE-SUP')), warnings.join('\n'));
+  assert.ok(warnings.some((w) => w.includes('話者')), warnings.join('\n'));
+  assert.ok(warnings.some((w) => w.includes('時刻')), warnings.join('\n'));
+});
+
+test('基準17: 条件を満たす根拠だけなら警告は出ない', () => {
+  const r = readShotcallingSnapshot({
+    kind: 'evidence-shotcalling',
+    players: { 'DD-CORE-SUP': { name: 'x', evidence: [scEv({ origin: SCRIM_ORIGIN, speakerIdentified: true })] } },
+  }) as ReturnType<typeof readShotcallingSnapshot> & { warnings?: string[] };
+  assert.equal(r.players['DD-CORE-SUP'].length, 1);
+  assert.deepEqual(r.warnings, []);
+});
+
+test('基準17: 読んだスクリムの文字起こしの根拠は確度を上げない(それだけなら「低」)', () => {
+  const r = readShotcallingSnapshot({
+    kind: 'evidence-shotcalling',
+    players: {
+      'DD-CORE-SUP': {
+        name: 'x',
+        evidence: [
+          scEv({ summary: 'a', origin: SCRIM_ORIGIN, speakerIdentified: true }),
+          scEv({ summary: 'b', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'https://www.youtube.com/watch?v=abc&t=2000s' }),
+        ],
+      },
+      'DD-CORE-MID': {
+        name: 'y',
+        evidence: [
+          scEv({ summary: 'a', origin: SCRIM_ORIGIN, speakerIdentified: true }),
+          scEv({ summary: 'b', origin: SCRIM_ORIGIN, speakerIdentified: true, source: 'https://www.youtube.com/watch?v=abc&t=2000s' }),
+          scEv({ summary: 'human', source: 'https://example.test/human' }),
+        ],
+      },
+    },
+  });
+  assert.equal(r.players['DD-CORE-SUP'].length, 2);
+  // 人の確認 2 件なら通常は「高」。スクリムの文字起こしの根拠だけなので「低」
+  assert.equal(shotcallingAxis(r.players['DD-CORE-SUP']).confidence, '低');
+  // 通常の根拠(人の確認 1 件 = 中)にスクリムの根拠を足しても「高」に上がらない
+  assert.equal(shotcallingAxis(r.players['DD-CORE-MID']).confidence, '中');
+});

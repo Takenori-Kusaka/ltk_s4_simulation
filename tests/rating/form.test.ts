@@ -196,3 +196,19 @@ test('基準19: 軸の説明のために基礎の点数と係数を返す', () =
 test('設定を省略すると既定値を使う', () => {
   assert.deepEqual(formFactor(games(10, 7), [], NOW), formFactor(games(10, 7), [], NOW, cfg));
 });
+
+// F-004 Task-2: 受入基準 14(調子の係数にスクリムの試合を使わない)。実装を読まずに受入基準から書いた
+test('基準14: スクリムの試合(queueId 0)を足しても、調子の係数・使った試合数・勝ち数は変わらない', () => {
+  const hist = [snap(12, 'GOLD', 'II', 50), snap(0, 'GOLD', 'I', 25)];
+  const ranked = games(10, 4);
+  const scrims = Array.from({ length: 8 }, (_, i) => g(1 + i, true, { queueId: 0 }));
+  const a = formFactor(ranked, hist, NOW, cfg);
+  const b = formFactor([...ranked, ...scrims], hist, NOW, cfg);
+  assert.equal(b.coefficient, a.coefficient);
+  assert.equal(b.games, a.games);
+  assert.equal(b.wins, a.wins);
+  // スクリムだけなら判断材料なし(係数 1.00)
+  const only = formFactor(scrims, [], NOW, cfg);
+  assert.equal(only.games, 0);
+  assert.equal(only.coefficient, 1);
+});

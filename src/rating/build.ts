@@ -12,6 +12,8 @@ import { roleSwitchDiscount,
 } from './evidence.ts';
 import { applyForm, formFactor, type FormGame, type FormResult, type LeagueSnapshot } from './form.ts';
 import type { Confidence, ExProCareer, GameRecord, MatchForPopulation, RankEntry } from './types.ts';
+import { scrimGameRecords } from '../results/to-games.ts';
+import type { LoadedResults } from '../results/types.ts';
 import axesConfig from './axes.json' with { type: 'json' };
 import ratingConfig from './config.json' with { type: 'json' };
 import knownFacts from './known-facts.json' with { type: 'json' };
@@ -89,6 +91,8 @@ const formGames = (games: readonly GameRecord[]): FormGame[] =>
 /** 全選手の評価。同じ入力と基準日なら同じ結果を返す(基準23) */
 export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] {
   const cfg = loadEngineConfig();
+  // F-004 基準15: スクリムの試合を使った軸の説明
+  const scrimNote = (n: number) => (n > 0 ? `スクリム ${n} 試合(重み ${cfg.scrimGameWeight ?? 1})を含む` : undefined);
   const ratingPlayers = inputs.players.map((p) => ({
     playerId: p.playerId,
     tier: p.tier,
@@ -116,7 +120,7 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
-      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason]
+      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimNote(a.scrimGames)]
         .filter(Boolean)
         .join('。') + (discount.reason ? `。${discount.reason}` : ''),
       data: a,
@@ -154,10 +158,12 @@ export interface LoadOptions {
   rawDir: string;
   /** 根拠の正規化した記録の置き場(shotcalling.json・tournament.json。career.json はあれば読む) */
   groundsDir: string;
+  /** F-004 基準12: 検証を通った試合結果の記録。渡せばスクリムの試合をソロランクの試合と同じ配列に足す */
+  results?: LoadedResults | null;
 }
 
 /** data/raw と根拠の記録から評価の入力を作る。読めないファイルは errors に出す */
-export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; errors: string[] } {
+export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; errors: string[]; warnings: string[] } {
   const errors: string[] = [];
   const read = <T>(path: string): T | null => {
     try {
@@ -173,6 +179,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
   const careerPath = join(opts.groundsDir, 'career.json');
   const cr: ReturnType<typeof readCareerSnapshot> = existsSync(careerPath) ? readCareerSnapshot(read(careerPath)) : { players: {}, errors: [] };
   errors.push(...sc.errors, ...tr.errors, ...cr.errors);
+  const scrims = opts.results ? scrimGameRecords(opts.results, { weight: loadEngineConfig().scrimGameWeight ?? 1 }) : {};
 
   const infos = new Map<string, unknown>();
   const matchInfo = (id: string) => {
@@ -195,6 +202,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
           return g ? [g] : [];
         })
       : [];
+    games.push(...(scrims[r.id] ?? []));
     const ms = raw?.masteryScore;
     const career = cr.players[r.id];
     // 基準12 の追記: プロの年数は経歴の記録(career.json の lol.years)と出場記録(tournament.json)の大きい方
@@ -216,6 +224,6 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
     };
   });
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
-  return { inputs: { players, matches }, errors };
+  return { inputs: { players, matches }, errors, warnings: sc.warnings };
 }
 

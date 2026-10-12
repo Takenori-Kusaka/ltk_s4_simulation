@@ -10,6 +10,7 @@ import {
   resolveAnchor,
   scoreDataAxis,
   selectGames,
+  SCRIM_QUEUE,
 } from './engine.ts';
 import type {
   Confidence,
@@ -96,7 +97,10 @@ const zOf = (x: number, s: Stat, clip: number) => (s.sd > 0 ? clamp((x - s.mean)
 
 /** ピックプールの素点: 大会のロールで規定の試合数以上遊んだチャンピオンの数と、それらの勝率(試合数で縮小) */
 function poolRaw(p: RatingPlayerInput, cfg: EngineConfig, now: number) {
-  const games = selectGames(p.games, now, cfg, { roleOnly: true, position: p.position });
+  // F-004 基準16: スクリムの試合は大会のロールの試合 1 試合(重みを掛けない)。チャンピオンの分からない試合は数えない
+  const games = selectGames(p.games, now, cfg, { roleOnly: true, position: p.position }).filter(
+    (g) => g.queueId !== SCRIM_QUEUE || typeof g.me.championId === 'number',
+  );
   const by = new Map<number, { n: number; w: number }>();
   for (const g of games) {
     const id = g.me.championId;
@@ -130,7 +134,7 @@ function consistencySd(p: RatingPlayerInput, population: Population, cfg: Engine
       s += m.weight * clamp((v - dist.mean) / dist.sd, -cfg.zClip, cfg.zClip);
       wsum += m.weight;
     }
-    if (wsum > 0) per.push({ z: s / wsum, w: recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) });
+    if (wsum > 0) per.push({ z: s / wsum, w: recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) * (g.weight ?? 1) });
   }
   if (per.length < CONF.stability.consistencyMinGames) return null;
   const W = per.reduce((s, x) => s + x.w, 0);
@@ -273,6 +277,7 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
     newest: dates.length ? iso(dates[0]) : null,
     oldest: dates.length ? iso(dates[dates.length - 1]) : null,
     bonus: 0,
+    scrimGames: raw.games.filter((g) => g.queueId === SCRIM_QUEUE).length,
     metrics: [],
     poolDetail: { champions: raw.champions, winRate: raw.winRate, list: raw.list },
   };

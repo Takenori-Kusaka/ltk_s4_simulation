@@ -82,6 +82,9 @@ export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' |
   return choice;
 }
 
+/** F-004 基準12: スクリムの試合の記録の queueId */
+export const SCRIM_QUEUE = 0;
+
 /** 新しさの重み 0.5^(日数 / 半減期) */
 export function recencyWeight(ageDays: number, halfLifeDays: number): number {
   return 0.5 ** (Math.max(0, ageDays) / halfLifeDays);
@@ -173,9 +176,11 @@ export function scoreDataAxis(
 
   let n = 0;
   let pSum = 0;
+  let scrimGames = 0;
   const metricAcc = axis.metrics.map(() => ({ zSum: 0, vSum: 0, w: 0, count: 0 }));
   for (const g of games) {
-    const w = recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays);
+    // F-004 基準13: スクリムの試合は新しさの重みに scrimGameWeight(g.weight)を掛ける
+    const w = recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) * (g.weight ?? 1);
     let gz = 0;
     let gw = 0;
     axis.metrics.forEach((def, i) => {
@@ -195,6 +200,7 @@ export function scoreDataAxis(
     if (gw === 0) continue; // この試合に使える指標が無い
     pSum += w * (gz / gw);
     n += w;
+    if (g.queueId === SCRIM_QUEUE) scrimGames += 1;
   }
   const correction = n > 0 ? pSum / n : 0;
   const shrink = n / (n + cfg.k);
@@ -221,6 +227,7 @@ export function scoreDataAxis(
     newest: games.length ? isoDay(games[0].endTime) : null,
     oldest: games.length ? isoDay(games[games.length - 1].endTime) : null,
     bonus,
+    scrimGames,
     metrics: axis.metrics.map((def, i) => {
       const m = metricAcc[i];
       return {

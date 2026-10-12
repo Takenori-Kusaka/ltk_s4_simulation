@@ -35,6 +35,8 @@ export interface GameRecord {
   me: Record<string, number>;
   /** 同じ試合の同じロールの相手。いなければ null */
   opp: Record<string, number> | null;
+  /** F-004 基準13: 試合の重み(新しさの重みに掛ける)。スクリムは scrimGameWeight。省略時 1 */
+  weight?: number;
 }
 
 /** 母集団の構築に使う試合(全参加者) */
@@ -84,6 +86,8 @@ export interface EngineConfig {
   exProFloor?: Record<string, number | { base: number; perYear: number; max: number }>;
   zClip: number;
   confidence: { high: number; mid: number };
+  /** F-004 基準13: スクリムの試合の重み(ソロランク 1 試合 = 1)。省略時 1 */
+  scrimGameWeight?: number;
 }
 
 /** 母集団の分布: ロール → 指標のキーとモード → 平均と標準偏差 */
@@ -138,5 +142,7 @@ export interface DataAxisResult {
   newest: string | null;
   oldest: string | null;
   bonus: number;
+  /** F-004 基準15: この軸に使ったスクリムの試合(queueId 0)の数 */
+  scrimGames: number;
   metrics: AxisMetricResult[];
 }

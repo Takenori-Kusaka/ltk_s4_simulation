@@ -66,7 +66,7 @@ export async function main(opts: AggregateMainOptions = {}): Promise<number> {
     out(`試合結果の記録が検証に反したため(${results.errors.length} 件)、評価と勝率表を書かない`);
     return 3;
   }
-  code = Math.max(code, writeRatings(opts, publicDir, out));
+  code = Math.max(code, writeRatings(opts, publicDir, out, results));
   return code;
 }
 
@@ -93,11 +93,13 @@ function readResults(opts: AggregateMainOptions, publicDir: string, out: (l: str
 }
 
 /** F-009 基準21・22: 評価を計算し、常識の一覧を検査して、反しなければ ratings.json を書く */
-function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void): number {
+function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void, results: LoadedResults | null = null): number {
   const now = (opts.now ?? (() => new Date()))();
   const groundsDir = opts.groundsDir ?? 'docs/research/grounds/normalized';
-  const { inputs, errors } = loadRatingInputs({ rawDir: opts.rawDir ?? 'data/raw', groundsDir });
+  // F-004 Task-2(基準12・17): スクリムの記録を評価の入力へ渡す。スクリムの文字起こしの根拠で読まないものは警告
+  const { inputs, errors, warnings } = loadRatingInputs({ rawDir: opts.rawDir ?? 'data/raw', groundsDir, results });
   for (const e of errors) out(`評価の入力のエラー: ${e}`);
+  for (const w of warnings) out(`評価の入力の警告: ${w}`);
   const ratings = buildRatings(inputs, now.getTime());
   const report = checkKnownFacts(ratings, inputs, now.getTime(), { recompute: () => buildRatings(inputs, now.getTime()), facts: opts.facts });
   for (const l of formatReport(report)) out(l);
