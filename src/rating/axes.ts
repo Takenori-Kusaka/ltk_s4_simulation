@@ -4,6 +4,8 @@ import def from './axes.json' with { type: 'json' };
 import {
   buildPopulation,
   confidenceOf,
+  confidenceReasonOf,
+  gameWeight,
   metricDiff,
   rankAnchor,
   recencyWeight,
@@ -94,13 +96,15 @@ const stat = (xs: number[]): Stat => {
 };
 const zOf = (x: number, s: Stat, clip: number) => (s.sd > 0 ? clamp((x - s.mean) / s.sd, -clip, clip) : 0);
 
-/** ピックプールの素点: 大会のロールで規定の試合数以上遊んだチャンピオンの数と、それらの勝率(試合数で縮小) */
+/**
+ * ピックプールの素点: 大会のロールで規定の試合数以上遊んだチャンピオンの数と、それらの勝率(試合数で縮小)。
+ * F-004 基準16: スクリムの試合も 1 試合として数える(scrimGameWeight は掛けない)。チャンピオンの無い試合(champion が null)は試合の数にも数えない
+ */
 function poolRaw(p: RatingPlayerInput, cfg: EngineConfig, now: number) {
-  const games = selectGames(p.games, now, cfg, { roleOnly: true, position: p.position });
+  const games = selectGames(p.games, now, cfg, { roleOnly: true, position: p.position }).filter((g) => typeof g.me.championId === 'number');
   const by = new Map<number, { n: number; w: number }>();
   for (const g of games) {
     const id = g.me.championId;
-    if (typeof id !== 'number') continue;
     const e = by.get(id) ?? { n: 0, w: 0 };
     e.n += 1;
     e.w += g.me.win === 1 ? 1 : 0;
@@ -130,7 +134,7 @@ function consistencySd(p: RatingPlayerInput, population: Population, cfg: Engine
       s += m.weight * clamp((v - dist.mean) / dist.sd, -cfg.zClip, cfg.zClip);
       wsum += m.weight;
     }
-    if (wsum > 0) per.push({ z: s / wsum, w: recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) });
+    if (wsum > 0) per.push({ z: s / wsum, w: gameWeight(g, now, cfg) });
   }
   if (per.length < CONF.stability.consistencyMinGames) return null;
   const W = per.reduce((s, x) => s + x.w, 0);
@@ -256,6 +260,7 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
   if (!estimated && soloMissing) confidence = downgrade(confidence);
   const dates = raw.games.map((g) => g.endTime).sort((a, b) => b - a);
   const iso = (t: number) => new Date(t).toISOString().slice(0, 10);
+  const scrimGames = raw.games.filter((g) => g.kind === 'scrim').length;
   return {
     key: axis.key,
     label: axis.label,
@@ -274,6 +279,9 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
     oldest: dates.length ? iso(dates[dates.length - 1]) : null,
     bonus: 0,
     metrics: [],
+    scrimGames,
+    // 基準16: ピックプールはスクリムを 1 試合として数える(重み 1.0)
+    confidenceReason: confidenceReasonOf(n, scrimGames, cfg, 1),
     poolDetail: { champions: raw.champions, winRate: raw.winRate, list: raw.list },
   };
 }

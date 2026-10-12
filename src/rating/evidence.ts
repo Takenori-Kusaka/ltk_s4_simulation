@@ -19,9 +19,16 @@ export interface ShotcallingEvidence {
   kind: EvidenceKind;
   /** ai: AI(Gemini・調査エージェント)が集めた未確認の根拠 / human: 人が確認した根拠 */
   collectedBy: 'ai' | 'human';
+  /** 根拠の出どころ。`scrim-transcript` で始まればスクリムの配信の文字起こし(F-004 基準17: 話者の特定と時刻つきの URL を要し、確度は「低」) */
   origin?: string;
+  /** スクリムの文字起こしで、話者を本人と特定した印 */
+  speakerIdentified?: boolean;
   kindBy?: string;
 }
+
+/** F-004 基準17: スクリムの配信の文字起こしから作った根拠か */
+export const isScrimTranscript = (e: Pick<ShotcallingEvidence, 'origin'>): boolean => typeof e.origin === 'string' && e.origin.startsWith('scrim-transcript');
+export const SCRIM_TRANSCRIPT_MARK = '確度「低」(スクリムの文字起こし)';
 
 export interface ShotcallingConfig {
   base: number;
@@ -131,18 +138,20 @@ export function shotcallingAxis(entries: readonly ShotcallingEvidence[], cfg: Sh
     why.push(`価値責任者が「コールしない側」と確認したため上限 ${cfg.negativeCap}`);
   }
 
-  const human = used.filter((e) => e.collectedBy === 'human').length;
-  const ai = used.filter((e) => e.collectedBy === 'ai');
+  // F-004 基準17: スクリムの文字起こしの根拠は点数には使うが確度は「低」(確度の数に入れない)
+  const scrim = used.filter(isScrimTranscript).length;
+  const human = used.filter((e) => e.collectedBy === 'human' && !isScrimTranscript(e)).length;
+  const ai = used.filter((e) => e.collectedBy === 'ai' && !isScrimTranscript(e));
   const aiPoints = ai.reduce((s, e) => s + cfg.confidence.aiPoints[e.strength], 0);
   let confidence: Confidence = '低';
   if (human >= cfg.confidence.highHuman) confidence = '高';
   else if (human >= cfg.confidence.midHuman || aiPoints >= cfg.confidence.midAiPoints) confidence = '中';
-  const confidenceReason = `人が確認した根拠 ${human} 件、AI が集めた根拠 ${ai.length} 件(強さの合計 ${round(aiPoints)})`;
+  const confidenceReason = `人が確認した根拠 ${human} 件、AI が集めた根拠 ${ai.length} 件(強さの合計 ${round(aiPoints)})${scrim ? `、スクリムの文字起こしの根拠 ${scrim} 件(確度「低」。確度の数に入れない)` : ''}`;
 
   const evidence: EvidenceItem[] = entries.map((e) => ({
     text: `${e.direction === '+' ? '肯定' : '否定'}・${e.strength}・${KIND_LABEL[e.kind]}: ${e.summary}`,
     source: e.source,
-    marks: e.collectedBy === 'ai' ? [AI_MARK] : [],
+    marks: [...(e.collectedBy === 'ai' ? [AI_MARK] : []), ...(isScrimTranscript(e) ? [SCRIM_TRANSCRIPT_MARK] : [])],
     used: weight(e) > 0,
   }));
   return {
@@ -241,9 +250,17 @@ function readPlayers(raw: unknown, kind: string): { players: [string, Record<str
   return { players: Object.entries(raw.players).filter((e): e is [string, Record<string, unknown>] => isObj(e[1])), errors: [] };
 }
 
-/** 出典・向き・強さ・種類・集めた主体のどれかが欠けた根拠を拒否する(選手をエラーに出す) */
-export function readShotcallingSnapshot(raw: unknown): { players: Record<string, ShotcallingEvidence[]>; errors: string[] } {
+/** 時刻つきの URL(例 https://www.youtube.com/watch?v=…&t=27865s) */
+const TIMED_URL = /^https?:\/\/\S+[?&#]t=\d+/;
+
+/**
+ * 出典・向き・強さ・種類・集めた主体のどれかが欠けた根拠を拒否する(選手をエラーに出す)。
+ * F-004 基準17: スクリムの文字起こしの根拠(origin が scrim-transcript で始まる)は、話者を本人と特定した印
+ * speakerIdentified: true と時刻つきの URL が無ければ読まず、選手 ID と理由を warnings に出す
+ */
+export function readShotcallingSnapshot(raw: unknown): { players: Record<string, ShotcallingEvidence[]>; errors: string[]; warnings: string[] } {
   const { players, errors } = readPlayers(raw, 'evidence-shotcalling');
+  const warnings: string[] = [];
   const out: Record<string, ShotcallingEvidence[]> = {};
   for (const [id, p] of players) {
     out[id] = [];
@@ -251,11 +268,16 @@ export function readShotcallingSnapshot(raw: unknown): { players: Record<string,
     list.forEach((e: unknown, i) => {
       const ok = isObj(e) && str(e.summary) && str(e.source) && (e.direction === '+' || e.direction === '-') &&
         STRENGTHS.includes(e.strength as string) && KINDS.includes(e.kind as string) && (e.collectedBy === 'ai' || e.collectedBy === 'human');
-      if (ok) out[id].push(e as unknown as ShotcallingEvidence);
-      else errors.push(`${id}: コール力の根拠 ${i + 1} 件目に出典・向き・強さ・種類・集めた主体のどれかが無い`);
+      if (!ok) return void errors.push(`${id}: コール力の根拠 ${i + 1} 件目に出典・向き・強さ・種類・集めた主体のどれかが無い`);
+      const item = e as unknown as ShotcallingEvidence;
+      if (isScrimTranscript(item)) {
+        const why = [item.speakerIdentified === true ? null : '話者を本人と特定した印(speakerIdentified)が無い', TIMED_URL.test(item.source) ? null : '時刻つきの URL が無い'].filter(Boolean);
+        if (why.length) return void warnings.push(`${id}: スクリムの文字起こしのコール力の根拠 ${i + 1} 件目を読まない(${why.join('、')})`);
+      }
+      out[id].push(item);
     });
   }
-  return { players: out, errors };
+  return { players: out, errors, warnings };
 }
 
 /** 出典の無い記録を拒否する(選手と項目をエラーに出す) */

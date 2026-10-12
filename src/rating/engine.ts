@@ -87,6 +87,22 @@ export function recencyWeight(ageDays: number, halfLifeDays: number): number {
   return 0.5 ** (Math.max(0, ageDays) / halfLifeDays);
 }
 
+/** F-004 基準13: 1 試合の重み = 新しさの重み × (スクリムの記録なら scrimGameWeight。省略時 1) */
+export function gameWeight(g: GameRecord, now: number, cfg: EngineConfig): number {
+  return recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) * (g.kind === 'scrim' ? cfg.scrimGameWeight ?? 1 : 1);
+}
+
+/** F-004 基準15: 「スクリム n 試合(重み w)を含む」。0 件なら null */
+export function scrimSentence(scrimGames: number, weight: number): string | null {
+  return scrimGames > 0 ? `スクリム ${scrimGames} 試合(重み ${weight.toFixed(1)})を含む` : null;
+}
+
+/** 確度の理由: 有効な試合数と閾値。スクリムを含む軸はその数と重み(F-004 基準15) */
+export function confidenceReasonOf(n: number, scrimGames: number, cfg: EngineConfig, weight = cfg.scrimGameWeight ?? 1): string {
+  const s = scrimSentence(scrimGames, weight);
+  return `有効な試合数 ${n.toFixed(1)}(${cfg.confidence.high} 以上で高、${cfg.confidence.mid} 以上で中)${s ? `。${s}` : ''}`;
+}
+
 /** 基準1・2: 評価の試合(期間・長さ)と、ロールに依存する軸では大会のロールの試合 */
 export function selectGames(
   games: readonly GameRecord[],
@@ -173,9 +189,10 @@ export function scoreDataAxis(
 
   let n = 0;
   let pSum = 0;
+  let scrimGames = 0;
   const metricAcc = axis.metrics.map(() => ({ zSum: 0, vSum: 0, w: 0, count: 0 }));
   for (const g of games) {
-    const w = recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays);
+    const w = gameWeight(g, now, cfg);
     let gz = 0;
     let gw = 0;
     axis.metrics.forEach((def, i) => {
@@ -195,6 +212,7 @@ export function scoreDataAxis(
     if (gw === 0) continue; // この試合に使える指標が無い
     pSum += w * (gz / gw);
     n += w;
+    if (g.kind === 'scrim') scrimGames += 1;
   }
   const correction = n > 0 ? pSum / n : 0;
   const shrink = n / (n + cfg.k);
@@ -221,6 +239,8 @@ export function scoreDataAxis(
     newest: games.length ? isoDay(games[0].endTime) : null,
     oldest: games.length ? isoDay(games[games.length - 1].endTime) : null,
     bonus,
+    scrimGames,
+    confidenceReason: confidenceReasonOf(n, scrimGames, cfg),
     metrics: axis.metrics.map((def, i) => {
       const m = metricAcc[i];
       return {
