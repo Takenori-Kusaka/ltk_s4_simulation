@@ -24,7 +24,7 @@ test('AC3c: スクリムが無ければ λ は 1 で、外部の見立ての項�
   assert.equal(m.extLogit, Math.round(m.betaExt * (m.eA - m.eB) * 1000) / 1000);
 });
 
-test('AC3c: λ = scrimHalf(4)÷(4 + n_s)。外部の見立ての項は β_ext × (λ_A × E_A − λ_B × E_B) で、β_ext は λ を掛ける前の E から決める', () => {
+test('AC3c: λ = scrimHalf(4)÷(4 + 両チームの n_s の平均)。外部の見立ての項は β_ext × λ × (E_A − E_B) で、β_ext は λ を掛ける前の E から決める', () => {
   const games = [1, 2, 3, 4].map((i) => scrim('DD-NEXT', 'IT-NEXT', `2026-10-1${i}`));
   const plain = computePriorWinrates(tierTeams(), { externalViews: VIEWS });
   const o = computePriorWinrates(tierTeams(), { externalViews: VIEWS, results: games });
@@ -36,9 +36,23 @@ test('AC3c: λ = scrimHalf(4)÷(4 + n_s)。外部の見立ての項は β_ext ×
   const itIsA = m.a === 'IT';
   assert.equal(itIsA ? m.lambdaA : m.lambdaB, 0.5);
   assert.equal(itIsA ? m.nsA : m.nsB, 4);
-  const lA = 0.5, lB = 0.5; // DD・IT とも 4 試合で 0.5
-  assert.equal(m.extLogit, Math.round(m.betaExt * (lA * m.eA - lB * m.eB) * 1000) / 1000);
+  // DD・IT とも 4 試合で、平均 4 → λ = 0.5
+  assert.equal(m.extLogit, Math.round(m.betaExt * 0.5 * (m.eA - m.eB) * 1000) / 1000);
   assert.ok(Math.abs(m.extLogit) < Math.abs(nextMatch(plain, 2).extLogit), '見立ての項が小さくなる');
+});
+
+test('AC3c: スクリム数が違う 2 チームにも同じ λ を掛け、外部の見立ての項の向きは λ を掛ける前と変わらない', () => {
+  // IT-NEXT だけ 4 試合(相手はリスナー扱いの別階級)。LR-NEXT は 0 試合 → 平均 2、λ = 4 ÷ 6
+  const games = [1, 2, 3, 4].map((i) => scrim('IT-NEXT', 'DD-CORE', `2026-10-1${i}`));
+  const plain = computePriorWinrates(tierTeams(), { externalViews: VIEWS });
+  const o = computePriorWinrates(tierTeams(), { externalViews: VIEWS, results: games });
+  const pick = (x: typeof o) => x.matches.find((m) => m.stage === 'regular' && m.tier === 'NEXT' && [m.a, m.b].includes('IT') && [m.a, m.b].includes('LR'))!;
+  const m = pick(o), p = pick(plain);
+  const l = Math.round((4 / 6) * 100) / 100;
+  assert.deepEqual([m.lambdaA, m.lambdaB], [l, l]);
+  assert.equal(m.extLogit, Math.round(m.betaExt * (4 / 6) * (m.eA - m.eB) * 1000) / 1000);
+  assert.equal(Math.sign(m.extLogit), Math.sign(p.extLogit), '見立ての項の向きは変わらない');
+  assert.ok(Math.abs(m.extLogit) < Math.abs(p.extLogit));
 });
 
 test('AC3c: n_s はその試合日より前(当日を含まない)のスクリムで、相手の階級を問わず数える。本番の結果は数えない', () => {
@@ -65,6 +79,6 @@ test('AC3c: 根拠の節の外部の見立てに「スクリム n_s 試合によ
     { kind: 'ratings', players }, teamEval as never, null,
   );
   if (!s.ok) return assert.fail(s.reason);
-  assert.equal(s.layers.macro.external.a.scrimWeight, 'スクリム 0 試合により見立ての重み 1.00');
-  assert.equal(s.layers.macro.external.b.scrimWeight, 'スクリム 4 試合により見立ての重み 0.50');
+  assert.equal(s.layers.macro.external.a.scrimWeight, 'スクリム 0 試合(見立ての重みは両チームの平均で 1.00)');
+  assert.equal(s.layers.macro.external.b.scrimWeight, 'スクリム 4 試合(見立ての重みは両チームの平均で 0.50)');
 });
