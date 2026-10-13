@@ -3,12 +3,14 @@
 // 再判定 2: M は連携の厚み・司令塔の 2 軸(継続性は仕上がりの項で扱う)。外部の見立ての項 E・β_ext を足し、p_macro はマクロ項と外部の見立ての項の和から作る
 // F-005 Task-3: 階級チームごとの仕上がり(共同プレイ歴 c・メタの近さ m・仕上がりの速さ τ)を teams[].maturation に出す(src/winrate/dynamics.ts)。
 // 試合ごとの事前の勝率は d = 0 の値のまま(試合日ごとの勝率は dynamics.ts の純粋な関数で画面が作る)
-// DOM と Node 固有の API に依存しない。結果による更新(θ)・気持ち・ドラフトの項は後のタスク(ここでは 0)
+// F-005 Task-2(基準4): 本番とスクリムの結果による θ の当て直し(src/winrate/update.ts)。試合ごとに、その試合日より前の結果で当て直す
+// DOM と Node 固有の API に依存しない。気持ち・ドラフトの項は後のタスク(ここでは 0)
 import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../sim/types.ts';
 import type { WinTable } from '../sim/validate.ts';
 import type { OwnerView } from '../rating/owner-views.ts';
+import { fitTheta, type ResultGame, type ThetaConfig, type ThetaSide } from './update.ts';
 import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMember, type MetaChampionLike } from './dynamics.ts';
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
@@ -21,7 +23,7 @@ export interface ExternalConfig {
   selfTeam: number;
 }
 
-export interface WinrateConfig extends DynamicsConfig {
+export interface WinrateConfig extends DynamicsConfig, ThetaConfig {
   beta: { targetSd: number };
   /** 基準3: β_macro × (M_A − M_B) の 6 組の二乗平均平方根を合わせる広がり */
   macro: { targetSd: number };
@@ -95,6 +97,8 @@ export interface TeamRow {
   externalCount: number;
   /** Task-3(基準 9・10・12): 仕上がり(c・m_pool・m・τ と内訳)。試合日ごとの勝率は画面が dynamics.ts の関数で作る */
   maturation: Maturation;
+  /** 基準4: すべての結果で当て直した θ と、使った本番・スクリムの試合数(結果が無ければ θ 0) */
+  result: ThetaSide;
 }
 
 export interface MatchPrior {
@@ -125,7 +129,14 @@ export interface MatchPrior {
   extLogit: number;
   /** 基準6: ステージ補正(A の値 − B の値) */
   stageTerm: number;
-  /** A の勝率(%、0.1 単位)。p_lane と p_macro の掛け合わせにステージ補正を加えた値 */
+  /** 基準4: その試合日より前の結果で当て直した θ(A・B)と、項 θ_A − θ_B */
+  thetaA: number;
+  thetaB: number;
+  thetaLogit: number;
+  /** 基準4: 当て直しに使った結果の試合数(A・B それぞれの本番 + スクリム) */
+  resultsA: number;
+  resultsB: number;
+  /** A の勝率(%、0.1 単位)。p_lane と p_macro の掛け合わせに、結果による更新の項とステージ補正を加えた値 */
   pA: number;
   pB: number;
   /** 基準3b: レーン相対の勝率 p_lane と、チームの能力(マクロ項 + 外部の見立ての項)の勝率 p_macro(%、0.1 単位。A と B の和が 100.0) */
@@ -136,6 +147,8 @@ export interface MatchPrior {
   /** 外部の見立ての項だけの勝率 p_ext(%、0.1 単位。A と B の和が 100.0) */
   pExtA: number;
   pExtB: number;
+  /** 基準4: 結果による更新の前の勝率(レーン項 + マクロ項 + 外部の見立ての項 + ステージ補正。%、0.1 単位) */
+  pBeforeResultsA: number;
   /** 基準3b: M を計算できない階級チームが関わるとき(p_macro は 50.0%)の理由。無ければ null */
   macroMissing: string | null;
   /** 基準16: データ不足の表示と理由。無ければ null */
@@ -237,7 +250,7 @@ function percents(p: number): [number, number] {
 
 export function computePriorWinrates(
   teams: readonly TierTeamS[],
-  opts: { config?: WinrateConfig; externalViews?: readonly ExternalView[]; meta?: readonly MetaChampionLike[] | null } = {},
+  opts: { config?: WinrateConfig; externalViews?: readonly ExternalView[]; meta?: readonly MetaChampionLike[] | null; results?: readonly ResultGame[] } = {},
 ): WinrateOutput {
   const cfg = opts.config ?? CFG;
   const views = opts.externalViews ?? [];
@@ -255,7 +268,7 @@ export function computePriorWinrates(
       const ext = externalOf(views, key, cfg.external);
       // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
       const maturation = maturationOf(t?.members, opts.meta, cfg, t?.ownerViews ?? []);
-      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation };
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 } };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
       else rows.push({ ...base, S: t.S, reason: null });
@@ -281,29 +294,52 @@ export function computePriorWinrates(
     betaExtBasis[tier] = scaleBasis('E', 'β_ext', knownE, cfg.external.targetSd);
   }
 
-  // 1組の事前の勝率(A の対数オッズ = レーン項 + マクロ項 + 外部の見立ての項 + ステージ補正)。stage が無ければステージ補正なし
-  const prior = (tier: Tier, a: TeamId, b: TeamId, stage?: StageKey) => {
+  // 基準4: 階級ごと・試合日ごとの θ。固定の項は β × (S_A − S_B)(S が無い側があれば 0)。before が無ければすべての結果
+  const results = opts.results ?? [];
+  const thetaCache = new Map<string, Record<string, ThetaSide>>();
+  const thetaOf = (tier: Tier, before?: string) => {
+    const ck = `${tier}|${before ?? ''}`;
+    if (!thetaCache.has(ck)) {
+      const keys = TEAMS.map((t) => `${t}-${tier}`);
+      const S = (k: string) => rows.find((r) => r.key === k)!.S;
+      const fixed = (x: string, y: string) => {
+        const sx = S(x), sy = S(y);
+        return sx === null || sy === null ? 0 : beta[tier] * (sx - sy);
+      };
+      thetaCache.set(ck, fitTheta(results, keys, fixed, cfg, before));
+    }
+    return thetaCache.get(ck)!;
+  };
+  for (const r of rows) r.result = thetaOf(r.tier)[r.key];
+
+  // 1組の勝率(A の対数オッズ = レーン項 + マクロ項 + 外部の見立ての項 + 結果による更新の項 + ステージ補正)。stage が無ければステージ補正なし。
+  // before は試合日(その日より前の結果で θ を当て直す)。無ければすべての結果
+  const prior = (tier: Tier, a: TeamId, b: TeamId, stage?: StageKey, before?: string) => {
     const A = sOf(a, tier), B = sOf(b, tier);
+    const th = thetaOf(tier, before), tA = th[A.key], tB = th[B.key];
+    const thetaPart = { thetaA: tA.theta, thetaB: tB.theta, resultsA: tA.official + tA.scrim, resultsB: tB.official + tB.scrim };
     const st = stage ? (cfg.stage[stage]?.[A.key] ?? 0) - (cfg.stage[stage]?.[B.key] ?? 0) : 0;
     const noM = [A, B].filter((x) => x.M === null);
     const macroMissing = noM.length ? `マクロの点数が無い(${noM.map((x) => `${x.key}: ${x.macroReason}`).join(' / ')})` : null;
-    const common = { sA: A.S, sB: B.S, mA: A.M, mB: B.M, eA: A.E, eB: B.E, beta: beta[tier], betaMacro: betaMacro[tier], betaExt: betaExt[tier], stageTerm: st, macroMissing };
+    const common = { ...thetaPart, sA: A.S, sB: B.S, mA: A.M, mB: B.M, eA: A.E, eB: B.E, beta: beta[tier], betaMacro: betaMacro[tier], betaExt: betaExt[tier], stageTerm: st, macroMissing };
     const half = { pA: 50.0, pB: 50.0, pLaneA: 50.0, pLaneB: 50.0, pMacroA: 50.0, pMacroB: 50.0, pExtA: 50.0, pExtB: 50.0 };
     if (A.S === null || B.S === null) {
       const why = [A, B].filter((x) => x.S === null).map((x) => `${x.key}: ${x.reason}`).join(' / ');
-      return { ...common, logit: 0, laneLogit: 0, macroLogit: 0, extLogit: 0, ...half, dataMissing: `データ不足(${why})` };
+      return { ...common, logit: 0, laneLogit: 0, macroLogit: 0, extLogit: 0, thetaLogit: 0, ...half, pBeforeResultsA: 50.0, dataMissing: `データ不足(${why})` };
     }
     const lane = beta[tier] * (A.S - B.S);
     const macro = A.M === null || B.M === null ? 0 : betaMacro[tier] * (A.M - B.M);
     const ext = betaExt[tier] * (A.E - B.E);
-    const logit = lane + macro + ext + st;
+    const thetaLogit = tA.theta - tB.theta;
+    const logit = lane + macro + ext + thetaLogit + st;
     const [pA, pB] = percents(sigmoid(logit));
+    const [pBeforeResultsA] = percents(sigmoid(lane + macro + ext + st));
     const [pLaneA, pLaneB] = percents(sigmoid(lane));
     const [pMacroA, pMacroB] = percents(sigmoid(macro + ext));
     const [pExtA, pExtB] = percents(sigmoid(ext));
     return {
-      ...common, logit: r3(logit), laneLogit: r3(lane), macroLogit: r3(macro), extLogit: r3(ext),
-      pA, pB, pLaneA, pLaneB, pMacroA, pMacroB, pExtA, pExtB, dataMissing: null,
+      ...common, logit: r3(logit), laneLogit: r3(lane), macroLogit: r3(macro), extLogit: r3(ext), thetaLogit: r3(thetaLogit),
+      pA, pB, pLaneA, pLaneB, pMacroA, pMacroB, pExtA, pExtB, pBeforeResultsA, dataMissing: null,
     };
   };
 
@@ -311,12 +347,12 @@ export function computePriorWinrates(
   for (const d of REGULAR_DAYS) {
     for (const card of d.cards) {
       for (const tier of ['NEXT', 'CORE'] as const) {
-        matches.push({ stage: 'regular', day: d.day, tier, a: card.blue, b: card.red, ...prior(tier, card.blue, card.red, 'regular') });
+        matches.push({ stage: 'regular', day: d.day, tier, a: card.blue, b: card.red, ...prior(tier, card.blue, card.red, 'regular', d.date) });
       }
     }
   }
   for (const c of MASTERS_CUPS) {
-    for (const [a, b] of c.semis) matches.push({ stage: 'masters', cup: c.cup, tier: 'MASTERS', a, b, ...prior('MASTERS', a, b, 'masters') });
+    for (const [a, b] of c.semis) matches.push({ stage: 'masters', cup: c.cup, tier: 'MASTERS', a, b, ...prior('MASTERS', a, b, 'masters', c.date) });
   }
 
   // 基準7: F-001 の入力の形式。winTable はステージ補正なし、stageWinTables はステージごとの補正つき(第3戦・決勝・Playoffs の組もここで引く)

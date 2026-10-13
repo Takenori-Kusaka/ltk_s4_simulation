@@ -7,7 +7,7 @@ import { TEAM_INFO } from '../lib/index.ts';
 import type { MatchPrior } from '../../winrate/core.ts';
 import { dayWinrate, percentPair } from '../../winrate/dynamics.ts';
 import type { WinratesFile } from '../sim/view.ts';
-import type { MacroPartRaw, MatchMaturation, TeamLayer } from '../story/story.ts';
+import type { MacroPartRaw, MatchMaturation, MatchResults, TeamLayer } from '../story/story.ts';
 
 export type DayRef = { kind: 'regular'; day: number; date: string } | { kind: 'masters'; cup: number; date: string };
 
@@ -62,6 +62,8 @@ export interface MatchRowView {
   pExt?: number;
   /** F-005 基準12: この試合日の仕上がり(根拠の節へ渡す)。勝率表のファイルに仕上がりが無い、または戦力 S が無ければ undefined */
   maturation?: MatchMaturation;
+  /** F-005 基準4: 結果による更新(ブルー側から見た値)。勝率表のファイルに無ければ undefined */
+  results?: MatchResults;
 }
 
 export interface DayPercent {
@@ -94,7 +96,14 @@ export interface DayBoxView {
 
 const finite = (x: unknown): number | undefined => (typeof x === 'number' && Number.isFinite(x) ? x : undefined);
 /** F-005 基準 3b の項目(試合ごとの pLaneA・pMacroA・pExtA、階級チームごとの M・E・externalCount)。勝率表のファイルに無ければ undefined(F-005 側の型の定義を待たず、任意の項目として読む) */
-type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown };
+type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown; thetaA?: unknown; thetaB?: unknown; thetaLogit?: unknown; resultsA?: unknown; resultsB?: unknown; pBeforeResultsA?: unknown };
+/** F-005 基準4 の項目。どれかが無ければ undefined */
+const resultsOf = (x: LayerFields): MatchResults | undefined => {
+  const v = [x.thetaA, x.thetaB, x.thetaLogit, x.resultsA, x.resultsB, x.pBeforeResultsA].map(finite);
+  if (v.some((y) => y === undefined)) return undefined;
+  const [thetaA, thetaB, logit, nA, nB, pBeforeA] = v as number[];
+  return { thetaA, thetaB, logit, nA, nB, pBeforeA };
+};
 type TeamFields = { M?: unknown; macroParts?: unknown; E?: unknown; externalCount?: unknown };
 /** teams[].macroParts のうち、key が文字列で raw が数の項目だけ(壊れた項目は入れない) */
 const macroParts = (x: unknown): MacroPartRaw[] => {
@@ -127,7 +136,7 @@ function row(file: WinratesFile, tier: Tier, blue: TeamId, red: TeamId, m: Match
   if (!m) return { tier, blue: side(blue, 50, lb), red: side(red, 50, lr), dataMissing: '勝率表にこの試合が無い' };
   const x = m as MatchPrior & LayerFields;
   const day = dayPercent(file, tier, blue, red, m.pA / 100, date);
-  return { tier, blue: side(blue, day.pA, lb), red: side(red, day.pB, lr), dataMissing: m.dataMissing, pLane: finite(x.pLaneA), pMacro: finite(x.pMacroA), pExt: finite(x.pExtA), maturation: day.maturation };
+  return { tier, blue: side(blue, day.pA, lb), red: side(red, day.pB, lr), dataMissing: m.dataMissing, pLane: finite(x.pLaneA), pMacro: finite(x.pMacroA), pExt: finite(x.pExtA), maturation: day.maturation, results: resultsOf(x) };
 }
 
 /** 基準1・3: 日程の箱(公式の Regular Stage の画像の形。左がブルー、右がレッド) */

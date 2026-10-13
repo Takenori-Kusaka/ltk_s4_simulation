@@ -161,12 +161,16 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   }
   const external = readExternalViews(externalRaw);
   for (const e of external.errors) out(`外部の見立ての入力: ${e}`);
-  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions });
+  // F-005 基準4: 本番とスクリムの結果で θ を当て直す(F-004 の記録が無ければ θ は 0)
+  const resultGames = (results?.games ?? []).map((g) => ({ kind: g.kind, date: g.date, teams: g.teams, winner: g.winner }));
+  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions, results: resultGames });
   const winratePath = join(publicDir, 'winrates.json');
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
   writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');
   const scales = TIERS.map((tier) => `${tier} β ${winrates.beta[tier]} / β_macro ${winrates.betaMacro[tier]} / β_ext ${winrates.betaExt[tier]}`).join('、');
   out(`勝率表を書いた: ${winratePath}(${scales})`);
+  const thetas = winrates.teams.filter((t) => t.result.official + t.result.scrim > 0).map((t) => `${t.key} ${t.result.theta > 0 ? '+' : ''}${t.result.theta.toFixed(3)}(本番 ${t.result.official}・スクリム ${t.result.scrim})`);
+  out(`結果による更新 θ: ${thetas.length ? thetas.join('、') : 'データなし'}`);
   return errors.length ? 1 : 0;
 }
 
