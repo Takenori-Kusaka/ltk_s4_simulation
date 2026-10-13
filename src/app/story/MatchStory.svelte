@@ -26,6 +26,13 @@
             マクロ(チーム)の相対勝率 <b>{story.layers.macro.p}%</b>
             {#if story.layers.macro.pExt !== null}<small class="sub">うち外部の見立てだけなら {story.layers.macro.pExt}%</small>{/if}
           </li>
+          {#if story.layers.results}
+            {#if story.layers.results.none}
+              <li>結果による更新 <b>データなし</b><small class="sub">この試合日より前のスクリム・本番の結果が無い</small></li>
+            {:else}
+              <li>スクリム・本番の結果による更新 <b>{story.layers.results.diff}%</b><small class="sub">{input.a} {story.layers.results.nA} 試合・{input.b} {story.layers.results.nB} 試合の結果から。加える前は {story.layers.results.pBefore}%</small></li>
+            {/if}
+          {/if}
           <li>掛け合わせた試合の勝率 <b>{story.layers.combined.p}%</b></li>
           {#if story.layers.maturation}<li>仕上がりを加えた、この試合日の勝率 <b>{story.layers.maturation.pDay}%</b><small class="sub">仕上がりの差 {story.layers.maturation.shift}(確度 低)。内訳は下の「仕上がり」</small></li>{/if}
         </ul>

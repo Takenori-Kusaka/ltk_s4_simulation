@@ -70,7 +70,23 @@ export interface StoryInput {
   teamB?: TeamLayer;
   /** F-005 基準12: この試合日の仕上がり(日程の箱の行が作る)。無ければ小節を出さず、pA は事前の勝率とみなす */
   maturation?: MatchMaturation;
+  /** F-005 基準4: 結果による更新(勝率表のファイルの θ と試合数)。無い勝率表のファイルでは undefined */
+  results?: MatchResults;
 }
+/** F-005 基準4: 本番とスクリムの結果による θ の当て直し。A から見た値 */
+export interface MatchResults {
+  thetaA: number;
+  thetaB: number;
+  /** 項 θ_A − θ_B */
+  logit: number;
+  /** 当て直しに使った結果の試合数(本番 + スクリム) */
+  nA: number;
+  nB: number;
+  /** 結果による更新の前の A の勝率(%) */
+  pBeforeA: number;
+}
+/** 根拠の節の「結果による更新」の行(F-014 基準24 により勝率の差と試合数だけ)。結果が 1 件も無ければ none */
+export type ResultsLayer = { none: true } | { none: false; pBefore: string; diff: string; nA: number; nB: number };
 /** F-005 基準9・12: 1 試合の仕上がり。pA・pB(StoryInput)はこの加算を加えた後の勝率、pPriorA は加える前の A の勝率(%) */
 export interface MatchMaturation {
   dA: number;
@@ -206,6 +222,8 @@ export interface StoryLayers {
   macro: { p: string | null; pExt: string | null; M: { a: string; b: string }; parts: MacroPart[]; external: { a: ExternalSide; b: ExternalSide } };
   /** 掛け合わせた試合の勝率(仕上がりを加える前の事前の値) */
   combined: { p: string };
+  /** F-005 基準4: 結果による更新。勝率表のファイルに無ければ null */
+  results: ResultsLayer | null;
   /** 価値責任者の要望: 結論の一文の直後に置くチームの層の一文(固定の形)。E・M が勝率表のファイルに無ければ null */
   teamSentence: string | null;
   /** F-005 基準12: 仕上がりの小節。入力に仕上がりが無ければ null */
@@ -243,9 +261,9 @@ export const INCLUDED = [
   '選手の 8 軸(ソロランクの基準・対面との差・LTK の経験・コール力と大会経験の出典つき根拠)',
   'コーチの評価(戦力の 15%。MASTERS には無い)',
   'チームの仕上がり(共同プレイ歴・メタの近さで決まる速さ。試合日が進むほど効く。確度 低)',
+  `スクリムと本番の結果(試合日より前の結果で強さを当て直す。スクリム 1 試合は本番の ${(winrateConfig as { weights: { scrim: number } }).weights.scrim} 試合分)`,
 ];
 export const EXCLUDED = [
-  { text: 'スクリムと本番の結果', feature: '今後の更新で入る予定(F-004・F-005 Task-2)' },
   { text: 'ドラフト(NEXT のプロテクトで CORE が使えなくなるピック)', feature: '今後の更新で入る予定(F-006・F-005 Task-3)' },
   { text: '連敗の気持ちの補正', feature: '今後の更新で入る予定(F-004 の結果の入力の後。いまは 0)' },
 ];
@@ -436,9 +454,18 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
     },
     // 掛け合わせの行は事前(d = 0)の勝率。仕上がりがあれば pA はその試合日の値なので、加える前の値を出す
     combined: { p: f1(input.maturation?.pPriorA ?? input.pA) },
+    results: resultsLayerOf(input.results, input.maturation?.pPriorA ?? input.pA),
     teamSentence: teamSentenceOf(input, A, B, parts),
     maturation: maturationLayerOf(input),
   };
+}
+
+/** F-005 基準4: 結果による更新の行。勝率の差は、結果を加える前と後(仕上がりの前)の A の勝率の差。両チームとも結果が無ければ「データなし」 */
+export function resultsLayerOf(r: MatchResults | undefined, pAfterA: number): ResultsLayer | null {
+  if (!r) return null;
+  if (r.nA + r.nB === 0) return { none: true };
+  const d = Math.round((pAfterA - r.pBeforeA) * 10) / 10 + 0;
+  return { none: false, pBefore: f1(r.pBeforeA), diff: `${d < 0 ? '' : '+'}${d.toFixed(1)}`, nA: r.nA, nB: r.nB };
 }
 
 const isHttps = (u: string | undefined): u is string => typeof u === 'string' && u.startsWith('https://');

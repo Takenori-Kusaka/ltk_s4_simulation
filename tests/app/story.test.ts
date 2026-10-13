@@ -159,7 +159,9 @@ test('基準23・24: 固定の文(入っているもの・入っていないも�
   // F-005 Task-3 でチームの仕上がり(共同プレイ歴・メタの近さ)が入った。入っているものへ移り、まだ入っていないものには残らない
   assert.ok(INCLUDED.some((t) => /チームの仕上がり/.test(t) && /共同プレイ歴/.test(t)));
   assert.ok(!EXCLUDED.some((x) => /チームの仕上がり/.test(x.text)));
-  assert.ok(EXCLUDED.some((x) => /結果/.test(x.text) && /F-004/.test(x.feature)));
+  // F-005 Task-2 でスクリムと本番の結果(θ の当て直し)が入った。入っているものへ移り、まだ入っていないものには残らない
+  assert.ok(INCLUDED.some((t) => /スクリムと本番の結果/.test(t)));
+  assert.ok(!EXCLUDED.some((x) => /スクリムと本番の結果/.test(x.text)));
   const text = JSON.stringify(s);
   for (const w of ['β', '対数オッズ', '標準偏差']) assert.ok(!text.includes(w), w);
   const svelte = readFileSync(new URL('../../src/app/story/MatchStory.svelte', import.meta.url), 'utf8').replace(/<style[\s\S]*<\/style>/, '');
