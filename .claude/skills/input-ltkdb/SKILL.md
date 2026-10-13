@@ -1,6 +1,6 @@
 ---
 name: input-ltkdb
-description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめから、名簿の階級チーム同士のスクリムを F-004 の試合結果の記録(`docs/research/grounds/scrims/`)へ機械で取り込む。`/input-ltkdb`。毎日の定期実行から呼ばれる。リスナー参加・スコアの無い試合・既存の記録と同じ試合は取り込まない。共通の原則は /data-update。
+description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめから、名簿の階級チーム同士のスクリムを F-004 の試合結果の記録(`docs/research/grounds/scrims/`)へ機械で取り込む。`/input-ltkdb`。毎日 7:45 JST に GitHub Actions(`.github/workflows/ltkdb-import.yml`)が同じ変換を流す。リスナー参加・スコアの無い試合・既存の記録と同じ試合は取り込まない。共通の原則は /data-update。
 ---
 
 # LTKDB からスクリムの試合結果を取り込む
@@ -38,6 +38,8 @@ description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試�
 5. `node scripts/gate/g5-local.mjs --no-install` を通す
 6. コミット(Author は指示した人、日本語、末尾の段落に `Spec: setup` と `Co-Authored-By: <モデルの名称と版>`)。公開の前の点検(`.claude/skills/data-update/reference/integrate.md` の 5)を流す
 7. push して Draft PR を出す(本文は `.github/PULL_REQUEST_TEMPLATE.md` から。リスク区分は前例の R3 を草案として残し、確定は人)。ラベル `state:needs-dev`。CI が全件 success になってから `state:dev-done`。マージと Ready は人
+
+毎日の取り込みは GitHub Actions のワークフロー `.github/workflows/ltkdb-import.yml` が行う(手順 2・3 と Draft PR。手順 4 の README の行は PR の上で足す)。手動で流すときは Actions の画面から workflow_dispatch で実行するか、この手順で流す。Claude の定期実行には頼らない(価値責任者の指示 2026-10-12: git 資産にならない仕組みにしない)。
 
 価値責任者は 2026-10-12 に、LTKDB を毎日集計して勝率へ反映することを求め、この取り込みの Draft PR の push を承認した(「今後もここを1日おきに集計し、勝率へどんどん反映し、より確度をあげていけるようにしましょう」。頻度は毎日と確認)。
 

@@ -1,0 +1,86 @@
+# LTKDB からスクリムの試合結果を毎日取り込む(/input-ltkdb の機械の部分)
+#
+# 価値責任者の求め(2026-10-12): LTKDB を毎日集計して勝率へ反映する。
+# 変換は生成 AI を使わないスクリプト(.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs)。
+# 新しい試合があれば、記録を足すブランチを push して Draft PR を出す。マージと Ready は人。
+# 勝率への反映は、マージの後に価値責任者の手元で集計を流したときに起きる(data/raw は手元にだけある)。
+
+name: ltkdb-import
+
+on:
+  schedule:
+    - cron: '45 22 * * *' # 毎日 7:45 JST(8:15 の site-deploy の前)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ltkdb-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    name: ltkdb-import
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+
+      - name: LTKDB を変換する
+        id: convert
+        env:
+          COLLECTED_WITH: ltkdb-to-scrims.mjs(GitHub Actions)
+        run: |
+          set +e
+          node .claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs | tee convert.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          { echo '## LTKDB の取り込み'; echo; echo '```'; cat convert.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          # 0 = 新しい試合なし、10 = 書いたファイルがある、それ以外 = 失敗
+          if [ "$code" != 0 ] && [ "$code" != 10 ]; then exit "$code"; fi
+
+      - name: 記録の読み込みをテストで通す
+        if: steps.convert.outputs.code == '10'
+        run: node --test tests/results/load.test.ts
+
+      - name: Draft PR を出す
+        if: steps.convert.outputs.code == '10'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          day=$(TZ=Asia/Tokyo date +%Y%m%d)
+          branch="docs/input-ltkdb-${day}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git add docs/research/grounds/scrims/
+          printf '%s\n\n%s\n\n%s\n' \
+            "docs: LTKDB からスクリムの試合結果を取り込む(${day})" \
+            'ltkdb-import ワークフローの機械の変換(.claude/skills/input-ltkdb)。' \
+            'Spec: setup' > msg.txt
+          git commit -F msg.txt
+          git push -u origin "$branch"
+          {
+            echo '## 対応タスク'; echo
+            echo 'LTKDB の毎日の取り込み(`.github/workflows/ltkdb-import.yml`)。トレーラは末尾の節。'; echo
+            echo '## 変更の概要'; echo
+            echo '名簿の階級チーム同士のスクリムのうち、新しい試合の記録を足した。変換の出力:'; echo
+            echo '```'; cat convert.log; echo '```'; echo
+            echo '`docs/research/grounds/scrims/README.md` の表の行は、この PR の上で人か担い手が足す(/input-ltkdb の手順 4)。'; echo
+            echo '## 検証方法と結果'; echo
+            echo '## AI 関与範囲'; echo
+            echo '- 生成: なし(生成 AI を使わない変換スクリプトの出力)'
+            echo '- 人の確認:'; echo
+            echo '## 作成を指示した者'; echo
+            echo '## リスク区分'; echo
+            echo '<!-- 草案。記録だけの変更で、取り消しは revert で完結する。確定は人 -->'; echo
+            echo 'R3'; echo
+            echo '## トレーラ(スカッシュのメッセージの末尾になる。この節を末尾に保つ)'; echo
+            echo 'Spec: setup'
+          } > body.md
+          gh pr create --draft --base main --head "$branch" \
+            --title "docs: LTKDB からスクリムの試合結果を取り込む(${day})" \
+            --body-file body.md --label 'state:needs-dev'
