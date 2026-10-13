@@ -137,6 +137,15 @@
               <td><b>{mt.b.m}</b><span class="reason">チャンピオンの近さ m_pool {mt.b.mPool}。{mt.b.mPoolHits.length ? `メタの重要チャンピオンに当たる得意ピック: ${mt.b.mPoolHits.join(' / ')}` : 'メタの重要チャンピオンに当たる得意ピックはない'}</span></td>
             </tr>
             <tr><th scope="row">気持ちの補正</th><td>{mt.a.mood}</td><td>{mt.b.mood}</td></tr>
+            {#if mt.a.owner || mt.b.owner}
+              <!-- F-005 基準20: 価値責任者の見立て(データから計算した項と区別する) -->
+              <tr>
+                <th scope="row">価値責任者の見立て(伸びしろ・勢い)</th>
+                {#each [mt.a, mt.b] as side}
+                  <td>{#if side.owner}<b>{side.owner.term}</b><span class="reason">伸びしろの点 G {side.owner.G}・勢いの点 V {side.owner.V}。{side.owner.items.join(' / ')}</span>{:else}—{/if}</td>
+                {/each}
+              </tr>
+            {/if}
           </tbody>
         </table>
       </div>

@@ -143,8 +143,12 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
       id: p.id, name: p.name, role: p.role,
       ltk: (inputOf.get(p.id)?.tournament.ltk ?? []).map((x) => ({ season: x.season, team: x.team })),
       pool: (ratingOf.get(p.id)?.axes.find((a) => a.key === 'pool')?.data?.poolDetail?.list ?? []).map((x) => ({ championId: x.championId, games: x.games })),
+      // F-005 基準17: 価値責任者の見立ての伸びしろ
+      ownerViews: (inputOf.get(p.id)?.ownerViews ?? []).filter((v) => v.axis === 'growth'),
     }));
-    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts, members };
+    // F-005 基準18: 価値責任者の見立ての勢い
+    const ownerViews = (inputs.teamViews ?? []).filter((v) => v.targetKind === 'team' && v.target === `${t.team}-${t.tier}` && v.axis === 'momentum');
+    const base = { team: t.team as TierTeamS['team'], tier: t.tier as TierTeamS['tier'], macroParts, members, ownerViews };
     return unrated.length ? { ...base, S: null, reason: `評価の無い選手: ${unrated.join('・')}` } : { ...base, S: t.S };
   });
   // 外部の見立て(groundsDir の external-views.json)。無ければ項は 0

@@ -8,6 +8,7 @@ import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../sim/types.ts';
 import type { WinTable } from '../sim/validate.ts';
+import type { OwnerView } from '../rating/owner-views.ts';
 import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMember, type MetaChampionLike } from './dynamics.ts';
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
@@ -73,6 +74,8 @@ export interface TierTeamS {
   macroParts?: MacroPart[];
   /** Task-3: 仕上がりの材料(名簿の 5 人の LTK の出場記録とピックプール)。無ければ c = 0・当たり無しで計算する */
   members?: readonly MaturationMember[];
+  /** 基準18: 価値責任者の見立てのうち、この階級チームの勢い(axis = momentum)の項目 */
+  ownerViews?: readonly OwnerView[];
 }
 
 export interface TeamRow {
@@ -251,7 +254,7 @@ export function computePriorWinrates(
         : { M: r2(t.M), reason: null };
       const ext = externalOf(views, key, cfg.external);
       // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
-      const maturation = maturationOf(t?.members, opts.meta, cfg);
+      const maturation = maturationOf(t?.members, opts.meta, cfg, t?.ownerViews ?? []);
       const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
