@@ -129,6 +129,20 @@
                   {/each}
                 </ul>
               {/if}
+              {#if a.ownerView}
+                <!-- F-009 基準39: 価値責任者の見立て(データの補正と区別する) -->
+                <div class="owner-view">
+                  <p class="owner-view-head"><span class="mark">価値責任者の見立て</span> 加点 {a.ownerView.value}{#if a.ownerView.clipped}({a.ownerView.clipped}){/if}</p>
+                  <ul class="grounds">
+                    {#each a.ownerView.items as v}
+                      <li>
+                        <span class="ground-text">「{v.quote}」</span>
+                        <span class="ground-meta"><span>{v.date}</span><span>{v.strength}</span><span>{v.source}</span></span>
+                      </li>
+                    {/each}
+                  </ul>
+                </div>
+              {/if}
               <p class="missing-note">確度{a.confidence ? ` ${a.confidence}` : ': データなし'} — {a.confidenceReason}</p>
             </div>
           {/if}

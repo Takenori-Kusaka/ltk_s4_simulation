@@ -97,6 +97,15 @@ export interface RatingAxisView {
   metrics: MetricRow[];
   evidence: EvidenceRow[];
   confidenceReason: string;
+  /** F-009 基準39: 価値責任者の見立ての加点(データの補正と分けて示す)。項目が無ければ持たない */
+  ownerView?: OwnerViewView;
+}
+export interface OwnerViewView {
+  /** 加点の値(符号つき) */
+  value: string;
+  /** 合計が上限で切り詰められた場合の説明 */
+  clipped: string | null;
+  items: { quote: string; date: string; strength: string; source: string }[];
 }
 
 /** 標準正規分布の累積分布(Abramowitz–Stegun 7.1.26) */
@@ -142,7 +151,16 @@ function dataAxis(a: AxisRating, coefficient: number): Pick<RatingAxisView, 'det
   const confidenceReason =
     `有効な試合数 ${d.effectiveGames.toFixed(1)}(${cfg.confidence.high} 以上で高、${cfg.confidence.mid} 以上で中)` +
     (d.estimated ? '。試合が無く、ランクの基準(事前値)だけで推定した' : '');
-  return { details, metrics, evidence: [], confidenceReason };
+  return { details, metrics, evidence: [], confidenceReason, ...(a.ownerView ? { ownerView: ownerViewView(a.ownerView) } : {}) };
+}
+
+/** 基準39: 見立ての加点の値、使った項目の原文・日付・強さ、切り詰めの有無 */
+export function ownerViewView(o: NonNullable<AxisRating['ownerView']>): OwnerViewView {
+  return {
+    value: signed(o.value),
+    clipped: o.clipped ? `合計 ${signed(o.raw)} を上限で ${signed(o.value)} に切り詰めた` : null,
+    items: o.views.map((v) => ({ quote: v.quote, date: v.date, strength: `${v.direction === '+' ? '肯定' : '否定'}・${v.strength}`, source: v.source })),
+  };
 }
 
 function evidenceAxis(a: AxisRating, coefficient: number): Pick<RatingAxisView, 'details' | 'metrics' | 'evidence' | 'confidenceReason'> {
