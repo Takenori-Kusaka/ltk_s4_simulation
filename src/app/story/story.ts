@@ -87,6 +87,9 @@ export interface MatchResults {
   /** F-005 基準3c: その試合日より前のスクリムの試合数 n_s と、外部の見立ての残り具合 λ */
   nsA?: number;
   nsB?: number;
+  /** 基準3c(2026-10-13 改定): その試合日より前の本番の試合数 n_o */
+  noA?: number;
+  noB?: number;
   lambdaA?: number;
   lambdaB?: number;
 }
@@ -446,9 +449,10 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
     const label = input.teamA?.parts?.find((p) => p.key === ax.key)?.label || xa?.label || xb?.label || ax.label;
     return { key: ax.key, label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
   });
-  const ext = (team: string, layer: TeamLayer | undefined, ns: number | undefined, lambda: number | undefined): ExternalSide => {
+  const ext = (team: string, layer: TeamLayer | undefined, ns: number | undefined, lambda: number | undefined, no: number | undefined): ExternalSide => {
     const e = layer?.E, c = layer?.externalCount;
-    const scrimWeight = finite(ns) && finite(lambda) ? `スクリム ${ns} 試合(見立ての重みは両チームの平均で ${lambda.toFixed(2)})` : null;
+    const games = finite(no) && no > 0 ? `スクリム ${ns} 試合・本番 ${no} 試合` : `スクリム ${ns} 試合`;
+    const scrimWeight = finite(ns) && finite(lambda) ? `${games}(見立ての重みは両チームの平均で ${lambda.toFixed(2)})` : null;
     return { E: finite(e) ? signedE(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier), scrimWeight };
   };
   return {
@@ -458,7 +462,7 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
       pExt: pct(input.pExt),
       M: { a: M(A, input.teamA), b: M(B, input.teamB) },
       parts,
-      external: { a: ext(input.a, input.teamA, input.results?.nsA, input.results?.lambdaA), b: ext(input.b, input.teamB, input.results?.nsB, input.results?.lambdaB) },
+      external: { a: ext(input.a, input.teamA, input.results?.nsA, input.results?.lambdaA, input.results?.noA), b: ext(input.b, input.teamB, input.results?.nsB, input.results?.lambdaB, input.results?.noB) },
     },
     // 掛け合わせの行は事前(d = 0)の勝率。仕上がりがあれば pA はその試合日の値なので、加える前の値を出す
     combined: { p: f1(input.maturation?.pPriorA ?? input.pA) },

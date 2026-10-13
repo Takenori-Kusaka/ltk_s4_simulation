@@ -6,7 +6,7 @@
   "stage": { "regular": {}, "masters": {}, "playoffs": {} },
   "stageBasis": "初期値 0。S1〜S3 でステージ別の差を示すデータが無い(docs/design/team-model-algorithm.md 節3)",
   "theta": { "priorSd": 0.58 },
-  "weights": { "official": 1.0, "scrim": 0.4 },
+  "weights": { "official": 2.0, "scrim": 0.4 },
   "maturation": { "max": 0.2, "tau0": 1.5, "a": 1.0, "b": 1.0 },
   "mood": { "cap": 0.15, "perLoss": 0.05 },
   "draft": { "delta": 0.2 },

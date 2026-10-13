@@ -104,6 +104,8 @@ export interface TeamRow {
   result: ThetaSide;
   /** 基準3c: すべての結果でのスクリムの試合数 n_s、見立ての残り具合 λ(小数第二位)、λ × E(小数第二位) */
   ns: number;
+  /** 基準3c(2026-10-13 改定): すべての結果での本番の試合数 n_o */
+  no: number;
   lambda: number;
   lambdaE: number;
 }
@@ -126,6 +128,9 @@ export interface MatchPrior {
   /** 基準3c: その試合日より前の両チームのスクリムの試合数 n_s と、見立ての残り具合 λ(小数第二位) */
   nsA: number;
   nsB: number;
+  /** 基準3c(2026-10-13 改定): その試合日より前の両チームの本番の試合数 n_o */
+  noA: number;
+  noB: number;
   lambdaA: number;
   lambdaB: number;
   beta: number;
@@ -280,7 +285,7 @@ export function computePriorWinrates(
       const ext = externalOf(views, key, cfg.external);
       // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
       const maturation = maturationOf(t?.members, opts.meta, cfg, t?.ownerViews ?? []);
-      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 }, ns: 0, lambda: 1, lambdaE: ext.E };
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 }, ns: 0, no: 0, lambda: 1, lambdaE: ext.E };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
       else rows.push({ ...base, S: t.S, reason: null });
@@ -322,16 +327,20 @@ export function computePriorWinrates(
     }
     return thetaCache.get(ck)!;
   };
-  // 基準3c: 試合日 before より前(無ければすべて)のスクリムで、その階級チームが出たゲームの数と λ。相手の階級は問わない
+  // 基準3c: 試合日 before より前(無ければすべて)の、その階級チームが出たスクリム n_s と本番 n_o のゲームの数。相手の階級は問わない。
+  // 見立てを弱める試合数 n = n_s + n_o × (weights.official ÷ weights.scrim)。本番 1 試合はスクリムの重みの比の数だけ数える
+  const officialAsScrims = cfg.weights.scrim > 0 ? cfg.weights.official / cfg.weights.scrim : 0;
   const lambdaOf = (key: string, before?: string) => {
-    const ns = results.filter((g) => g.kind === 'scrim' && (before === undefined || g.date < before) && (g.teams[0] === key || g.teams[1] === key)).length;
+    const mine = results.filter((g) => (before === undefined || g.date < before) && (g.teams[0] === key || g.teams[1] === key));
+    const ns = mine.filter((g) => g.kind === 'scrim').length, no = mine.length - ns;
+    const n = ns + no * officialAsScrims;
     const half = cfg.external.scrimHalf;
-    return { ns, lambda: half === undefined || half <= 0 ? 1 : half / (half + ns) };
+    return { ns, no, n, lambda: half === undefined || half <= 0 ? 1 : half / (half + n) };
   };
   for (const r of rows) {
     r.result = thetaOf(r.tier)[r.key];
     const l = lambdaOf(r.key);
-    Object.assign(r, { ns: l.ns, lambda: r2(l.lambda), lambdaE: r2(l.lambda * r.E) });
+    Object.assign(r, { ns: l.ns, no: l.no, lambda: r2(l.lambda), lambdaE: r2(l.lambda * r.E) });
   }
 
   // 1組の勝率(A の対数オッズ = レーン項 + マクロ項 + 外部の見立ての項 + 結果による更新の項 + ステージ補正)。stage が無ければステージ補正なし。
@@ -342,10 +351,10 @@ export function computePriorWinrates(
     const lA = lambdaOf(A.key, before), lB = lambdaOf(B.key, before);
     // 基準3c(2026-10-13 改定): 両チームに同じ λ を掛ける。チームごとに掛けると、スクリムの多いチームだけが自分の見立てを失う
     const hf = cfg.external.scrimHalf;
-    const lambda = hf === undefined || hf <= 0 ? 1 : hf / (hf + (lA.ns + lB.ns) / 2);
+    const lambda = hf === undefined || hf <= 0 ? 1 : hf / (hf + (lA.n + lB.n) / 2);
     const thetaPart = {
       thetaA: tA.theta, thetaB: tB.theta, resultsA: tA.official + tA.scrim, resultsB: tB.official + tB.scrim,
-      nsA: lA.ns, nsB: lB.ns, lambdaA: r2(lambda), lambdaB: r2(lambda),
+      nsA: lA.ns, nsB: lB.ns, noA: lA.no, noB: lB.no, lambdaA: r2(lambda), lambdaB: r2(lambda),
     };
     const st = stage ? (cfg.stage[stage]?.[A.key] ?? 0) - (cfg.stage[stage]?.[B.key] ?? 0) : 0;
     const noM = [A, B].filter((x) => x.M === null);
