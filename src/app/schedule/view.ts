@@ -96,7 +96,7 @@ export interface DayBoxView {
 
 const finite = (x: unknown): number | undefined => (typeof x === 'number' && Number.isFinite(x) ? x : undefined);
 /** F-005 基準 3b の項目(試合ごとの pLaneA・pMacroA・pExtA、階級チームごとの M・E・externalCount)。勝率表のファイルに無ければ undefined(F-005 側の型の定義を待たず、任意の項目として読む) */
-type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown; thetaA?: unknown; thetaB?: unknown; thetaLogit?: unknown; resultsA?: unknown; resultsB?: unknown; pBeforeResultsA?: unknown; nsA?: unknown; nsB?: unknown; lambdaA?: unknown; lambdaB?: unknown };
+type LayerFields = { pLaneA?: unknown; pMacroA?: unknown; pExtA?: unknown; thetaA?: unknown; thetaB?: unknown; thetaLogit?: unknown; resultsA?: unknown; resultsB?: unknown; pBeforeResultsA?: unknown; nsA?: unknown; nsB?: unknown; noA?: unknown; noB?: unknown; lambdaA?: unknown; lambdaB?: unknown };
 /** F-005 基準4 の項目。どれかが無ければ undefined */
 const resultsOf = (x: LayerFields): MatchResults | undefined => {
   const v = [x.thetaA, x.thetaB, x.thetaLogit, x.resultsA, x.resultsB, x.pBeforeResultsA].map(finite);
@@ -105,7 +105,9 @@ const resultsOf = (x: LayerFields): MatchResults | undefined => {
   // 基準3c: スクリムの試合数と見立ての残り具合(無い勝率表のファイルでは付けない)
   const [nsA, nsB, lambdaA, lambdaB] = [x.nsA, x.nsB, x.lambdaA, x.lambdaB].map(finite);
   const scrim = nsA !== undefined && nsB !== undefined && lambdaA !== undefined && lambdaB !== undefined ? { nsA, nsB, lambdaA, lambdaB } : {};
-  return { thetaA, thetaB, logit, nA, nB, pBeforeA, ...scrim };
+  const [noA, noB] = [x.noA, x.noB].map(finite);
+  const official = noA !== undefined && noB !== undefined ? { noA, noB } : {};
+  return { thetaA, thetaB, logit, nA, nB, pBeforeA, ...scrim, ...official };
 };
 type TeamFields = { M?: unknown; macroParts?: unknown; E?: unknown; externalCount?: unknown };
 /** teams[].macroParts のうち、key が文字列で raw が数の項目だけ(壊れた項目は入れない) */

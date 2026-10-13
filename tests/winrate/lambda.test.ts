@@ -82,3 +82,33 @@ test('AC3c: 根拠の節の外部の見立てに「スクリム n_s 試合によ
   assert.equal(s.layers.macro.external.a.scrimWeight, 'スクリム 0 試合(見立ての重みは両チームの平均で 1.00)');
   assert.equal(s.layers.macro.external.b.scrimWeight, 'スクリム 4 試合(見立ての重みは両チームの平均で 0.50)');
 });
+
+test('AC3c(2026-10-13 改定): 本番 1 試合はスクリムの重みの比(2.0 ÷ 0.4 = 5)の数だけ λ の試合数に数え、n_o を持つ', () => {
+  // IT-NEXT と LR-NEXT が本番を 1 試合ずつ(10/15)→ Day 2 以降は両チームとも n = 5、λ = 4 ÷ 9
+  const games: ResultGame[] = [{ kind: 'official', date: '2026-10-15', teams: ['IT-NEXT', 'LR-NEXT'], winner: 'IT-NEXT' }];
+  const o = computePriorWinrates(tierTeams(), { externalViews: VIEWS, results: games });
+  const m = o.matches.find((x) => x.stage === 'regular' && x.day === 2 && x.tier === 'NEXT' && [x.a, x.b].includes('IT'))!;
+  const itIsA = m.a === 'IT';
+  assert.equal(itIsA ? m.noA : m.noB, 1);
+  assert.equal(itIsA ? m.nsA : m.nsB, 0);
+  // Day 2 の IT の相手は本番 0 試合 → 平均 2.5、λ = 4 ÷ 6.5
+  assert.deepEqual([m.lambdaA, m.lambdaB], [Math.round((4 / 6.5) * 100) / 100, Math.round((4 / 6.5) * 100) / 100]);
+  const it = o.teams.find((t) => t.key === 'IT-NEXT')!;
+  assert.deepEqual([it.ns, it.no, it.lambda], [0, 1, Math.round((4 / 9) * 100) / 100]);
+});
+
+test('AC3c(2026-10-13 改定): 根拠の節に本番があれば「スクリム n_s 試合・本番 n_o 試合」と出す', async () => {
+  const { matchStory } = await import('../../src/app/story/story.ts');
+  const { ROSTER } = await import('../../src/data/roster.ts');
+  const KEYS = ['ground', 'laning', 'teamfight', 'synergy', 'stability', 'pool', 'shotcalling', 'tournament'];
+  const roles = ['TOP', 'JG', 'MID', 'ADC', 'SUP'];
+  const players = ['CC', 'DD'].flatMap((t) => roles.map((r) => ({ playerId: `${t}-MASTERS-${r}`, name: ROSTER.find((p) => p.id === `${t}-MASTERS-${r}`)?.name ?? r, axes: KEYS.map((key) => ({ key, label: key, display: 7 })) })));
+  const teamEval = { tierTeams: ['CC', 'DD'].map((team) => ({ team, tier: 'MASTERS', S: 7, coachC: null, coachId: null })) };
+  const s = matchStory(
+    { tier: 'MASTERS', a: 'CC', b: 'DD', pA: 50, pB: 50, pLane: 50, pMacro: 50, pExt: 50, results: { thetaA: 0, thetaB: 0, logit: 0, nA: 0, nB: 5, pBeforeA: 50, nsA: 0, nsB: 4, noA: 0, noB: 1, lambdaA: 0.53, lambdaB: 0.53 } },
+    { kind: 'ratings', players }, teamEval as never, null,
+  );
+  if (!s.ok) return assert.fail(s.reason);
+  assert.equal(s.layers.macro.external.a.scrimWeight, 'スクリム 0 試合(見立ての重みは両チームの平均で 0.53)');
+  assert.equal(s.layers.macro.external.b.scrimWeight, 'スクリム 4 試合・本番 1 試合(見立ての重みは両チームの平均で 0.53)');
+});
