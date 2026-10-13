@@ -4,7 +4,7 @@
 // F-005 Task-3: 階級チームごとの仕上がり(共同プレイ歴 c・メタの近さ m・仕上がりの速さ τ)を teams[].maturation に出す(src/winrate/dynamics.ts)。
 // 試合ごとの事前の勝率は d = 0 の値のまま(試合日ごとの勝率は dynamics.ts の純粋な関数で画面が作る)
 // F-005 Task-2(基準4): 本番とスクリムの結果による θ の当て直し(src/winrate/update.ts)。試合ごとに、その試合日より前の結果で当て直す
-// F-005 Task-8(基準3c): 外部の見立ての項は λ × E。λ = scrimHalf ÷ (scrimHalf + その試合日より前のスクリムの試合数)
+// F-005 Task-8(基準3c): 外部の見立ての項は λ × (E_A − E_B)。λ = scrimHalf ÷ (scrimHalf + 両チームのその試合日より前のスクリムの試合数の平均)
 // DOM と Node 固有の API に依存しない。気持ち・ドラフトの項は後のタスク(ここでは 0)
 import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
@@ -340,9 +340,12 @@ export function computePriorWinrates(
     const A = sOf(a, tier), B = sOf(b, tier);
     const th = thetaOf(tier, before), tA = th[A.key], tB = th[B.key];
     const lA = lambdaOf(A.key, before), lB = lambdaOf(B.key, before);
+    // 基準3c(2026-10-13 改定): 両チームに同じ λ を掛ける。チームごとに掛けると、スクリムの多いチームだけが自分の見立てを失う
+    const hf = cfg.external.scrimHalf;
+    const lambda = hf === undefined || hf <= 0 ? 1 : hf / (hf + (lA.ns + lB.ns) / 2);
     const thetaPart = {
       thetaA: tA.theta, thetaB: tB.theta, resultsA: tA.official + tA.scrim, resultsB: tB.official + tB.scrim,
-      nsA: lA.ns, nsB: lB.ns, lambdaA: r2(lA.lambda), lambdaB: r2(lB.lambda),
+      nsA: lA.ns, nsB: lB.ns, lambdaA: r2(lambda), lambdaB: r2(lambda),
     };
     const st = stage ? (cfg.stage[stage]?.[A.key] ?? 0) - (cfg.stage[stage]?.[B.key] ?? 0) : 0;
     const noM = [A, B].filter((x) => x.M === null);
@@ -356,7 +359,7 @@ export function computePriorWinrates(
     const lane = beta[tier] * (A.S - B.S);
     const macro = A.M === null || B.M === null ? 0 : betaMacro[tier] * (A.M - B.M);
     // 基準3c: β_ext は λ を掛ける前の E から決めたまま、項だけ λ × E の差にする
-    const ext = betaExt[tier] * (lA.lambda * A.E - lB.lambda * B.E);
+    const ext = betaExt[tier] * lambda * (A.E - B.E);
     const thetaLogit = tA.theta - tB.theta;
     const logit = lane + macro + ext + thetaLogit + st;
     const [pA, pB] = percents(sigmoid(logit));

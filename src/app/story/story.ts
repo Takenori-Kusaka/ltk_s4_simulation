@@ -448,7 +448,7 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
   });
   const ext = (team: string, layer: TeamLayer | undefined, ns: number | undefined, lambda: number | undefined): ExternalSide => {
     const e = layer?.E, c = layer?.externalCount;
-    const scrimWeight = finite(ns) && finite(lambda) ? `スクリム ${ns} 試合により見立ての重み ${lambda.toFixed(2)}` : null;
+    const scrimWeight = finite(ns) && finite(lambda) ? `スクリム ${ns} 試合(見立ての重みは両チームの平均で ${lambda.toFixed(2)})` : null;
     return { E: finite(e) ? signedE(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier), scrimWeight };
   };
   return {
