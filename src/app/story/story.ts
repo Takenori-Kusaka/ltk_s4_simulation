@@ -84,6 +84,11 @@ export interface MatchResults {
   nB: number;
   /** 結果による更新の前の A の勝率(%) */
   pBeforeA: number;
+  /** F-005 基準3c: その試合日より前のスクリムの試合数 n_s と、外部の見立ての残り具合 λ */
+  nsA?: number;
+  nsB?: number;
+  lambdaA?: number;
+  lambdaB?: number;
 }
 /** 根拠の節の「結果による更新」の行(F-014 基準24 により勝率の差と試合数だけ)。結果が 1 件も無ければ none */
 export type ResultsLayer = { none: true } | { none: false; pBefore: string; diff: string; nA: number; nB: number };
@@ -184,6 +189,8 @@ export interface ExternalSide {
   E: string;
   count: string;
   items: ExternalItem[];
+  /** F-005 基準3c: 「スクリム n_s 試合により見立ての重み λ」。勝率表のファイルに無ければ null */
+  scrimWeight: string | null;
 }
 /** F-005 基準12: 仕上がりの片側(文字列は表示の精度。d は整数、項と加算は小数第三位、τ・m は小数第二位、c は小数第一位) */
 export interface MaturationSide {
@@ -439,9 +446,10 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
     const label = input.teamA?.parts?.find((p) => p.key === ax.key)?.label || xa?.label || xb?.label || ax.label;
     return { key: ax.key, label, a: ra === null ? '—' : f2(ra), b: rb === null ? '—' : f2(rb), reasonA: xa?.reason ?? '', reasonB: xb?.reason ?? '' };
   });
-  const ext = (team: string, layer: TeamLayer | undefined): ExternalSide => {
+  const ext = (team: string, layer: TeamLayer | undefined, ns: number | undefined, lambda: number | undefined): ExternalSide => {
     const e = layer?.E, c = layer?.externalCount;
-    return { E: finite(e) ? signedE(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier) };
+    const scrimWeight = finite(ns) && finite(lambda) ? `スクリム ${ns} 試合により見立ての重み ${lambda.toFixed(2)}` : null;
+    return { E: finite(e) ? signedE(e) : '—', count: finite(c) ? String(c) : '—', items: externalItems(views, team, input.tier), scrimWeight };
   };
   return {
     lane: { p: pct(input.pLane) },
@@ -450,7 +458,7 @@ function layersOf(input: StoryInput, A: TierTeamLike, B: TierTeamLike, views: un
       pExt: pct(input.pExt),
       M: { a: M(A, input.teamA), b: M(B, input.teamB) },
       parts,
-      external: { a: ext(input.a, input.teamA), b: ext(input.b, input.teamB) },
+      external: { a: ext(input.a, input.teamA, input.results?.nsA, input.results?.lambdaA), b: ext(input.b, input.teamB, input.results?.nsB, input.results?.lambdaB) },
     },
     // 掛け合わせの行は事前(d = 0)の勝率。仕上がりがあれば pA はその試合日の値なので、加える前の値を出す
     combined: { p: f1(input.maturation?.pPriorA ?? input.pA) },
