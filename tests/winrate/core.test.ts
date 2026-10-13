@@ -270,7 +270,8 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
 
 test('用語: 外部の見立て E は階級チームごとの Σ(向き × 強さの重み 強 1.5・中 1.0・弱 0.5)を ±clip(3.0)に切り詰めた値と件数。読み込みは形の違う項目を理由つきで除く', () => {
   // 2026-10-10: 外部の見立ての重みの既定値を 0.20 → 0.35(レーンの β と同等)に変更
-  assert.deepEqual(baseConfig.external, { targetSd: 0.35, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0, selfTeam: 0.5 });
+  // 2026-10-13: 基準3c の external.scrimHalf(初期値 4)を追加
+  assert.deepEqual(baseConfig.external, { targetSd: 0.35, strength: { 強: 1.5, 中: 1.0, 弱: 0.5 }, clip: 3.0, selfTeam: 0.5, scrimHalf: 4 });
   const cfg = baseConfig.external;
   assert.deepEqual(externalOf(VIEWS, 'DD-NEXT', cfg), { E: 2.5, count: 2 });
   assert.deepEqual(externalOf(VIEWS, 'CC-NEXT', cfg), { E: -0.5, count: 1 });
