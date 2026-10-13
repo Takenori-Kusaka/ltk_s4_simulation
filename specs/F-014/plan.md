@@ -16,6 +16,7 @@
 | Task-6 | (2026-10-10 追加。再判定 3)内容レビューの反映: 順位表の注記、結論の一文の言い回し、大会経験の根拠と「未確認(AI 収集)」の印、言い回しの統一(乱数の種・影響・予想 pt・今後の更新・15%)、英語のチーム名、最後の日より後の見出しと Playoffs の案内 | 26, 27, 28, 29, 30 | `src/app/schedule/view.ts`、`src/app/schedule/StandingsBoard.svelte`、`src/app/schedule/DayBox.svelte`、`src/app/components/Home.svelte`、`src/app/sim/SimPage.svelte`、`tests/app/schedule.test.ts` | Task-1 | 可 |
 | (Task-6 の対象パス) | `src/app/schedule/**`、`src/app/story/**`、`src/app/sim/**`、`src/app/team/**`、`src/app/components/Home.svelte`、`src/app/components/PlayerSheet.svelte`、`tests/app/**` | Task-5 | 不可 |
 | Task-7 | (2026-10-10 追加。再判定 4)根拠の 2 層: レーン(個人)とマクロ(チーム)の相対勝率の 3 行、マクロの層(M と 2 つの軸の素点と理由)、外部の見立ての小節 | 31, 32, 33 | `src/app/story/**`、`tests/app/story.test.ts` | Task-6 | 不可 |
+| Task-8 | (2026-10-13 追加)ほぼ互角の印: 用語「ほぼ互角」の境界(有利な側が 56.0% 未満)を日程の箱の印と結論の一文で共有する | 34, 27 | `src/app/schedule/view.ts`、`src/app/schedule/DayBox.svelte`、`src/app/story/story.ts`、`tests/app/schedule.test.ts`、`tests/app/story.test.ts` | Task-7 | 可 |
 
 ## 粒度の確認
 
