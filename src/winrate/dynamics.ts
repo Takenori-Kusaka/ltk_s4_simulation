@@ -6,6 +6,7 @@ import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
 import type { TeamId, Tier } from '../sim/types.ts';
 import { MIN_GAMES } from '../meta/match.ts';
+import { loadOwnerViewConfig, type OwnerView } from '../rating/owner-views.ts';
 
 export interface DynamicsConfig {
   /** 基準9・10: 仕上がりの項の上限 M(対数オッズ)、τ の基準 tau0(試合日)、c と m の効き a・b */
@@ -16,6 +17,8 @@ export interface DynamicsConfig {
   mood: { cap: number; perLoss: number };
   /** 基準13: 当てはまりの確認が済むまでの、各項の寄与の切り詰め(±) */
   unvalidatedCap: number;
+  /** 基準17・18: 価値責任者の見立ての伸びしろの項と勢いの項(基準13 の切り詰めの対象にしない。基準19) */
+  ownerView: { growthPerDay: number; growthCap: number; momentumStep: number; momentumHalf: number; momentumCap: number };
 }
 const CFG = config as unknown as DynamicsConfig;
 
@@ -29,6 +32,15 @@ export interface MaturationMember {
   ltk: readonly { season: string; team: string }[];
   /** F-009 のピックプール(大会のロールで 3 試合以上。ratings.json の pool 軸の poolDetail.list)。評価が無ければ空 */
   pool: readonly { championId: number; games: number }[];
+  /** 基準17: 価値責任者の見立てのうち、この選手の伸びしろ(axis = growth)の項目 */
+  ownerViews?: readonly OwnerView[];
+}
+
+/** 基準17〜20: 価値責任者の見立ての伸びしろの点 G と勢いの点 V、使った項目 */
+export interface OwnerTerms {
+  G: number;
+  V: number;
+  items: { name: string; axis: 'growth' | 'momentum'; direction: '+' | '-'; strength: string; date: string; quote: string }[];
 }
 
 /** F-011 のメタの重要チャンピオン(data/meta/<パッチ>.json の champions[]。段階A 1.0・段階B 0.5) */
@@ -71,6 +83,8 @@ export interface Maturation {
   /** 基準10・13: 当てはまりの確認が済むまで「低」 */
   confidence: '低';
   note: string;
+  /** 基準17〜20: 価値責任者の見立て。項目が無ければ null */
+  owner?: OwnerTerms | null;
 }
 
 const r3 = (x: number) => Math.round(x * 1000) / 1000 + 0;
@@ -119,8 +133,43 @@ export function tauOf(c: number, m: number, cfg: DynamicsConfig = CFG): number {
 }
 
 /** 階級チームの仕上がり。選手が無ければ c = 0・当たり無し。メタの一覧が無ければ m_pool = 0.5。m_style が無い間は m = m_pool(確度「低」) */
+/** 用語「伸びしろの点 G」「勢いの点 V」: 5 人の伸びしろの項目と、階級チームの勢いの項目の Σ(向き × 強さの重み。F-009 の ownerView.strength) */
+export function ownerTermsOf(members: readonly MaturationMember[], teamViews: readonly OwnerView[] = []): OwnerTerms | null {
+  const w = loadOwnerViewConfig().strength;
+  const items: OwnerTerms['items'] = [];
+  let G = 0, V = 0;
+  for (const m of members) {
+    for (const v of m.ownerViews ?? []) {
+      if (v.axis !== 'growth') continue;
+      G += (v.direction === '+' ? 1 : -1) * w[v.strength];
+      items.push({ name: m.name, axis: 'growth', direction: v.direction, strength: v.strength, date: v.date, quote: v.quote });
+    }
+  }
+  for (const v of teamViews) {
+    if (v.axis !== 'momentum') continue;
+    V += (v.direction === '+' ? 1 : -1) * w[v.strength];
+    items.push({ name: v.target, axis: 'momentum', direction: v.direction, strength: v.strength, date: v.date, quote: v.quote });
+  }
+  return items.length ? { G: r3(G), V: r3(V), items } : null;
+}
+
+/** 基準17: 伸びしろの項 = growthPerDay × G × d を ±growthCap に切り詰めた値 */
+export function growthTerm(owner: OwnerTerms | null | undefined, d: number, cfg: DynamicsConfig = CFG): number {
+  if (!owner || !(d > 0)) return 0;
+  const k = cfg.ownerView;
+  return clamp(k.growthPerDay * owner.G * d, -k.growthCap, k.growthCap);
+}
+
+/** 基準18: 勢いの項 = momentumStep × V × 0.5^(d ÷ momentumHalf) を ±momentumCap に切り詰めた値。d = 0(開幕)で最も大きい */
+export function momentumTerm(owner: OwnerTerms | null | undefined, d: number, cfg: DynamicsConfig = CFG): number {
+  if (!owner || !owner.V) return 0;
+  const k = cfg.ownerView;
+  return clamp(k.momentumStep * owner.V * Math.pow(0.5, Math.max(0, d) / k.momentumHalf), -k.momentumCap, k.momentumCap);
+}
+
 export function maturationOf(
   members: readonly MaturationMember[] | undefined, meta: readonly MetaChampionLike[] | null | undefined, cfg: DynamicsConfig = CFG,
+  teamViews: readonly OwnerView[] = [],
 ): Maturation {
   const ms = members ?? [];
   const co = coPlayOf(ms);
@@ -131,7 +180,8 @@ export function maturationOf(
   notes.push('F-010 の戦い方の特性とメタの一覧の mainstreamStyle が無いため m = m_pool(確度「低」)');
   notes.push(`S1〜S3 での当てはまりの確認(基準13)まで、寄与は ±${cfg.unvalidatedCap.toFixed(2)} に切り詰める`);
   const m = pool.mPool;
-  return { c: co.c, cPairs: co.pairs, mPool: pool.mPool, mPoolHits: pool.hits, mStyle: null, m, tau: r3(tauOf(co.c, m, cfg)), confidence: '低', note: notes.join('。') };
+  const owner = ownerTermsOf(ms, teamViews);
+  return { c: co.c, cPairs: co.pairs, mPool: pool.mPool, mPoolHits: pool.hits, mStyle: null, m, tau: r3(tauOf(co.c, m, cfg)), confidence: '低', note: notes.join('。'), owner };
 }
 
 /** 基準9: 仕上がりの項 M × (1 − exp(−d ÷ τ))。d = 0 で 0 */
@@ -145,18 +195,24 @@ export function moodTerm(k: number, cfg: DynamicsConfig = CFG): number {
   return k >= 2 ? -Math.min(cfg.mood.cap, cfg.mood.perLoss * (k - 1)) : 0;
 }
 
-/** 基準9・11・13: A から見た対数オッズの加算(仕上がりの項の差と気持ちの補正の差。項ごとに ±unvalidatedCap に切り詰め) */
+/** 基準17・18: 価値責任者の見立ての項(伸びしろ + 勢い)。A・B それぞれの値 */
+export function ownerTerm(m: { owner?: OwnerTerms | null }, d: number, cfg: DynamicsConfig = CFG): number {
+  return growthTerm(m.owner, d, cfg) + momentumTerm(m.owner, d, cfg);
+}
+
+/** 基準9・11・13・17〜19: A から見た対数オッズの加算(仕上がりの項の差と気持ちの補正の差は項ごとに ±unvalidatedCap に切り詰め、見立ての項の差はその外で加える) */
 export function dayShift(
-  A: { tau: number }, B: { tau: number }, dA: number, dB: number, opts: { kA?: number; kB?: number; config?: DynamicsConfig } = {},
+  A: { tau: number; owner?: OwnerTerms | null }, B: { tau: number; owner?: OwnerTerms | null }, dA: number, dB: number,
+  opts: { kA?: number; kB?: number; config?: DynamicsConfig } = {},
 ): number {
   const cfg = opts.config ?? CFG;
   const cap = cfg.unvalidatedCap;
   const mat = clamp(maturationTerm(A, dA, cfg) - maturationTerm(B, dB, cfg), -cap, cap);
   const mood = clamp(moodTerm(opts.kA ?? 0, cfg) - moodTerm(opts.kB ?? 0, cfg), -cap, cap);
-  return mat + mood;
+  return mat + mood + ownerTerm(A, dA, cfg) - ownerTerm(B, dB, cfg);
 }
 
-/** 事前の勝率 pA(0〜1)に対数オッズの加算を加えた勝率。加算 0 と 0・1 はそのまま(d = 0 の初日は事前の勝率と同じ値になる) */
+/** 事前の勝率 pA(0〜1)に対数オッズの加算を加えた勝率。加算 0 と 0・1 はそのまま(d = 0 の初日は、勢いの項(基準18)が無ければ事前の勝率と同じ値になる) */
 export function winProbOnDay(pA: number, shift: number): number {
   if (shift === 0 || !(pA > 0 && pA < 1)) return pA;
   return sigmoid(logit(pA) + shift);
@@ -194,6 +250,9 @@ export interface DayWinrate {
   dB: number;
   termA: number;
   termB: number;
+  /** 基準17・18: 価値責任者の見立ての項(伸びしろ + 勢い) */
+  ownerA: number;
+  ownerB: number;
   /** 切り詰めた後の加算(A − B) */
   shift: number;
   /** 仕上がりを加えたか(両チームの戦力 S と τ がそろうときだけ。基準16 の 50.0% は動かさない) */
@@ -211,8 +270,9 @@ export function dayWinrate(
   const dA = daysPlayedBefore(tier, a, date), dB = daysPlayedBefore(tier, b, date);
   const ma = A?.maturation ?? null, mb = B?.maturation ?? null;
   const applied = !!(ma && mb && Number.isFinite(ma.tau) && Number.isFinite(mb.tau) && A?.S !== null && A?.S !== undefined && B?.S !== null && B?.S !== undefined);
-  if (!applied) return { p: prior, prior, dA, dB, termA: 0, termB: 0, shift: 0, applied, a: ma, b: mb };
+  if (!applied) return { p: prior, prior, dA, dB, termA: 0, termB: 0, ownerA: 0, ownerB: 0, shift: 0, applied, a: ma, b: mb };
   const termA = maturationTerm(ma!, dA, cfg), termB = maturationTerm(mb!, dB, cfg);
+  const ownerA = ownerTerm(ma!, dA, cfg), ownerB = ownerTerm(mb!, dB, cfg);
   const shift = dayShift(ma!, mb!, dA, dB, { config: cfg });
-  return { p: winProbOnDay(prior, shift), prior, dA, dB, termA, termB, shift, applied, a: ma, b: mb };
+  return { p: winProbOnDay(prior, shift), prior, dA, dB, termA, termB, ownerA, ownerB, shift, applied, a: ma, b: mb };
 }
