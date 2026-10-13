@@ -103,6 +103,7 @@
       {#each external as { team, ex } (team)}
         <div class="ext-side">
           <p class="ext-head">{team} <span class="ext-e">E <b>{ex.E}</b></span><span class="ext-count">({ex.count} 件)</span></p>
+          {#if ex.scrimWeight}<p class="muted">{ex.scrimWeight}</p>{/if}
           {#if ex.items.length}
             <ul>
               {#each ex.items as it}

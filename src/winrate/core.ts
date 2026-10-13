@@ -4,6 +4,7 @@
 // F-005 Task-3: 階級チームごとの仕上がり(共同プレイ歴 c・メタの近さ m・仕上がりの速さ τ)を teams[].maturation に出す(src/winrate/dynamics.ts)。
 // 試合ごとの事前の勝率は d = 0 の値のまま(試合日ごとの勝率は dynamics.ts の純粋な関数で画面が作る)
 // F-005 Task-2(基準4): 本番とスクリムの結果による θ の当て直し(src/winrate/update.ts)。試合ごとに、その試合日より前の結果で当て直す
+// F-005 Task-8(基準3c): 外部の見立ての項は λ × E。λ = scrimHalf ÷ (scrimHalf + その試合日より前のスクリムの試合数)
 // DOM と Node 固有の API に依存しない。気持ち・ドラフトの項は後のタスク(ここでは 0)
 import config from './config.json' with { type: 'json' };
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
@@ -15,12 +16,14 @@ import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMemb
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
 
-/** 外部の見立ての設定: 広がり、強さの重み(強・中・弱)、E の切り詰め(±clip)、話者の自チームについての項目の係数 */
+/** 外部の見立ての設定: 広がり、強さの重み(強・中・弱)、E の切り詰め(±clip)、話者の自チームについての項目の係数、見立てが半分になるスクリムの試合数 */
 export interface ExternalConfig {
   targetSd: number;
   strength: Record<string, number>;
   clip: number;
   selfTeam: number;
+  /** 基準3c: λ = scrimHalf ÷ (scrimHalf + n_s)。省略時は λ = 1(弱めない) */
+  scrimHalf?: number;
 }
 
 export interface WinrateConfig extends DynamicsConfig, ThetaConfig {
@@ -99,6 +102,10 @@ export interface TeamRow {
   maturation: Maturation;
   /** 基準4: すべての結果で当て直した θ と、使った本番・スクリムの試合数(結果が無ければ θ 0) */
   result: ThetaSide;
+  /** 基準3c: すべての結果でのスクリムの試合数 n_s、見立ての残り具合 λ(小数第二位)、λ × E(小数第二位) */
+  ns: number;
+  lambda: number;
+  lambdaE: number;
 }
 
 export interface MatchPrior {
@@ -116,6 +123,11 @@ export interface MatchPrior {
   /** 両チームの外部の見立て E */
   eA: number;
   eB: number;
+  /** 基準3c: その試合日より前の両チームのスクリムの試合数 n_s と、見立ての残り具合 λ(小数第二位) */
+  nsA: number;
+  nsB: number;
+  lambdaA: number;
+  lambdaB: number;
   beta: number;
   betaMacro: number;
   betaExt: number;
@@ -125,7 +137,7 @@ export interface MatchPrior {
   laneLogit: number;
   /** マクロ項 β_macro × (M_A − M_B)。M が無い側があれば 0 */
   macroLogit: number;
-  /** 外部の見立ての項 β_ext × (E_A − E_B) */
+  /** 外部の見立ての項 β_ext × (λ_A × E_A − λ_B × E_B)(基準3c) */
   extLogit: number;
   /** 基準6: ステージ補正(A の値 − B の値) */
   stageTerm: number;
@@ -268,7 +280,7 @@ export function computePriorWinrates(
       const ext = externalOf(views, key, cfg.external);
       // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
       const maturation = maturationOf(t?.members, opts.meta, cfg, t?.ownerViews ?? []);
-      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 } };
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 }, ns: 0, lambda: 1, lambdaE: ext.E };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
       else rows.push({ ...base, S: t.S, reason: null });
@@ -310,14 +322,28 @@ export function computePriorWinrates(
     }
     return thetaCache.get(ck)!;
   };
-  for (const r of rows) r.result = thetaOf(r.tier)[r.key];
+  // 基準3c: 試合日 before より前(無ければすべて)のスクリムで、その階級チームが出たゲームの数と λ。相手の階級は問わない
+  const lambdaOf = (key: string, before?: string) => {
+    const ns = results.filter((g) => g.kind === 'scrim' && (before === undefined || g.date < before) && (g.teams[0] === key || g.teams[1] === key)).length;
+    const half = cfg.external.scrimHalf;
+    return { ns, lambda: half === undefined || half <= 0 ? 1 : half / (half + ns) };
+  };
+  for (const r of rows) {
+    r.result = thetaOf(r.tier)[r.key];
+    const l = lambdaOf(r.key);
+    Object.assign(r, { ns: l.ns, lambda: r2(l.lambda), lambdaE: r2(l.lambda * r.E) });
+  }
 
   // 1組の勝率(A の対数オッズ = レーン項 + マクロ項 + 外部の見立ての項 + 結果による更新の項 + ステージ補正)。stage が無ければステージ補正なし。
   // before は試合日(その日より前の結果で θ を当て直す)。無ければすべての結果
   const prior = (tier: Tier, a: TeamId, b: TeamId, stage?: StageKey, before?: string) => {
     const A = sOf(a, tier), B = sOf(b, tier);
     const th = thetaOf(tier, before), tA = th[A.key], tB = th[B.key];
-    const thetaPart = { thetaA: tA.theta, thetaB: tB.theta, resultsA: tA.official + tA.scrim, resultsB: tB.official + tB.scrim };
+    const lA = lambdaOf(A.key, before), lB = lambdaOf(B.key, before);
+    const thetaPart = {
+      thetaA: tA.theta, thetaB: tB.theta, resultsA: tA.official + tA.scrim, resultsB: tB.official + tB.scrim,
+      nsA: lA.ns, nsB: lB.ns, lambdaA: r2(lA.lambda), lambdaB: r2(lB.lambda),
+    };
     const st = stage ? (cfg.stage[stage]?.[A.key] ?? 0) - (cfg.stage[stage]?.[B.key] ?? 0) : 0;
     const noM = [A, B].filter((x) => x.M === null);
     const macroMissing = noM.length ? `マクロの点数が無い(${noM.map((x) => `${x.key}: ${x.macroReason}`).join(' / ')})` : null;
@@ -329,7 +355,8 @@ export function computePriorWinrates(
     }
     const lane = beta[tier] * (A.S - B.S);
     const macro = A.M === null || B.M === null ? 0 : betaMacro[tier] * (A.M - B.M);
-    const ext = betaExt[tier] * (A.E - B.E);
+    // 基準3c: β_ext は λ を掛ける前の E から決めたまま、項だけ λ × E の差にする
+    const ext = betaExt[tier] * (lA.lambda * A.E - lB.lambda * B.E);
     const thetaLogit = tA.theta - tB.theta;
     const logit = lane + macro + ext + thetaLogit + st;
     const [pA, pB] = percents(sigmoid(logit));
