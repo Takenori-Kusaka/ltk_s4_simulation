@@ -77,6 +77,9 @@ export interface MatchMaturation {
   dB: number;
   termA: number;
   termB: number;
+  /** F-005 基準17・18: 価値責任者の見立ての項(伸びしろ + 勢い)。無ければ 0 */
+  ownerA?: number;
+  ownerB?: number;
   /** 切り詰めた後の加算(A − B) */
   shift: number;
   pPriorA: number;
@@ -180,6 +183,8 @@ export interface MaturationSide {
   mPoolHits: string[];
   /** "0.00(連敗 0)" */
   mood: string;
+  /** F-005 基準20: 価値責任者の見立て(伸びしろの項と勢いの項、G・V、原文)。項目が無ければ null */
+  owner: { term: string; G: string; V: string; items: string[] } | null;
 }
 export interface MaturationLayer {
   a: MaturationSide;
@@ -351,7 +356,7 @@ const signed3 = (x: number) => (x < 0 ? '' : '+') + f3(x);
 const CAP = (winrateConfig as { unvalidatedCap: number }).unvalidatedCap;
 
 /** F-005 基準12: 仕上がりの片側。連敗 k は本番の結果が入るまで 0 */
-function maturationSideOf(d: number, term: number, m: Maturation): MaturationSide {
+function maturationSideOf(d: number, term: number, m: Maturation, owner = 0): MaturationSide {
   const byPlayer = new Map<string, string[]>();
   for (const h of m.mPoolHits) byPlayer.set(h.name, [...(byPlayer.get(h.name) ?? []), `${h.champion}(段階${h.tier})`]);
   return {
@@ -364,6 +369,14 @@ function maturationSideOf(d: number, term: number, m: Maturation): MaturationSid
     mPool: f2(m.mPool),
     mPoolHits: [...byPlayer].map(([name, champs]) => `${name}: ${champs.join('、')}`),
     mood: '0.00(連敗 0)',
+    owner: m.owner
+      ? {
+          term: signed3(owner),
+          G: f2(m.owner.G),
+          V: f2(m.owner.V),
+          items: m.owner.items.map((v) => `${v.axis === 'growth' ? '伸びしろ' : '勢い'} ${v.direction === '+' ? '肯定' : '否定'}・${v.strength}(${v.name}、${v.date}):「${v.quote}」`),
+        }
+      : null,
   };
 }
 
@@ -376,11 +389,11 @@ function maturationLayerOf(input: StoryInput): MaturationLayer | null {
   const faster = tauA === tauB ? `仕上がりの速さは同じ(τ ${f2(tauA)} 試合日)` : `先に仕上がるのは ${tauA < tauB ? nameA : nameB}(τ ${f2(Math.min(tauA, tauB))} 試合日 vs ${f2(Math.max(tauA, tauB))} 試合日。小さいほど早い)`;
   const shift = Math.round(x.shift * 1000) / 1000;
   const summary = x.dA === 0 && x.dB === 0
-    ? `初日はどちらも仕上がり前(項は 0)。${faster}`
+    ? `初日はどちらも仕上がり前(項は 0)。${shift === 0 ? '' : `価値責任者の見立ての勢いで ${signed3(shift)}(${shift > 0 ? nameA : nameB} に有利)。`}${faster}`
     : `ここまで ${nameA} は ${x.dA} 試合日、${nameB} は ${x.dB} 試合日を戦った。仕上がりの差は ${signed3(shift)}(${shift === 0 ? 'どちらにも寄らない' : `${shift > 0 ? nameA : nameB} に有利`})。${faster}`;
   return {
-    a: maturationSideOf(x.dA, x.termA, x.a),
-    b: maturationSideOf(x.dB, x.termB, x.b),
+    a: maturationSideOf(x.dA, x.termA, x.a, x.ownerA ?? 0),
+    b: maturationSideOf(x.dB, x.termB, x.b, x.ownerB ?? 0),
     shift: signed3(shift),
     pDay: f1(input.pA),
     pPrior: f1(x.pPriorA),

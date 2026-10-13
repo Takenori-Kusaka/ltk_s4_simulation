@@ -14,6 +14,7 @@
 | Task-4 | S1〜S3 での当てはまりの確認の命令と記録、常識の検査 K-08・K-09(反したら勝率表を書かずに失敗) | 13, 15 | `scripts/winrate-backtest.mjs`、`src/winrate/checks.ts`、`src/rating/known-facts.json`、`tests/winrate/checks.test.ts` | Task-2, Task-3 | 不可 |
 | Task-6 | (2026-10-10 追加。再判定)マクロ項と外部の見立て: マクロの点数 M(連携の厚み・司令塔の素点の平均)、外部の見立ての点数 E(external-views.json)、β_macro・β_ext、レーン相対とマクロ相対の勝率、掛け合わせ(対数オッズの和)、勝率表のファイルへの p_lane・p_macro・p_ext・M・E の書き出し | 2, 3, 3b, 7 | `src/winrate/core.ts`、`src/winrate/config.json`、`src/collect/aggregate-cli.ts`、`tests/winrate/core.test.ts` | Task-1 | 可 |
 | Task-5 | 試合の分析ページ(事前と更新後の勝率、上位3つの要因、β、区間、仕上がりと気持ちの内訳、予測と実際の結果) | 5, 8, 12 | `src/app/match/**`、`src/app/components/App.svelte`、`src/app/lib/index.ts`、`src/app/app.css`、`tests/app/match.test.ts` | Task-4 | 不可 |
+| Task-7 | (2026-10-12 追加)価値責任者の見立ての伸びしろの項と勢いの項: 伸びしろの点 G・勢いの点 V(F-009 の見立ての記録)、項の計算(基準13 の切り詰めの外)、勝率表のファイルの仕上がりへの G・V・項目の書き出し、試合の分析ページの仕上がりの小節の「価値責任者の見立て」の行。当てはまりの確認の 3 通りの比較(基準19 の後半)は F-004 基準23 の命令の後 | 17, 18, 19, 20 | `src/winrate/dynamics.ts`、`src/winrate/core.ts`、`src/winrate/config.json`、`src/collect/aggregate-cli.ts`、`src/app/story/**`、`src/app/schedule/view.ts`、`tests/winrate/owner-terms.test.ts` | Task-3、F-009 Task-14、F-010 Task-8 | 可 |
 
 ## 粒度の確認
 
