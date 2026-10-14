@@ -61,7 +61,17 @@ export function oppAdjustVariants(cfg: Pick<EngineConfig, 'oppAdjust'>): EngineV
   ];
 }
 
-const officialOf =(games: readonly ResultsGame[]) => games.filter((g) => g.kind === 'official' && g.tier !== null);
+/** 基準43: 本番の重み officialGameWeight を評価設定のままにした組、scrimGameWeight と同じ値にした組、0 にした組 */
+export function officialWeightVariants(cfg: Pick<EngineConfig, 'scrimGameWeight' | 'officialGameWeight'>): EngineVariant[] {
+  const scrim = cfg.scrimGameWeight ?? 1;
+  return [
+    { key: 'official-config', label: `officialGameWeight ${cfg.officialGameWeight ?? 1}(設定の値)`, engine: {} },
+    { key: 'official-scrim', label: `officialGameWeight ${scrim}(scrimGameWeight と同じ値)`, engine: { officialGameWeight: scrim } },
+    { key: 'official-0', label: 'officialGameWeight 0', engine: { officialGameWeight: 0 } },
+  ];
+}
+
+const officialOf = (games: readonly ResultsGame[]) => games.filter((g) => g.kind === 'official' && g.tier !== null);
 
 export function enoughOfficialGames(games: readonly ResultsGame[]): boolean {
   return officialOf(games).length >= MIN_OFFICIAL_GAMES;
