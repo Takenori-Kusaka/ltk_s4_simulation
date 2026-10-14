@@ -235,6 +235,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "アイバーン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "アーゴット",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ルシアン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ケイトリン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ヴェイン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "アンベッサ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "スカーナー",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "リサンドラ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "レネクトン",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ドクター・ムンド",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ロック",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ゼリ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   },
   {
@@ -473,6 +615,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "オラフ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ランブル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ルシアン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ケイトリン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ノーチラス",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ナー",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ヴェイン",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "マオカイ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "アジール",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "レネクトン",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "オレリオン・ソル",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   },
   {
@@ -711,6 +995,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "マルザハール",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "オレリオン・ソル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ジャーヴァンⅣ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ルシアン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "リサンドラ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "フェイ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "セジュアニ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ケイトリン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ニーコ",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "カミール",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "スカーナー",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ツイステッド・フェイト",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   }
 ]

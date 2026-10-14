@@ -479,6 +479,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "リー・シン",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ポッピー",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "パイク",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "リリア",
+        "role": "JG"
+      },
+      {
+        "order": 9,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": 10,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "エズリアル",
+        "role": "ADC"
+      },
+      {
+        "order": 11,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ニーコ",
+        "role": "SUP"
+      },
+      {
+        "order": 12,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 13,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "サイオン",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ビクター",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ツイステッド・フェイト",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ナフィーリ",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "リサンドラ",
+        "role": "MID"
+      },
+      {
+        "order": 19,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "カ・サンテ",
+        "role": "TOP"
+      },
+      {
+        "order": 20,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      }
+    ],
     "notes": "この試合はリプレイで 2 回振り返られている(7:04〜7:14 と 9:00〜9:22)。7:04:40 の時点(試合時間 31:45)で LR CORE が 11-7 でリードしており、そこから DD CORE が逆転した"
   },
   {
@@ -720,6 +862,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "リー・シン",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ポッピー",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ツイステッド・フェイト",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ロック",
+        "role": "MID"
+      },
+      {
+        "order": 8,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "アカリ",
+        "role": "MID"
+      },
+      {
+        "order": 9,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "パンテオン",
+        "role": "JG"
+      },
+      {
+        "order": 10,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": 11,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      },
+      {
+        "order": 12,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ベイガー",
+        "role": "ADC"
+      },
+      {
+        "order": 13,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "オーン",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ヴェイン",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ナー",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 18,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "スカーナー",
+        "role": "JG"
+      },
+      {
+        "order": 19,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "カ・サンテ",
+        "role": "TOP"
+      },
+      {
+        "order": 20,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ヨリック",
+        "role": "TOP"
+      }
+    ],
     "notes": "この試合のあと配信の終わり(9:50:32)までは、この試合と 2 つ前の試合のリプレイの振り返りと、2026/10/09 の別の試合(対 RRJ・寝すぎた黒猫らのチーム、LR の勝利 39:43)の試合履歴とリプレイで、新しい実戦はない"
   }
 ]

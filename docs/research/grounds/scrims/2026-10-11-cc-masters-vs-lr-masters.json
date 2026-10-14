@@ -235,6 +235,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ハイマーディンガー",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "ヨネ",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "シンドラ",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "キヤナ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ルシアン",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ケイトリン",
+        "role": "ADC"
+      },
+      {
+        "order": 8,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": 9,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ヴァイ",
+        "role": "JG"
+      },
+      {
+        "order": 10,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ザーヘン",
+        "role": "JG"
+      },
+      {
+        "order": 11,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "オーロラ",
+        "role": "MID"
+      },
+      {
+        "order": 12,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "カシオペア",
+        "role": "MID"
+      },
+      {
+        "order": 13,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "バード",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "マルファイト",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "ニーコ",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ノーチラス",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "レオナ",
+        "role": "SUP"
+      },
+      {
+        "order": 18,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ブラウム",
+        "role": "SUP"
+      },
+      {
+        "order": 19,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": 20,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ジリアン",
+        "role": "TOP"
+      }
+    ],
     "notes": null
   },
   {
@@ -473,6 +615,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ハイマーディンガー",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "キヤナ",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "シンドラ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "グラガス",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      },
+      {
+        "order": 8,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": 9,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      },
+      {
+        "order": 10,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      },
+      {
+        "order": 11,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": 12,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "JG"
+      },
+      {
+        "order": 13,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ジグス",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "ライズ",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "サイラス",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "CC MASTERS",
+        "type": "BAN",
+        "champion": "オリアナ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ゼラス",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ランブル",
+        "role": "TOP"
+      },
+      {
+        "order": 19,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ボリベア",
+        "role": "MID"
+      },
+      {
+        "order": 20,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "アンベッサ",
+        "role": "TOP"
+      }
+    ],
     "notes": null
   },
   {
