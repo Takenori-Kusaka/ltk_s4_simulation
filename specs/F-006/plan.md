@@ -16,7 +16,7 @@
 | Task-6 | 相手からの BAN 数 b・n_s・n_o の集計と、予想の出力の `scrimDraft`、NEXT のプロテクトの値への `protect.banBonus`(n_s が 2 以上)と理由の文 | 13, 14 | `src/predict/scrim-draft.ts`、`src/predict/protect.ts`、`src/predict/next-draft.ts`、`src/predict/config.json`、`src/collect/aggregate-cli.ts`、`tests/predict/scrim-draft.test.ts`、`tests/predict/protect.test.ts` | Task-2, Task-5 | 不可 |
 | Task-7 | 試合の分析ページの BAN 候補の下のスクリムの BAN・ピックの集計(相手から BAN された上位 5 体、自分の BAN の上位 5 体、最初のピック、n_s・n_o、「BAN の記録なし」「順の記録なし」) | 15 | `src/app/match/**`(Task-4 と同じ置き場)、`tests/app/match-scrim-draft.test.ts` | Task-4, Task-6 | 不可 |
 
-(2026-10-14 追記)LTKDB の BP詳細を記録の `draft` へ写す変換は F-004 の Task-14(F-004 基準 44〜47。G-4 再判定 3 `docs/gates/g4-F-004-2026-10-14-rejudge3.md` で判定待ち)。Task-6・Task-7 の集計の n_s・n_o は、F-004 Task-14 のマージ後の取り込みまで、すべての階級チームで 0 になる。
+(2026-10-14 追記)LTKDB の BP詳細を記録の `draft` へ写す変換は F-004 の Task-14(F-004 基準 44〜47。G-4 再判定 3 `docs/gates/g4-F-004-2026-10-14-rejudge3.md` で判定待ち)。既存の 14 試合の記録への `draft` は記録だけの PR で足す(F-004 決定 D9)。どちらかが入るまで、Task-6・Task-7 の集計の n_s・n_o はすべての階級チームで 0 になる。
 
 ## 粒度の確認
 
