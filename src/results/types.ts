@@ -24,6 +24,8 @@ export interface PlayerResult {
   championId: number | null;
   kills: number; deaths: number; assists: number; gold: number; damage: number;
   cs: number | null; level: number | null; goldPerMin: number | null;
+  /** 基準25: 14 分時点の CS(記録に無ければ null) */
+  cs14: number | null;
   mappingConfidence: MappingConfidence;
   /** 基準6: 「未確認」の行は使わない(false)。後続のタスクが試合の記録を作るときに見る */
   use: boolean;
@@ -43,22 +45,29 @@ export interface MatchResult {
   /** 記録のファイル名(置き場の中の名前)と要素の番号 */
   file: string;
   index: number;
-  duration: string;
-  durationSec: number;
+  /** 基準28: 結果だけの記録(選手の行・チームの値を持たない)。F-005 の結果の入力にだけ使い、個人の評価・ピックプール・キーマンに使わない */
+  resultOnly: boolean;
+  /** 結果だけの記録は duration を持たなければ null */
+  duration: string | null;
+  durationSec: number | null;
+  /** 基準25: 14 分の CS を計測した時刻(秒)。無ければ null */
+  cs14Sec: number | null;
+  /** 記録の game(試合の番号)。スクリムでは持たなければ null(用語「スクリムの試合 ID の n」) */
+  game: number | null;
   /** 2 つの階級チーム ID(辞書順) */
   teams: [TierTeamId, TierTeamId];
   winner: TierTeamId;
   sides: { blue: TierTeamId; red: TierTeamId } | null;
   source: ResultSource;
   official: OfficialInfo | null;
-  /** 階級チーム ID → チームの値と 5 人の行 */
+  /** 階級チーム ID → チームの値と 5 人の行。結果だけの記録は空 */
   stats: Record<string, TeamResult>;
 }
 
 /** 基準4: 反した欄。index が null ならファイル全体のエラー */
 export interface ResultError { file: string; index: number | null; field: string; message: string }
-/** 基準5・7: 使わない記録と理由 */
-export interface ExcludedRecord { file: string; index: number; reason: 'リスナー参加' | '重複'; detail: string }
+/** 基準5・7・30: 使わない記録と理由 */
+export interface ExcludedRecord { file: string; index: number; reason: 'リスナー参加' | '重複' | '置き換え'; detail: string }
 /** 基準6: 「未確認」で使わない選手の行 */
 export interface UnconfirmedRow { file: string; index: number; team: TierTeamId; role: Role; rosterName: string }
 

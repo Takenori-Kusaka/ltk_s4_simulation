@@ -68,12 +68,13 @@ function parsePlayer(p: unknown, teamId: TierTeamId, label: string, j: number, b
   else if (typeof p.champion === 'string' && champions && !champions.names.has(p.champion)) fail('champion', `チャンピオンの一覧(Data Dragon ${champions.version ?? '?'})に無い名前`);
   for (const k of ['kills', 'deaths', 'assists', 'gold', 'damage'] as const) if (!count(p[k])) fail(k, '0 以上の整数');
   for (const k of ['cs', 'level', 'goldPerMin'] as const) if (p[k] != null && numOrNull(p[k]) === null) fail(k, '数か null');
+  if (p.cs14 != null && !count(p.cs14)) fail('cs14', '0 以上の整数か null');
   if (!ok) return null;
   const champion = p.champion as string | null;
   return {
     playerId: entry!.id, rosterName: entry!.name, role: role!, champion, championId: championKeyOf(champions, champion),
     kills: p.kills as number, deaths: p.deaths as number, assists: p.assists as number, gold: p.gold as number, damage: p.damage as number,
-    cs: numOrNull(p.cs), level: numOrNull(p.level), goldPerMin: numOrNull(p.goldPerMin), mappingConfidence: conf!, use: conf !== '未確認',
+    cs: numOrNull(p.cs), level: numOrNull(p.level), goldPerMin: numOrNull(p.goldPerMin), cs14: numOrNull(p.cs14), mappingConfidence: conf!, use: conf !== '未確認',
   };
 }
 
@@ -145,13 +146,19 @@ function parseElement(file: string, index: number, kind: ResultKind, fileDate: s
   else if (raw.date !== fileDate) bad('date', `ファイル名の日付 ${fileDate} と一致しない`);
   if (typeof raw.listeners !== 'boolean') bad('listeners', 'true か false');
   if (!isObj(raw.source) || typeof raw.source.url !== 'string' || !raw.source.url.trim()) bad('source.url', '出典の URL が無い');
+  if (raw.resultOnly !== undefined && typeof raw.resultOnly !== 'boolean') bad('resultOnly', 'true か false');
   if (errors.length) return result();
   const date = raw.date as string;
   // 基準5: リスナー参加の記録は、中身を検証せず(名簿外の参加者がいる)、どの計算にも使わない
   if (raw.listeners === true) return result(null, { file, index, reason: 'リスナー参加', detail: `${date} の記録。計算に使わない` });
 
-  const durationSec = parseDuration(raw.duration);
-  if (durationSec === null) bad('duration', 'mm:ss の形');
+  // 基準28: 結果だけの記録は duration・チームの値・選手の行を持たなくてよい。duration を持てば mm:ss の形
+  const resultOnly = raw.resultOnly === true;
+  const durationSec = resultOnly && raw.duration == null ? null : parseDuration(raw.duration);
+  if (durationSec === null && !(resultOnly && raw.duration == null)) bad('duration', 'mm:ss の形');
+  // 基準1・28: スクリムの game は任意(結果だけの記録は必須)。本番の game は parseOfficial が見る
+  const hasGame = raw.game !== undefined && raw.game !== null;
+  if (kind === 'scrim' && (hasGame || resultOnly) && !(count(raw.game) && (raw.game as number) >= 1)) bad('game', resultOnly ? '結果だけの記録は 1 以上の試合の番号を持つ' : '1 以上の整数');
   const teamsRaw = isObj(raw.teams) ? raw.teams : null;
   const labels = teamsRaw ? Object.keys(teamsRaw) : [];
   const idOf = new Map<string, TierTeamId>();
@@ -179,6 +186,10 @@ function parseElement(file: string, index: number, kind: ResultKind, fileDate: s
       bad(`teams.${label}`, 'チームの記録(オブジェクト)でない');
       continue;
     }
+    if (resultOnly) {
+      if (Array.isArray(t.players) && t.players.length > 0) bad(`teams.${label}.players`, '結果だけの記録は選手の行を持たない');
+      continue;
+    }
     const players = Array.isArray(t.players) ? t.players : null;
     if (!players || players.length !== 5) bad(`teams.${label}.players`, '5 人の選手の行');
     const rows = (players ?? []).map((p, j) => parsePlayer(p, id, label, j, bad, champions)).filter((r): r is PlayerResult => r !== null);
@@ -191,14 +202,30 @@ function parseElement(file: string, index: number, kind: ResultKind, fileDate: s
     }
     stats[id] = { kills: t.kills as number, deaths: t.deaths as number, assists: t.assists as number, gold: t.gold as number, players: rows };
   }
+  // 基準25: 14 分の CS の計測時刻(本番の記録にも同じ範囲を当てる)
+  const cs14Sec = raw.cs14Sec ?? null;
+  if (cs14Sec !== null && !(Number.isInteger(cs14Sec) && (cs14Sec as number) >= 780 && (cs14Sec as number) <= 900)) bad('cs14Sec', '780 以上 900 以下の整数(秒)');
+  else if (cs14Sec === null && Object.values(stats).some((t) => t.players.some((p) => p.cs14 !== null))) bad('cs14Sec', 'cs14 を持つ選手の行があるのに cs14Sec が無い');
   const teamIds = [...idOf.values()].sort() as [TierTeamId, TierTeamId];
   // 基準1・3: 本番の欄と日程
   const official = kind === 'official' ? parseOfficial(raw, teamIds, date, sides, bad) : null;
   if (errors.length) return result();
   return result({
-    matchId: official?.matchId ?? '', kind, date, file, index, duration: raw.duration as string, durationSec: durationSec!,
+    matchId: official?.matchId ?? '', kind, date, file, index, resultOnly, duration: durationSec === null ? null : (raw.duration as string), durationSec,
+    cs14Sec: cs14Sec as number | null, game: hasGame ? (raw.game as number) : null,
     teams: teamIds, winner: winner!, sides, source: raw.source as ResultSource, official: official?.info ?? null, stats,
   });
+}
+
+/**
+ * 用語「同じ試合」: (a) どちらも source.ltkdbMatchId を持ち一致する。(b) kind・date・2 つの階級チームが同じで、
+ * 本番は試合 ID、スクリムは両方の game が同じ。どちらも ltkdbMatchId を持ち値が違えば同じ試合としない
+ */
+function sameMatch(a: MatchResult, b: MatchResult): boolean {
+  const la = a.source.ltkdbMatchId, lb = b.source.ltkdbMatchId;
+  if (typeof la === 'string' && typeof lb === 'string') return la === lb;
+  if (a.kind !== b.kind || a.date !== b.date || a.teams.join('|') !== b.teams.join('|')) return false;
+  return a.kind === 'official' ? a.matchId === b.matchId : a.game !== null && a.game === b.game;
 }
 
 /**
@@ -225,27 +252,53 @@ export function collectResults(files: readonly ResultFile[], ctx: ResultsContext
       });
     }
   }
+  // 基準7: 選手の行を持つスクリムの重複(結果だけの記録は duration を持たないため対象にしない)
+  const firstOf = new Map<string, MatchResult>();
+  const candidates: MatchResult[] = [];
+  for (const g of parsed) {
+    if (g.kind === 'scrim' && !g.resultOnly) {
+      const key = `${g.date}|${g.teams.join('|')}|${g.durationSec}`;
+      const first = firstOf.get(key);
+      if (first) {
+        out.excluded.push({ file: g.file, index: g.index, reason: '重複', detail: `${first.file}[${first.index}] と同じ試合(${g.date}・${g.teams.join(' 対 ')}・${g.duration})` });
+        continue;
+      }
+      firstOf.set(key, g);
+    }
+    candidates.push(g);
+  }
+  // 基準30: 同じ試合の結果だけの記録 1 件と選手の行を持つ記録 1 件は、選手の行を持つ記録だけを使う。3 件以上の同じ試合は基準3・7 の検査に任せる
+  const replaced = new Set<MatchResult>();
+  for (const r of candidates.filter((x) => x.resultOnly)) {
+    const same = candidates.filter((x) => x !== r && sameMatch(x, r));
+    const full = same.length === 1 && !same[0].resultOnly ? same[0] : null;
+    if (!full || candidates.some((x) => x !== full && x !== r && sameMatch(x, full))) continue;
+    replaced.add(r);
+    if (full.winner !== r.winner) out.errors.push({ file: r.file, index: r.index, field: 'winner', message: `同じ試合の ${full.file}[${full.index}] の winner ${full.winner} と食い違う` });
+    else out.excluded.push({ file: r.file, index: r.index, reason: '置き換え', detail: `${full.file}[${full.index}](選手の行を持つ記録)と同じ試合。結果だけの記録を使わない` });
+  }
+  const used = candidates.filter((x) => !replaced.has(x));
   const kept = new Map<string, MatchResult>();
-  const officials = parsed.filter((x) => x.kind === 'official');
+  const officials = used.filter((x) => x.kind === 'official');
   for (const g of officials) {
     const others = officials.filter((x) => x !== g && x.matchId === g.matchId);
     if (others.length) out.errors.push({ file: g.file, index: g.index, field: 'matchId', message: `同じ試合 ID ${g.matchId} の記録が ${others.map((x) => `${x.file}[${x.index}]`).join('・')} にもある` });
     else kept.set(g.matchId, g);
   }
-  const firstOf = new Map<string, MatchResult>();
+  // 用語「スクリムの試合 ID の n」: game を持てばその値、持たなければ同じ日・同じ組の game を持たない記録の通し番号
   const counter = new Map<string, number>();
-  for (const g of parsed.filter((x) => x.kind === 'scrim')) {
+  const byId = new Map<string, MatchResult[]>();
+  for (const g of used.filter((x) => x.kind === 'scrim')) {
     const pair = `${g.date}|${g.teams.join('|')}`;
-    const first = firstOf.get(`${pair}|${g.durationSec}`);
-    if (first) {
-      out.excluded.push({ file: g.file, index: g.index, reason: '重複', detail: `${first.file}[${first.index}] と同じ試合(${g.date}・${g.teams.join(' 対 ')}・${g.duration})` });
-      continue;
-    }
-    firstOf.set(`${pair}|${g.durationSec}`, g);
-    const n = (counter.get(pair) ?? 0) + 1;
-    counter.set(pair, n);
+    const n = g.game ?? (counter.get(pair) ?? 0) + 1;
+    if (g.game === null) counter.set(pair, n);
     g.matchId = `SC-${g.date.replace(/-/g, '')}-${g.teams[0]}-${g.teams[1]}-G${n}`;
-    kept.set(g.matchId, g);
+    byId.set(g.matchId, [...(byId.get(g.matchId) ?? []), g]);
+  }
+  // 基準7(追記): 同じ試合でない 2 件の n が重なれば基準4 のとおり扱う
+  for (const [id, list] of byId) {
+    if (list.length === 1) kept.set(id, list[0]);
+    else for (const g of list) out.errors.push({ file: g.file, index: g.index, field: 'game', message: `試合 ID ${id} の n が ${list.filter((x) => x !== g).map((x) => `${x.file}[${x.index}]`).join('・')} と重なる` });
   }
   if (out.errors.length) return out;
   out.games = [...kept.values()].sort((a, b) => cmp(a.date, b.date) || cmp(a.file, b.file) || a.index - b.index);
@@ -286,5 +339,8 @@ export function summarizeResults(r: LoadedResults): string {
   const n = (kind: ResultKind) => r.games.filter((g) => g.kind === kind).length;
   const ex = (reason: ExcludedRecord['reason']) => r.excluded.filter((x) => x.reason === reason).length;
   const tail = r.errors.length ? `。エラー ${r.errors.length} 件(評価と勝率表を書かない)` : '';
-  return `試合結果の記録: ファイル ${r.files.length} 件から本番 ${n('official')} 試合・スクリム ${n('scrim')} 試合を読んだ。除外: リスナー参加 ${ex('リスナー参加')} 件・重複 ${ex('重複')} 件。選手の行: 未確認 ${r.unconfirmed.length}(使わない)・推定 ${r.estimated}${tail}`;
+  // 基準29: 結果だけの記録(F-005 の結果の入力にだけ使う)の件数とファイル名
+  const ro = r.games.filter((g) => g.resultOnly);
+  const roNote = `結果だけ ${ro.length} 件${ro.length ? `(${ro.map((g) => `${g.file}[${g.index}]`).join('・')}。チームの強さにだけ使う)` : ''}`;
+  return `試合結果の記録: ファイル ${r.files.length} 件から本番 ${n('official')} 試合・スクリム ${n('scrim')} 試合を読んだ(うち${roNote})。除外: リスナー参加 ${ex('リスナー参加')} 件・重複 ${ex('重複')} 件・置き換え ${ex('置き換え')} 件。選手の行: 未確認 ${r.unconfirmed.length}(使わない)・推定 ${r.estimated}${tail}`;
 }

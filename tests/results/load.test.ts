@@ -339,3 +339,166 @@ test('既存の記録: docs/research/grounds/scrims の 2026-10-09 のスクリ�
   assert.equal(r.excluded.filter((x) => x.file === REAL_FILE).length, 0);
   assert.ok(r.files.includes(`scrims/${REAL_FILE}`));
 });
+
+// ---- F-004 Task-6: 受入基準 25・28・29・30(と基準 1・3・5・7 の 2026-10-14 の追記)。実装を読まずに受入基準から書いた ----
+
+const LTKDB = 'https://demo-lab0110.github.io/ltk-schedule-status-site/';
+const withSource = (rec: Row, ltkdbMatchId?: string): Row => ({ ...rec, source: ltkdbMatchId ? { url: LTKDB, ltkdbMatchId } : { url: LTKDB } });
+/** 結果だけの記録(スクリム): LR CORE 対 DD CORE、勝者 DD CORE */
+const resultOnly = (over: Row = {}): Row => ({
+  kind: 'scrim', resultOnly: true, date: '2026-10-10', game: 1, listeners: false, source: { url: LTKDB }, winner: 'DD CORE', teams: { 'LR CORE': {}, 'DD CORE': {} }, ...over,
+});
+/** 結果だけの記録(本番): 1 日目の CC NEXT 対 DD NEXT */
+const resultOnlyOfficial = (over: Row = {}): Row => ({
+  kind: 'official', resultOnly: true, date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, listeners: false,
+  source: { url: 'https://www.youtube.com/watch?v=official' }, winner: 'CC NEXT', teams: { 'CC NEXT': {}, 'DD NEXT': {} }, ...over,
+});
+
+test('基準28: 結果だけの記録は duration・チームの値・選手の行が無くても受け付け、resultOnly の印と試合 ID を持つ', () => {
+  const r = one([resultOnly()]);
+  assert.deepEqual(r.errors, []);
+  assert.equal(r.games.length, 1);
+  const g = r.games[0];
+  assert.deepEqual([g.resultOnly, g.kind, g.teams, g.winner, g.matchId, g.duration, g.durationSec], [true, 'scrim', ['DD-CORE', 'LR-CORE'], 'DD-CORE', 'SC-20261010-DD-CORE-LR-CORE-G1', null, null]);
+  assert.equal(one([scrim()]).games[0].resultOnly, false, '選手の行を持つ記録は false');
+  // チームの値があっても、mm:ss の duration があってもよい
+  assert.deepEqual(one([resultOnly({ duration: '31:02', teams: { 'LR CORE': { kills: 3 }, 'DD CORE': {} } })]).errors, []);
+  // 本番の結果だけの記録: 日程と一致すれば受け付け、試合 ID は選手の行を持つ記録と同じ
+  const off = one([resultOnlyOfficial()], RS_FILE, 'official');
+  assert.deepEqual(off.errors, []);
+  assert.deepEqual([off.games[0].matchId, off.games[0].resultOnly], ['RS-1-CC-DD-NEXT', true]);
+});
+
+test('基準28: 結果だけの記録で、選手の行を持つ・game が無い・duration が mm:ss でない・必須の欄が無い記録はエラー。本番は日程と一致しなければエラー', () => {
+  assert.ok(fields(one([resultOnly({ teams: { 'LR CORE': teamOf('LR CORE'), 'DD CORE': {} } })])).some((f) => f.startsWith('teams.LR CORE')), '選手の行を持つ');
+  assert.ok(fields(one([resultOnly({ teams: { 'LR CORE': { players: [{ role: 'TOP' }] }, 'DD CORE': {} } })])).some((f) => f.startsWith('teams.LR CORE')), '1 行でも選手の行を持つ');
+  const noGame = resultOnly();
+  delete noGame.game;
+  assert.ok(fields(one([noGame])).includes('game'), 'game が無い');
+  assert.ok(fields(one([resultOnly({ game: 0 })])).includes('game'), 'game は 1 以上');
+  assert.ok(fields(one([resultOnly({ duration: '31分' })])).includes('duration'), 'duration の形');
+  assert.ok(fields(one([resultOnly({ resultOnly: 'yes' })])).includes('resultOnly'), 'resultOnly は真偽値');
+  for (const key of ['kind', 'date', 'winner', 'teams', 'source', 'listeners']) {
+    const rec = resultOnly();
+    delete rec[key];
+    const r = one([rec]);
+    assert.ok(r.errors.some((e) => e.field === key || e.field.startsWith(`${key}.`)), `${key}: ${JSON.stringify(r.errors)}`);
+    assert.equal(r.games.length, 0, key);
+  }
+  assert.ok(fields(one([resultOnly({ winner: 'DD NEXT' })])).includes('winner'));
+  assert.ok(fields(one([resultOnly()], '2026-10-11-x.json')).includes('date'));
+  const off = (over: Row) => fields(one([resultOnlyOfficial(over)], RS_FILE, 'official'));
+  assert.ok(off({ day: 2, date: '2026-10-19' }).length > 0, '2 日目に CC 対 DD は無い');
+  assert.ok(off({ sides: { 'CC NEXT': 'レッド', 'DD NEXT': 'ブルー' } }).includes('sides'));
+  assert.ok(off({ stage: undefined }).includes('stage'));
+  assert.ok(off({ game: 2 }).includes('game'));
+});
+
+test('基準1・7(追記): スクリムの記録は任意で game(1 以上の整数)を持ち、試合 ID の n はその値。持たない記録は持たない記録だけで数える', () => {
+  assert.ok(fields(one([scrim({ game: 0 })])).includes('game'));
+  assert.ok(fields(one([scrim({ game: '2' })])).includes('game'));
+  const r = one([scrim({ game: 2 }), scrim({ duration: '30:00' })]);
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(r.games.map((g) => g.matchId).sort(), ['SC-20261010-DD-CORE-LR-CORE-G1', 'SC-20261010-DD-CORE-LR-CORE-G2']);
+  // 結果だけの記録は duration を持たないため、基準 7 の重複にしない
+  const two = one([resultOnly(), resultOnly({ game: 2 })]);
+  assert.deepEqual([two.errors, two.excluded], [[], []]);
+  assert.equal(two.games.length, 2);
+});
+
+test('基準7(追記): 同じ日・同じ組で、同じ試合でない 2 件の試合 ID の n が重なればエラー(source.ltkdbMatchId が違えば同じ試合としない)', () => {
+  const clash = one([withSource(scrim({ game: 1 }), 'SCRIM_A_001'), withSource(scrim({ game: 1, duration: '30:00' }), 'SCRIM_A_002')]);
+  assert.ok(clash.errors.length > 0, '両方が game 1、ltkdbMatchId が違う');
+  assert.equal(clash.games.length, 0);
+  // game を持たない記録の通し番号 1 と、game 1 の結果だけの記録(別の試合)が重なる
+  const counted = one([withSource(scrim(), 'SCRIM_A_002'), withSource(resultOnly({ game: 1 }), 'SCRIM_A_001')]);
+  assert.ok(counted.errors.length > 0, JSON.stringify(counted.errors));
+  // 重ならなければ両方使う
+  const ok = one([scrim(), resultOnly({ game: 2 })]);
+  assert.deepEqual(ok.errors, []);
+  assert.equal(ok.games.length, 2);
+});
+
+test('基準5(追記): listeners が true の結果だけの記録も、どの計算にも使わず「リスナー参加」を出す', () => {
+  const r = one([resultOnly({ listeners: true })]);
+  assert.deepEqual([r.errors, r.games.length], [[], 0]);
+  assert.deepEqual(r.excluded.map((x) => [x.file, x.index, x.reason]), [[SCRIM_FILE, 0, 'リスナー参加']]);
+});
+
+test('基準30: 同じ試合の結果だけの記録と選手の行を持つ記録があれば、選手の行を持つ記録だけを使い、結果だけの記録を「置き換え」として出す', () => {
+  // (a) ltkdbMatchId が一致(結果だけの記録のファイルが辞書順で先でも)
+  const a = run([
+    { file: '2026-10-10-a-result-only.json', kind: 'scrim', raw: [withSource(resultOnly({ game: 3 }), 'SCRIM_X_001')] },
+    { file: '2026-10-10-b-full.json', kind: 'scrim', raw: [withSource(scrim(), 'SCRIM_X_001')] },
+  ]);
+  assert.deepEqual(a.errors, []);
+  assert.deepEqual(a.games.map((g) => [g.file, g.resultOnly]), [['2026-10-10-b-full.json', false]]);
+  assert.deepEqual(a.excluded.map((x) => [x.file, x.index, x.reason]), [['2026-10-10-a-result-only.json', 0, '置き換え']]);
+  assert.match(a.excluded[0].detail, /2026-10-10-b-full\.json\[0\]/);
+  assert.match(summarizeResults(a), /置き換え 1/);
+  // (b) ltkdbMatchId を持たず、両方の game が同じ
+  const b = one([resultOnly({ game: 2 }), scrim({ game: 2 })]);
+  assert.deepEqual(b.errors, []);
+  assert.deepEqual(b.games.map((g) => [g.index, g.matchId]), [[1, 'SC-20261010-DD-CORE-LR-CORE-G2']]);
+  assert.deepEqual(b.excluded.map((x) => [x.index, x.reason]), [[0, '置き換え']]);
+  // 本番: 同じ試合 ID の結果だけの記録 1 件と選手の行を持つ記録 1 件は「1 件だけ」に反したとしない
+  const off = run([
+    { file: '2026-10-15-cc-next-vs-dd-next.json', kind: 'official', raw: [resultOnlyOfficial()] },
+    { file: RS_FILE, kind: 'official', raw: [official()] },
+  ]);
+  assert.deepEqual(off.errors, []);
+  assert.deepEqual(off.games.map((g) => [g.file, g.matchId, g.resultOnly]), [[RS_FILE, 'RS-1-CC-DD-NEXT', false]]);
+  assert.deepEqual(off.excluded.map((x) => [x.file, x.reason]), [['2026-10-15-cc-next-vs-dd-next.json', '置き換え']]);
+});
+
+test('基準30: 同じ試合の 2 つの記録の winner が食い違えばエラー。ltkdbMatchId が違えば game が同じでも同じ試合としない', () => {
+  const w = one([resultOnly({ game: 2, winner: 'LR CORE' }), scrim({ game: 2 })]);
+  assert.ok(w.errors.some((e) => e.field === 'winner'), JSON.stringify(w.errors));
+  assert.equal(w.games.length, 0);
+  const off = run([
+    { file: '2026-10-15-cc-next-vs-dd-next.json', kind: 'official', raw: [resultOnlyOfficial({ winner: 'DD NEXT' })] },
+    { file: RS_FILE, kind: 'official', raw: [official()] },
+  ]);
+  assert.ok(off.errors.some((e) => e.field === 'winner'), JSON.stringify(off.errors));
+  const differ = one([withSource(resultOnly({ game: 2 }), 'SCRIM_X_001'), withSource(scrim({ game: 2 }), 'SCRIM_X_002')]);
+  assert.ok(differ.errors.length > 0, '別の試合で n が重なる');
+  assert.ok(differ.excluded.every((x) => x.reason !== '置き換え'));
+});
+
+test('基準25: cs14Sec は 780 以上 900 以下の整数、cs14 は 0 以上の整数か null、cs14 が null でない行がある記録は cs14Sec を持つ(本番の記録にも当てる)', () => {
+  const withCs = (rec: Row, cs14: unknown, sec?: unknown, label = 'DD CORE') => {
+    if (sec !== undefined) rec.cs14Sec = sec;
+    team(rec, label).players[0].cs14 = cs14;
+    return rec;
+  };
+  const r = one([withCs(scrim(), 103, 840)]);
+  assert.deepEqual(r.errors, []);
+  assert.equal(r.games[0].cs14Sec, 840);
+  assert.equal(r.games[0].stats['DD-CORE'].players.find((p) => p.role === 'TOP')!.cs14, 103);
+  assert.equal(r.games[0].stats['LR-CORE'].players[0].cs14, null, '持たない行は null');
+  assert.equal(one([scrim()]).games[0].cs14Sec, null);
+  for (const sec of [779, 901, 840.5, '840']) assert.ok(fields(one([withCs(scrim(), 103, sec)])).includes('cs14Sec'), String(sec));
+  for (const sec of [780, 900]) assert.deepEqual(one([withCs(scrim(), 103, sec)]).errors, [], String(sec));
+  for (const cs of [-1, 1.5, '103']) assert.ok(fields(one([withCs(scrim(), cs, 840)])).includes('teams.DD CORE.players[0].cs14'), String(cs));
+  assert.deepEqual(one([withCs(scrim(), null)]).errors, [], 'null だけなら cs14Sec は要らない');
+  assert.ok(fields(one([withCs(scrim(), 103)])).includes('cs14Sec'), 'cs14 があるのに cs14Sec が無い');
+  assert.ok(fields(one([withCs(official(), 103, 700, 'DD NEXT')], RS_FILE, 'official')).includes('cs14Sec'), '本番にも範囲を当てる');
+  assert.deepEqual(one([withCs(official(), 103, 840, 'DD NEXT')], RS_FILE, 'official').errors, []);
+});
+
+test('基準29: 集計の出力に結果だけの記録の件数とファイル名を示し、結果だけの記録を results.json の games[] に 1 試合として書く', async () => {
+  const RO_FILE = '2026-10-10-lr-core-vs-dd-core-result-only.json';
+  const r = run([{ file: SCRIM_FILE, kind: 'scrim', raw: [scrim()] }, { file: RO_FILE, kind: 'scrim', raw: [resultOnly({ game: 2 })] }]);
+  assert.deepEqual(r.errors, []);
+  const line = summarizeResults(r);
+  assert.match(line, /結果だけ 1 件/);
+  assert.ok(line.includes(`${RO_FILE}[0]`), line);
+  assert.match(line, /スクリム 2 試合/, '結果だけの記録も試合に数える');
+  const root = tempRoot({ [`scrims/${SCRIM_FILE}`]: [scrim()], [`scrims/${RO_FILE}`]: [resultOnly({ game: 2 })] });
+  const env = cliEnv();
+  const code = await main({ ...env, resultsRoot: root });
+  assert.ok(code === 0 || code === 2, `終了コード ${code}\n${env.lines.join('\n')}`);
+  assert.ok(env.lines.some((l) => /結果だけ 1 件/.test(l) && l.includes(RO_FILE)), env.lines.join('\n'));
+  const results = JSON.parse(readFileSync(join(env.publicDir, 'results.json'), 'utf8')) as { games: { matchId: string; kind: string; winner: string }[] };
+  assert.deepEqual(results.games.map((g) => [g.matchId, g.kind, g.winner]), [['SC-20261010-DD-CORE-LR-CORE-G1', 'scrim', 'DD-CORE'], ['SC-20261010-DD-CORE-LR-CORE-G2', 'scrim', 'DD-CORE']]);
+});
