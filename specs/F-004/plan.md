@@ -23,6 +23,7 @@
 | Task-11 | (2026-10-14 追加)14 分の CS をレーン戦へ: 記録の `cs14` から指標 `csAt14` を作る(TOP・JG・MID・ADC)、レーン戦の軸の定義への指標の追加、名簿の階級チーム同士の試合の同じロールの差の分布での標準化と組の数の下限 `cs14MinPairs`、説明の「n 試合を含む」の数え方 | 26, 27, 39, 40 | `src/results/to-games.ts`、`src/rating/axes.json`、`src/rating/engine.ts`、`src/rating/axes.ts`、`src/rating/types.ts`、`src/rating/config.json`、`tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/axes.test.ts` | Task-2、Task-6(`cs14` の欄の検証) | 可(Task-12 と。`src/rating/types.ts`・`config.json` に触るため、マージは順に) |
 | Task-12 | (2026-10-14 追加)本番の試合を個人の評価へ: 本番の記録の選手の行から `kind: official` の試合の記録を作ること(結果だけの記録は除く)、`officialGameWeight` の重み、調子の係数とピックプールの数え方、説明の「本番 n 試合(重み w)を含む」 | 41, 42 | `src/results/to-games.ts`、`src/rating/types.ts`、`src/rating/engine.ts`、`src/rating/axes.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-2、Task-6(結果だけの記録の受け口) | 可(Task-11 と。同上) |
 | Task-13 | (2026-10-14 追加)当てはまりの確認に `officialGameWeight` の 3 通り(設定の値・`scrimGameWeight` と同じ値・0)の比較を足す | 43 | `src/results/fit.ts`、`src/results/fit-cli.ts`、`tests/results/fit.test.ts` | Task-5、Task-12 | 可 |
+| Task-14 | (2026-10-14 追加)LTKDB の BAN・ピックを記録の `draft` へ: BP詳細の行から `draft` を作る規則(`team`・`type`・`role`、チャンピオン名の正規化と「NOBAN」・空の BAN の null、`order` と要素の並び)、`draft` を書かない試合の条件と出力、既存の記録への `draft` の追記と食い違いの訂正の候補、置き換えの記録への `draft`、要約の項目 | 44, 45, 46, 47 | `.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs`、`.claude/skills/input-ltkdb/SKILL.md`、`tests/results/ltkdb-convert.test.ts`、`tests/results/fixtures/**` | Task-7、Task-8、F-006 Task-5 | 否(Task-8・Task-9 と同じファイルに触る) |
 
 **対応する受入基準のないタスクを作らないでください**。何のための作業か分からないタスクは、完了の判定ができません。
 
@@ -46,6 +47,9 @@
 | 変更行数(2026-10-14 追記。Task-6〜10) | 800 | Task-6 約 350 / Task-7 約 500 / Task-8 約 400 / Task-9 約 120 / Task-10 約 150 |
 | 変更ファイル数(同上) | 15 | Task-6 5 / Task-7 4〜8(固定データを含む)/ Task-8 4〜8 / Task-9 2 / Task-10 5 |
 | レビュー所要時間(同上) | 30分 | Task-6・Task-8 各 25〜30 分 / Task-7 30 分 / Task-9・Task-10 各 15 分 |
+| 変更行数(2026-10-14 追記。Task-14) | 800 | Task-14 約 460(変換のスクリプト約 120 は算定の外。テスト約 200、固定データ約 260 = BP詳細の階級チーム同士の 260 行を 1 行 1 レコードで) |
+| 変更ファイル数(同上) | 15 | Task-14 4〜5 |
+| レビュー所要時間(同上) | 30分 | Task-14 25 分 |
 
 上限を超える見込みのタスクは分割します。**目安は行数ではなくレビュー可能性です**。行数は実装コードの差分で数え、記録のファイル(`docs/research/grounds/scrims/*.json`)・チャンピオンの一覧(`data/public/champions.json`)・自動生成ファイルは除きます。
 
@@ -70,6 +74,7 @@
 | 26, 27, 39, 40(2026-10-14) | 単体(TOP・JG・MID・ADC の `csAt14`、SUP と `cs14` が null の試合に持たせないこと、`maxCsAdvantageOnLaneOpponent` を作らないこと、平均 0・二乗平均平方根の分布、リスナー参加と結果だけの記録とソロランクの試合を分布に入れないこと、組の数が 7 と 8 の境界、説明の n) | `tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/axes.test.ts` |
 | 41, 42(2026-10-14) | 単体(本番の行から `official` の記録ができ結果だけの記録からはできないこと、重み 4.0 での n・縮小・確度、調子の係数に入らないこと、ピックプールで 1 試合、説明の文の有無) | `tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` |
 | 43(2026-10-14) | 単体(固定の予測と結果で 3 通りの比較、推奨の文が無いこと) | `tests/results/fit.test.ts` |
+| 44, 45, 46, 47(2026-10-14) | 単体(LTKDB の 2026-10-14 の BP詳細の階級チーム同士の 15 試合 260 行を写した固定データで、順のある試合・順の無い試合・PICK だけの試合の `draft`、「NOBAN」「NO BAN」と空の BAN が null になること、BAN の `role` が null になること、要素の並び、「BP順」が一部だけ・重複する合成の試合で `order` が全要素 null になること、ロールの空の PICK(MASTERS CC 対 LR の 1 試合目)・PICK 4 行・名前の空の PICK・選手の行と食い違う PICK の合成の試合で `draft` を書かずに記録を書くこと、BP詳細の無い試合に `draft` の欄が無いこと、既存の記録へ `draft` だけを足し他の欄と要素の並びが変わらないこと、`draft` を持つ記録との食い違いが訂正の候補になり書き換えないこと、置き換えの記録に `draft` が入ること、要約の項目と終了コード 10、書いた `draft` が読み込み(F-006 基準 12)を通ること) | `tests/results/ltkdb-convert.test.ts` |
 
 テストは**実装より先に生成します**。実装コードをテスト生成の入力に渡しません。
 
@@ -84,6 +89,7 @@
 | 5 | Task-7 | 層4 のマージ後の main | LTKDB の変換(本番・結果だけ・写し・要約) |
 | 6 | Task-8・Task-9 | 層5 のマージ後の main | 変換の置き換え・訂正の候補・検証・照合 / 取り込みのワークフロー(並列。どちらも `.claude/skills/input-ltkdb/SKILL.md` に触るため、マージは順に) |
 | —(層4〜6 と独立) | Task-10 | Task-3 のマージ後の main | 連敗の数 k を気持ちの補正へ |
+| 7(2026-10-14 追記) | Task-14 | Task-8 と F-006 Task-5 のマージ後の main | LTKDB の BAN・ピックを記録の `draft` へ |
 
 ## AI エージェントへ与える分割の指示
 
@@ -97,8 +103,11 @@
 
 - (2026-10-14 追記)Task-11・Task-12 は、F-009 の Task-16〜18(安定感・レーン戦の確度・相手の強さ)と同じ `src/rating/` のファイルに触る。マージは Task-11 → Task-12 → F-009 Task-16〜18 の順にする
 - (2026-10-14 追記)価値責任者が確定する値(`officialGameWeight`、`cs14MinPairs`、JG に 14 分の CS を使うか)は、確定の前は仕様の起案の値を評価設定に置き、`_comment` に「価値責任者の確定を要する」と書く
+- (2026-10-14 追記)Task-14 は `.claude/**` を変えるため、PR に `state:needs-platform` を付けて AI維持管理者の確認を経る。Task-14 の PR は記録のファイル(`docs/research/grounds/**`)を変えない。既存の記録への `draft` の追記(基準 46)は、マージ後の変換の実行(取り込みのワークフローの Draft PR)で入る。価値責任者が確定する事項(既存の記録へ足すこと、本番の記録にも書くこと、順の欠ける試合の扱い、ロールのそろわない試合に書かないこと)は、確定の前は仕様の起案のとおりに実装する
 
 2026-10-14 追記(Task-11〜13): 再判定の記録は `docs/gates/g4-F-004-2026-10-14-rejudge2.md`。判定日と結果は判定者が書く。
+
+2026-10-14 追記(Task-14): 再判定の記録は `docs/gates/g4-F-004-2026-10-14-rejudge3.md`。判定日と結果は判定者が書く。
 
 ## 承認(G-4)
 
