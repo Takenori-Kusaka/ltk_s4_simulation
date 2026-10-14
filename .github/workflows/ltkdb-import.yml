@@ -1,8 +1,11 @@
-# LTKDB からスクリムの試合結果を毎日取り込む(/input-ltkdb の機械の部分)
+# LTKDB から試合結果を毎日取り込む(/input-ltkdb の機械の部分。F-004 基準 38)
 #
 # 価値責任者の求め(2026-10-12): LTKDB を毎日集計して勝率へ反映する。
 # 変換は生成 AI を使わないスクリプト(.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs)。
-# 新しい試合があれば、記録を足すブランチを push して Draft PR を出す。マージと Ready は人。
+# 変換は出力の最後の行に JSON の要約を出す。このワークフローは要約を読み、
+# - 書かなかった本番の試合と訂正の候補の試合 ID ごとに、開いた Issue が無ければ `state:needs-po` の Issue を 1 件作る
+# - 書いたファイルか置き換えがあれば、実行ごとに違う名前のブランチを push して Draft PR を出す(`scrims/` と `results/`)
+# マージと Ready は人。PR を作れなかった場合も Issue は作り、ジョブを失敗にする(黙って成功にしない)。
 # 勝率への反映は、マージの後に価値責任者の手元で集計を流したときに起きる(data/raw は手元にだけある)。
 
 name: ltkdb-import
@@ -15,6 +18,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write # 基準 38 の Issue(試合 ID ごと)を作るため
 
 concurrency:
   group: ltkdb-import
@@ -39,8 +43,51 @@ jobs:
           set -e
           echo "code=$code" >> "$GITHUB_OUTPUT"
           { echo '## LTKDB の取り込み'; echo; echo '```'; cat convert.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-          # 0 = 新しい試合なし、10 = 書いたファイルがある、それ以外 = 失敗
+          # 0 = 新しい試合なし、10 = 書いたファイルか置き換えがある、それ以外 = 失敗
           if [ "$code" != 0 ] && [ "$code" != 10 ]; then exit "$code"; fi
+          # 出力の最後の行が要約。JSON として読めなければ失敗にする
+          tail -n 1 convert.log > summary.json
+          jq -e 'type == "object"' summary.json > /dev/null
+
+      - name: 書かなかった本番と訂正の候補の Issue を作る
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # 開いた Issue の題名(試合 ID を含む題名があれば作らない)
+          gh issue list --state open --limit 1000 --json title --jq '.[].title' > open-titles.txt
+          made=0
+          make_issue() { # $1 = 試合 ID、$2 = 題名、$3 = 本文のファイル
+            if grep -qF -- "$1" open-titles.txt; then echo "既にある: $1"; return; fi
+            gh issue create --title "$2" --body-file "$3" --label 'state:needs-po'
+            echo "$2" >> open-titles.txt
+            made=$((made + 1))
+          }
+          jq -c '.skipped.official[]?' summary.json > official.jsonl
+          while IFS= read -r x; do
+            id=$(jq -r '.id' <<< "$x")
+            {
+              echo "LTKDB の本番の試合 \`$id\` を、変換(\`.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs\`)が \`results/\` へ書かなかった(F-004 基準 32)。"; echo
+              echo "- 試合日: $(jq -r '.date' <<< "$x")"
+              echo "- 2 チーム: $(jq -r '.teams | join(" 対 ")' <<< "$x")"
+              echo "- 勝利チーム: $(jq -r '.winner' <<< "$x")"
+              echo "- 理由: $(jq -r '.reason' <<< "$x")"; echo
+              echo "LTKDB の値・名簿・公式の日程のどれを直すか、取り込まないかは価値責任者が決める。実行: $RUN_URL"; echo
+              echo '```json'; jq . <<< "$x"; echo '```'
+            } > issue.md
+            make_issue "$id" "LTKDB の本番 $id を取り込めなかった" issue.md
+          done < official.jsonl
+          jq -c '.corrections[]?' summary.json > corrections.jsonl
+          while IFS= read -r x; do
+            id=$(jq -r '.id // .matchId // "試合 ID なし"' <<< "$x")
+            {
+              echo "置き場の記録と LTKDB の現在の値が試合 \`$id\` で食い違う(訂正の候補。F-004 基準 34)。変換は置き場の記録を書き換えていない。"; echo
+              echo "どちらを正とするかは価値責任者が決める。実行: $RUN_URL"; echo
+              echo '```json'; jq . <<< "$x"; echo '```'
+            } > issue.md
+            make_issue "$id" "LTKDB の訂正の候補 $id" issue.md
+          done < corrections.jsonl
+          echo "作った Issue: $made 件" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: 記録の読み込みをテストで通す
         if: steps.convert.outputs.code == '10'
@@ -52,13 +99,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           day=$(TZ=Asia/Tokyo date +%Y%m%d)
-          branch="docs/input-ltkdb-${day}"
+          # 実行ごとに違う名前(同じ日の再実行・手動の実行でも重ならない)
+          branch="docs/input-ltkdb-${day}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           git config user.name 'github-actions[bot]'
           git config user.email '41898+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git add docs/research/grounds/scrims/
+          for d in docs/research/grounds/scrims docs/research/grounds/results; do
+            if [ -d "$d" ]; then git add -- "$d"; fi
+          done
           printf '%s\n\n%s\n\n%s\n' \
-            "docs: LTKDB からスクリムの試合結果を取り込む(${day})" \
+            "docs: LTKDB から試合結果を取り込む(${day})" \
             'ltkdb-import ワークフローの機械の変換(.claude/skills/input-ltkdb)。' \
             'Spec: setup' > msg.txt
           git commit -F msg.txt
@@ -67,8 +117,9 @@ jobs:
             echo '## 対応タスク'; echo
             echo 'LTKDB の毎日の取り込み(`.github/workflows/ltkdb-import.yml`)。トレーラは末尾の節。'; echo
             echo '## 変更の概要'; echo
-            echo '名簿の階級チーム同士のスクリムのうち、新しい試合の記録を足した。変換の出力:'; echo
+            echo '名簿の階級チーム同士のスクリム(`scrims/`)と、公式の日程と一致した本番(`results/`)のうち、新しい試合の記録を足した(置き換えを含む)。変換の出力:'; echo
             echo '```'; cat convert.log; echo '```'; echo
+            echo '書かなかった本番と訂正の候補は、試合 ID ごとの Issue(`state:needs-po`)にした。'
             echo '`docs/research/grounds/scrims/README.md` の表の行は、この PR の上で人か担い手が足す(/input-ltkdb の手順 4)。'; echo
             echo '## 検証方法と結果'; echo
             echo '## AI 関与範囲'; echo
@@ -81,6 +132,16 @@ jobs:
             echo '## トレーラ(スカッシュのメッセージの末尾になる。この節を末尾に保つ)'; echo
             echo 'Spec: setup'
           } > body.md
+          set +e
           gh pr create --draft --base main --head "$branch" \
-            --title "docs: LTKDB からスクリムの試合結果を取り込む(${day})" \
-            --body-file body.md --label 'state:needs-dev'
+            --title "docs: LTKDB から試合結果を取り込む(${day})" \
+            --body-file body.md --label 'state:needs-dev' 2> pr-error.log
+          rc=$?
+          set -e
+          if [ "$rc" != 0 ]; then
+            cat pr-error.log
+            msg="Draft PR を作れなかった。ブランチ ${branch} は push 済み。人が手で PR を作るか、リポジトリの設定(Actions に PR の作成を許す)を見直す"
+            echo "::error::${msg}"
+            { echo; echo "**${msg}**"; echo; echo '```'; cat pr-error.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi

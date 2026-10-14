@@ -40,7 +40,13 @@ description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試�
 6. コミット(Author は指示した人、日本語、末尾の段落に `Spec: setup` と `Co-Authored-By: <モデルの名称と版>`)。公開の前の点検(`.claude/skills/data-update/reference/integrate.md` の 5)を流す
 7. push して Draft PR を出す(本文は `.github/PULL_REQUEST_TEMPLATE.md` から。リスク区分は前例の R3 を草案として残し、確定は人)。ラベル `state:needs-dev`。CI が全件 success になってから `state:dev-done`。マージと Ready は人
 
-毎日の取り込みは GitHub Actions のワークフロー `.github/workflows/ltkdb-import.yml` が行う(手順 2・3 と Draft PR。手順 4 の README の行は PR の上で足す)。手動で流すときは Actions の画面から workflow_dispatch で実行するか、この手順で流す。Claude の定期実行には頼らない(価値責任者の指示 2026-10-12: git 資産にならない仕組みにしない)。
+毎日の取り込みは GitHub Actions のワークフロー `.github/workflows/ltkdb-import.yml` が行う(手順 2・3 と Draft PR。手順 4 の README の行は PR の上で足す)。ワークフローは変換の要約(出力の最後の行)を読み、次を行う(基準 38):
+
+- `skipped.official`(書かなかった本番)と `corrections`(訂正の候補)の試合 ID ごとに、その試合 ID を題名に含む開いた Issue が無ければ、理由と要約の要素を本文に持つ Issue をラベル `state:needs-po` で 1 件作る。終了コード 0(新しい試合なし)でも作る
+- 終了コード 10 なら、実行ごとに違う名前のブランチ `docs/input-ltkdb-<YYYYMMDD>-<実行番号>-<試行番号>` へ `scrims/` と `results/` の変更を commit して push し、Draft PR(ラベル `state:needs-dev`)を出す
+- Draft PR を作れなかった場合(リポジトリの設定で Actions に PR の作成が許されていない場合など)も Issue は作り、ブランチは push したまま、ジョブを失敗にしてエラーと実行の要約に残す。人がそのブランチから PR を作る
+
+手動で流すときは Actions の画面から workflow_dispatch で実行するか、この手順で流す。Claude の定期実行には頼らない(価値責任者の指示 2026-10-12: git 資産にならない仕組みにしない)。
 
 価値責任者は 2026-10-12 に、LTKDB を毎日集計して勝率へ反映することを求め、この取り込みの Draft PR の push を承認した(「今後もここを1日おきに集計し、勝率へどんどん反映し、より確度をあげていけるようにしましょう」。頻度は毎日と確認)。
 
