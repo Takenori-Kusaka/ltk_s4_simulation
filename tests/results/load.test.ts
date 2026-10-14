@@ -589,11 +589,13 @@ test('基準12: null の order と null でない order の混在、各チーム
   assert.ok(draftField({ picks: [] }).length > 0, '配列でない');
 });
 
-test('基準12: 既存の記録(draft の欄が無い)は影響を受けず、すべての試合の draft が null', () => {
-  const champPath = 'data/public/champions.json';
-  const champions = existsSync(champPath) ? readChampionList(JSON.parse(readFileSync(champPath, 'utf8'))).list : null;
-  const r = loadResults({ root: 'docs/research/grounds', champions });
+test('基準12: draft の欄が無い記録(選手の行を持つ記録・結果だけの記録・本番)は draft が null で、検証に影響しない', () => {
+  // 置き場の実データには決定 D9(F-004)で draft が入るため、固定データで確かめる。実データがエラー 0 で読めることは「既存の記録」のテストが確かめる
+  const r = run([
+    { file: SCRIM_FILE, kind: 'scrim', raw: [scrim(), resultOnly({ game: 2 })] },
+    { file: RS_FILE, kind: 'official', raw: [official()] },
+  ]);
   assert.deepEqual(r.errors.map(formatResultError), []);
-  assert.ok(r.games.length > 0);
+  assert.equal(r.games.length, 3);
   assert.ok(r.games.every((g) => g.draft === null));
 });
