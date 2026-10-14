@@ -85,6 +85,11 @@ export interface MetricDef {
   mode: MetricMode;
   /** このロールでだけ使う(省略時は全ロール) */
   positions?: string[];
+  /**
+   * 標準化に使う分布(F-004 基準39・40)。results = 名簿の階級チーム同士の実戦の記録(スクリム・本番)の 1 試合 1 ロール 1 組の差の分布
+   * (平均 0・二乗平均平方根)。ソロランクの母集団(buildPopulation)には入れず、組の数が下限に満たないロールではその指標を除く。省略時はソロランクの母集団
+   */
+  population?: 'results';
 }
 
 export interface DataAxisDef {
@@ -115,6 +120,8 @@ export interface EngineConfig {
   confidence: { high: number; mid: number };
   /** スクリム 1 試合の重み(F-004 基準13。新しさの重みに掛ける。省略時 1) */
   scrimGameWeight?: number;
+  /** 実戦の記録の分布(MetricDef.population = results)を作る組の数の下限(F-004 基準40。初期値 8。省略時 0 = 下限なし) */
+  cs14MinPairs?: number;
   /** ブランク 1 年あたりの減衰(点。基準33・34。初期値 0.3。省略時 0 = 減衰しない) */
   blankDecayPerYear?: number;
   /** 減衰しない猶予の年数(初期値 1。省略時 0) */

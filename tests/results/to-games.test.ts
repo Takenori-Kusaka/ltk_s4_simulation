@@ -6,7 +6,8 @@ import { collectResults, loadResults } from '../../src/results/load.ts';
 import { buildResultsFile, resultGamesOf } from '../../src/results/official.ts';
 import { readChampionList } from '../../src/results/champions.ts';
 import { formFactor } from '../../src/rating/form.ts';
-import { loadEngineConfig, selectGames } from '../../src/rating/engine.ts';
+import { buildResultsPopulation, loadEngineConfig, selectGames } from '../../src/rating/engine.ts';
+import { DATA_AXES } from '../../src/rating/axes.ts';
 import { ROSTER } from '../../src/data/roster.ts';
 
 type Row = Record<string, unknown>;
@@ -143,4 +144,60 @@ test('基準29: 結果だけの記録は F-009 の試合の記録(ピックプ�
   assert.deepEqual(file.games.map((g) => [g.matchId, g.kind, g.winner]), [['RS-1-CC-DD-NEXT', 'official', 'CC-NEXT']]);
   assert.deepEqual(file.teams.filter((t) => t.key === 'DD-NEXT' || t.key === 'CC-NEXT').map((t) => [t.key, t.k, t.form]).sort(), [['CC-NEXT', 0, 'W'], ['DD-NEXT', 1, 'L']]);
   assert.equal(scrimGameRecords(off.games).size, 0);
+});
+
+// ---- F-004 Task-11: 受入基準 26(指標 csAt14)・39(階級チーム同士の分布。リスナー参加・結果だけの記録・ソロランクを入れない)。受入基準から書いた ----
+
+/** 記録の cs14Sec 840 と、ロール → 14 分の CS(null は欄が null) */
+const withCs14 = (rec: Row, lr: (number | null)[], dd: (number | null)[]): Row => {
+  team(rec, 'LR CORE').players.forEach((p, i) => { p.cs14 = lr[i]; });
+  team(rec, 'DD CORE').players.forEach((p, i) => { p.cs14 = dd[i]; });
+  return { ...rec, cs14Sec: 840 };
+};
+
+test('基準26: TOP・JG・MID・ADC で両方の行に cs14 があれば csAt14(自分は自分、対面は対面の cs14)。片方が null の ADC・SUP・cs14 の無い記録には持たせず、maxCsAdvantageOnLaneOpponent は作らない', () => {
+  // ロールの順は TOP・JG・MID・ADC・SUP。LR CORE 100・80・110・120・20、DD CORE 90・85・100・null・25
+  const rec = withCs14(record({ game: 1 }), [100, 80, 110, 120, 20], [90, 85, 100, null, 25]);
+  const old = record({ game: 2 });
+  const by = load([rec, old]);
+  const first = (id: string) => by.get(id)!.find((g) => g.matchId.endsWith('-G1'))!;
+  assert.deepEqual([first('DD-CORE-TOP').me.csAt14, first('DD-CORE-TOP').opp?.csAt14], [90, 100]);
+  assert.deepEqual([first('LR-CORE-TOP').me.csAt14, first('LR-CORE-TOP').opp?.csAt14], [100, 90]);
+  assert.deepEqual([first('DD-CORE-JG').me.csAt14, first('DD-CORE-JG').opp?.csAt14], [85, 80]);
+  assert.deepEqual([first('DD-CORE-MID').me.csAt14, first('DD-CORE-MID').opp?.csAt14], [100, 110]);
+  for (const id of ['DD-CORE-ADC', 'LR-CORE-ADC', 'DD-CORE-SUP', 'LR-CORE-SUP']) {
+    assert.equal('csAt14' in first(id).me, false, `${id} me`);
+    assert.equal('csAt14' in (first(id).opp ?? {}), false, `${id} opp`);
+  }
+  // cs14 の無い記録(2 試合目)はどのロールにも持たせない
+  for (const gs of by.values()) {
+    const g2 = gs.find((g) => g.matchId.endsWith('-G2'))!;
+    assert.equal('csAt14' in g2.me, false);
+    for (const g of gs) {
+      assert.equal('maxCsAdvantageOnLaneOpponent' in g.me, false);
+      assert.equal('maxCsAdvantageOnLaneOpponent' in (g.opp ?? {}), false);
+    }
+  }
+});
+
+test('基準39: 分布は 1 試合の 1 ロールにつき 1 組。リスナー参加の記録・結果だけの記録・ソロランクの試合は入れず、平均 0・二乗平均平方根', () => {
+  // TOP の差: 1 試合目 LR 100 − DD 90 = 10、2 試合目 LR 100 − DD 70 = 30。二乗平均平方根 √((100 + 900) ÷ 2) = √500 = 22.3607
+  const g1 = withCs14(record({ game: 1 }), [100, 80, 110, 120, 20], [90, 85, 100, 115, 25]);
+  const g2 = withCs14(record({ game: 2 }), [100, 80, 110, 120, 20], [70, 85, 100, 115, 25]);
+  // リスナー参加の記録(TOP の差 200)は計算に使わない(基準5)
+  const lis = withCs14(record({ game: 3, listeners: true }), [300, 80, 110, 120, 20], [100, 85, 100, 115, 25]);
+  const ro: Row = { kind: 'scrim', resultOnly: true, date: '2026-10-10', game: 4, listeners: false, source: { url: 'https://demo-lab0110.github.io/ltk-schedule-status-site/' }, winner: 'LR CORE', teams: { 'LR CORE': {}, 'DD CORE': {} } };
+  const r = collectResults([{ file: SCRIM_FILE, kind: 'scrim', raw: [g1, g2, lis, ro] }], { champions: CHAMPS });
+  assert.deepEqual(r.errors, []);
+  const records = [...scrimGameRecords(r.games).values()].flat();
+  // ソロランクの試合(kind なし)に csAt14 があっても入れない(TOP の差 500)
+  const solo = { matchId: 'JP1_1', endTime: NOON_JST, durationMin: 30, queueId: 420, position: 'TOP', me: { csAt14: 600 }, opp: { csAt14: 100 } };
+  const out = buildResultsPopulation([...records, solo], DATA_AXES, 0);
+  assert.equal(out.pairs.TOP.csAt14, 2, '両チームの記録があっても 1 試合 1 組');
+  const dist = out.population.TOP['csAt14:diff'];
+  assert.equal(dist.mean, 0);
+  assert.equal(dist.count, 2);
+  assert.ok(Math.abs(dist.sd - Math.sqrt(500)) < 1e-9, `${dist.sd}`);
+  // SUP は分布を作らない
+  assert.equal(out.population.UTILITY?.['csAt14:diff'], undefined);
 });

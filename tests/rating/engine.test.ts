@@ -550,3 +550,75 @@ test('基準42: 大会のロールの試合が下限未満なら確度は「低�
   // 0 件(推定)でも理由を示す
   assert.deepEqual(roleGamesFloor({ confidence: '低', confidenceReason: 'y' }, 0, 5), { confidence: '低', confidenceReason: 'y。大会のロールの試合 0 件(5 未満)' });
 });
+
+// ---- F-004 Task-11: 受入基準 39(csAt14 の差を階級チーム同士の試合の分布で標準化)・40(組の数の下限)。受入基準から書いた ----
+import { buildResultsPopulation } from '../../src/rating/engine.ts';
+
+const csAxis: DataAxisDef = {
+  key: 'laningTest',
+  label: 'レーン戦(テスト)',
+  rankWeight: 0.5,
+  roleDependent: false,
+  metrics: [{ key: 'csAt14', weight: 1, mode: 'diff', positions: ['TOP', 'JUNGLE'], population: 'results' }],
+};
+/** 実戦の記録 1 試合の両チームの記録(自分と対面を入れ替えた 2 件。同じ試合 ID) */
+const bothSides = (matchId: string, position: string, a: number, b: number): GameRecord[] => [
+  { ...game({ matchId, position, me: { csAt14: a }, opp: { csAt14: b } }), queueId: 0, kind: 'scrim' },
+  { ...game({ matchId, position, me: { csAt14: b }, opp: { csAt14: a } }), queueId: 0, kind: 'scrim' },
+];
+// TOP 8 試合の差 10, −20, 30, −40, 5, 15, −25, 35(平均 1.25)。二乗の和 100+400+900+1600+25+225+625+1225 = 5100、
+// 二乗平均平方根 √(5100 ÷ 8) = √637.5 = 25.2488(平均のまわりの標準偏差 √(637.5 − 1.5625) = 25.2179 とは違う)
+const TOP_DIFFS = [10, -20, 30, -40, 5, 15, -25, 35];
+const RMS8 = Math.sqrt(637.5);
+const topGames = TOP_DIFFS.flatMap((d, i) => bothSides(`SC-T${i}`, 'TOP', 100 + d, 100));
+// JG 7 試合(下限 8 に 1 組足りない)
+const jgGames = Array.from({ length: 7 }, (_, i) => bothSides(`SC-J${i}`, 'JUNGLE', 90 + i, 90)).flat();
+// ソロランクの試合(kind なし)に csAt14 があっても入れない
+const soloCs = [1, 2, 3].map((i) => game({ matchId: `JP1_${i}`, position: 'TOP', me: { csAt14: 500 }, opp: { csAt14: 0 } }));
+
+test('基準39: csAt14 の差の分布は実戦の記録の 1 試合 1 ロール 1 組から、平均 0・標準偏差は二乗平均平方根。ソロランクの試合は入れない', () => {
+  const out = buildResultsPopulation([...topGames, ...soloCs], [csAxis], 8);
+  assert.equal(out.pairs.TOP.csAt14, 8);
+  const d = out.population.TOP['csAt14:diff'];
+  assert.equal(d.mean, 0);
+  assert.equal(d.count, 8);
+  assert.ok(Math.abs(d.sd - RMS8) < 1e-9, `${d.sd}`);
+  assert.ok(Math.abs(d.sd - 25.2488) < 1e-4);
+});
+
+test('基準39: ソロランクの母集団(buildPopulation)は csAt14 の分布を作らない', () => {
+  const pop = buildPopulation([
+    { participants: [{ position: 'TOP', teamId: 100, stats: { csAt14: 120 } }, { position: 'TOP', teamId: 200, stats: { csAt14: 100 } }] },
+    { participants: [{ position: 'TOP', teamId: 100, stats: { csAt14: 80 } }, { position: 'TOP', teamId: 200, stats: { csAt14: 100 } }] },
+  ] as MatchForPopulation[], [csAxis]);
+  assert.equal(pop.TOP?.['csAt14:diff'], undefined);
+});
+
+test('基準40: 組の数が下限(8)に満たないロール(JG 7 組)は分布を作らず、ロールと組の数を出力する。8 組の TOP は作る', () => {
+  const out = buildResultsPopulation([...topGames, ...jgGames], [csAxis], 8);
+  assert.equal(out.pairs.JUNGLE.csAt14, 7);
+  assert.equal(out.population.JUNGLE?.['csAt14:diff'], undefined);
+  assert.notEqual(out.population.TOP['csAt14:diff'], undefined);
+  assert.equal(out.warnings.length, 1);
+  assert.match(out.warnings[0], /JUNGLE/);
+  assert.match(out.warnings[0], /7 組/);
+  // 下限 7 なら JG も作る(7 と 8 の境界)
+  const seven = buildResultsPopulation([...topGames, ...jgGames], [csAxis], 7);
+  assert.notEqual(seven.population.JUNGLE?.['csAt14:diff'], undefined);
+  assert.deepEqual(seven.warnings, []);
+});
+
+test('基準39・40: 標準化は分布の二乗平均平方根で割る。分布の無いロールの試合はその指標を除き、使える指標が無ければ試合を除く', () => {
+  const out = buildResultsPopulation([...topGames, ...jgGames], [csAxis], 8);
+  // TOP: 自分 110・対面 100 の差 10 → z = 10 ÷ 25.2488 = 0.39606
+  const top = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ matchId: 'X1', position: 'TOP', me: { csAt14: 110 }, opp: { csAt14: 100 } }), kind: 'scrim', queueId: 0 }], position: 'TOP' }, out.population, cfg, NOW);
+  assert.ok(Math.abs(top.correction - 10 / RMS8) < 1e-9, `${top.correction}`);
+  assert.ok(Math.abs(top.correction - 0.39606) < 1e-4);
+  assert.equal(top.scrimGames, 1);
+  // JG: 分布が無い(7 組)ので除く。試合は使われず、事前値だけ
+  const jg = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ matchId: 'X2', position: 'JUNGLE', me: { csAt14: 110 }, opp: { csAt14: 100 } }), kind: 'scrim', queueId: 0 }], position: 'JUNGLE' }, out.population, cfg, NOW);
+  assert.equal(jg.estimated, true);
+  assert.equal(jg.effectiveGames, 0);
+  assert.equal(jg.scrimGames, 0);
+  assert.equal(jg.metrics[0].gamesWithOpponent, 0);
+});

@@ -194,7 +194,8 @@ const popKey = (def: MetricDef) => `${def.key}:${def.mode}`;
 /** 基準7: 母集団(全試合の全参加者)の、ロールごと・指標ごとの「対面との差」の分布 */
 export function buildPopulation(matches: readonly MatchForPopulation[], axes: readonly DataAxisDef[]): Population {
   const defs = new Map<string, MetricDef>();
-  for (const a of axes) for (const m of a.metrics) defs.set(popKey(m), m);
+  // F-004 基準39: 実戦の記録の分布で標準化する指標(population = results)は、ソロランクの母集団に入れない
+  for (const a of axes) for (const m of a.metrics) if (m.population !== 'results') defs.set(popKey(m), m);
   const acc: Record<string, Record<string, number[]>> = {};
   for (const match of matches) {
     for (const p of match.participants) {
@@ -217,6 +218,47 @@ export function buildPopulation(matches: readonly MatchForPopulation[], axes: re
     }
   }
   return out;
+}
+
+/**
+ * F-004 基準39・40: 実戦の記録(kind を持つ記録。スクリム・本番)から、population = results の指標の、ロールごとの対面との差の分布。
+ * 1 試合の 1 ロールにつき 1 組(両チームの記録は試合 ID とロールで 1 つにする)。平均は 0、標準偏差は差の二乗の平均の平方根。
+ * Riot API の試合(kind なし)は入れない。組の数が minPairs に満たないロールは分布を作らず、ロールと組の数を warnings に出す
+ */
+export function buildResultsPopulation(
+  games: readonly GameRecord[],
+  axes: readonly DataAxisDef[],
+  minPairs: number,
+): { population: Population; pairs: Record<string, Record<string, number>>; warnings: string[] } {
+  const defs = new Map<string, MetricDef>();
+  for (const a of axes) for (const m of a.metrics) if (m.population === 'results') defs.set(popKey(m), m);
+  const acc: Record<string, Record<string, Map<string, number>>> = {};
+  for (const g of games) {
+    if (g.kind === undefined) continue;
+    for (const [k, def] of defs) {
+      if (def.positions && !def.positions.includes(g.position)) continue;
+      const v = metricDiff(def, g.me, g.opp);
+      if (v === null) continue;
+      const seen = ((acc[g.position] ??= {})[k] ??= new Map());
+      if (!seen.has(g.matchId)) seen.set(g.matchId, v);
+    }
+  }
+  const population: Population = {};
+  const pairs: Record<string, Record<string, number>> = {};
+  const warnings: string[] = [];
+  for (const [k, def] of defs) {
+    for (const pos of def.positions ?? Object.keys(acc)) {
+      const xs = [...(acc[pos]?.[k]?.values() ?? [])];
+      (pairs[pos] ??= {})[def.key] = xs.length;
+      if (xs.length < minPairs) {
+        warnings.push(`指標 ${def.key}: ${pos} の実戦の記録の組 ${xs.length} 組(下限 ${minPairs} 未満)。このロールの試合ではこの指標を使わない`);
+        continue;
+      }
+      if (!xs.length) continue;
+      (population[pos] ??= {})[k] = { mean: 0, sd: Math.sqrt(xs.reduce((s, x) => s + x * x, 0) / xs.length), count: xs.length };
+    }
+  }
+  return { population, pairs, warnings };
 }
 
 const isoDay = (t: number) => new Date(t).toISOString().slice(0, 10);
@@ -251,6 +293,8 @@ export function scoreDataAxis(
       const v = metricDiff(def, g.me, g.opp);
       if (v === null) return;
       const dist = population[g.position]?.[popKey(def)];
+      // F-004 基準40: 実戦の記録の分布が無い(組が下限に満たない)ロールでは、その試合のその指標を除く(基準8 と同じ扱い)
+      if (!dist && def.population === 'results') return;
       const z = dist && dist.sd > 0 ? clamp((v - dist.mean) / dist.sd, -cfg.zClip, cfg.zClip) : 0;
       gz += def.weight * z;
       gw += def.weight;

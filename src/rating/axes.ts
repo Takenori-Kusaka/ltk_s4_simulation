@@ -4,6 +4,7 @@ import def from './axes.json' with { type: 'json' };
 import knownFacts from './known-facts.json' with { type: 'json' };
 import {
   buildPopulation,
+  buildResultsPopulation,
   confidenceOf,
   confidenceReasonOf,
   gameWeight,
@@ -83,6 +84,8 @@ export interface RatingContext {
   /** 安定感のばらつき(試合ごとの地力の補正の標準偏差)の分布 */
   consistencyStat: Stat;
   masteryStat: Stat;
+  /** F-004 基準40: 実戦の記録の分布(csAt14)の組の数が下限に満たないロールと組の数 */
+  warnings: string[];
 }
 interface Stat {
   mean: number;
@@ -164,6 +167,9 @@ export function buildRatingContext(
       .map((g) => ({ participants: [{ position: g.position, teamId: 1, stats: g.me }, { position: g.position, teamId: 2, stats: g.opp! }] })),
   );
   const population = buildPopulation(matches.length ? matches : fromPlayers, CONF.axes);
+  // F-004 基準39・40: csAt14 は評価の入力の全選手の実戦の記録(スクリム・本番)の分布で標準化する
+  const results = buildResultsPopulation(players.flatMap((p) => p.games), CONF.axes, cfg.cs14MinPairs ?? 0);
+  for (const [pos, byKey] of Object.entries(results.population)) Object.assign((population[pos] ??= {}), byKey);
   const poolStats: RatingContext['poolStats'] = {};
   const byPos = new Map<string, { c: number[]; w: number[] }>();
   for (const p of players) {
@@ -190,6 +196,7 @@ export function buildRatingContext(
     poolStats,
     consistencyStat: stat(players.map((p) => consistencySd(p, population, cfg, now)).filter((x): x is number => x !== null)),
     masteryStat: stat(players.map((p) => p.masteryScore).filter((x): x is number => typeof x === 'number')),
+    warnings: results.warnings,
   };
 }
 
