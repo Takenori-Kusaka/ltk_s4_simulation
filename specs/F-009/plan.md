@@ -23,13 +23,17 @@
 | Task-13 | (2026-10-11 追加。再判定 4)到達点からのブランク: 到達の時点の読み方(`peak.allTime.when` の自由記述から最も遅い日付。年だけなら 7 月 1 日)と最終出場年(`lol.lastCompetitiveYear`)の読み込み、歴代の最高ランクと元プロの下限のブランクの減衰(`blankDecayPerYear`・`blankGraceYears`。下限は 8.0 を下回らない、現役の記録より下げない)、不明時の印と確度の 1 段下げ、ランクの基準の説明(到達・ブランク・減衰) | 6, 33, 34, 35, 36 | `src/rating/engine.ts`、`src/rating/types.ts`、`src/rating/evidence.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-11 | 可(Task-12 と同じファイルに触るため、マージは順に) |
 | Task-14 | (2026-10-12 追加)価値責任者の見立て: 見立ての記録 `owner-views.json` の読み込みと検査(選手を対象とする項目。チーム・コーチの項目は F-010 へ渡す)、データの軸の基礎の点数への加点(ロール転向の割引の後・調子の前)、選手のページの「価値責任者の見立て」の表示、2026-10-12 の見立ての記録の初版 | 37, 38, 39 | `src/rating/owner-views.ts`、`src/rating/build.ts`、`src/rating/config.json`、`src/app/rating/view.ts`、`src/app/components/PlayerSheet.svelte`、`docs/research/grounds/normalized/owner-views.json`、`tests/rating/owner-views.test.ts` | Task-11 | 可 |
 | Task-15 | (2026-10-12 追加)見立ての重みの比較: 当てはまりの確認の命令(F-004 基準23)に、見立ての重みを 1・0.5・0 倍にした 3 通りの対数損失と Brier スコアを足す | 40 | F-004 基準23 の命令の置き場、`tests/rating/owner-views.test.ts` | Task-14、F-004 基準23 の実装 | 可 |
+| Task-16 | (2026-10-14 追加。再判定 5)実戦の記録の計算の直し: 安定感の出来のばらつきをランクの試合だけで計算すること、レーン戦の確度の条件(常識の一覧 K-02 の `minRoleGames` を読み、満たない選手を「低」にし理由を示す) | 41, 42 | `src/rating/axes.ts`、`src/rating/engine.ts`、`src/rating/build.ts`、`tests/rating/axes.test.ts`、`tests/rating/engine.test.ts` | F-004 Task-2 | 可(Task-17 と。`engine.ts` に触るため、マージは順に) |
+| Task-17 | (2026-10-14 追加。再判定 5)相手の強さの補正: 実戦の記録への自分と対面のランクの基準の差の付与、`oppAdjust` の係数での引き算と切り詰め、軸の説明の「相手の強さの補正」、`oppAdjust` が無いか 0 のときに改訂前と同じ値を返すこと | 43, 44, 46 | `src/rating/engine.ts`、`src/rating/types.ts`、`src/rating/build.ts`、`src/rating/config.json`、`src/app/rating/view.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts`、`tests/app/rating-view.test.ts` | F-004 Task-2 | 可(Task-16 と。同上) |
+| Task-18 | (2026-10-14 追加。再判定 5)当てはまりの確認に `oppAdjust` の 3 通り(設定のまま・0・2 倍)の比較を足す | 45 | `src/results/fit.ts`、`src/results/fit-cli.ts`、`tests/results/fit.test.ts` | Task-17、F-004 Task-5 | 可 |
 
 ## 粒度の確認
 
 | 項目 | 上限 | 見込み |
 | --- | --- | --- |
 | 変更行数 | 800 | Task-1 約600 / Task-2 約400 / Task-3 約400(データの初版を除く)/ Task-4 約300 / Task-5 約300 / Task-6 約600 / Task-12 約250 / Task-13 約400(到達の時点の読み方のテストに実データの `when` 59 件を含む) |
-| 変更ファイル数 | 15 | 各 3〜10 |
+| 変更行数(2026-10-14 追記) | 800 | Task-16 約 150 / Task-17 約 300 / Task-18 約 100(実装とテストの合計) |
+| 変更ファイル数 | 15 | 各 3〜10。Task-16 5、Task-17 8、Task-18 3 |
 | レビュー所要時間 | 30分 | 各 20〜30 分 |
 
 ## テストの方針
@@ -45,6 +49,9 @@
 | 21, 22 | 単体(条件に反するとファイルを書かずに失敗) | `tests/rating/known-facts.test.ts` |
 | 26, 27 | 単体(差し替えた fetch) | `tests/collect/collect.test.ts` |
 | 20, 24, 25 | 画面の論理の単体と、Chrome・Playwright での確認 | `tests/app/**` |
+| 41, 42(2026-10-14) | 単体(実戦の記録を足しても出来のばらつきが変わらないこと、デスの差の項には入ること、大会のロールの試合 4 件と 5 件の境界、重みで有効な試合数が 15 を超えても「低」のままであること、値を常識の一覧から読むこと) | `tests/rating/axes.test.ts`、`tests/rating/engine.test.ts` |
+| 43, 44, 46(2026-10-14) | 単体(γ × 基準の差の引き算と ±zClip の切り詰め、ランクの試合・係数の無い軸・対面が名簿外の試合に引かないこと、説明の値と試合数、`oppAdjust` が無い・0 のとき改訂前と同じ点数) | `tests/rating/engine.test.ts`、`tests/rating/build.test.ts`、`tests/app/rating-view.test.ts` |
+| 45(2026-10-14) | 単体(固定の予測と結果で 3 通りの比較、推奨の文が無いこと) | `tests/results/fit.test.ts` |
 
 ## スタック構成(依存する変更を積み上げる場合のみ)
 
@@ -57,11 +64,15 @@
 | 5 | Task-9 | 層4 のマージ後の main | チームのページ |
 | 6 | Task-12・Task-13 | Task-11 のマージ後の main | 大会経験の改訂 / 到達点からのブランク(別の関心事。同じファイルに触るため、マージは順に) |
 
+| 7(2026-10-14 追記) | Task-16・Task-17 | F-004 Task-11・Task-12 のマージ後の main | 実戦の記録の計算の直し / 相手の強さの補正(同じファイルに触るため、マージは順に) |
+
 ## AI エージェントへ与える分割の指示
 
 - 1つの変更単位で1つの関心事のみを扱う
 - 変更単位ごとに単独でビルドと自動検証が通る状態にする
 - 依存の順序は上表の層番号に従う
+
+- (2026-10-14 追記)価値責任者が確定する値(`oppAdjust`)は、確定の前は仕様の起案の値を評価設定に置き、`_comment` に「価値責任者の確定を要する」と書く。再判定の記録は `docs/gates/g4-F-009-2026-10-14-rejudge5.md`
 
 ## 承認(G-4)
 
