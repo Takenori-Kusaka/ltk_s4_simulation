@@ -536,3 +536,16 @@ test('基準36: 歴代の最高ランクまたは元プロの下限を採った�
   assert.equal(legacy.whenUnknown, false);
   assert.doesNotMatch(legacy.anchorNote ?? '', /ブランク|到達/);
 });
+
+// F-009 Task-16: 受入基準 42(大会のロールの試合の下限は呼び出し側が常識の一覧から渡す。境界は「下限未満なら低」)
+test('基準42: 大会のロールの試合が下限未満なら確度は「低」、理由に「大会のロールの試合 n 件(下限 未満)」を足す。下限以上なら変えない', () => {
+  const r = { confidence: '高' as const, confidenceReason: '有効な試合数 19.1(15 以上で高、6 以上で中)' };
+  assert.deepEqual(roleGamesFloor(r, 4, 5), { confidence: '低', confidenceReason: '有効な試合数 19.1(15 以上で高、6 以上で中)。大会のロールの試合 4 件(5 未満)' });
+  assert.deepEqual(roleGamesFloor(r, 5, 5), r);
+  assert.deepEqual(roleGamesFloor(r, 6, 5), r);
+  // 下限は渡された値を使う(3 なら 2 件で低、3 件で変えない)
+  assert.equal(roleGamesFloor({ confidence: '中', confidenceReason: 'x' }, 2, 3).confidenceReason, 'x。大会のロールの試合 2 件(3 未満)');
+  assert.equal(roleGamesFloor({ confidence: '中', confidenceReason: 'x' }, 3, 3).confidence, '中');
+  // 0 件(推定)でも理由を示す
+  assert.deepEqual(roleGamesFloor({ confidence: '低', confidenceReason: 'y' }, 0, 5), { confidence: '低', confidenceReason: 'y。大会のロールの試合 0 件(5 未満)' });
+});

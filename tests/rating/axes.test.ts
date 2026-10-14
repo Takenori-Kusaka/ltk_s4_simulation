@@ -5,6 +5,8 @@ import { splitLevelAndShape, DATA_AXES, ltkBonus, rateDataAxes, buildRatingConte
 import { loadEngineConfig } from '../../src/rating/engine.ts';
 import type { GameRecord } from '../../src/rating/types.ts';
 import axesConf from '../../src/rating/axes.json' with { type: 'json' };
+import ratingConf from '../../src/rating/config.json' with { type: 'json' };
+import knownFacts from '../../src/rating/known-facts.json' with { type: 'json' };
 // 評価設定の初期値(2026-10-10 に 0.4/1.2 → 0.2/0.6 へ変更。出場歴が 4 軸に効く二重カウントの緩和)
 const PER = (axesConf as { ltkBonusPerSeason: number }).ltkBonusPerSeason;
 const CAP = (axesConf as { ltkBonusCap: number }).ltkBonusCap;
@@ -171,4 +173,65 @@ test('水準と形: shapeScale があれば、ピックプール以外の軸に 
   assert.equal(out[2].base, 6);
   assert.ok(Math.abs((out[0].shapeAdj ?? 0) + (out[1].shapeAdj ?? 0)) < 1e-12);
   assert.deepEqual(splitLevelAndShape(rs, { perfScale: 0.5 }).map((r) => r.base), [6, 6, 6]);
+});
+
+// F-009 Task-16: 受入基準 41(安定感の出来のばらつきはランクの試合だけ)・42(レーン戦の確度の条件は常識の一覧 K-02)
+const scrim = (pos: string, me: Record<string, number>, opp: Record<string, number>): GameRecord => ({ ...g(pos, 'Garen', true, me, opp), queueId: 0, kind: 'scrim' });
+const toMatch = (x: GameRecord) => ({ participants: [{ position: x.position, teamId: 1, stats: x.me }, { position: x.position, teamId: 2, stats: x.opp! }] });
+
+test('AC41: 実戦の記録を足しても出来のばらつきは変わらず、デスの差の項には入る', () => {
+  // ランクの試合 6 件(ゴールドとデスの差がばらつく)。スクリム 4 件は差が極端で、ばらつきに入れば値が変わる
+  const ranked = [[400, 3], [450, 5], [350, 4], [500, 2], [300, 6], [400, 4]].map(([gold, deaths]) => g('TOP', 'Garen', true, { goldPerMinute: gold, deaths }, { goldPerMinute: 400, deaths: 4 }));
+  const scrims = Array.from({ length: 4 }, () => scrim('TOP', { goldPerMinute: 700, deaths: 1 }, { goldPerMinute: 300, deaths: 6 }));
+  const a = player('A', 'TOP', ranked);
+  const b = player('B', 'TOP', [...ranked, ...scrims]);
+  // 母集団はランクの試合だけで固定する(選手の試合から補うと、スクリムで母集団が動き比較にならない)
+  const ctx = buildRatingContext([a, b], ranked.map(toMatch), cfg, NOW);
+  const st = (p: typeof a) => rateDataAxes(p, ctx).find((x) => x.key === 'stability')!;
+  const sa = st(a);
+  const sb = st(b);
+  assert.notEqual(sa.consistencySd ?? null, null);
+  assert.equal(sb.consistencySd, sa.consistencySd);
+  // デスの差の項: スクリム 4 件が入る。対面のいる試合 6 → 10、有効な試合数は 4 × scrimGameWeight 2 × 0.5^(3/45)(= 4 × 2 × 0.95484 = 7.6387)だけ増える
+  assert.equal(sa.metrics[0].gamesWithOpponent, 6);
+  assert.equal(sb.metrics[0].gamesWithOpponent, 10);
+  assert.equal(sb.scrimGames, 4);
+  assert.ok(Math.abs(sb.effectiveGames - sa.effectiveGames - 4 * (cfg.scrimGameWeight ?? 1) * 0.5 ** (3 / cfg.halfLifeDays)) < 1e-9);
+  assert.ok(Math.abs(sb.effectiveGames - sa.effectiveGames - 7.6387) < 1e-3);
+  // 補正 = 0.6 × デスの差の項 + 0.4 × ばらつきの項。ばらつきは 2 人で同じ値なので分布の標準偏差 0 で項は 0。
+  // A のデスの差 [+1, −1, 0, +2, −2, 0] の平均は 0 で補正 0。B はスクリムのデスの差 +5(母集団の平均 0 より良い)が入り正になる
+  assert.ok(Math.abs(sa.correction) < 1e-9, `${sa.correction}`);
+  assert.ok(sb.correction > 0, `${sb.correction}`);
+});
+
+test('AC42: 大会のロールの試合が常識の一覧 K-02 の minRoleGames 未満なら、重みで有効な試合数が 15 を超えてもレーン戦の確度は「低」で、理由に件数を示す', () => {
+  const k02 = (knownFacts as { facts: { id: string; params?: { minRoleGames?: number } }[] }).facts.find((f) => f.id === 'K-02')!;
+  const MIN = k02.params!.minRoleGames!;
+  assert.equal(MIN, 5);
+  // スクリムの重みを 5 にすると、4 件でも有効な試合数は 4 × 5 × 0.95484 = 19.10(高の閾値 15 以上)、5 件で 23.87
+  const heavy = { ...cfg, scrimGameWeight: 5 };
+  const lane = (i: number) => scrim('MIDDLE', { maxCsAdvantageOnLaneOpponent: 10 + i, laningPhaseGoldExpAdvantage: 1, maxLevelLeadLaneOpponent: 1 }, { maxCsAdvantageOnLaneOpponent: 5, laningPhaseGoldExpAdvantage: 0, maxLevelLeadLaneOpponent: 0 });
+  // 他のロールの試合 3 件は大会のロールの試合に数えない
+  const other = Array.from({ length: 3 }, () => g('TOP', 'Garen', true));
+  const under = player('U', 'MIDDLE', [...Array.from({ length: MIN - 1 }, (_, i) => lane(i)), ...other]);
+  const at = player('E', 'MIDDLE', Array.from({ length: MIN }, (_, i) => lane(i)));
+  const ctx = buildRatingContext([under, at], [], heavy, NOW);
+  const laning = (p: typeof under) => rateDataAxes(p, ctx).find((x) => x.key === 'laning')!;
+  const lu = laning(under);
+  assert.equal(lu.estimated, false);
+  assert.ok(lu.effectiveGames >= heavy.confidence.high, `${lu.effectiveGames}`);
+  assert.ok(Math.abs(lu.effectiveGames - 19.097) < 1e-3);
+  assert.equal(lu.confidence, '低');
+  assert.match(lu.confidenceReason, /大会のロールの試合 4 件\(5 未満\)/);
+  const le = laning(at);
+  assert.ok(Math.abs(le.effectiveGames - 23.871) < 1e-3);
+  assert.equal(le.confidence, '高');
+  assert.doesNotMatch(le.confidenceReason, /大会のロールの試合/);
+  // レーン戦以外の軸には効かない(地力はロールを問わず 7 件、有効な試合数 19.10 + 3 × 0.95484 = 21.96 で「高」)
+  assert.equal(rateDataAxes(under, ctx).find((x) => x.key === 'ground')!.confidence, '高');
+});
+
+test('AC42: 下限の値は常識の一覧からだけ読み、評価設定に別の値を持たない', () => {
+  assert.doesNotMatch(JSON.stringify(axesConf), /minRoleGames/);
+  assert.doesNotMatch(JSON.stringify(ratingConf), /minRoleGames/);
 });

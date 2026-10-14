@@ -1,6 +1,7 @@
 // F-009 Task-2: 個人のデータの6軸(地力・レーン戦・集団戦・連携・安定感・ピックプール)
 // 基礎の点数の式は engine.ts(ADR-0004)。この部品は軸の定義・LTK の経験の項・安定感のばらつき・ピックプールを担う
 import def from './axes.json' with { type: 'json' };
+import knownFacts from './known-facts.json' with { type: 'json' };
 import {
   buildPopulation,
   confidenceOf,
@@ -10,6 +11,7 @@ import {
   rankAnchor,
   recencyWeight,
   resolveAnchor,
+  roleGamesFloor,
   scoreDataAxis,
   selectGames,
 } from './engine.ts';
@@ -38,6 +40,12 @@ const DAY = 86_400_000;
 const clamp = (x: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, x));
 
 export const DATA_AXES: readonly DataAxisDef[] = CONF.axes;
+
+/** F-009 基準42: レーン戦の確度の条件(大会のロールの試合の下限)は常識の一覧 K-02 から読み、評価設定に持たない。K-02 が無ければ条件を掛けない */
+const MIN_ROLE_GAMES: number | undefined = (knownFacts as { facts: { id: string; params?: { minRoleGames?: number } }[] }).facts.find((f) => f.id === 'K-02')?.params?.minRoleGames;
+
+/** F-009 基準41: 出来のばらつきに使うランクの試合のキュー(ソロ・フレックス)。実戦の記録はデスの差の項にだけ入る */
+const RANKED_QUEUES = new Set([420, 440]);
 
 /** 基準10: LTK の経験の項 = 参加シーズン数 × 0.4(上限 1.2) */
 export function ltkBonus(seasons: number): number {
@@ -119,10 +127,10 @@ function poolRaw(p: RatingPlayerInput, cfg: EngineConfig, now: number) {
   return { games, list, champions: list.length, winRate };
 }
 
-/** 安定感のばらつき: 試合ごとの地力の補正(標準化した値の加重平均)の標準偏差 */
+/** 安定感のばらつき: 試合ごとの地力の補正(標準化した値の加重平均)の標準偏差。ランクの試合だけで計算する(基準41) */
 function consistencySd(p: RatingPlayerInput, population: Population, cfg: EngineConfig, now: number): number | null {
   const ground = CONF.axes.find((a) => a.key === 'ground')!;
-  const games = selectGames(p.games, now, cfg, { roleOnly: false, position: p.position });
+  const games = selectGames(p.games, now, cfg, { roleOnly: false, position: p.position }).filter((g) => RANKED_QUEUES.has(g.queueId));
   const per: { z: number; w: number }[] = [];
   for (const g of games) {
     let s = 0;
@@ -203,6 +211,8 @@ export function rateDataAxes(p: RatingPlayerInput, ctx: RatingContext): RatedAxi
   const results = CONF.axes.map((axis): RatedAxis => {
     if (axis.key === 'pool') return ratePool(p, ctx, axis);
     const r = scoreDataAxis(axis, input, population, cfg, now, bonusFor(axis.key));
+    // 基準42: レーン戦は大会のロールの試合(ランクの試合と実戦の記録の件数。重みは掛けない)が下限に満たなければ確度「低」
+    if (axis.key === 'laning' && MIN_ROLE_GAMES !== undefined) return { ...roleGamesFloor(r, r.gamesUsed, MIN_ROLE_GAMES), bonusReason: reason(axis.key) };
     if (axis.key !== 'stability') return { ...r, bonusReason: reason(axis.key) };
     // 安定感 = デスの対面との差 0.6 + 試合ごとの出来のばらつきの小ささ 0.4
     const sd = consistencySd(p, population, cfg, now);
