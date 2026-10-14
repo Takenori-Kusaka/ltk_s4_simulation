@@ -1,0 +1,237 @@
+// F-004 Task-7: 受入基準 31・32・33・37・38(LTKDB の変換: 本番・結果だけ・写し・要約)。実装より先に受入基準から書いた
+// 固定データ: fixtures/ltkdb-schedule.json は LTKDB の「サイト_予定」の本番 40 行(2026-10-14 の公開データのまま)、
+// fixtures/ltkdb-rows.json は同じ公開データのスクリム SCRIM_20261013_MASTERS_IT_CC_001(勝者だけ)・002(選手の行 10 行)の行。
+// 本番の行は、スクリムの行を本番の形に直した合成の行(選手は名簿の名前、各 K2・D2・A4・ゴールド 10,000・ダメージ 10,000・14分CS 100)
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { ROSTER } from '../../src/data/roster.ts';
+import { convert } from '../../.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs';
+
+type Row = Record<string, unknown>;
+const SCRIPT = '.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs';
+const ROLES = ['TOP', 'JG', 'MID', 'ADC', 'SUP'];
+const SCHEDULE: Row[] = JSON.parse(readFileSync('tests/results/fixtures/ltkdb-schedule.json', 'utf8'));
+const FIX = JSON.parse(readFileSync('tests/results/fixtures/ltkdb-rows.json', 'utf8'));
+const SCRIM1: Row = FIX['対戦結果まとめ'][0]; // 勝者 IT、試合時間が空、選手の行 0 行
+const SCRIM2: Row = FIX['対戦結果まとめ'][1]; // 勝者 CC、試合時間 31.9666… 分(= 1918 秒 = 31:58)、計測秒 840
+const DETAIL2: Row[] = FIX['リザルト詳細'];
+
+const root = () => mkdtempSync(join(tmpdir(), 'ltkdb-convert-'));
+const siteOf = (matches: Row[], details: Row[], schedule: Row[] = SCHEDULE): Row => ({
+  updatedAt: '2026-10-14T12:00:00.000Z',
+  sheets: { '対戦結果まとめ': matches, 'リザルト詳細': details, 'サイト_予定': schedule },
+});
+const run = (matches: Row[], details: Row[], dir = root(), schedule?: Row[]) => ({ dir, summary: convert(siteOf(matches, details, schedule), { root: dir, today: '2026-10-14', collectedWith: 'test' }) });
+const read = (dir: string, file: string): Row[] => JSON.parse(readFileSync(join(dir, file), 'utf8'));
+
+/** 本番の「対戦結果まとめ」の合成の行。KDA は 5 人 × (2/2/4) = 10/10/20 */
+const off = (id: string, scheduleId: string, date: string, t1: string, t2: string, winner: string, over: Row = {}): Row => ({
+  '試合ID': id, 'スケジュールID': scheduleId, '試合日': date, '試合番号': 1, 'チーム1名': t1, 'チーム2名': t2, '勝利チーム': winner,
+  '試合時間': 30, 'チーム1KDA': '10/10/20', 'チーム2KDA': '10/10/20', 'スクリム/本番': '本番', '動画URL': '', '確認状態': '承認済', '計測秒': 840, ...over,
+});
+/** 1 チームの選手の行 5 行(名前は名簿の tier の席の選手) */
+const players = (id: string, team: string, tier: string, side: string, name = (n: string) => n): Row[] => ROLES.map((role) => ({
+  '試合ID': id, 'チーム名': team, 'サイド': side, 'ロール': role, 'プレイヤー名': name(ROSTER.find((p) => p.team === team && p.tier === tier && p.role === role)!.name),
+  'サモナーネーム': '', 'チャンピオン名': 'アーリ', 'レベル': 15, 'K': 2, 'D': 2, 'A': 4, 'ダメージ': 10000, 'CS': '', 'ゴールド': 10000, '14分CS': 100,
+}));
+const both = (id: string, t1: string, t2: string, tier: string) => [...players(id, t1, tier, 'BLUE'), ...players(id, t2, tier, 'RED')];
+const skippedIds = (s: Row) => ((s.skipped as Row).official as Row[]).map((x) => x.id);
+
+// --- 基準 31: 本番の行を日程と突き合わせて results/ へ ---
+
+test('基準31: Regular Stage の行は stage・day・match を日程から、game を試合番号から取って results/ に書く', () => {
+  const { dir, summary } = run([off('OFF_RS1', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC')], both('OFF_RS1', 'CC', 'DD', 'NEXT'));
+  const [r] = read(dir, 'results/2026-10-15-cc-next-vs-dd-next.json');
+  assert.deepEqual([r.kind, r.date, r.stage, r.day, r.tier, r.match, r.game, r.winner, r.duration], ['official', '2026-10-15', 'regular', 1, 'NEXT', null, 1, 'CC NEXT', '30:00']);
+  assert.equal((r.source as Row).ltkdbMatchId, 'OFF_RS1');
+  assert.deepEqual(Object.keys(r.teams as Row).sort(), ['CC NEXT', 'DD NEXT']);
+  assert.deepEqual(summary.written, [{ file: 'results/2026-10-15-cc-next-vs-dd-next.json', added: ['OFF_RS1'] }]);
+});
+
+test('基準31: 予定の行の tier と stage は大文字と小文字を区別しない', () => {
+  const sched = SCHEDULE.map((x) => (x.schedule_id === 'LTK4_REGULAR_D1_M1' ? { ...x, tier: 'NEXT', stage: 'Regular' } : x));
+  const { dir } = run([off('OFF_RS1', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'DD')], both('OFF_RS1', 'CC', 'DD', 'NEXT'), root(), sched);
+  assert.equal(read(dir, 'results/2026-10-15-cc-next-vs-dd-next.json')[0].tier, 'NEXT');
+});
+
+test('基準31: MASTERS CUP の準決勝は 2 チームの組で semi1・semi2、3 位決定戦と決勝は match_no と準決勝の勝敗で決める', () => {
+  // 第 1 回(2026-10-20)の準決勝は DD 対 CC(semi1)・IT 対 LR(semi2)。勝者 DD・IT → 決勝 DD 対 IT、敗者 CC・LR → 3 位決定戦
+  const rows = [
+    off('MC_S1', 'LTK4_MASTERS_D1_M1', '2026-10-20', 'DD', 'CC', 'DD'), off('MC_S2', 'LTK4_MASTERS_D1_M2', '2026-10-20', 'IT', 'LR', 'IT'),
+    off('MC_T', 'LTK4_MASTERS_D1_M3', '2026-10-20', 'CC', 'LR', 'LR'), off('MC_F1', 'LTK4_MASTERS_D1_M4', '2026-10-20', 'DD', 'IT', 'DD'),
+  ];
+  const details = [...both('MC_S1', 'DD', 'CC', 'MASTERS'), ...both('MC_S2', 'IT', 'LR', 'MASTERS'), ...both('MC_T', 'CC', 'LR', 'MASTERS'), ...both('MC_F1', 'DD', 'IT', 'MASTERS')];
+  const { dir } = run(rows, details);
+  const pick = (f: string) => read(dir, `results/${f}`).map((r) => [r.stage, r.day, r.tier, r.match, r.game]);
+  assert.deepEqual(pick('2026-10-20-cc-masters-vs-dd-masters.json'), [['masters', 1, 'MASTERS', 'semi1', 1]]);
+  assert.deepEqual(pick('2026-10-20-it-masters-vs-lr-masters.json'), [['masters', 1, 'MASTERS', 'semi2', 1]]);
+  assert.deepEqual(pick('2026-10-20-cc-masters-vs-lr-masters.json'), [['masters', 1, 'MASTERS', 'third', 1]]);
+  assert.deepEqual(pick('2026-10-20-dd-masters-vs-it-masters.json'), [['masters', 1, 'MASTERS', 'final', 1]]);
+});
+
+test('基準31・32: 決勝は置き場にある準決勝の記録からも決まり、match_no と勝敗が食い違えば書かない', () => {
+  const dir = root();
+  run([off('MC_S1', 'LTK4_MASTERS_D1_M1', '2026-10-20', 'DD', 'CC', 'DD'), off('MC_S2', 'LTK4_MASTERS_D1_M2', '2026-10-20', 'IT', 'LR', 'IT')],
+    [...both('MC_S1', 'DD', 'CC', 'MASTERS'), ...both('MC_S2', 'IT', 'LR', 'MASTERS')], dir);
+  // 2 回目の実行: 決勝の G2 は置き場の準決勝から決まる。match_no 4(決勝)で敗者どうしの CC 対 LR は書かない
+  const { summary } = run([off('MC_F2', 'LTK4_MASTERS_D1_M4', '2026-10-20', 'IT', 'DD', 'IT', { '試合番号': 2 }), off('MC_BAD', 'LTK4_MASTERS_D1_M4', '2026-10-20', 'CC', 'LR', 'CC')],
+    [...both('MC_F2', 'IT', 'DD', 'MASTERS'), ...both('MC_BAD', 'CC', 'LR', 'MASTERS')], dir);
+  assert.deepEqual(read(dir, 'results/2026-10-20-dd-masters-vs-it-masters.json').map((r) => [r.match, r.game]), [['final', 2]]);
+  assert.equal(existsSync(join(dir, 'results/2026-10-20-cc-masters-vs-lr-masters.json')), false);
+  assert.deepEqual(skippedIds(summary), ['MC_BAD']);
+});
+
+test('基準31: 3 位決定戦は準決勝の記録が無ければ match を決められず書かない(基準32)', () => {
+  const { dir, summary } = run([off('MC_T', 'LTK4_MASTERS_D1_M3', '2026-10-20', 'CC', 'LR', 'LR')], both('MC_T', 'CC', 'LR', 'MASTERS'));
+  assert.equal(existsSync(join(dir, 'results')) && existsSync(join(dir, 'results/2026-10-20-cc-masters-vs-lr-masters.json')), false);
+  assert.deepEqual(skippedIds(summary), ['MC_T']);
+});
+
+test('基準31: Playoffs は予定の tier が空なら選手の名前が名簿の席と一致する階級をとり、match_no の指すマッチの日付で match を決める', () => {
+  // LTK4_PLAYOFFS_M1 は match_no 1 = upperFinal(2026-11-21)。選手 10 人は名簿の CORE の席の名前
+  const { dir } = run([off('PO_1', 'LTK4_PLAYOFFS_M1', '2026-11-21', 'DD', 'LR', 'LR')], both('PO_1', 'DD', 'LR', 'CORE'));
+  const [r] = read(dir, 'results/2026-11-21-dd-core-vs-lr-core.json');
+  assert.deepEqual([r.stage, r.day, r.tier, r.match, r.game, r.winner], ['playoffs', null, 'CORE', 'upperFinal', 1, 'LR CORE']);
+});
+
+test('基準32: Playoffs で名前から階級が決まらない行、match_no のマッチの日付が試合日と違う行は書かない', () => {
+  const sub = [...players('PO_X', 'DD', 'CORE', 'BLUE', () => '代打の選手'), ...players('PO_X', 'LR', 'CORE', 'RED')];
+  // LTK4_PLAYOFFS_M3 は match_no 3 = lowerFinal(2026-11-22)。試合日 2026-11-21 とは合わない
+  const { dir, summary } = run([off('PO_X', 'LTK4_PLAYOFFS_M1', '2026-11-21', 'DD', 'LR', 'LR'), off('PO_D', 'LTK4_PLAYOFFS_M3', '2026-11-21', 'DD', 'LR', 'DD')],
+    [...sub, ...both('PO_D', 'DD', 'LR', 'CORE')]);
+  assert.deepEqual(skippedIds(summary).sort(), ['PO_D', 'PO_X']);
+  assert.equal(existsSync(join(dir, 'results/2026-11-21-dd-core-vs-lr-core.json')), false);
+});
+
+// --- 基準 32: 一致しない行は書かずに出力し、残りを続ける ---
+
+test('基準32: スケジュールID が予定に無い行・試合日が違う行・stage が食い違う行は書かず、試合 ID・試合日・2 チーム・勝利チームと理由を出し、残りを書く', () => {
+  const sched = SCHEDULE.map((x) => (x.schedule_id === 'LTK4_REGULAR_D1_M3' ? { ...x, stage: 'MASTERS' } : x));
+  const rows = [
+    off('OFF_NOSCHED', 'LTK4_REGULAR_D9_M1', '2026-10-15', 'CC', 'DD', 'CC'),
+    off('OFF_DATE', 'LTK4_REGULAR_D1_M1', '2026-10-16', 'CC', 'DD', 'CC'),
+    off('OFF_STAGE', 'LTK4_REGULAR_D1_M3', '2026-10-15', 'IT', 'LR', 'IT'),
+    off('OFF_OK', 'LTK4_REGULAR_D1_M2', '2026-10-15', 'CC', 'DD', 'DD'),
+  ];
+  const details = [...both('OFF_NOSCHED', 'CC', 'DD', 'NEXT'), ...both('OFF_DATE', 'CC', 'DD', 'NEXT'), ...both('OFF_STAGE', 'IT', 'LR', 'NEXT'), ...both('OFF_OK', 'CC', 'DD', 'CORE')];
+  const { dir, summary } = run(rows, details, root(), sched);
+  const sk = (summary.skipped as Row).official as Row[];
+  assert.deepEqual(sk.map((x) => x.id), ['OFF_NOSCHED', 'OFF_DATE', 'OFF_STAGE']);
+  assert.deepEqual([sk[1].date, sk[1].teams, sk[1].winner], ['2026-10-16', ['CC', 'DD'], 'CC']);
+  assert.ok(sk.every((x) => typeof x.reason === 'string' && (x.reason as string).length > 0));
+  assert.equal(read(dir, 'results/2026-10-15-cc-core-vs-dd-core.json')[0].winner, 'DD CORE');
+});
+
+test('基準32: 同じ試合 ID になる本番の行が 2 件あれば、どちらも書かない', () => {
+  const rows = [off('OFF_A', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC'), off('OFF_B', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'DD', 'CC', 'DD'),
+    off('OFF_C', 'LTK4_REGULAR_D1_M3', '2026-10-15', 'IT', 'LR', 'LR')];
+  const { dir, summary } = run(rows, [...both('OFF_A', 'CC', 'DD', 'NEXT'), ...both('OFF_B', 'DD', 'CC', 'NEXT'), ...both('OFF_C', 'IT', 'LR', 'NEXT')]);
+  assert.deepEqual(skippedIds(summary).sort(), ['OFF_A', 'OFF_B']);
+  assert.equal(existsSync(join(dir, 'results/2026-10-15-cc-next-vs-dd-next.json')), false);
+  assert.equal(read(dir, 'results/2026-10-15-it-next-vs-lr-next.json')[0].winner, 'LR NEXT');
+});
+
+// --- 基準 33: 結果だけの記録 ---
+
+test('基準33: 選手の行も試合時間も無いスクリムは結果だけの記録(game は試合番号。duration・sides・選手の行なし)', () => {
+  const { dir, summary } = run([SCRIM1], []);
+  const [r] = read(dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json');
+  assert.deepEqual([r.kind, r.resultOnly, r.date, r.game, r.listeners, r.winner], ['scrim', true, '2026-10-13', 1, false, 'IT MASTERS']);
+  assert.deepEqual(r.teams, { 'IT MASTERS': {}, 'CC MASTERS': {} });
+  assert.equal((r.source as Row).ltkdbMatchId, 'SCRIM_20261013_MASTERS_IT_CC_001');
+  assert.equal('duration' in r || 'sides' in r || 'durationSec' in r, false);
+  assert.deepEqual(summary.resultOnly, ['SCRIM_20261013_MASTERS_IT_CC_001']);
+});
+
+test('基準33: 選手の行が 10 行に満たない試合、試合時間が空の試合も結果だけの記録', () => {
+  const a = run([SCRIM2], DETAIL2.slice(0, 7));
+  assert.deepEqual(read(a.dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json').map((r) => [r.resultOnly, r.game, r.winner]), [[true, 2, 'CC MASTERS']]);
+  const b = run([{ ...SCRIM2, '試合時間': '' }], DETAIL2);
+  const [r] = read(b.dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json');
+  assert.equal(r.resultOnly, true);
+  assert.deepEqual(r.teams, { 'IT MASTERS': {}, 'CC MASTERS': {} });
+});
+
+test('基準33: 本番の結果だけの記録は日程と一致した行だけ(stage・day・tier・match を持つ)。階級が決まらなければ書かない', () => {
+  const { dir, summary } = run([off('OFF_RO', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'DD', { '試合時間': '' }), off('PO_RO', 'LTK4_PLAYOFFS_M1', '2026-11-21', 'DD', 'LR', 'LR', { '試合時間': '' })], []);
+  const [r] = read(dir, 'results/2026-10-15-cc-next-vs-dd-next.json');
+  assert.deepEqual([r.kind, r.resultOnly, r.stage, r.day, r.tier, r.match, r.game, r.winner], ['official', true, 'regular', 1, 'NEXT', null, 1, 'DD NEXT']);
+  assert.equal('duration' in r, false);
+  assert.deepEqual(skippedIds(summary), ['PO_RO']);
+  assert.deepEqual(summary.resultOnly, ['OFF_RO']);
+});
+
+// --- 基準 37: 14 分の CS と試合の番号の写し ---
+
+test('基準37: 計測秒 840 のスクリムは cs14Sec と各選手の cs14 を写し、game に試合番号を書く', () => {
+  const { dir } = run([SCRIM1, SCRIM2], DETAIL2);
+  const recs = read(dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json');
+  assert.deepEqual(recs.map((r) => r.game), [1, 2]);
+  const r = recs[1];
+  assert.deepEqual([r.cs14Sec, r.duration, r.winner], [840, '31:58', 'CC MASTERS']); // 31.9666… 分 × 60 = 1918 秒
+  const ps = (label: string) => ((r.teams as Row)[label] as Row).players as Row[];
+  // 固定データ: CC の ADC Yuhi の 14分CS 121、IT の TOP らいじん 103、CC の SUP NEMOH 20
+  assert.equal(ps('CC MASTERS').find((p) => p.role === 'ADC')!.cs14, 121);
+  assert.equal(ps('IT MASTERS').find((p) => p.role === 'TOP')!.cs14, 103);
+  assert.equal(ps('CC MASTERS').find((p) => p.role === 'SUP')!.cs14, 20);
+});
+
+test('基準37: 計測秒の境界 779・780・900・901・空。範囲外と空では cs14・cs14Sec を書かない。14分CS が空の行は null', () => {
+  const details = DETAIL2.map((d) => (d['ロール'] === 'MID' && d['チーム名'] === 'IT' ? { ...d, '14分CS': '' } : d));
+  for (const [sec, want] of [[779, undefined], [780, 780], [900, 900], [901, undefined], ['', undefined]] as const) {
+    const { dir } = run([{ ...SCRIM2, '計測秒': sec }], details);
+    const [r] = read(dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json');
+    assert.equal(r.cs14Sec, want, `計測秒 ${sec}`);
+    const all = Object.values(r.teams as Record<string, Row>).flatMap((t) => t.players as Row[]);
+    if (want === undefined) assert.ok(all.every((p) => !('cs14' in p)), `計測秒 ${sec}`);
+    else assert.equal(all.find((p) => p.displayName === 'Eugeo')!.cs14, null);
+  }
+});
+
+test('基準37: 試合番号が文字列でも整数に直して game に書き、本番の記録にも cs14 を写す', () => {
+  const a = run([{ ...SCRIM2, '試合番号': '3' }], DETAIL2);
+  assert.equal(read(a.dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json')[0].game, 3);
+  const b = run([off('OFF_RS1', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC')], both('OFF_RS1', 'CC', 'DD', 'NEXT'));
+  const [r] = read(b.dir, 'results/2026-10-15-cc-next-vs-dd-next.json');
+  assert.equal(r.cs14Sec, 840);
+  assert.equal((((r.teams as Row)['CC NEXT'] as Row).players as Row[])[0].cs14, 100);
+});
+
+// --- 基準 38: 要約と終了コード ---
+
+const cli = (args: string[]) => {
+  try {
+    return { code: 0, out: execFileSync(process.execPath, [SCRIPT, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }) };
+  } catch (e) {
+    const err = e as { status: number; stdout: string };
+    return { code: err.status, out: err.stdout };
+  }
+};
+const lastJson = (out: string): Row => JSON.parse(out.trim().split('\n').at(-1)!);
+
+test('基準38: 最後の行は JSON の要約。書いたファイルがあれば 10、新しい試合が無ければ 0、読み取りに失敗すれば 1', () => {
+  const tmp = root();
+  const listener = { ...SCRIM2, '試合ID': 'SCRIM_20261013_MASTERS_IT_LISTENERS_001', 'チーム2名': 'リスナー' };
+  const site = siteOf([SCRIM1, SCRIM2, listener, off('OFF_BAD', 'LTK4_REGULAR_D9_M1', '2026-10-15', 'CC', 'DD', 'CC')], DETAIL2);
+  writeFileSync(join(tmp, 'site.json'), JSON.stringify(site));
+  const dir = join(tmp, 'grounds');
+  const first = cli(['--in', join(tmp, 'site.json'), '--root', dir]);
+  assert.equal(first.code, 10);
+  const s = lastJson(first.out);
+  assert.deepEqual(Object.keys(s).sort(), ['corrections', 'listeners', 'replaced', 'resultOnly', 'skipped', 'unconfirmed', 'updatedAt', 'written']);
+  assert.deepEqual(s.written, [{ file: 'scrims/2026-10-13-cc-masters-vs-it-masters.json', added: ['SCRIM_20261013_MASTERS_IT_CC_001', 'SCRIM_20261013_MASTERS_IT_CC_002'] }]);
+  assert.deepEqual(s.resultOnly, ['SCRIM_20261013_MASTERS_IT_CC_001']);
+  assert.deepEqual([s.listeners, s.updatedAt, s.replaced, s.corrections, s.unconfirmed], [1, '2026-10-14T12:00:00.000Z', [], [], []]);
+  assert.deepEqual(((s.skipped as Row).official as Row[]).map((x) => x.id), ['OFF_BAD']);
+  assert.ok(Array.isArray((s.skipped as Row).scrim));
+  // 2 回目: 同じ入力。既存の記録と同じ試合だけで、書くものが無い
+  const second = cli(['--in', join(tmp, 'site.json'), '--root', dir]);
+  assert.equal(second.code, 0);
+  assert.deepEqual(lastJson(second.out).written, []);
+  writeFileSync(join(tmp, 'broken.json'), '{ not json');
+  assert.equal(cli(['--in', join(tmp, 'broken.json'), '--root', dir]).code, 1);
+});
