@@ -1,8 +1,10 @@
 // F-006 Task-2: NEXT のプロテクト候補と軸にする選手・理由(受入基準 4・4b)
 // プロテクトの値 u = 見込みの値 v × ロールの重み w_r × (1 + protect.metaBonus × メタの重要度 g)
+// F-006 Task-6(基準14): スクリムの試合数 n_s が 2 以上なら u × (1 + protect.banBonus × min(1, b ÷ n_s))。b は相手から BAN された回数
 import { loadPickConfig, pickCandidates, type PickCandidate, type PickConfig } from './picks.ts';
 import type { PlayerPool } from '../meta/match.ts';
 import type { MetaGuide } from '../meta/load.ts';
+import type { ScrimDraft } from './scrim-draft.ts';
 import teamConfig from '../team/config.json' with { type: 'json' };
 
 /** F-010 のロールの重み(src/team/config.json の roleWeights) */
@@ -10,6 +12,13 @@ export const ROLE_WEIGHTS: Record<string, number> = { ...(teamConfig as { roleWe
 
 export function protectValue(c: PickCandidate, role: string, cfg: PickConfig = loadPickConfig()): number {
   return c.value * (ROLE_WEIGHTS[role] ?? 0) * (1 + cfg.protect.metaBonus * c.meta);
+}
+
+/** 基準14: スクリムで相手から BAN された回数 b と n_s。n_s が 2 未満、または BAN されていなければ null */
+function scrimBan(scrim: ScrimDraft | null | undefined, championId: number): { b: number; ns: number } | null {
+  if (!scrim || scrim.games < 2) return null;
+  const b = scrim.bannedBy.filter((x) => x.championId === championId).reduce((s, x) => s + x.count, 0);
+  return b > 0 ? { b, ns: scrim.games } : null;
 }
 
 export interface ProtectCandidate extends PickCandidate {
@@ -35,19 +44,26 @@ const pct = (x: number) => `${Math.round(x * 100)}%`;
 const tierText = (g: number, cfg: PickConfig) => (g >= cfg.meta.A ? '段階A' : g >= cfg.meta.B ? '段階B' : 'メタの一覧に無い');
 
 /** 基準4・4b */
-export function protectCandidates(team: readonly PlayerPool[], guide: MetaGuide, cfg: PickConfig = loadPickConfig()): ProtectResult {
+export function protectCandidates(team: readonly PlayerPool[], guide: MetaGuide, cfg: PickConfig = loadPickConfig(), scrim?: ScrimDraft | null): ProtectResult {
   const all = { ...cfg, pick: { ...cfg.pick, topN: Number.MAX_SAFE_INTEGER } };
+  // config.json の protect.banBonus(PickConfig の型は picks.ts にあり、この変更の範囲外のため読み出しで補う)
+  const banBonus = (cfg.protect as PickConfig['protect'] & { banBonus?: number }).banBonus ?? 0;
   const entries = team.flatMap((p) =>
-    pickCandidates(p, guide, all).candidates.map((c) => ({ ...c, playerId: p.playerId, role: p.role, protectValue: protectValue(c, p.role, cfg) })),
+    pickCandidates(p, guide, all).candidates.map((c) => {
+      const ban = scrimBan(scrim, c.championId);
+      const bonus = ban ? 1 + banBonus * Math.min(1, ban.b / ban.ns) : 1;
+      return { ...c, playerId: p.playerId, role: p.role, protectValue: protectValue(c, p.role, cfg) * bonus, ban };
+    }),
   );
   const order = (a: (typeof entries)[number], b: (typeof entries)[number]) =>
     b.protectValue - a.protectValue || b.games - a.games || a.championId - b.championId;
   entries.sort(order);
 
+  const banText = (e: (typeof entries)[number]) => (e.ban ? `・スクリムで相手から ${e.ban.b} / ${e.ban.ns} 試合 BAN された` : '');
   const reasonOf = (e: (typeof entries)[number], narrow?: number) =>
     narrow !== undefined
-      ? `ピックプールが ${narrow} 体と狭いため、この選手の${narrow === 1 ? '1体' : '2体'}を守る(${e.games} 試合・勝率 ${pct(e.winRate)}・${tierText(e.meta, cfg)}・プロテクトの値 ${e.protectValue.toFixed(3)})`
-      : `大会のロールで ${e.games} 試合・勝率 ${pct(e.winRate)}・${tierText(e.meta, cfg)}・プロテクトの値 ${e.protectValue.toFixed(3)}`;
+      ? `ピックプールが ${narrow} 体と狭いため、この選手の${narrow === 1 ? '1体' : '2体'}を守る(${e.games} 試合・勝率 ${pct(e.winRate)}・${tierText(e.meta, cfg)}${banText(e)}・プロテクトの値 ${e.protectValue.toFixed(3)})`
+      : `大会のロールで ${e.games} 試合・勝率 ${pct(e.winRate)}・${tierText(e.meta, cfg)}${banText(e)}・プロテクトの値 ${e.protectValue.toFixed(3)}`;
 
   // ピックプールが狭い選手(1〜narrowPool 体)。複数なら最大のプロテクトの値を持つ選手
   const narrowIds = new Set(team.filter((p) => p.list.length > 0 && p.list.length <= cfg.protect.narrowPool).map((p) => p.playerId));
