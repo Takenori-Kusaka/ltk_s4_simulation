@@ -122,7 +122,7 @@ test('基準23: 書き出しは指標と試合の一覧を持ち、推奨の文�
   assert.doesNotMatch(md, RECOMMEND);
   assert.match(md, /対数損失/);
   assert.match(md, /Brier/);
-  assert.match(md, /scrimGameWeight 2(設定の値)/);
+  assert.match(md, /scrimGameWeight 2\(設定の値\)/);
   assert.match(md, /scrimGameWeight 0/);
   assert.match(md, /価値責任者/);
   for (const x of GAMES) assert.ok(md.includes(x.matchId), `試合の一覧に ${x.matchId}`);
