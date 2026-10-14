@@ -146,3 +146,57 @@ test('AC9: 集計のコマンドは F-005 が読む NEXT の予想のファイ�
   assert.equal(saved.kind, NEXT_DRAFT_KIND);
   assert.equal(saved.matches.length, 12);
 });
+
+// ---- F-006 Task-6: 受入基準 14(スクリムで相手から BAN された回数によるプロテクトの値の加点と理由)。実装を読まずに受入基準から書いた ----
+
+/** n_s = games、相手から BAN された回数 b を championId → 回数で渡す */
+const scrim = (games: number, bannedBy: [number, number][]) => ({
+  games, ordered: 0, bans: [], firstPicks: [],
+  bannedBy: bannedBy.map(([championId, count]) => ({ champion: `c${championId}`, championId, count })),
+});
+/** SUP の 13 を 10 試合・勝率 90% にしたチーム。v(13) = 0.5 × 10/10 + 0.3 × 0.9 = 0.77、u(13) = 0.77 × 0.21 = 0.1617。
+ *  JG の 64: v = 0.5 + 0.15 + 0.2 × 0.5 = 0.75、u = 0.75 × 0.21 × 1.25 = 0.196875。MID の 103: v = 0.85、u = 0.85 × 0.24 × 1.5 = 0.306 */
+const SUP_STRONG = WIDE.map((p) => (p.role === 'SUP' ? pool('CC-NEXT-SUP', 'SUP', [e(13, 10, 0.9), e(14, 5), e(15, 3)]) : p));
+
+test('AC14: protect.banBonus の初期値は 0.3', () => {
+  assert.equal((loadPickConfig().protect as { banBonus?: number }).banBonus, 0.3);
+});
+
+test('AC14: n_s が 2 以上なら u × (1 + 0.3 × min(1, b ÷ n_s))で選ぶ。b = n_s の 13 は 0.1617 × 1.3 = 0.21021 > 0.196875 で 64 に代わる', () => {
+  assert.deepEqual(protectCandidates(SUP_STRONG, guide).protects.map((p) => p.championId), [103, 64]);
+  const r = protectCandidates(SUP_STRONG, guide, undefined, scrim(2, [[13, 2]])).protects;
+  assert.deepEqual(r.map((p) => p.championId), [103, 13]);
+  assert.ok(Math.abs(r[1].protectValue - 0.21021) < 1e-9, String(r[1].protectValue));
+  assert.ok(Math.abs(r[0].protectValue - 0.306) < 1e-9, '相手から BAN されていない 103 は変わらない');
+});
+
+test('AC14: b ÷ n_s が 1 未満なら比で加点し(103: 0.306 × 1.15 = 0.3519)、1 を超えても 1 で止める(0.306 × 1.3 = 0.3978)', () => {
+  const half = protectCandidates(SUP_STRONG, guide, undefined, scrim(2, [[103, 1], [13, 1]])).protects;
+  assert.ok(Math.abs(half[0].protectValue - 0.3519) < 1e-9, String(half[0].protectValue));
+  // 13 は 0.1617 × 1.15 = 0.185955 < 0.196875 で選ばれない
+  assert.deepEqual(half.map((p) => p.championId), [103, 64]);
+  const over = protectCandidates(SUP_STRONG, guide, undefined, scrim(2, [[103, 3]])).protects;
+  assert.ok(Math.abs(over[0].protectValue - 0.3978) < 1e-9, String(over[0].protectValue));
+});
+
+test('AC14: n_s が 1(2 未満)なら u を変えない', () => {
+  const r = protectCandidates(SUP_STRONG, guide, undefined, scrim(1, [[13, 1], [103, 1]])).protects;
+  assert.deepEqual(r.map((p) => p.championId), [103, 64]);
+  assert.ok(Math.abs(r[0].protectValue - 0.306) < 1e-9);
+  assert.ok(r.every((p) => !/スクリム/.test(p.reason)));
+});
+
+test('AC14: 理由に「スクリムで相手から b / n_s 試合 BAN された」を書く。BAN されていない候補には書かない', () => {
+  const r = protectCandidates(SUP_STRONG, guide, undefined, scrim(3, [[103, 2]])).protects;
+  assert.match(r[0].reason, /スクリムで相手から 2 \/ 3 試合 BAN された/);
+  assert.ok(!/スクリム/.test(r[1].reason));
+});
+
+test('AC14: NEXT の予想の出力は、その階級チームの scrimDraft でプロテクト候補を選ぶ', () => {
+  const ratings = { players: SUP_STRONG.map((p) => ({ playerId: p.playerId, axes: [{ key: 'pool', data: { poolDetail: { list: p.list } } }] })) };
+  const cc = (sd: Parameters<typeof nextDraftForecast>[3]) => nextDraftForecast(ratings, guide, undefined, sd).matches.find((x) => x.matchId === 'RS-1-CC-DD-NEXT')!.teams[0];
+  assert.deepEqual(cc(undefined).protects, [103, 64]);
+  assert.deepEqual(cc({ 'CC-NEXT': scrim(2, [[13, 2]]) }).protects, [103, 13]);
+  // 別の階級チーム(CC CORE)の BAN は使わない
+  assert.deepEqual(cc({ 'CC-CORE': scrim(2, [[13, 2]]) }).protects, [103, 64]);
+});

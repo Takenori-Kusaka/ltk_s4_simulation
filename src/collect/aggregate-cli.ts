@@ -10,6 +10,7 @@ import { buildRatings, configVersion, loadRatingInputs } from '../rating/build.t
 import { checkKnownFacts, formatReport, type KnownFact } from '../rating/known-facts.ts';
 import { teamIndicators } from '../rating/team-indicators.ts';
 import { nextDraftForecast } from '../predict/next-draft.ts';
+import { scrimDraftByTeam } from '../predict/scrim-draft.ts';
 import { computePriorWinrates, MACRO_KEYS, readExternalViews, type MacroPart, type TierTeamS } from '../winrate/core.ts';
 import type { MaturationMember } from '../winrate/dynamics.ts';
 import { TIERS } from '../sim/types.ts';
@@ -62,19 +63,19 @@ export async function main(opts: AggregateMainOptions = {}): Promise<number> {
     code = 1;
   }
   // F-004 Task-1: 試合結果の記録(本番・スクリム)。反した記録があれば公開用の評価・勝率表を書かずに止める(基準4)
-  const results = readResults(opts, publicDir, out);
+  const champions = opts.resultsRoot ? readChampions(publicDir, out) : null;
+  const results = readResults(opts, champions, out);
   if (results && results.errors.length > 0) {
     for (const e of results.errors) out(`試合結果の記録のエラー: ${formatResultError(e)}`);
     out(`試合結果の記録が検証に反したため(${results.errors.length} 件)、評価と勝率表を書かない`);
     return 3;
   }
-  code = Math.max(code, writeRatings(opts, publicDir, out, results));
+  code = Math.max(code, writeRatings(opts, publicDir, out, results, champions));
   return code;
 }
 
-/** F-004 基準1〜7: 記録を読んで検証し、読んだ件数・除いた記録・使わない選手の行を出す。resultsRoot が無ければ読まない */
-function readResults(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void): LoadedResults | null {
-  if (!opts.resultsRoot) return null;
+/** チャンピオンの一覧(champions.json)。記録の検証(F-004 基準2)と、F-006 のスクリムの BAN の championId に使う */
+function readChampions(publicDir: string, out: (l: string) => void): ChampionList | null {
   let champions: ChampionList | null = null;
   const championsPath = join(publicDir, 'champions.json');
   if (existsSync(championsPath)) {
@@ -87,6 +88,12 @@ function readResults(opts: AggregateMainOptions, publicDir: string, out: (l: str
     }
   }
   if (!champions) out('チャンピオンの一覧(champions.json)が無いため、試合結果の記録の champion の検証を省いた');
+  return champions;
+}
+
+/** F-004 基準1〜7: 記録を読んで検証し、読んだ件数・除いた記録・使わない選手の行を出す。resultsRoot が無ければ読まない */
+function readResults(opts: AggregateMainOptions, champions: ChampionList | null, out: (l: string) => void): LoadedResults | null {
+  if (!opts.resultsRoot) return null;
   const loaded = loadResults({ root: opts.resultsRoot, champions });
   out(summarizeResults(loaded));
   for (const x of loaded.excluded) out(`試合結果の記録を除いた: ${x.file}[${x.index}] ${x.reason}(${x.detail})`);
@@ -106,7 +113,7 @@ function readPrevious(path: string, out: (l: string) => void): unknown {
 }
 
 /** F-009 基準21・22: 評価を計算し、常識の一覧を検査して、反しなければ ratings.json を書く */
-function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void, results: LoadedResults | null): number {
+function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: string) => void, results: LoadedResults | null, champions: ChampionList | null): number {
   const now = (opts.now ?? (() => new Date()))();
   const groundsDir = opts.groundsDir ?? 'docs/research/grounds/normalized';
   // F-004 Task-2: 受け付けたスクリムの記録を個人の評価の試合の記録に足す(基準12)
@@ -128,11 +135,13 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   const file = { kind: 'ratings', computedAt: now.toISOString(), configVersion: configVersion(), matches: inputs.matches.length, checks, players: ratings, teams };
   writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
   out(`評価のファイルを書いた: ${path}(評価設定の版 ${file.configVersion})`);
-  // F-006 基準9: F-005 が読む NEXT の予想ピックとプロテクト候補
+  // F-006 基準9: F-005 が読む NEXT の予想ピックとプロテクト候補。基準13・14: スクリムの BAN・ピックの集計とプロテクトの値の加点
   const meta = loadMetaGuide();
   const draftPath = join(publicDir, 'next-draft.json');
-  writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, meta), null, 2) + '\n');
-  out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}`);
+  const scrimDraft = scrimDraftByTeam(results?.games ?? [], champions);
+  writeFileSync(draftPath, JSON.stringify(nextDraftForecast(file, meta, undefined, scrimDraft), null, 2) + '\n');
+  const withBans = Object.entries(scrimDraft).filter(([, s]) => s && s.games > 0).map(([k, s]) => `${k} ${s!.games}`);
+  out(`NEXT の予想ピックとプロテクト候補を書いた: ${draftPath}(スクリムの BAN の記録 n_s: ${withBans.length ? withBans.join('、') : 'なし'})`);
   // F-010: 階級チームの評価と全階級チームの総合の軸
   const ev = evaluateTeams({ ratings, inputs: inputs.players, matches: inputs.matches, teamIndicators: teams, now: now.getTime(), snapshotsDir: opts.snapshotsDir ?? 'data/snapshots', ownerViews: inputs.teamViews });
   for (const e of ev.errors) out(`チームの評価の入力: ${e}`);

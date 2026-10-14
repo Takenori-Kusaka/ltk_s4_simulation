@@ -1,6 +1,8 @@
 // F-006 Task-2: F-005 基準14 が読む、NEXT の試合ごとの予想ピックとプロテクト候補(受入基準 9)
+// F-006 Task-6: 階級チームごとのスクリムの BAN・ピックの集計 scrimDraft(受入基準 13)と、それによるプロテクト候補(受入基準 14)
 import { loadPickConfig, pickCandidates, type PickConfig } from './picks.ts';
 import { protectCandidates } from './protect.ts';
+import type { ScrimDraft } from './scrim-draft.ts';
 import { poolsFromRatings } from '../meta/match.ts';
 import type { MetaGuide } from '../meta/load.ts';
 import { ROSTER } from '../data/roster.ts';
@@ -19,19 +21,23 @@ export interface NextDraftTeam {
 export interface NextDraftForecast {
   kind: typeof NEXT_DRAFT_KIND;
   matches: { matchId: string; date: string; teams: NextDraftTeam[] }[];
+  /** 階級チーム ID → スクリムの BAN・ピックの集計。draft を持つ記録が無ければ null */
+  scrimDraft: Record<string, ScrimDraft | null>;
 }
 
 const ROLE_ORDER = ['TOP', 'JG', 'MID', 'ADC', 'SUP'];
 
 /** Regular Stage の NEXT の全試合(日程の左がブルー)。試合の識別は RS-<日>-<ブルー>-<レッド>-NEXT */
-export function nextDraftForecast(ratings: Parameters<typeof poolsFromRatings>[0], guide: MetaGuide, cfg: PickConfig = loadPickConfig()): NextDraftForecast {
+export function nextDraftForecast(
+  ratings: Parameters<typeof poolsFromRatings>[0], guide: MetaGuide, cfg: PickConfig = loadPickConfig(), scrimDraft: Partial<Record<string, ScrimDraft | null>> = {},
+): NextDraftForecast {
   const pools = new Map(poolsFromRatings(ratings).map((p) => [p.playerId, p]));
   const teamOf = (team: string): NextDraftTeam => {
     const members = ROSTER.filter((r) => r.team === team && r.tier === 'NEXT')
       .sort((a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role))
       .flatMap((r) => (pools.has(r.id) ? [pools.get(r.id)!] : []));
     const picks = members.flatMap((p) => pickCandidates(p, guide, cfg).candidates.slice(0, 1).map((c) => c.championId));
-    const protects = protectCandidates(members, guide, cfg).protects.map((p) => p.championId);
+    const protects = protectCandidates(members, guide, cfg, scrimDraft[`${team}-NEXT`]).protects.map((p) => p.championId);
     return { team, picks, protects };
   };
   return {
@@ -39,5 +45,6 @@ export function nextDraftForecast(ratings: Parameters<typeof poolsFromRatings>[0
     matches: REGULAR_DAYS.flatMap((d) =>
       d.cards.map((c) => ({ matchId: `RS-${d.day}-${c.blue}-${c.red}-NEXT`, date: d.date, teams: [teamOf(c.blue), teamOf(c.red)] })),
     ),
+    scrimDraft: Object.fromEntries([...new Set(ROSTER.map((r) => `${r.team}-${r.tier}`))].map((t) => [t, scrimDraft[t] ?? null])),
   };
 }
