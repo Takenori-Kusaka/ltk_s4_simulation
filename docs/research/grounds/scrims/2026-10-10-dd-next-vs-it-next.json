@@ -235,6 +235,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ミス・フォーチュン",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": 9,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      },
+      {
+        "order": 10,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "エズリアル",
+        "role": "ADC"
+      },
+      {
+        "order": 11,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 12,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "リリア",
+        "role": "JG"
+      },
+      {
+        "order": 13,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "アカリ",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ガレン",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ゼラス",
+        "role": "MID"
+      },
+      {
+        "order": 19,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "カ・サンテ",
+        "role": "TOP"
+      },
+      {
+        "order": 20,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "オラフ",
+        "role": "TOP"
+      }
+    ],
     "notes": null
   },
   {
@@ -473,6 +615,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "アカリ",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ミス・フォーチュン",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ビクター",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "セラフィーン",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ジャーヴァンⅣ",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "リリア",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "シヴィア",
+        "role": "ADC"
+      },
+      {
+        "order": 9,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "レオナ",
+        "role": "SUP"
+      },
+      {
+        "order": 10,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ラカン",
+        "role": "SUP"
+      },
+      {
+        "order": 11,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": 12,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "マオカイ",
+        "role": "JG"
+      },
+      {
+        "order": 13,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ヨネ",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ヴェックス",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ダイアナ",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ヨリック",
+        "role": "TOP"
+      },
+      {
+        "order": 18,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "サイオン",
+        "role": "TOP"
+      },
+      {
+        "order": 19,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "オーロラ",
+        "role": "MID"
+      },
+      {
+        "order": 20,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "フェイ",
+        "role": "MID"
+      }
+    ],
     "notes": null
   },
   {
@@ -711,6 +995,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "セラフィーン",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "レル",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ビクター",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "フェイ",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "MID"
+      },
+      {
+        "order": 8,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": 9,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": 10,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "トリスターナ",
+        "role": "ADC"
+      },
+      {
+        "order": 11,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 12,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "レオナ",
+        "role": "SUP"
+      },
+      {
+        "order": 13,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "マルザハール",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "アカリ",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "リサンドラ",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ダイアナ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ロック",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": 19,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "オラフ",
+        "role": "TOP"
+      },
+      {
+        "order": 20,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      }
+    ],
     "notes": null
   },
   {
@@ -949,6 +1375,148 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ジャーヴァンⅣ",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "オラフ",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "アカリ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "リリア",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ロック",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "モルデカイザー",
+        "role": "JG"
+      },
+      {
+        "order": 9,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "コーキ",
+        "role": "TOP"
+      },
+      {
+        "order": 10,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ゼリ",
+        "role": "ADC"
+      },
+      {
+        "order": 11,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      },
+      {
+        "order": 12,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 13,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ビクター",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "スウェイン",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "フェイ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "マルザハール",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "レネクトン",
+        "role": "TOP"
+      },
+      {
+        "order": 19,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ゼラス",
+        "role": "MID"
+      },
+      {
+        "order": 20,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "トリスターナ",
+        "role": "ADC"
+      }
+    ],
     "notes": null
   }
 ]

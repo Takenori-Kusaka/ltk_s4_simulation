@@ -235,6 +235,78 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "アンベッサ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "アーリ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ジリアン",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "トランドル",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   },
   {
@@ -473,6 +545,78 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "モルデカイザー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "シンドラ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ケイトリン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "バード",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "グラガス",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "リー・シン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "カシオペア",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ザヤ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ラカン",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   },
   {
@@ -711,6 +855,78 @@
       }
     },
     "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "カ・サンテ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "エズリアル",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "レル",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "カミール",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "スカーナー",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ロック",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "カイ＝サ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "CC MASTERS",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      }
+    ],
     "notes": null
   },
   {
