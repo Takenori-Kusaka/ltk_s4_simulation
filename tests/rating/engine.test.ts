@@ -684,7 +684,7 @@ import { oppAdjustSentence } from '../../src/rating/engine.ts';
 const DIA = { tier: 'DIAMOND', division: 'IV', lp: 0 };
 const A_DIA = (24 / 28) * 8;
 /** 実戦の記録(重みは新しさ 1 × 種類の重み。cfg に scrimGameWeight が無ければ 1) */
-const real = (o: Partial<GameRecord> & { me?: Record<string, number> }): GameRecord => ({ ...game({ ageDays: 0, ...o }), kind: o.kind ?? 'scrim', queueId: 0 });
+const real = (o: Partial<GameRecord> & { me?: Record<string, number> }): GameRecord => ({ ...game({ ageDays: 0, ...o }), kind: o.kind ?? 'scrim', queueId: 0, ...(o.oppAnchor === undefined ? {} : { oppAnchor: o.oppAnchor }) });
 const near = (a: number, b: number, msg = '') => assert.ok(Math.abs(a - b) < 1e-9, `${a} vs ${b} ${msg}`);
 
 test('基準43: 評価設定 oppAdjust の初期値は地力 0.15・レーン戦 0.23・連携 0.20・安定感 0.08。集団戦とピックプールは持たない', () => {
