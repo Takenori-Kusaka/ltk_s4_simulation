@@ -578,7 +578,7 @@ test('F-004 基準9: 集計は本番の結果から数えた k を勝率表の t
   const rows = file.teams.map((t) => ({ ...t, S: 6 }));
   const d = dayWinrate(rows, 'NEXT', 'DD', 'LR', 0.5, '2026-10-23');
   assert.equal(d.applied, true);
-  assert.deepEqual([d.kA, d.kB], [2, 0]);
+  assert.deepEqual([d.kA, d.kB], [2, 1], 'LR-NEXT は 1 日目に IT-NEXT に負けている(k = 1 の補正は 0)');
   assert.equal(d.shift, dayShift(d.a!, d.b!, d.dA, d.dB, { kA: 2 }));
   assert.ok(Math.abs(d.shift - dayShift(d.a!, d.b!, d.dA, d.dB) - -0.05) < 1e-12, '2 連敗の −0.05 が加わる');
 });
