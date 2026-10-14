@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { scrimGameRecords } from '../../src/results/to-games.ts';
 import { collectResults, loadResults } from '../../src/results/load.ts';
+import { buildResultsFile, resultGamesOf } from '../../src/results/official.ts';
 import { readChampionList } from '../../src/results/champions.ts';
 import { formFactor } from '../../src/rating/form.ts';
 import { loadEngineConfig, selectGames } from '../../src/rating/engine.ts';
@@ -118,4 +119,28 @@ test('基準14: スクリムの記録はソロランクと同じ条件(120 日�
   const form = formFactor(games.map((g) => ({ endTime: g.endTime, durationMin: g.durationMin, queueId: g.queueId, win: g.me.win === 1 })), [], now);
   assert.equal(form.games, 0, 'スクリムは調子の係数の試合に数えない');
   assert.equal(form.coefficient, 1);
+});
+
+// ---- F-004 Task-6: 受入基準 29(結果だけの記録は F-005 の結果の入力にだけ入り、個人の評価・ピックプールに入らない)。実装を読まずに受入基準から書いた ----
+
+test('基準29: 結果だけの記録は F-009 の試合の記録(ピックプールの元)を作らず、F-005 の結果の入力 games[] と連敗の数 k には 1 試合として入る', () => {
+  const ro: Row = { kind: 'scrim', resultOnly: true, date: '2026-10-10', game: 2, listeners: false, source: { url: 'https://demo-lab0110.github.io/ltk-schedule-status-site/' }, winner: 'LR CORE', teams: { 'LR CORE': {}, 'DD CORE': {} } };
+  const r = collectResults([{ file: SCRIM_FILE, kind: 'scrim', raw: [record(), ro] }], { champions: CHAMPS });
+  assert.deepEqual(r.errors, []);
+  const by = scrimGameRecords(r.games);
+  assert.equal(by.size, 10);
+  assert.ok([...by.values()].every((gs) => gs.length === 1), '選手の行を持つ 1 試合だけ');
+  assert.ok([...by.values()].flat().every((g) => g.matchId === 'SC-20261010-DD-CORE-LR-CORE-G1'));
+  assert.equal(scrimGameRecords(r.games.filter((g) => g.resultOnly)).size, 0);
+  assert.deepEqual(resultGamesOf(r.games).map((g) => [g.matchId, g.winner, g.kind]), [['SC-20261010-DD-CORE-LR-CORE-G1', 'DD-CORE', 'scrim'], ['SC-20261010-DD-CORE-LR-CORE-G2', 'LR-CORE', 'scrim']]);
+  // 本番の結果だけの記録は連敗の数 k と勝敗の並びに数える
+  const off = collectResults([{ file: '2026-10-15-cc-next-vs-dd-next.json', kind: 'official', raw: [{
+    kind: 'official', resultOnly: true, date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, listeners: false,
+    source: { url: 'https://www.youtube.com/watch?v=official' }, winner: 'CC NEXT', teams: { 'CC NEXT': {}, 'DD NEXT': {} },
+  }] }], { champions: CHAMPS });
+  assert.deepEqual(off.errors, []);
+  const file = buildResultsFile({ games: off.games, computedAt: '2026-10-16T00:00:00.000Z' });
+  assert.deepEqual(file.games.map((g) => [g.matchId, g.kind, g.winner]), [['RS-1-CC-DD-NEXT', 'official', 'CC-NEXT']]);
+  assert.deepEqual(file.teams.filter((t) => t.key === 'DD-NEXT' || t.key === 'CC-NEXT').map((t) => [t.key, t.k, t.form]).sort(), [['CC-NEXT', 0, 'W'], ['DD-NEXT', 1, 'L']]);
+  assert.equal(scrimGameRecords(off.games).size, 0);
 });

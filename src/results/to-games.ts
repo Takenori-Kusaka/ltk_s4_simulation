@@ -34,12 +34,13 @@ export function scrimStats(row: PlayerResult, team: TeamResult, durationMin: num
 
 /**
  * 基準12: 受け付けたスクリムの記録から、選手 ID → 試合の記録。使わない行(「未確認」)は記録を作らず、
- * 対面がその行なら対面なし(F-009 基準 8 で除外)。本番の記録は対象外(個人の評価に入れない。スコープ外)
+ * 対面がその行なら対面なし(F-009 基準 8 で除外)。本番の記録は対象外(個人の評価に入れない。スコープ外)。
+ * 基準29: 結果だけの記録は選手の行を持たず、試合の記録(ピックプールの元)を作らない
  */
 export function scrimGameRecords(games: readonly MatchResult[]): Map<string, GameRecord[]> {
   const out = new Map<string, GameRecord[]>();
   for (const g of games) {
-    if (g.kind !== 'scrim') continue;
+    if (g.kind !== 'scrim' || g.resultOnly || g.durationSec === null) continue;
     const durationMin = g.durationSec / 60;
     for (const teamId of g.teams) {
       const team = g.stats[teamId];
