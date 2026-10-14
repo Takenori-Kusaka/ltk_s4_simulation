@@ -622,3 +622,57 @@ test('基準39・40: 標準化は分布の二乗平均平方根で割る。分�
   assert.equal(jg.scrimGames, 0);
   assert.equal(jg.metrics[0].gamesWithOpponent, 0);
 });
+
+// F-004 Task-12: 受入基準 42(本番の試合の重み officialGameWeight と「本番 n 試合(重み w)を含む」)・27(n は指標を持つ試合だけ)。受入基準から書いた
+test('F-004 AC42: 本番の試合(kind official)は新しさの重み × officialGameWeight で数え、有効な試合数 n・縮小・補正の重み付き平均・確度に効く', () => {
+  const gold = { tier: 'GOLD', division: 'IV', lp: 0 };
+  const cfgO: EngineConfig = { ...cfg, scrimGameWeight: 2, officialGameWeight: 4 };
+  const solo = game({ ageDays: 0, me: { dmg: 21000 } }); // z = +1
+  const off: GameRecord = { ...game({ ageDays: 0, me: { dmg: 19000 } }), kind: 'official', queueId: 0 }; // z = −1
+  // n = 1 + 4 = 5、補正 = (1 × 1 + 4 × −1) ÷ 5 = −0.6、縮小 5 ÷ (5 + 8) = 5/13
+  const r = scoreDataAxis(axis, { rank: gold, games: [solo, off], position: 'MIDDLE' }, population, cfgO, NOW);
+  assert.ok(Math.abs(r.effectiveGames - 5) < 1e-9, `n = 1 + 4 = 5(${r.effectiveGames})`);
+  assert.ok(Math.abs(r.correction - -0.6) < 1e-9, `${r.correction}`);
+  assert.ok(Math.abs(r.shrink - 5 / 13) < 1e-9);
+  assert.equal(r.officialGames, 1);
+  assert.equal(r.scrimGames, 0);
+  assert.match(r.confidenceReason, /本番 1 試合\(重み 4\.0\)を含む/);
+  assert.doesNotMatch(r.confidenceReason, /スクリム/);
+  // 設定に officialGameWeight が無ければ 1 倍: n = 2、補正 0
+  const r1 = scoreDataAxis(axis, { rank: gold, games: [solo, off], position: 'MIDDLE' }, population, cfg, NOW);
+  assert.ok(Math.abs(r1.effectiveGames - 2) < 1e-9);
+  assert.ok(Math.abs(r1.correction) < 1e-9);
+  // 確度の有効な試合数も重みで数える: 本番 2 試合 × 4.0 = 8.0 → 中(重みが無ければ 2.0 → 低)
+  const two: GameRecord[] = [1, 2].map((i) => ({ ...game({ ageDays: 0, matchId: `O${i}` }), kind: 'official', queueId: 0 }));
+  assert.equal(scoreDataAxis(axis, { rank: gold, games: two, position: 'MIDDLE' }, population, cfgO, NOW).confidence, '中');
+  assert.equal(scoreDataAxis(axis, { rank: gold, games: two, position: 'MIDDLE' }, population, cfg, NOW).confidence, '低');
+  // スクリムと本番が両方あれば両方の文: n = 1 + 2 + 4 = 7、補正 = (1 − 2 − 4) ÷ 7 = −5/7
+  const scrim: GameRecord = { ...game({ ageDays: 0, me: { dmg: 19000 } }), kind: 'scrim', queueId: 0 };
+  const both = scoreDataAxis(axis, { rank: gold, games: [solo, scrim, off], position: 'MIDDLE' }, population, cfgO, NOW);
+  assert.ok(Math.abs(both.effectiveGames - 7) < 1e-9);
+  assert.ok(Math.abs(both.correction - -5 / 7) < 1e-9);
+  assert.deepEqual([both.scrimGames, both.officialGames], [1, 1]);
+  assert.match(both.confidenceReason, /スクリム 1 試合\(重み 2\.0\)を含む/);
+  assert.match(both.confidenceReason, /本番 1 試合\(重み 4\.0\)を含む/);
+  // ソロランクだけなら本番の文を出さない
+  const only = scoreDataAxis(axis, { rank: gold, games: [solo], position: 'MIDDLE' }, population, cfgO, NOW);
+  assert.equal(only.officialGames, 0);
+  assert.doesNotMatch(only.confidenceReason, /本番/);
+});
+
+test('F-004 AC27・AC42: 本番の試合も csAt14 の分布で標準化し、分布の無いロールの試合は数えない(本番の n に入れない)', () => {
+  const out = buildResultsPopulation([...topGames, ...jgGames], [csAxis], 8);
+  const cfgO: EngineConfig = { ...cfg, officialGameWeight: 4 };
+  // TOP: 自分 110・対面 100 の差 10 → z = 10 ÷ √637.5 = 0.39606。重み 4 の 1 試合だけなので補正は z のまま、n = 4
+  const top = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ ageDays: 0, matchId: 'O1', position: 'TOP', me: { csAt14: 110 }, opp: { csAt14: 100 } }), kind: 'official', queueId: 0 }], position: 'TOP' }, out.population, cfgO, NOW);
+  assert.ok(Math.abs(top.correction - 10 / RMS8) < 1e-9, `${top.correction}`);
+  assert.ok(Math.abs(top.effectiveGames - 4) < 1e-9);
+  assert.equal(top.officialGames, 1);
+  assert.match(top.confidenceReason, /本番 1 試合\(重み 4\.0\)を含む/);
+  // JG: 分布が無い(7 組)。csAt14 の無い試合(cs14 の無い試合)も数えない
+  const jg = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ matchId: 'O2', position: 'JUNGLE', me: { csAt14: 110 }, opp: { csAt14: 100 } }), kind: 'official', queueId: 0 }], position: 'JUNGLE' }, out.population, cfgO, NOW);
+  assert.equal(jg.officialGames, 0);
+  assert.doesNotMatch(jg.confidenceReason, /本番/);
+  const noCs = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ matchId: 'O3', position: 'TOP', me: { dmg: 1 }, opp: { dmg: 1 } }), kind: 'official', queueId: 0 }], position: 'TOP' }, out.population, cfgO, NOW);
+  assert.equal(noCs.officialGames, 0);
+});

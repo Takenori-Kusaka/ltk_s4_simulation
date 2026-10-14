@@ -613,3 +613,78 @@ test('基準33〜36(経歴の記録の実データ): 到達の時点・最終出
     }
   }
 });
+
+// F-004 Task-12: 受入基準 41(本番の試合の記録を評価の入力へ。調子の係数とピックプールの数え方)・42(重み officialGameWeight と説明の文)・40(組の数の出力)。受入基準から書いた
+const NOW3 = Date.parse('2026-10-16T03:00:00Z');
+const URL_X = { url: 'https://www.youtube.com/watch?v=x' };
+const nextTeams = (winner: 'CC NEXT' | 'DD NEXT'): Row => ({ 'CC NEXT': f004Team('CC NEXT', winner === 'CC NEXT' ? 3 : 1), 'DD NEXT': f004Team('DD NEXT', winner === 'DD NEXT' ? 3 : 1) });
+const nextScrim = (duration: string, winner: 'CC NEXT' | 'DD NEXT'): Row => ({ kind: 'scrim', date: '2026-10-10', listeners: false, source: URL_X, duration, winner, teams: nextTeams(winner) });
+/** Regular Stage 1 日目の NEXT の CC NEXT 対 DD NEXT(試合 ID RS-1-CC-DD-NEXT)。2026-10-15 正午(JST)は NOW3 の 1 日前 */
+const nextOfficial = (winner: 'CC NEXT' | 'DD NEXT', over: Row = {}): Row => ({
+  kind: 'official', date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, listeners: false, source: URL_X, duration: '40:00', winner, teams: nextTeams(winner), ...over,
+});
+const nextInputs = (scrims: Row[], officials: Row[]) => {
+  const files = [
+    ...(scrims.length ? [{ file: '2026-10-10-cc-next-vs-dd-next.json', kind: 'scrim' as const, raw: scrims }] : []),
+    ...(officials.length ? [{ file: '2026-10-15-cc-next-vs-dd-next.json', kind: 'official' as const, raw: officials }] : []),
+  ];
+  const r = collectResults(files, { champions: F004_CHAMPS });
+  assert.deepEqual(r.errors, []);
+  return loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(), scrims: r.games });
+};
+
+test('F-004 AC41/AC42: 本番の試合の記録を games に足し、軸の説明と確度の理由に「本番 n 試合(重み 4.0)を含む」。有効な試合数は 4.0 倍。調子の係数には数えない', () => {
+  const { inputs, errors } = nextInputs([], [nextOfficial('DD NEXT')]);
+  assert.deepEqual(errors, []);
+  const adc = find(inputs.players, 'DD-NEXT-ADC');
+  assert.equal(adc.games.length, 1);
+  assert.ok(adc.games.every((g) => g.kind === 'official' && g.queueId === 0 && g.position === 'BOTTOM'));
+  assert.equal(inputs.matches.length, 0, '本番は母集団(matches)に入れない');
+  const ratings = buildRatings(inputs, NOW3);
+  const ground = axisOf(ratings, 'DD-NEXT-ADC', 'ground');
+  assert.match(ground.reason, /本番 1 試合\(重み 4\.0\)を含む/);
+  assert.match(ground.data!.confidenceReason, /本番 1 試合\(重み 4\.0\)を含む/);
+  assert.doesNotMatch(ground.reason, /スクリム/);
+  assert.equal(ground.data!.officialGames, 1);
+  const w1 = 0.5 ** (1 / 45); // 2026-10-15 正午(JST)から基準日まで 1 日
+  assert.ok(Math.abs(ground.data!.effectiveGames - 4 * w1) < 1e-6, `有効な試合数 ${ground.data!.effectiveGames}`);
+  // 14 分の CS の無い試合はレーン戦に使われず、文を出さない(基準27)
+  const laning = axisOf(ratings, 'DD-NEXT-ADC', 'laning');
+  assert.equal(laning.data!.officialGames, 0);
+  assert.doesNotMatch(laning.reason, /本番/);
+  assert.doesNotMatch(axisOf(ratings, 'CC-MASTERS-TOP', 'ground').reason, /本番/);
+  // 基準14: 調子の係数(キュー 420・440)に本番の試合を使わない
+  assert.equal(ratings.find((r) => r.playerId === 'DD-NEXT-ADC')!.form.games, 0);
+});
+
+test('F-004 AC41(基準16): ピックプールは本番の使用チャンピオンを 1 試合(勝敗つき)として数え、officialGameWeight を掛けない', () => {
+  // スクリム 3 試合(DD NEXT の 2 勝 1 敗)+ 本番 1 試合(DD NEXT の勝ち)。ユナラ(804)4 試合 3 勝
+  const { inputs } = nextInputs([nextScrim('40:00', 'DD NEXT'), nextScrim('35:00', 'DD NEXT'), nextScrim('30:00', 'CC NEXT')], [nextOfficial('DD NEXT')]);
+  const ratings = buildRatings(inputs, NOW3);
+  const pool = axisOf(ratings, 'DD-NEXT-ADC', 'pool');
+  assert.equal(pool.estimated, false);
+  assert.deepEqual(pool.data!.poolDetail?.list.map((c) => [c.championId, c.games]), [[804, 4]]);
+  // 3 勝 1 敗を事前 5 試合で縮小: (3 + 2.5) ÷ (4 + 5) = 0.6111
+  assert.ok(Math.abs((pool.data!.poolDetail?.list[0].winRate ?? 0) - 5.5 / 9) < 1e-9);
+  // 有効な試合数: スクリム 3 × 0.5^(6/45)(10-10 正午から 6 日)+ 本番 1 × 0.5^(1/45)。重みは掛けない
+  const expected = 3 * 0.5 ** (6 / 45) + 0.5 ** (1 / 45);
+  assert.ok(Math.abs(pool.data!.effectiveGames - expected) < 1e-6, `${pool.data!.effectiveGames} vs ${expected}`);
+  assert.deepEqual([pool.data!.scrimGames, pool.data!.officialGames], [3, 1]);
+  assert.match(pool.reason, /本番 1 試合\(重み 1\.0\)を含む/);
+  // champion が null の行(JG)は数えない
+  assert.equal(axisOf(ratings, 'DD-NEXT-JG', 'pool').data!.officialGames, 0);
+});
+
+test('F-004 AC40: csAt14 の組の数が下限に満たないロールと組の数を、評価の入力の警告に出す。実戦の記録が無ければ出さない', () => {
+  const rec = nextOfficial('DD NEXT', { cs14Sec: 840 });
+  const t = rec.teams as Record<string, { players: Row[] }>;
+  t['CC NEXT'].players[0].cs14 = 100;
+  t['DD NEXT'].players[0].cs14 = 90;
+  const { warnings } = nextInputs([], [rec]);
+  const cs = warnings.filter((w) => w.includes('csAt14'));
+  // TOP 1 組・JUNGLE・MIDDLE・BOTTOM 0 組(下限 8)
+  assert.ok(cs.some((w) => /TOP/.test(w) && /1 組/.test(w)), cs.join('\n'));
+  assert.ok(cs.some((w) => /JUNGLE/.test(w) && /0 組/.test(w)), cs.join('\n'));
+  assert.equal(cs.filter((w) => /UTILITY/.test(w)).length, 0, 'SUP は分布を作らない');
+  assert.deepEqual(loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds() }).warnings.filter((w) => w.includes('csAt14')), []);
+});

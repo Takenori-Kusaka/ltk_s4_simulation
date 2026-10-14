@@ -133,9 +133,10 @@ export function recencyWeight(ageDays: number, halfLifeDays: number): number {
   return 0.5 ** (Math.max(0, ageDays) / halfLifeDays);
 }
 
-/** F-004 基準13: 1 試合の重み = 新しさの重み × (スクリムの記録なら scrimGameWeight。省略時 1) */
+/** F-004 基準13・42: 1 試合の重み = 新しさの重み × (スクリムなら scrimGameWeight、本番なら officialGameWeight。省略時 1) */
 export function gameWeight(g: GameRecord, now: number, cfg: EngineConfig): number {
-  return recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) * (g.kind === 'scrim' ? cfg.scrimGameWeight ?? 1 : 1);
+  const kindWeight = g.kind === 'scrim' ? cfg.scrimGameWeight ?? 1 : g.kind === 'official' ? cfg.officialGameWeight ?? 1 : 1;
+  return recencyWeight((now - g.endTime) / DAY, cfg.halfLifeDays) * kindWeight;
 }
 
 /** F-004 基準15: 「スクリム n 試合(重み w)を含む」。0 件なら null */
@@ -143,10 +144,22 @@ export function scrimSentence(scrimGames: number, weight: number): string | null
   return scrimGames > 0 ? `スクリム ${scrimGames} 試合(重み ${weight.toFixed(1)})を含む` : null;
 }
 
-/** 確度の理由: 有効な試合数と閾値。スクリムを含む軸はその数と重み(F-004 基準15) */
-export function confidenceReasonOf(n: number, scrimGames: number, cfg: EngineConfig, weight = cfg.scrimGameWeight ?? 1): string {
-  const s = scrimSentence(scrimGames, weight);
-  return `有効な試合数 ${n.toFixed(1)}(${cfg.confidence.high} 以上で高、${cfg.confidence.mid} 以上で中)${s ? `。${s}` : ''}`;
+/** F-004 基準42: 「本番 n 試合(重み w)を含む」。0 件なら null */
+export function officialSentence(officialGames: number, weight: number): string | null {
+  return officialGames > 0 ? `本番 ${officialGames} 試合(重み ${weight.toFixed(1)})を含む` : null;
+}
+
+/** 確度の理由: 有効な試合数と閾値。スクリム・本番を含む軸はその数と重み(F-004 基準15・42) */
+export function confidenceReasonOf(
+  n: number,
+  scrimGames: number,
+  cfg: EngineConfig,
+  weight = cfg.scrimGameWeight ?? 1,
+  officialGames = 0,
+  officialWeight = cfg.officialGameWeight ?? 1,
+): string {
+  const s = [scrimSentence(scrimGames, weight), officialSentence(officialGames, officialWeight)].filter(Boolean).map((x) => `。${x}`).join('');
+  return `有効な試合数 ${n.toFixed(1)}(${cfg.confidence.high} 以上で高、${cfg.confidence.mid} 以上で中)${s}`;
 }
 
 /** 基準1・2: 評価の試合(期間・長さ)と、ロールに依存する軸では大会のロールの試合 */
@@ -283,6 +296,7 @@ export function scoreDataAxis(
   let n = 0;
   let pSum = 0;
   let scrimGames = 0;
+  let officialGames = 0;
   const metricAcc = axis.metrics.map(() => ({ zSum: 0, vSum: 0, w: 0, count: 0 }));
   for (const g of games) {
     const w = gameWeight(g, now, cfg);
@@ -308,6 +322,7 @@ export function scoreDataAxis(
     pSum += w * (gz / gw);
     n += w;
     if (g.kind === 'scrim') scrimGames += 1;
+    if (g.kind === 'official') officialGames += 1;
   }
   const correction = n > 0 ? pSum / n : 0;
   const shrink = n / (n + cfg.k);
@@ -338,7 +353,8 @@ export function scoreDataAxis(
     oldest: games.length ? isoDay(games[games.length - 1].endTime) : null,
     bonus,
     scrimGames,
-    confidenceReason: confidenceReasonOf(n, scrimGames, cfg) + (whenUnknown && !estimated ? `。${REACH_UNKNOWN_DOWNGRADE}` : ''),
+    officialGames,
+    confidenceReason: confidenceReasonOf(n, scrimGames, cfg, undefined, officialGames) + (whenUnknown && !estimated ? `。${REACH_UNKNOWN_DOWNGRADE}` : ''),
     metrics: axis.metrics.map((def, i) => {
       const m = metricAcc[i];
       return {

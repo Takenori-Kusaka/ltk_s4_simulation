@@ -1,8 +1,9 @@
 {
   "_comment": "F-009 評価設定(ADR-0004・docs/design/rating-model.md)。値は 2026-10-09 に価値責任者が確定した設計書の初期値",
   "engine": {
-    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する。blankDecayPerYear・blankGraceYears は到達点からのブランクの減衰(基準33・34。1 年あたり 0.3 点、猶予 1 年。歴代の最高ランクと元プロの下限に掛かり、下限は 8.0 を下回らない)。2026-10-11 の起案(G-4 再判定 4)。cs14MinPairs は 14 分の CS(csAt14)の分布を作る、ロールごとの実戦の記録の組の数の下限(F-004 基準40。初期値 8。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者・技術判断者が変えてよい)",
+    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する。blankDecayPerYear・blankGraceYears は到達点からのブランクの減衰(基準33・34。1 年あたり 0.3 点、猶予 1 年。歴代の最高ランクと元プロの下限に掛かり、下限は 8.0 を下回らない)。2026-10-11 の起案(G-4 再判定 4)。cs14MinPairs は 14 分の CS(csAt14)の分布を作る、ロールごとの実戦の記録の組の数の下限(F-004 基準40。初期値 8。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者・技術判断者が変えてよい)。officialGameWeight は本番 1 試合の重み(F-004 基準42。初期値 4.0 = scrimGameWeight の 2 倍。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者が変えてよい)",
     "scrimGameWeight": 2,
+    "officialGameWeight": 4,
     "cs14MinPairs": 8,
     "blankDecayPerYear": 0.3,
     "blankGraceYears": 1,

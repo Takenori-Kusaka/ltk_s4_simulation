@@ -62,8 +62,8 @@ export interface GameRecord {
   me: Record<string, number>;
   /** 同じ試合の同じロールの相手。いなければ null */
   opp: Record<string, number> | null;
-  /** 記録の種類。scrim = スクリムの記録(F-004。重み scrimGameWeight)。省略時は Riot API の試合 */
-  kind?: 'scrim';
+  /** 記録の種類。scrim = スクリムの記録(F-004。重み scrimGameWeight)、official = 本番の記録(F-004 基準41。重み officialGameWeight)。省略時は Riot API の試合 */
+  kind?: 'scrim' | 'official';
 }
 
 /** 母集団の構築に使う試合(全参加者) */
@@ -120,6 +120,8 @@ export interface EngineConfig {
   confidence: { high: number; mid: number };
   /** スクリム 1 試合の重み(F-004 基準13。新しさの重みに掛ける。省略時 1) */
   scrimGameWeight?: number;
+  /** 本番 1 試合の重み(F-004 基準42。新しさの重みに掛ける。省略時 1) */
+  officialGameWeight?: number;
   /** 実戦の記録の分布(MetricDef.population = results)を作る組の数の下限(F-004 基準40。初期値 8。省略時 0 = 下限なし) */
   cs14MinPairs?: number;
   /** ブランク 1 年あたりの減衰(点。基準33・34。初期値 0.3。省略時 0 = 減衰しない) */
@@ -185,6 +187,8 @@ export interface DataAxisResult {
   metrics: AxisMetricResult[];
   /** この軸に使ったスクリムの試合の数(F-004 基準15) */
   scrimGames: number;
-  /** 確度の理由(有効な試合数。スクリムを含む軸はその数と重み) */
+  /** この軸に使った本番の試合の数(F-004 基準42) */
+  officialGames: number;
+  /** 確度の理由(有効な試合数。スクリム・本番を含む軸はその数と重み) */
   confidenceReason: string;
 }
