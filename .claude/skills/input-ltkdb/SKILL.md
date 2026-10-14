@@ -5,12 +5,12 @@ description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試�
 
 # LTKDB からスクリムの試合結果を取り込む
 
-共通の原則(出典を付ける、個人情報を入れない、見立てを書き込まない)と人へ戻す場面は `.claude/skills/data-update/SKILL.md` にあります。先に読んでください。記録の形の正本は `specs/F-004/spec.md`「入力の形」「受入基準 1〜7・28・31〜38」と `src/results/types.ts`・`src/results/load.ts` です。配信から自分で書き起こすときは `/input-scrim` を使います。
+共通の原則(出典を付ける、個人情報を入れない、見立てを書き込まない)と人へ戻す場面は `.claude/skills/data-update/SKILL.md` にあります。先に読んでください。記録の形の正本は `specs/F-004/spec.md`「入力の形」「受入基準 1〜7・28・31〜38・44〜47」、F-006 の受入基準 12(`draft`)と `src/results/types.ts`・`src/results/load.ts` です。配信から自分で書き起こすときは `/input-scrim` を使います。
 
 ## 出典
 
 - LTKDB: https://demo-lab0110.github.io/ltk-schedule-status-site/ (非公式のファンサイト)
-- データ: https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json の `sheets` の「対戦結果まとめ」(1 試合 1 行)、「リザルト詳細」(1 試合 10 行)、「サイト_予定」(本番の行の「スケジュールID」が指す)。「サイト_選手プロフィール」「サイト_チームマスタ」は、予定の `tier` が空の本番の階級を選手の名前から決めるのに使う
+- データ: https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json の `sheets` の「対戦結果まとめ」(1 試合 1 行)、「リザルト詳細」(1 試合 10 行)、「サイト_予定」(本番の行の「スケジュールID」が指す)、「BP詳細」(BAN・ピック。1 試合 0〜20 行)。「サイト_選手プロフィール」「サイト_チームマスタ」は、予定の `tier` が空の本番の階級を選手の名前から決めるのに使う
 - サイトの説明では、一部の値はスクリーンショットの OCR で、後で直されることがある。2026-10-12 の確かめでは、配信から独立に書き起こした LR CORE vs DD CORE の 3 試合と 173 個の値がすべて一致した(`docs/research/grounds/scrims/README.md`)
 
 ## 取り込むもの・取り込まないもの
@@ -27,6 +27,9 @@ description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試�
 | 書こうとする記録が、置き場の記録と合わせた読み込みの検証(基準 1〜3・7・25・28)に反する(例: Regular Stage・準決勝の試合番号が 1 でない、サイドが日程と違う、一覧に無いチャンピオン) | その試合だけ書かず、要約の `skipped` に「書く前の検証に反した」と反した欄を出す。残りは書く。基準 35 |
 | チャンピオン名が一覧に無く、NFKC で一覧のただ 1 つの名前と一致する(「ジャーヴァンIV」→「ジャーヴァンⅣ」) | 一覧の表記に置き換えて書く。一覧は `--champions <ファイル>`、無ければ `data/public/champions.json`、無ければ Data Dragon ja_JP。読めなければ何も書かず終了コード 1。基準 35 |
 | 選手の行の「プレイヤー名」「サモナーネーム」(`#` の前)のどちらも、その席の名簿の名前・Riot ID のゲーム名・「サイト_選手プロフィール」の名前と一致しない(大文字と小文字、NFKC の違いは同じとみなす。代打・ロールの入れ替え) | `mappingConfidence` を「未確認(LTKDB の選手名 <名前> がその席の選手と一致しない)」として書き、要約の `unconfirmed` に試合 ID・席・名前を出す(読み込みの基準 6 でその行は使われない)。基準 36 |
+| 書く記録(選手の行を持つ記録・結果だけの記録・置き換え。スクリムと本番)の試合に「BP詳細」の行がある | 1 行 1 要素の `draft` を書く。`team` は「チーム名」+ 階級、`type` は「種別」、`role` は PICK の「ロール」(BAN は null)、`champion` は「チャンピオン名」を基準 35 で正規化した名前(BAN の空と「NOBAN」(空白を除いて大文字)は null)。`order` は全行の「BP順」が 1 以上の整数で重複しなければ「BP順」、そうでなければ全要素 null。並びは `order` の昇順、null なら BAN → PICK、チーム1 → チーム2、PICK は TOP → JG → MID → ADC → SUP、BAN は行の順。サイド・フェーズ・選手の名前・集計用名は写さない。行の無い試合には `draft` の欄を書かない。要約の `draftWritten`。基準 44 |
+| BP詳細が (a) どちらかのチームの PICK が 5 行でない・ロールが TOP〜SUP を 1 つずつでない(空のロールを含む)、(b) PICK のチャンピオン名が空か「NOBAN」、(c) 作った `draft` が F-006 基準 12 の検証(選手の行のチャンピオンとの照合を含む)に反する | 記録は `draft` なしで書く。要約の `draftSkipped` に試合 ID と当たった条件((a)〜(c) で始まる理由)を出す。基準 45 |
+| 置き場に同じ試合の記録がある(基準 34) | その記録に `draft` を足さない(既存の記録への `draft` は記録だけの PR で足す。決定 D9)。`draft` の無い記録は要約の `withoutDraft`(ファイル名・要素の番号・試合 ID)に、`draft` が LTKDB から作ったものと食い違う記録は欄 `draft` の訂正の候補(`corrections`。両方の値)に出す。照合はその記録の選手の行と行い、反すれば `draftSkipped`。置き換えで書く記録には `draft` を含める。基準 46 |
 
 ## 手順
 
@@ -37,7 +40,7 @@ description: 非公式のファンサイト LTKDB(LTK Schedule & Status)の試�
    COLLECTED_WITH="<モデルの名称と版>" node .claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs
    ```
 
-   終了コード 0 = 新しい試合なし(ここで終える。PR を出さない)、10 = 書いたファイルがある、1 = 失敗(取得できない・形が違う。報告して終える)。`--in <ファイル>` で手元の site-data.json を、`--root <置き場の親>`(既定 `docs/research/grounds`。`scrims/` と `results/` を持つ)で書く先を、`--dry-run` で書かずに試せる。同じ日・同じ組のファイルが既にあれば後ろに足す。出力の最後の行は JSON の要約(`written`(書いたファイルと試合 ID)・`replaced`・`resultOnly`・`skipped.official`・`skipped.scrim`(書かなかった試合と理由)・`corrections`・`unconfirmed`・`listeners`・`updatedAt`。基準 38)。`replaced`・`corrections`・`unconfirmed` は F-004 Task-8 で埋まるまで空
+   終了コード 0 = 新しい試合なし(ここで終える。PR を出さない)、10 = 書いたファイルがある、1 = 失敗(取得できない・形が違う。報告して終える)。`--in <ファイル>` で手元の site-data.json を、`--root <置き場の親>`(既定 `docs/research/grounds`。`scrims/` と `results/` を持つ)で書く先を、`--dry-run` で書かずに試せる。同じ日・同じ組のファイルが既にあれば後ろに足す。出力の最後の行は JSON の要約(`written`(書いたファイルと試合 ID)・`replaced`・`resultOnly`・`skipped.official`・`skipped.scrim`(書かなかった試合と理由)・`corrections`・`unconfirmed`・`draftWritten`(`draft` を書いた試合 ID)・`draftSkipped`(`draft` を書かなかった試合 ID と条件)・`withoutDraft`(draft の無い既存の記録)・`listeners`・`updatedAt`。基準 38・47)
 3. 読み込みをテストで通す(テストは変えない): `node --test tests/results/load.test.ts`。反した欄があれば記録を直すのではなく、変換の出力をそのまま残して `state:needs-po` で人へ戻す(LTKDB の値の誤り、名簿の変更、Data Dragon に無いチャンピオン名など)
 4. `docs/research/grounds/scrims/README.md` の表に新しいファイルの行(対戦カード・勝敗・試合時間・対応づけの確度・読めなかった項目)を、`docs/research/grounds/README.md` の末尾に 1 行を足す
 5. `node scripts/gate/g5-local.mjs --no-install` を通す

@@ -9,6 +9,8 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFil
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ROSTER } from '../../src/data/roster.ts';
+import { readChampionList } from '../../src/results/champions.ts';
+import { loadResults } from '../../src/results/load.ts';
 import { convert } from '../../.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs';
 
 type Row = Record<string, unknown>;
@@ -231,7 +233,7 @@ test('基準38: 最後の行は JSON の要約。書いたファイルがあれ�
   const first = cli(['--in', join(tmp, 'site.json'), '--root', dir]);
   assert.equal(first.code, 10);
   const s = lastJson(first.out);
-  assert.deepEqual(Object.keys(s).sort(), ['corrections', 'listeners', 'replaced', 'resultOnly', 'skipped', 'unconfirmed', 'updatedAt', 'written']);
+  assert.deepEqual(Object.keys(s).sort(), ['corrections', 'draftSkipped', 'draftWritten', 'listeners', 'replaced', 'resultOnly', 'skipped', 'unconfirmed', 'updatedAt', 'withoutDraft', 'written']);
   assert.deepEqual(s.written, [{ file: 'scrims/2026-10-13-cc-masters-vs-it-masters.json', added: ['SCRIM_20261013_MASTERS_IT_CC_001', 'SCRIM_20261013_MASTERS_IT_CC_002'] }]);
   assert.deepEqual(s.resultOnly, ['SCRIM_20261013_MASTERS_IT_CC_001']);
   assert.deepEqual([s.listeners, s.updatedAt, s.replaced, s.corrections, s.unconfirmed], [1, '2026-10-14T12:00:00.000Z', [], [], []]);
@@ -409,4 +411,192 @@ test('基準36: 大文字と小文字・全角と半角の違う名前(固定デ
   const { dir, summary } = run([SCRIM2], rows);
   assert.deepEqual(summary.unconfirmed, []);
   assert.ok([...confs(dir, SCRIM_FILE, 'CC MASTERS'), ...confs(dir, SCRIM_FILE, 'IT MASTERS')].every(([, c]) => /^推定/.test(c as string)));
+});
+
+// --- F-004 Task-14: 受入基準 44・45・46・47(LTKDB の BP詳細を記録の draft へ)。実装より先に受入基準から書いた ---
+// 固定データ: fixtures/ltkdb-bp.json は 2026-10-14 の LTKDB の公開データの、BP詳細を持つ名簿の階級チーム同士の 15 試合の
+// 「対戦結果まとめ」15 行と「BP詳細」260 行(1 行 1 レコード)。選手の行は含めないので、SCRIM2 以外は結果だけの記録になる。
+// fixtures/ltkdb-bp-champions.json は Data Dragon 16.20.1 の一覧から、その 260 行に出る 90 体を抜いたもの
+const BP = JSON.parse(readFileSync('tests/results/fixtures/ltkdb-bp.json', 'utf8'));
+const BP_CHAMPS = { version: 'test', champions: { ...CHAMPS.champions, ...JSON.parse(readFileSync('tests/results/fixtures/ltkdb-bp-champions.json', 'utf8')).champions } };
+const LRDD2 = 'SCRIM_20261009_CORE_LR_DD_002'; // チーム1 DD・チーム2 LR。BP順 1〜20 がそろう。順 4 の DD の BAN は「NOBAN」
+const DDIT1 = 'SCRIM_20261011_CORE_DD_IT_001'; // チーム1 IT・チーム2 DD。BP順が全行空。DD の BAN 2 行のチャンピオン名が空
+const CCLR1 = 'SCRIM_20261011_MASTERS_CC_LR_001'; // PICK だけ 10 行。LR の 5 行のロールが空
+const matchOf = (id: string): Row => BP['対戦結果まとめ'].find((m: Row) => m['試合ID'] === id);
+const bpOf = (id: string): Row[] => BP['BP詳細'].filter((r: Row) => r['試合ID'] === id);
+const setBp = (rows: Row[], order: number, over: Row) => rows.map((r) => (r['BP順'] === order ? { ...r, ...over } : r));
+const runBp = (matches: Row[], details: Row[], bp: Row[], dir = root()) => {
+  const site = siteOf(matches, details);
+  return { dir, summary: convert({ ...site, sheets: { ...(site.sheets as Row), 'BP詳細': bp } }, { root: dir, today: '2026-10-14', collectedWith: 'test', champions: BP_CHAMPS }) };
+};
+const tuples = (d: unknown) => (d as Row[]).map((e) => [e.order, e.team, e.type, e.role, e.champion]);
+const LRDD_FILE = 'scrims/2026-10-09-dd-core-vs-lr-core.json';
+const DDIT_FILE = 'scrims/2026-10-11-dd-core-vs-it-core.json';
+const CCLR_FILE = 'scrims/2026-10-11-cc-masters-vs-lr-masters.json';
+// 固定データの行を手で並べた期待値。LR_DD_002 は BP順の昇順(順 4 の NOBAN は null、BAN の role は null)
+const LRDD2_DRAFT = [
+  [1, 'LR CORE', 'BAN', null, 'アニビア'], [2, 'DD CORE', 'BAN', null, 'リー・シン'], [3, 'LR CORE', 'BAN', null, 'ポッピー'], [4, 'DD CORE', 'BAN', null, null],
+  [5, 'LR CORE', 'BAN', null, 'アーリ'], [6, 'DD CORE', 'BAN', null, 'パイク'], [7, 'LR CORE', 'PICK', 'JG', 'ウーコン'], [8, 'DD CORE', 'PICK', 'JG', 'リリア'],
+  [9, 'DD CORE', 'PICK', 'ADC', 'ジン'], [10, 'LR CORE', 'PICK', 'ADC', 'エズリアル'], [11, 'LR CORE', 'PICK', 'SUP', 'ニーコ'], [12, 'DD CORE', 'PICK', 'SUP', 'ノーチラス'],
+  [13, 'DD CORE', 'BAN', null, 'ガリオ'], [14, 'LR CORE', 'BAN', null, 'サイオン'], [15, 'DD CORE', 'BAN', null, 'ビクター'], [16, 'LR CORE', 'BAN', null, 'ツイステッド・フェイト'],
+  [17, 'DD CORE', 'PICK', 'MID', 'ナフィーリ'], [18, 'LR CORE', 'PICK', 'MID', 'リサンドラ'], [19, 'LR CORE', 'PICK', 'TOP', 'カ・サンテ'], [20, 'DD CORE', 'PICK', 'TOP', 'ナー'],
+];
+// DD_IT_001 は順が無い: BAN(チーム1 IT → チーム2 DD、各チームは行の順)の後に PICK(IT → DD、TOP → JG → MID → ADC → SUP)
+const DDIT1_BAN_IT = ['アイバーン', 'アーゴット', 'ノクターン', 'アニビア', 'ルシアン'];
+const DDIT1_BAN_DD = ['ケイトリン', null, null, 'ヴェイン', 'ガリオ'];
+const DDIT1_PICK = [
+  [null, 'IT CORE', 'PICK', 'TOP', 'アンベッサ'], [null, 'IT CORE', 'PICK', 'JG', 'スカーナー'], [null, 'IT CORE', 'PICK', 'MID', 'リサンドラ'], [null, 'IT CORE', 'PICK', 'ADC', 'ユナラ'], [null, 'IT CORE', 'PICK', 'SUP', 'ノーチラス'],
+  [null, 'DD CORE', 'PICK', 'TOP', 'レネクトン'], [null, 'DD CORE', 'PICK', 'JG', 'ドクター・ムンド'], [null, 'DD CORE', 'PICK', 'MID', 'ロック'], [null, 'DD CORE', 'PICK', 'ADC', 'ゼリ'], [null, 'DD CORE', 'PICK', 'SUP', 'ルル'],
+];
+const bans = (team: string, names: (string | null)[]) => names.map((c) => [null, team, 'BAN', null, c]);
+// IT_CC_002 は PICK だけ(IT → CC)。固定データの選手の行(DETAIL2)のチャンピオンと同じ
+const ITCC2_DRAFT = [
+  [null, 'IT MASTERS', 'PICK', 'TOP', 'アンベッサ'], [null, 'IT MASTERS', 'PICK', 'JG', 'チョ＝ガス'], [null, 'IT MASTERS', 'PICK', 'MID', 'アーリ'], [null, 'IT MASTERS', 'PICK', 'ADC', 'ユナラ'], [null, 'IT MASTERS', 'PICK', 'SUP', 'ルル'],
+  [null, 'CC MASTERS', 'PICK', 'TOP', 'ジリアン'], [null, 'CC MASTERS', 'PICK', 'JG', 'トランドル'], [null, 'CC MASTERS', 'PICK', 'MID', 'ビクター'], [null, 'CC MASTERS', 'PICK', 'ADC', 'ルシアン'], [null, 'CC MASTERS', 'PICK', 'SUP', 'ミリオ'],
+];
+const reasonsOf = (s: Row) => (s.draftSkipped as Row[]).map((x) => [x.id, (x.reason as string).slice(0, 3)]);
+
+// --- 基準 44: BP詳細の行から draft を作る ---
+
+test('基準44: BP順のそろう試合は BP順の昇順で、team・type・role・champion・order だけを写す(NOBAN の BAN は null、BAN の role は null)', () => {
+  const { dir, summary } = runBp([matchOf(LRDD2)], [], bpOf(LRDD2));
+  const [r] = read(dir, LRDD_FILE);
+  assert.deepEqual(tuples(r.draft), LRDD2_DRAFT);
+  assert.ok((r.draft as Row[]).every((e) => Object.keys(e).sort().join() === 'champion,order,role,team,type'));
+  assert.deepEqual([summary.draftWritten, summary.draftSkipped, summary.withoutDraft], [[LRDD2], [], []]);
+  // 行の並びを逆にしても order の昇順
+  assert.deepEqual(tuples(read(runBp([matchOf(LRDD2)], [], [...bpOf(LRDD2)].reverse()).dir, LRDD_FILE)[0].draft), LRDD2_DRAFT);
+});
+
+test('基準44: BP順の無い試合は order が全要素 null。BAN の後に PICK、チーム1 → チーム2、PICK はロールの順、BAN は行の順。空の BAN は null', () => {
+  const { dir } = runBp([matchOf(DDIT1)], [], bpOf(DDIT1));
+  assert.deepEqual(tuples(read(dir, DDIT_FILE)[0].draft), [...bans('IT CORE', DDIT1_BAN_IT), ...bans('DD CORE', DDIT1_BAN_DD), ...DDIT1_PICK]);
+  // 行の並びを逆にすると BAN だけが逆の順になる(PICK はロールの順のまま)
+  const rev = runBp([matchOf(DDIT1)], [], [...bpOf(DDIT1)].reverse());
+  assert.deepEqual(tuples(read(rev.dir, DDIT_FILE)[0].draft), [...bans('IT CORE', [...DDIT1_BAN_IT].reverse()), ...bans('DD CORE', [...DDIT1_BAN_DD].reverse()), ...DDIT1_PICK]);
+});
+
+test('基準44: PICK だけの試合で選手の行を持つ記録にも draft を書く(選手の行のチャンピオンと一致)', () => {
+  const { dir, summary } = runBp([SCRIM2], DETAIL2, bpOf(ID2));
+  const [r] = read(dir, SCRIM_FILE);
+  assert.equal(r.resultOnly, undefined);
+  assert.deepEqual(tuples(r.draft), ITCC2_DRAFT);
+  assert.deepEqual(summary.draftWritten, [ID2]);
+});
+
+test('基準44: 「NO BAN」「noban」・空の BAN は null、BAN のチャンピオン名にも基準 35 の正規化をする', () => {
+  const rows = setBp(setBp(setBp(setBp(bpOf(LRDD2), 1, { 'チャンピオン名': 'ジャーヴァンIV' }), 4, { 'チャンピオン名': 'NO BAN' }), 6, { 'チャンピオン名': ' noban ' }), 13, { 'チャンピオン名': '' });
+  const d = tuples(read(runBp([matchOf(LRDD2)], [], rows).dir, LRDD_FILE)[0].draft);
+  assert.deepEqual([d[0][4], d[3][4], d[5][4], d[12][4]], ['ジャーヴァンⅣ', null, null, null]);
+});
+
+test('基準44: BP順が一部の行にだけある・重複する・0 の試合は order を全要素 null にし、BAN → PICK の並びにする', () => {
+  for (const rows of [setBp(bpOf(LRDD2), 5, { 'BP順': '' }), setBp(bpOf(LRDD2), 6, { 'BP順': 5 }), setBp(bpOf(LRDD2), 1, { 'BP順': 0 })]) {
+    const d = tuples(read(runBp([matchOf(LRDD2)], [], rows).dir, LRDD_FILE)[0].draft);
+    assert.ok(d.every((e) => e[0] === null));
+    // チーム1 DD の BAN(行の順: リー・シン・NOBAN・パイク・ガリオ・ビクター)が先頭、DD の PICK は TOP ナー・JG リリア・MID ナフィーリ・ADC ジン・SUP ノーチラス
+    assert.deepEqual(d.slice(0, 5).map((e) => e[4]), ['リー・シン', null, 'パイク', 'ガリオ', 'ビクター']);
+    assert.deepEqual(d.slice(10, 15), [['TOP', 'ナー'], ['JG', 'リリア'], ['MID', 'ナフィーリ'], ['ADC', 'ジン'], ['SUP', 'ノーチラス']].map(([role, c]) => [null, 'DD CORE', 'PICK', role, c]));
+  }
+});
+
+test('基準44: BP詳細の行が無い試合の記録には draft の欄を書かない(BP詳細の表が無い入力も)', () => {
+  const a = run([SCRIM1, SCRIM2], DETAIL2); // 表そのものが無い
+  assert.ok(read(a.dir, SCRIM_FILE).every((r) => !('draft' in r)));
+  const b = runBp([SCRIM1, SCRIM2], DETAIL2, bpOf(ID2)); // SCRIM1(001)には行が無い
+  assert.deepEqual(read(b.dir, SCRIM_FILE).map((r) => [r.game, 'draft' in r]), [[1, false], [2, true]]);
+});
+
+// --- 基準 45: draft を書かない試合 ---
+
+test('基準45 (a): ロールの空の PICK(MASTERS CC 対 LR の 1 試合目)、PICK 4 行、ロールの重複は draft を書かずに記録を書き、試合 ID と条件を出す', () => {
+  const { dir, summary } = runBp([matchOf(CCLR1)], [], bpOf(CCLR1));
+  const [r] = read(dir, CCLR_FILE);
+  assert.deepEqual([r.resultOnly, 'draft' in r], [true, false]);
+  assert.deepEqual(summary.written, [{ file: CCLR_FILE, added: [CCLR1] }]);
+  assert.deepEqual([reasonsOf(summary), summary.draftWritten], [[[CCLR1, '(a)']], []]);
+  const four = bpOf(LRDD2).filter((x) => x['BP順'] !== 20); // DD の TOP の PICK を除く
+  const dup = setBp(bpOf(LRDD2), 8, { 'ロール': 'TOP' }); // DD の PICK が TOP 2 つ・JG なし
+  for (const rows of [four, dup]) {
+    const s = runBp([matchOf(LRDD2)], [], rows);
+    assert.equal('draft' in read(s.dir, LRDD_FILE)[0], false);
+    assert.deepEqual(reasonsOf(s.summary), [[LRDD2, '(a)']]);
+  }
+});
+
+test('基準45 (b): PICK のチャンピオン名が空か NOBAN の試合は draft を書かない', () => {
+  for (const name of ['', 'No Ban']) {
+    const s = runBp([matchOf(LRDD2)], [], setBp(bpOf(LRDD2), 7, { 'チャンピオン名': name }));
+    assert.equal('draft' in read(s.dir, LRDD_FILE)[0], false);
+    assert.deepEqual(reasonsOf(s.summary), [[LRDD2, '(b)']]);
+  }
+});
+
+test('基準45 (c): 選手の行と食い違う PICK・一覧に無いチャンピオンの試合は draft を書かず、記録(選手の行)は書く', () => {
+  const a = runBp([SCRIM2], yuhi({ 'チャンピオン名': 'アーリ' }), bpOf(ID2)); // 選手の行は CC の ADC がアーリ、BP詳細はルシアン
+  const [r] = read(a.dir, SCRIM_FILE);
+  assert.deepEqual([r.resultOnly, 'draft' in r, a.summary.written], [undefined, false, [{ file: SCRIM_FILE, added: [ID2] }]]);
+  assert.deepEqual(reasonsOf(a.summary), [[ID2, '(c)']]);
+  const b = runBp([matchOf(LRDD2)], [], setBp(bpOf(LRDD2), 7, { 'チャンピオン名': 'ナゾノチャンピオン' }));
+  assert.equal('draft' in read(b.dir, LRDD_FILE)[0], false);
+  assert.deepEqual(reasonsOf(b.summary), [[LRDD2, '(c)']]);
+});
+
+// --- 基準 46: 既存の記録に draft を足さない・食い違いは訂正の候補・置き換えには draft ---
+
+test('基準46: draft の無い既存の記録には足さず、ファイル名・要素の番号・試合 ID を「draft の無い既存の記録」に出す(ltkdbMatchId の無い記録も)', () => {
+  const { dir } = runBp([SCRIM2], DETAIL2, []);
+  const before = raw(dir, SCRIM_FILE);
+  const { summary } = runBp([SCRIM2], DETAIL2, bpOf(ID2), dir);
+  assert.equal(raw(dir, SCRIM_FILE), before);
+  assert.deepEqual([summary.withoutDraft, summary.draftWritten, summary.written, summary.corrections], [[{ file: SCRIM_FILE, index: 0, id: ID2 }], [], [], []]);
+  // 配信の書き起こし(ltkdbMatchId なし、試合時間 31:58)も同じ試合として扱う
+  const r = { ...read(dir, SCRIM_FILE)[0], source: { url: 'https://www.youtube.com/watch?v=stream' } };
+  const other = root();
+  mkdirSync(join(other, 'scrims'));
+  writeFileSync(join(other, 'scrims/2026-10-13-stream-cc-vs-it.json'), JSON.stringify([r]));
+  assert.deepEqual(runBp([SCRIM2], DETAIL2, bpOf(ID2), other).summary.withoutDraft, [{ file: 'scrims/2026-10-13-stream-cc-vs-it.json', index: 0, id: ID2 }]);
+});
+
+test('基準46: draft を持つ既存の記録は、一致すれば何も出さず、食い違えば書き換えずに欄 draft を両方の値とともに訂正の候補に出す', () => {
+  const { dir } = runBp([matchOf(LRDD2)], [], bpOf(LRDD2));
+  const before = raw(dir, LRDD_FILE);
+  const same = runBp([matchOf(LRDD2)], [], bpOf(LRDD2), dir).summary;
+  assert.deepEqual([same.corrections, same.withoutDraft, same.draftWritten], [[], [], []]);
+  const { summary } = runBp([matchOf(LRDD2)], [], setBp(bpOf(LRDD2), 1, { 'チャンピオン名': 'アーリ' }), dir); // 順 1 の LR の BAN アニビア → アーリ
+  assert.equal(raw(dir, LRDD_FILE), before);
+  const [c] = summary.corrections as Row[];
+  assert.deepEqual([(summary.corrections as Row[]).length, c.id, c.where, c.field], [1, LRDD2, `${LRDD_FILE}[0]`, 'draft']);
+  assert.deepEqual([tuples(c.stored), tuples(c.ltkdb)[0], tuples(c.ltkdb).slice(1)], [LRDD2_DRAFT, [1, 'LR CORE', 'BAN', null, 'アーリ'], LRDD2_DRAFT.slice(1)]);
+});
+
+test('基準46・45 (c): 既存の記録の選手の行と食い違う BP詳細は訂正の候補にせず、基準 45 として出す', () => {
+  const { dir } = runBp([SCRIM2], DETAIL2, bpOf(ID2));
+  const before = raw(dir, SCRIM_FILE);
+  const rows = bpOf(ID2).map((x) => (x['チーム名'] === 'CC' && x['ロール'] === 'ADC' ? { ...x, 'チャンピオン名': 'アーリ' } : x)); // 置き場の選手の行はルシアン
+  const { summary } = runBp([SCRIM2], DETAIL2, rows, dir);
+  assert.equal(raw(dir, SCRIM_FILE), before);
+  assert.deepEqual([summary.corrections, reasonsOf(summary)], [[], [[ID2, '(c)']]]);
+});
+
+test('基準46: 結果だけの記録を選手の行を持つ記録で置き換えるとき、draft を含める', () => {
+  const { dir } = runBp([{ ...SCRIM2, '試合時間': '' }], DETAIL2, []);
+  assert.equal('draft' in read(dir, SCRIM_FILE)[0], false);
+  const { summary } = runBp([SCRIM2], DETAIL2, bpOf(ID2), dir);
+  const [r] = read(dir, SCRIM_FILE);
+  assert.deepEqual([r.resultOnly, tuples(r.draft)], [undefined, ITCC2_DRAFT]);
+  assert.deepEqual([summary.replaced, summary.draftWritten, summary.withoutDraft], [[{ file: SCRIM_FILE, index: 0, id: ID2 }], [ID2], []]);
+});
+
+// --- 基準 47: 要約、書いた draft が読み込み(F-006 基準 12)を通ること ---
+
+test('基準47: 固定データの 15 試合を流すと、draft を書いた 14 試合・書かなかった 1 試合と条件を要約に出し、書いた draft は読み込みを通る', () => {
+  const ids = BP['対戦結果まとめ'].map((m: Row) => m['試合ID'] as string);
+  const { dir, summary } = runBp(BP['対戦結果まとめ'].map((m: Row) => (m['試合ID'] === ID2 ? SCRIM2 : m)), DETAIL2, BP['BP詳細']);
+  assert.deepEqual([...(summary.draftWritten as string[])].sort(), ids.filter((id: string) => id !== CCLR1).sort());
+  assert.deepEqual([reasonsOf(summary), summary.withoutDraft], [[[CCLR1, '(a)']], []]);
+  const loaded = loadResults({ root: dir, champions: readChampionList(BP_CHAMPS).list });
+  assert.deepEqual(loaded.errors, []);
+  assert.equal(loaded.games.filter((g) => g.draft !== null).length, 14);
+  assert.equal(loaded.games.length, 15);
 });

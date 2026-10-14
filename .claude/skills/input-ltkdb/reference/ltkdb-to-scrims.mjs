@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // /input-ltkdb の変換: LTKDB(非公式のファンサイト LTK Schedule & Status)の site-data.json から、
 // 名簿の階級チーム同士のスクリムを docs/research/grounds/scrims/、日程と一致した本番を docs/research/grounds/results/ へ
-// F-004 の記録(配列形)として書き出す。生成 AI を使わない機械の変換。受入基準は specs/F-004/spec.md の 31〜38
+// F-004 の記録(配列形)として書き出す。生成 AI を使わない機械の変換。受入基準は specs/F-004/spec.md の 31〜38・44〜47(BP詳細 → draft)
 //
 //   node .claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs [--in <site-data.json>] [--root <置き場の親>] [--champions <champions.json>] [--dry-run]
 //
@@ -60,6 +60,53 @@ export function normalizeChampion(name, list) {
   const hits = [...list.names].filter((n) => n.normalize('NFKC') === name.normalize('NFKC'));
   return hits.length === 1 ? hits[0] : name;
 }
+
+/** BAN しなかった枠の表記か(空白を除いて大文字にした値が NOBAN。基準 44・45) */
+const isNoBan = (name) => String(name ?? '').replace(/\s/g, '').toUpperCase() === 'NOBAN';
+
+/**
+ * BP詳細の行から記録の draft を作る(基準 44)。行が無ければ null、基準 45 の (a)・(b) に当たれば { reason }、作れれば { draft }。
+ * order は全行の BP順が 1 以上の整数で重複しなければ BP順、そうでなければ全要素 null。並びは order の昇順、null なら
+ * BAN → PICK、チーム1 → チーム2、PICK はロールの順、BAN は行の順。サイド・フェーズ・選手の名前・集計用名は写さない
+ */
+function draftOf(x, bpRows, champions) {
+  if (!bpRows.length) return null;
+  const teams = [x.m['チーム1名'], x.m['チーム2名']];
+  for (const t of teams) {
+    const roles = bpRows.filter((r) => r['チーム名'] === t && r['種別'] === 'PICK').map((r) => r['ロール']);
+    if (roles.length !== 5 || ROLES.some((role) => !roles.includes(role))) return { reason: `(a) ${t} の PICK が ${roles.length} 行(ロール ${roles.map((r) => r || '空').join('・') || 'なし'})。TOP・JG・MID・ADC・SUP を 1 つずつでない` };
+  }
+  const bad = bpRows.find((r) => r['種別'] === 'PICK' && (!r['チャンピオン名'] || isNoBan(r['チャンピオン名'])));
+  if (bad) return { reason: `(b) ${bad['チーム名']} の ${bad['ロール']} の PICK のチャンピオン名が「${bad['チャンピオン名']}」` };
+  const orders = bpRows.map((r) => intOf(r['BP順']));
+  const ordered = orders.every((o) => o !== null && o >= 1) && new Set(orders).size === orders.length;
+  const rank = (r) => [r['種別'] === 'BAN' ? 0 : 1, teams.indexOf(r['チーム名']), r['種別'] === 'PICK' ? ROLES.indexOf(r['ロール']) : 0];
+  const rows = bpRows.map((r, i) => ({ r, i, order: ordered ? orders[i] : null, k: rank(r) }));
+  rows.sort((p, q) => (ordered ? p.order - q.order : p.k.reduce((d, v, j) => d || v - q.k[j], 0) || p.i - q.i));
+  return {
+    draft: rows.map(({ r, order }) => ({
+      order, team: `${r['チーム名']} ${x.place.tier}`, type: r['種別'],
+      champion: r['種別'] === 'BAN' && (!r['チャンピオン名'] || isNoBan(r['チャンピオン名'])) ? null : normalizeChampion(r['チャンピオン名'], champions),
+      role: r['種別'] === 'PICK' ? r['ロール'] : null,
+    })),
+  };
+}
+
+/** 基準 45 (c): 記録 rec に draft を入れたとき、F-006 基準 12 の検証(読み込みと同じ関数。選手の行との照合を含む)に反した欄。反しなければ null */
+function draftProblem(rec, draft, champions) {
+  const r = collectResults([{ file: `${rec.date}-draft.json`, kind: rec.kind, raw: [{ ...rec, draft }] }], { champions });
+  const bad = r.errors.filter((e) => e.field.startsWith('draft'));
+  return bad.length ? `(c) F-006 基準 12 の検証に反した: ${bad.map((e) => `${e.field}: ${e.message}`).join('、')}` : null;
+}
+
+/** 記録の draft の欄は pickBanOrder の後、notes の前(既存の記録と同じ位置) */
+function withDraft(rec, draft) {
+  const { notes, ...rest } = rec;
+  return 'notes' in rec ? { ...rest, draft, notes } : { ...rest, draft };
+}
+
+/** draft を比べる値(欄の順に依らない) */
+const draftKey = (d) => JSON.stringify(d.map((e) => [e.order ?? null, e.team, e.type, e.role ?? null, e.champion ?? null]));
 
 /** 既存の記録(scrims/ と results/)。同じ試合の判定に使う */
 function existingRecords(root) {
@@ -134,7 +181,9 @@ export function convert(site, { root = 'docs/research/grounds', dryRun = false, 
   const schedule = s['サイト_予定'] ?? [];
   const seatNames = seatNamesOf(s);
   const existing = existingRecords(root);
-  const summary = { written: [], replaced: [], resultOnly: [], skipped: { official: [], scrim: [] }, corrections: [], unconfirmed: [], listeners: 0, updatedAt: site.updatedAt };
+  const bp = s['BP詳細'] ?? [];
+  const summary = { written: [], replaced: [], resultOnly: [], skipped: { official: [], scrim: [] }, corrections: [], unconfirmed: [], draftWritten: [], draftSkipped: [], withoutDraft: [], listeners: 0, updatedAt: site.updatedAt };
+  const skipDraft = (id, reason) => summary.draftSkipped.some((y) => y.id === id && y.reason === reason) || summary.draftSkipped.push({ id, reason });
   const skipOfficial = (item, reason) => summary.skipped.official.push({ n: item.n, id: item.id, date: item.m['試合日'], teams: [item.m['チーム1名'], item.m['チーム2名']], winner: item.m['勝利チーム'], reason });
   const items = [];
   s['対戦結果まとめ'].forEach((m, n) => {
@@ -205,15 +254,31 @@ export function convert(site, { root = 'docs/research/grounds', dryRun = false, 
     }
     // 基準 34: 置き場に同じ試合があれば足さない。結果だけの記録 1 件で勝者が一致すれば、選手の行を持つ記録で置き換える
     const same = existing.filter((e) => sameAs(e, x, sec, teamsKey));
+    const replacing = same.length === 1 && same[0].r.resultOnly && rec && !rec.resultOnly && same[0].r.winner === rec.winner;
+    // 基準 44・45: 新しく書く記録と置き換えの記録には draft を入れる。(a)・(b)・(c) に当たれば draft だけを書かない
+    const built = draftOf(x, bp.filter((b) => b['試合ID'] === id), champions);
+    if (built?.reason) skipDraft(id, built.reason);
+    else if (built && rec && (!same.length || replacing)) {
+      const why = draftProblem(rec, built.draft, champions);
+      if (why) skipDraft(id, why);
+      else rec = withDraft(rec, built.draft);
+    }
     if (same.length) {
       const [one] = same;
-      if (same.length === 1 && one.r.resultOnly && rec && !rec.resultOnly && one.r.winner === rec.winner) {
+      if (replacing) {
         replaces.push({ file: one.file, index: one.index, rec, x });
         continue;
       }
       let cand = rec;
       if (!cand) try { cand = { winner: winnerOf(x) }; } catch { cand = null; }
       if (cand) for (const e of same) for (const c of correctionsOf(e.r, cand)) summary.corrections.push({ id, where: e.where, ...c });
+      // 基準 46: 既存の記録に draft を足さない。draft の無い記録は出力し、食い違う draft は訂正の候補(照合はその記録の選手の行と)
+      if (built?.draft) for (const e of same) {
+        const why = draftProblem(e.r, built.draft, champions);
+        if (why) skipDraft(id, why);
+        else if (e.r.draft === undefined || e.r.draft === null) summary.withoutDraft.push({ file: e.file, index: e.index, id });
+        else if (!Array.isArray(e.r.draft) || draftKey(e.r.draft) !== draftKey(built.draft)) summary.corrections.push({ id, where: e.where, field: 'draft', stored: e.r.draft, ltkdb: built.draft });
+      }
       skipOf(x, `既存の記録 ${same.map((e) => e.where).join('・')} と同じ試合`);
       continue;
     }
@@ -237,6 +302,7 @@ export function convert(site, { root = 'docs/research/grounds', dryRun = false, 
       else summary.written.push({ file: c.file, added: [c.x.id] });
     } else summary.replaced.push({ file: c.file, index: c.index, id: c.x.id });
     if (c.rec.resultOnly) summary.resultOnly.push(c.x.id);
+    if (c.rec.draft) summary.draftWritten.push(c.x.id);
     summary.unconfirmed.push(...(c.x.unconfirmed ?? []));
   }
   if (!dryRun) {
@@ -420,11 +486,15 @@ async function cli(args) {
     const summary = convert(site, { root: opt('--root') ?? 'docs/research/grounds', dryRun: args.includes('--dry-run'), champions });
     for (const w of summary.written) console.log(`書いた: ${w.file}(${w.added.join(', ')})`);
     for (const r of summary.replaced) console.log(`置き換えた: ${r.file}[${r.index}](${r.id})`);
-    for (const c of summary.corrections) console.log(`訂正の候補: ${c.id}(${c.where})${c.field}: 置き場 ${c.stored} / LTKDB ${c.ltkdb}`);
+    const val = (v) => (v !== null && typeof v === 'object' ? JSON.stringify(v) : v);
+    for (const c of summary.corrections) console.log(`訂正の候補: ${c.id}(${c.where})${c.field}: 置き場 ${val(c.stored)} / LTKDB ${val(c.ltkdb)}`);
     for (const u of summary.unconfirmed) console.log(`未確認: ${u.id} ${u.team} ${u.role}: LTKDB の選手名 ${u.name}`);
     if (summary.resultOnly.length) console.log(`結果だけの記録: ${summary.resultOnly.join(', ')}`);
     for (const x of summary.skipped.official) console.log(`書かなかった本番: ${x.id}(${x.date} ${x.teams.join(' 対 ')}、勝利 ${x.winner}): ${x.reason}`);
     for (const x of summary.skipped.scrim) console.log(`書かなかったスクリム: ${x.id}: ${x.reason}`);
+    if (summary.draftWritten.length) console.log(`draft を書いた: ${summary.draftWritten.join(', ')}`);
+    for (const x of summary.draftSkipped) console.log(`draft を書かなかった: ${x.id}: ${x.reason}`);
+    for (const w of summary.withoutDraft) console.log(`draft の無い既存の記録: ${w.file}[${w.index}](${w.id})`);
     console.log(`リスナー参加 ${summary.listeners} 件(扱わない)`);
     console.log(JSON.stringify(summary));
     return summary.written.length || summary.replaced.length ? 10 : 0;
