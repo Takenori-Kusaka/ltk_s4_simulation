@@ -3,19 +3,24 @@
 // 名簿の階級チーム同士のスクリムを docs/research/grounds/scrims/、日程と一致した本番を docs/research/grounds/results/ へ
 // F-004 の記録(配列形)として書き出す。生成 AI を使わない機械の変換。受入基準は specs/F-004/spec.md の 31〜38
 //
-//   node .claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs [--in <site-data.json>] [--root <置き場の親>] [--dry-run]
+//   node .claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs [--in <site-data.json>] [--root <置き場の親>] [--champions <champions.json>] [--dry-run]
 //
 // --in を省けば LTKDB のリポジトリの site-data.json を取りに行く。--root の既定は docs/research/grounds(scrims/ と results/ を持つ)。
+// --champions を省けば data/public/champions.json、無ければ Data Dragon ja_JP から取る(基準 35)。
 // 終了コード: 0 = 変更なし、10 = 書いたファイルか置き換えがある、1 = 取得か読み取りの失敗。出力の最後の行は JSON の要約(基準 38)。
 // テストは convert を読み込んで呼ぶ(tests/results/ltkdb-convert.test.ts)
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchDataDragon } from '../../../../src/collect/ddragon.ts';
 import { ROSTER } from '../../../../src/data/roster.ts';
+import { readChampionList } from '../../../../src/results/champions.ts';
+import { collectResults, formatResultError, parseDuration } from '../../../../src/results/load.ts';
 import { MASTERS_CUPS, REGULAR_DAYS } from '../../../../src/sim/schedule.ts';
 
 const SITE = 'https://demo-lab0110.github.io/ltk-schedule-status-site/';
 const DATA = 'https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json';
+const CHAMPIONS = 'data/public/champions.json';
 const ROLES = ['TOP', 'JG', 'MID', 'ADC', 'SUP'];
 const TIERS = ['NEXT', 'CORE', 'MASTERS'];
 /** LTKDB の予定の Playoffs の match_no → マッチと日付(基準 3 の日付) */
@@ -43,6 +48,19 @@ function seatNamesOf(sheets) {
   return names;
 }
 
+/** LTKDB の選手の行の「プレイヤー名」か「サモナーネーム」(# の前)が、その席の名前のどれかと一致するか(基準 36) */
+const nameFits = (seatNames, team, tier, r) => {
+  const names = seatNames.get(seatKey(team, tier, r['ロール']));
+  return Boolean(names) && [r['プレイヤー名'], String(r['サモナーネーム'] ?? '').split('#')[0]].some((n) => n && names.has(norm(n)));
+};
+
+/** チャンピオン名(基準 35): 一覧に無く、NFKC がただ 1 つの一覧の名前の NFKC と一致すれば一覧の表記に置き換える(例: ジャーヴァンIV → ジャーヴァンⅣ) */
+export function normalizeChampion(name, list) {
+  if (!name || list.names.has(name)) return name || null;
+  const hits = [...list.names].filter((n) => n.normalize('NFKC') === name.normalize('NFKC'));
+  return hits.length === 1 ? hits[0] : name;
+}
+
 /** 既存の記録(scrims/ と results/)。同じ試合の判定に使う */
 function existingRecords(root) {
   const out = [];
@@ -53,9 +71,8 @@ function existingRecords(root) {
       const recs = JSON.parse(readFileSync(join(path, f), 'utf8'));
       if (!Array.isArray(recs)) continue;
       recs.forEach((r, i) => {
-        const [m, s] = String(r.duration ?? '').split(':').map(Number);
         const teams = Object.keys(r.teams ?? {}).sort().join('|');
-        out.push({ where: `${dir}/${f}[${i}]`, r, teams, sec: r.duration ? m * 60 + s : null, ltkdbMatchId: r.source?.ltkdbMatchId ?? null });
+        out.push({ file: `${dir}/${f}`, index: i, where: `${dir}/${f}[${i}]`, r, teams, sec: parseDuration(r.duration), ltkdbMatchId: r.source?.ltkdbMatchId ?? null });
       });
     }
   }
@@ -70,10 +87,7 @@ function placeOfficial(m, rows, schedule, seatNames) {
   let tier = String(sched.tier ?? '').toUpperCase();
   if (tier && !TIERS.includes(tier)) return { reason: `予定の tier ${sched.tier} が読めない` };
   if (!tier) {
-    const fits = rows.length === 10 ? TIERS.filter((t) => rows.every((r) => {
-      const names = seatNames.get(seatKey(r['チーム名'], t, r['ロール']));
-      return names && [r['プレイヤー名'], String(r['サモナーネーム'] ?? '').split('#')[0]].some((n) => n && names.has(norm(n)));
-    })) : [];
+    const fits = rows.length === 10 ? TIERS.filter((t) => rows.every((r) => nameFits(seatNames, r['チーム名'], t, r))) : [];
     if (fits.length !== 1) return { reason: `階級が決まらない(予定の tier が空で、選手の行 ${rows.length} 行の名前が名簿のちょうど 1 つの階級の席と一致しない)` };
     tier = fits[0];
   }
@@ -112,7 +126,10 @@ function settleFinals(item, semis) {
   return teams.every((t) => want.includes(t)) ? null : `予定の match_no(${item.place.match})と準決勝の勝敗(${item.place.match === 'final' ? '勝者' : '敗者'}は ${want.join('・')})が合わない`;
 }
 
-export function convert(site, { root = 'docs/research/grounds', dryRun = false, today = new Date().toISOString().slice(0, 10), collectedWith = process.env.COLLECTED_WITH ?? 'ltkdb-to-scrims.mjs' } = {}) {
+/** champions は champions.json の中身(必須。読めなければ例外。基準 35) */
+export function convert(site, { root = 'docs/research/grounds', dryRun = false, today = new Date().toISOString().slice(0, 10), collectedWith = process.env.COLLECTED_WITH ?? 'ltkdb-to-scrims.mjs', champions: championsRaw } = {}) {
+  const { list: champions, error } = readChampionList(championsRaw);
+  if (!champions) throw new Error(`チャンピオンの一覧を読めない: ${error}`);
   const s = site.sheets;
   const schedule = s['サイト_予定'] ?? [];
   const seatNames = seatNamesOf(s);
@@ -168,49 +185,144 @@ export function convert(site, { root = 'docs/research/grounds', dryRun = false, 
     : x.place.stage === 'masters' ? `MC${x.place.day}-${x.place.match}-G${x.game}` : `PO-${x.place.match}-G${x.game}`;
   const byMatch = new Map();
   for (const x of placed) if (x.kind === 'official') byMatch.set(matchIdOf(x), [...(byMatch.get(matchIdOf(x)) ?? []), x]);
+  const skipOf = (x, reason) => (x.kind === 'official' ? skipOfficial(x, reason) : summary.skipped.scrim.push({ id: x.id, reason }));
+  const replaces = [];
   const groups = new Map();
   for (const x of placed) {
     const { m, id, kind, place: { tier } } = x;
-    const skip = (reason) => (kind === 'official' ? skipOfficial(x, reason) : summary.skipped.scrim.push({ id, reason }));
     if (kind === 'official' && byMatch.get(matchIdOf(x)).length > 1) {
-      skip(`同じ試合 ID ${matchIdOf(x)} になる本番の行が ${byMatch.get(matchIdOf(x)).length} 件(${byMatch.get(matchIdOf(x)).map((y) => y.id).join('・')})`);
+      skipOf(x, `同じ試合 ID ${matchIdOf(x)} になる本番の行が ${byMatch.get(matchIdOf(x)).length} 件(${byMatch.get(matchIdOf(x)).map((y) => y.id).join('・')})`);
       continue;
     }
     const sec = x.resultOnly ? null : Math.round(Number(m['試合時間']) * 60);
     const teamsKey = [m['チーム1名'], m['チーム2名']].map((t) => `${t} ${tier}`).sort().join('|');
-    const dup = existing.find((e) => e.ltkdbMatchId === id || (e.r.date === m['試合日'] && e.teams === teamsKey && e.r.kind === kind && (
-      kind === 'official' ? e.r.match === x.place.match && e.r.game === x.game
-        : (e.r.game === x.game || (sec !== null && e.sec !== null && Math.abs(e.sec - sec) <= 1)))));
-    if (dup) {
-      skip(`既存の記録 ${dup.where} と同じ試合`);
+    let rec = null;
+    let error = null;
+    try {
+      rec = x.resultOnly ? resultOnlyRecord(x, collectedWith, today, site.updatedAt) : toRecord(x, sec, collectedWith, today, site.updatedAt, seatNames, champions);
+    } catch (e) {
+      error = e.message;
+    }
+    // 基準 34: 置き場に同じ試合があれば足さない。結果だけの記録 1 件で勝者が一致すれば、選手の行を持つ記録で置き換える
+    const same = existing.filter((e) => sameAs(e, x, sec, teamsKey));
+    if (same.length) {
+      const [one] = same;
+      if (same.length === 1 && one.r.resultOnly && rec && !rec.resultOnly && one.r.winner === rec.winner) {
+        replaces.push({ file: one.file, index: one.index, rec, x });
+        continue;
+      }
+      let cand = rec;
+      if (!cand) try { cand = { winner: winnerOf(x) }; } catch { cand = null; }
+      if (cand) for (const e of same) for (const c of correctionsOf(e.r, cand)) summary.corrections.push({ id, where: e.where, ...c });
+      skipOf(x, `既存の記録 ${same.map((e) => e.where).join('・')} と同じ試合`);
       continue;
     }
-    let rec;
-    try {
-      rec = x.resultOnly ? resultOnlyRecord(x, collectedWith, today, site.updatedAt) : toRecord(x, sec, collectedWith, today, site.updatedAt);
-    } catch (e) {
-      skip(e.message);
+    if (!rec) {
+      skipOf(x, error);
       continue;
     }
     const [a, b] = [m['チーム1名'], m['チーム2名']].map((t) => t.toLowerCase()).sort();
     const file = `${kind === 'official' ? 'results' : 'scrims'}/${m['試合日']}-${a}-${tier.toLowerCase()}-vs-${b}-${tier.toLowerCase()}.json`;
     if (!groups.has(file)) groups.set(file, []);
-    groups.get(file).push({ no: x.game, rec, id });
+    groups.get(file).push({ file, index: null, rec, x });
   }
-  for (const [file, list] of groups) {
-    list.sort((p, q) => p.no - q.no);
-    const path = join(root, file);
-    // 同じ日・同じ組のファイルが既にあれば、後ろに足す(要素の順 = 試合の番号の順)
-    const prev = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : [];
-    if (!dryRun) {
+  // 基準 35: 書く前に置き場と合わせて検証し、反した試合を隔離して残りを書く。同じ日・同じ組のファイルが既にあれば後ろに足す(要素の順 = 試合の番号の順)
+  const changes = [...replaces, ...[...groups.values()].flatMap((list) => list.sort((p, q) => p.x.game - q.x.game))];
+  const { accepted, rejected, files } = validateWrites(root, changes, champions);
+  for (const { change, problems } of rejected) skipOf(change.x, `書く前の検証に反した: ${problems.join('、')}`);
+  for (const c of accepted) {
+    if (c.index === null) {
+      const w = summary.written.find((y) => y.file === c.file);
+      if (w) w.added.push(c.x.id);
+      else summary.written.push({ file: c.file, added: [c.x.id] });
+    } else summary.replaced.push({ file: c.file, index: c.index, id: c.x.id });
+    if (c.rec.resultOnly) summary.resultOnly.push(c.x.id);
+    summary.unconfirmed.push(...(c.x.unconfirmed ?? []));
+  }
+  if (!dryRun) {
+    for (const file of new Set(accepted.map((c) => c.file))) {
+      const path = join(root, file);
       mkdirSync(join(path, '..'), { recursive: true });
-      writeFileSync(path, JSON.stringify([...prev, ...list.map((y) => y.rec)], null, 2) + '\n');
+      writeFileSync(path, JSON.stringify(files.get(file).raw, null, 2) + '\n');
     }
-    summary.written.push({ file, added: list.map((y) => y.id) });
-    for (const y of list) if (y.rec.resultOnly) summary.resultOnly.push(y.id);
   }
   summary.skipped.official = summary.skipped.official.sort((p, q) => p.n - q.n).map(({ n, ...rest }) => rest);
   return summary;
+}
+
+/**
+ * 同じ試合(用語)か。(a) どちらも ltkdbMatchId を持てば値の一致だけで決める。(b) kind・date・2 つの階級チームが同じで、本番は試合 ID、スクリムは game が同じ。
+ * 基準 34: 加えて、置き場の選手の行を持つスクリムで 2 つの階級チームが同じで試合時間の差が 1 秒以内の記録(配信からの書き起こし)
+ */
+function sameAs(e, x, sec, teamsKey) {
+  if (e.ltkdbMatchId) return e.ltkdbMatchId === x.id;
+  const { r } = e;
+  if (r.kind === x.kind && r.date === x.m['試合日'] && e.teams === teamsKey && (x.kind === 'official'
+    ? r.stage === x.place.stage && r.day === x.place.day && r.match === x.place.match && r.game === x.game
+    : r.game != null && r.game === x.game)) return true;
+  return x.kind === 'scrim' && r.kind === 'scrim' && !r.resultOnly && e.teams === teamsKey && e.sec !== null && sec !== null && Math.abs(e.sec - sec) <= 1;
+}
+
+const COMPARED = ['kills', 'deaths', 'assists', 'gold', 'damage', 'champion', 'cs14'];
+const hasPlayers = (r) => !r.resultOnly && Object.values(r.teams ?? {}).some((t) => t.players?.length);
+
+/**
+ * 訂正の候補(基準 34): 置き場の記録 stored と、LTKDB の現在の値から作った記録 cand の食い違い。置き場の記録が持つ欄(null でない欄)だけを比べる。
+ * 勝者はどの記録でも、ltkdbMatchId と選手の行を持つ記録は試合時間(秒。1 秒以内の差は同じ)と選手の行の COMPARED も。戻り値は { field, stored, ltkdb } の配列
+ */
+export function correctionsOf(stored, cand) {
+  const out = [];
+  if (stored.winner !== cand.winner) out.push({ field: 'winner', stored: stored.winner, ltkdb: cand.winner });
+  if (!stored.source?.ltkdbMatchId || !hasPlayers(stored) || !hasPlayers(cand)) return out;
+  const [a, b] = [stored.durationSec ?? parseDuration(stored.duration), cand.durationSec ?? parseDuration(cand.duration)];
+  if (a !== null && a !== undefined && b !== null && b !== undefined && Math.abs(a - b) > 1) out.push({ field: 'duration', stored: a, ltkdb: b });
+  for (const [label, t] of Object.entries(stored.teams)) {
+    for (const p of t.players ?? []) {
+      const q = cand.teams[label]?.players?.find((y) => y.role === p.role);
+      if (q) for (const k of COMPARED) if (p[k] !== null && p[k] !== undefined && k in q && q[k] !== p[k]) out.push({ field: `teams.${label}.players[${p.role}].${k}`, stored: p[k], ltkdb: q[k] });
+    }
+  }
+  return out;
+}
+
+/**
+ * 書く前の検証(基準 35): 置き場(root の results/・scrims/)の記録に changes({ file: 'scrims/<名前>.json', index: null(足す)か要素の番号(置き換え), rec })を
+ * 1 件ずつ当て、読み込みと同じ検証(collectResults)で新しく出たエラーと「重複」(基準 7)があれば、その変更を退ける。
+ * 戻り値: accepted(通った変更)、rejected({ change, problems })、files(通った変更を当てた後のファイル。'scrims/<名前>.json' → { raw })
+ */
+export function validateWrites(root, changes, champions) {
+  const files = new Map();
+  for (const [dir, kind] of [['results', 'official'], ['scrims', 'scrim']]) {
+    const path = join(root, dir);
+    if (!existsSync(path)) continue;
+    for (const f of readdirSync(path).filter((n) => n.endsWith('.json'))) files.set(`${dir}/${f}`, { file: f, kind, raw: JSON.parse(readFileSync(join(path, f), 'utf8')) });
+  }
+  const problemsNow = () => {
+    const r = collectResults([...files.values()], { champions });
+    return new Set([...r.errors.map(formatResultError), ...r.excluded.filter((e) => e.reason === '重複').map((e) => `${e.file}[${e.index}] 重複: ${e.detail}`)]);
+  };
+  let seen = problemsNow();
+  const accepted = [];
+  const rejected = [];
+  for (const change of changes) {
+    const prev = files.get(change.file);
+    const raw = Array.isArray(prev?.raw) ? [...prev.raw] : [];
+    if (change.index === null) raw.push(change.rec);
+    else raw[change.index] = change.rec;
+    const [dir, f] = change.file.split('/');
+    files.set(change.file, { file: f, kind: dir === 'results' ? 'official' : 'scrim', raw });
+    const now = problemsNow();
+    const fresh = [...now].filter((p) => !seen.has(p));
+    if (fresh.length) {
+      if (prev) files.set(change.file, prev);
+      else files.delete(change.file);
+      rejected.push({ change, problems: fresh });
+    } else {
+      seen = now;
+      accepted.push(change);
+    }
+  }
+  return { accepted, rejected, files };
 }
 
 /** 記録の頭の欄: kind・date、本番は stage・day・tier・match、game、listeners、source */
@@ -244,8 +356,9 @@ function resultOnlyRecord(x, collectedWith, today, updatedAt) {
   };
 }
 
-function toRecord(x, sec, collectedWith, today, updatedAt) {
+function toRecord(x, sec, collectedWith, today, updatedAt, seatNames, champions) {
   const { m, rows, place: { tier } } = x;
+  x.unconfirmed = [];
   const teams = {};
   const sides = {};
   const cs14Sec = intOf(m['計測秒']);
@@ -259,7 +372,13 @@ function toRecord(x, sec, collectedWith, today, updatedAt) {
       if (!ro) throw new Error(`名簿に ${tk} ${tier} ${role} が無い`);
       const summ = r['サモナーネーム'];
       const game = ro.riotId?.split('#')[0];
-      const conf = summ && summ === game
+      const name = r['プレイヤー名'] || summ;
+      // 基準 36: 名前がその席の選手と一致しない行(代打・ロールの入れ替え)は「未確認」
+      const fits = nameFits(seatNames, tk, tier, r);
+      if (!fits) x.unconfirmed.push({ id: x.id, team: key, role, name });
+      const conf = !fits
+        ? `未確認(LTKDB の選手名 ${name} がその席の選手と一致しない)`
+        : summ && summ === game
         ? `確信(LTKDB のサモナーネーム ${summ} が名簿の Riot ID と一致)`
         : summ
           ? `推定(LTKDB の選手名 ${r['プレイヤー名']}・サモナーネーム ${summ}。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)`
@@ -268,7 +387,7 @@ function toRecord(x, sec, collectedWith, today, updatedAt) {
       sides[key] = r['サイド'] === 'BLUE' ? 'ブルー' : 'レッド';
       return {
         role, displayName: summ || r['プレイヤー名'], rosterId: ro.id, rosterName: ro.name, mappingConfidence: conf,
-        level: num(r['レベル']), champion: r['チャンピオン名'] || null, championNote: null,
+        level: num(r['レベル']), champion: normalizeChampion(r['チャンピオン名'] || null, champions), championNote: null,
         kills: Number(r['K']), deaths: Number(r['D']), assists: Number(r['A']), gold, damage: Number(r['ダメージ']),
         cs: num(r['CS']), ...(withCs14 ? { cs14: num(r['14分CS']) } : {}), goldPerMin: Math.round(gold / (sec / 60)), damageNote: null,
       };
@@ -296,8 +415,13 @@ async function cli(args) {
     const raw = input ? readFileSync(input, 'utf8') : await (await fetch(DATA)).text();
     const site = JSON.parse(raw);
     if (!site?.sheets?.['対戦結果まとめ'] || !site.sheets['リザルト詳細']) throw new Error('site-data.json の形が想定と違う(対戦結果まとめ・リザルト詳細が無い)');
-    const summary = convert(site, { root: opt('--root') ?? 'docs/research/grounds', dryRun: args.includes('--dry-run') });
+    const championsPath = opt('--champions') ?? (existsSync(CHAMPIONS) ? CHAMPIONS : null);
+    const champions = championsPath ? JSON.parse(readFileSync(championsPath, 'utf8')) : await fetchDataDragon();
+    const summary = convert(site, { root: opt('--root') ?? 'docs/research/grounds', dryRun: args.includes('--dry-run'), champions });
     for (const w of summary.written) console.log(`書いた: ${w.file}(${w.added.join(', ')})`);
+    for (const r of summary.replaced) console.log(`置き換えた: ${r.file}[${r.index}](${r.id})`);
+    for (const c of summary.corrections) console.log(`訂正の候補: ${c.id}(${c.where})${c.field}: 置き場 ${c.stored} / LTKDB ${c.ltkdb}`);
+    for (const u of summary.unconfirmed) console.log(`未確認: ${u.id} ${u.team} ${u.role}: LTKDB の選手名 ${u.name}`);
     if (summary.resultOnly.length) console.log(`結果だけの記録: ${summary.resultOnly.join(', ')}`);
     for (const x of summary.skipped.official) console.log(`書かなかった本番: ${x.id}(${x.date} ${x.teams.join(' 対 ')}、勝利 ${x.winner}): ${x.reason}`);
     for (const x of summary.skipped.scrim) console.log(`書かなかったスクリム: ${x.id}: ${x.reason}`);
