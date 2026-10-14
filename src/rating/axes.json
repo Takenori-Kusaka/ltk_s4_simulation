@@ -1,5 +1,5 @@
 {
-  "_comment": "F-009 Task-2 個人のデータの6軸(docs/design/rating-model.md 節2。2026-10-09 に価値責任者が確定)。指標は match-v5 の participant と challenges のキー。mode: diff=自分−対面 / logratio=ln((自分+1)/(対面+1)) / negdiff=−(自分−対面)",
+  "_comment": "F-009 Task-2 個人のデータの6軸(docs/design/rating-model.md 節2。2026-10-09 に価値責任者が確定)。指標は match-v5 の participant と challenges のキー。mode: diff=自分−対面 / logratio=ln((自分+1)/(対面+1)) / negdiff=−(自分−対面)。csAt14 は F-004 の実戦の記録(スクリム・本番)の 14 分の CS で、population: results は名簿の階級チーム同士の試合の差の分布(平均 0・二乗平均平方根)で標準化する印(F-004 基準26・39・40。G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md)。重み 0.4 は試合の中で使える指標がこれだけのため点数に効かない",
   "ltkBonusPerSeason": 0.2,
   "ltkBonusCap": 0.6,
   "ltkBonusAxes": ["teamfight", "synergy", "stability"],
@@ -49,6 +49,7 @@
       "roleDependent": true,
       "metrics": [
         { "key": "maxCsAdvantageOnLaneOpponent", "weight": 0.4, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
+        { "key": "csAt14", "weight": 0.4, "mode": "diff", "positions": ["TOP", "JUNGLE", "MIDDLE", "BOTTOM"], "population": "results" },
         { "key": "laningPhaseGoldExpAdvantage", "weight": 0.3, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
         { "key": "maxLevelLeadLaneOpponent", "weight": 0.3, "mode": "diff", "positions": ["TOP", "MIDDLE", "BOTTOM"] },
         { "key": "enemyJungleMonsterKills", "weight": 0.3, "mode": "diff", "positions": ["JUNGLE"] },

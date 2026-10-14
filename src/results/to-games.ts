@@ -33,7 +33,7 @@ export function scrimStats(row: PlayerResult, team: TeamResult, durationMin: num
 }
 
 /**
- * 基準12: 受け付けたスクリムの記録から、選手 ID → 試合の記録。使わない行(「未確認」)は記録を作らず、
+ * 基準12: 受け付けたスクリムの記録から、選手 ID → 試合の記録(基準26 の csAt14 を含む)。使わない行(「未確認」)は記録を作らず、
  * 対面がその行なら対面なし(F-009 基準 8 で除外)。本番の記録は対象外(個人の評価に入れない。スコープ外)。
  * 基準29: 結果だけの記録は選手の行を持たず、試合の記録(ピックプールの元)を作らない
  */
@@ -48,14 +48,21 @@ export function scrimGameRecords(games: readonly MatchResult[]): Map<string, Gam
       for (const row of team.players) {
         if (!row.use) continue;
         const oppRow = oppTeam.players.find((p) => p.role === row.role && p.use) ?? null;
+        const me = scrimStats(row, team, durationMin, g.winner === teamId);
+        const opp = oppRow ? scrimStats(oppRow, oppTeam, durationMin, g.winner !== teamId) : null;
+        // 基準26: TOP・JG・MID・ADC で自分と対面の両方に cs14 があるときだけ csAt14 を持たせる(SUP と片方が null の試合には持たせない)
+        if (opp && oppRow && row.role !== 'SUP' && typeof row.cs14 === 'number' && typeof oppRow.cs14 === 'number') {
+          me.csAt14 = row.cs14;
+          opp.csAt14 = oppRow.cs14;
+        }
         const record: GameRecord = {
           matchId: g.matchId,
           endTime: scrimEndTime(g.date),
           durationMin,
           queueId: SCRIM_QUEUE_ID,
           position: POSITION_OF[row.role],
-          me: scrimStats(row, team, durationMin, g.winner === teamId),
-          opp: oppRow ? scrimStats(oppRow, oppTeam, durationMin, g.winner !== teamId) : null,
+          me,
+          opp,
           kind: 'scrim',
         };
         const list = out.get(row.playerId) ?? [];

@@ -235,3 +235,59 @@ test('AC42: 下限の値は常識の一覧からだけ読み、評価設定に�
   assert.doesNotMatch(JSON.stringify(axesConf), /minRoleGames/);
   assert.doesNotMatch(JSON.stringify(ratingConf), /minRoleGames/);
 });
+
+// ---- F-004 Task-11: 受入基準 26(レーン戦の軸の定義)・27(説明の n)・39・40(評価設定の下限と、評価の入力からの分布)。受入基準から書いた ----
+
+test('基準26: レーン戦の軸に csAt14(差。TOP・JG・MID・ADC。階級チーム同士の分布)を持ち、SUP には使わない', () => {
+  const laning = DATA_AXES.find((a) => a.key === 'laning')!;
+  const m = laning.metrics.find((x) => x.key === 'csAt14')!;
+  assert.equal(m.mode, 'diff');
+  assert.deepEqual([...m.positions!].sort(), ['BOTTOM', 'JUNGLE', 'MIDDLE', 'TOP']);
+  assert.equal(m.population, 'results');
+});
+
+test('基準40: 評価設定の cs14MinPairs の初期値は 8', () => {
+  assert.equal(cfg.cs14MinPairs, 8);
+});
+
+/** 実戦の記録 1 試合の TOP の両チームの記録(同じ試合 ID)。cs14 が無ければ csAt14 を持たない */
+const scrimPair = (matchId: string, a: number | null, b: number | null): [GameRecord, GameRecord] => {
+  const side = (x: number | null, y: number | null): GameRecord => {
+    const r = scrim('TOP', x === null ? {} : { csAt14: x }, y === null ? {} : { csAt14: y });
+    return { ...r, matchId };
+  };
+  return [side(a, b), side(b, a)];
+};
+
+test('基準27・39: 評価の入力の実戦の記録から TOP の分布(8 組)を作り、レーン戦の「スクリム n 試合」は csAt14 のある試合だけを数える', () => {
+  // 差 10, −20, 30, −40, 5, 15, −25, 35 → 二乗平均平方根 √(5100 ÷ 8) = 25.2488。cs14 の無い試合 2 件を足す
+  const diffs = [10, -20, 30, -40, 5, 15, -25, 35];
+  const pairs = diffs.map((d, i) => scrimPair(`SC-T${i}`, 100 + d, 100));
+  const none = [scrimPair('SC-N1', null, null), scrimPair('SC-N2', null, null)];
+  const a = player('A', 'TOP', [...pairs.map((p) => p[0]), ...none.map((p) => p[0])]);
+  const b = player('B', 'TOP', [...pairs.map((p) => p[1]), ...none.map((p) => p[1])]);
+  const ctx = buildRatingContext([a, b], [], cfg, NOW);
+  const d = ctx.population.TOP['csAt14:diff'];
+  assert.equal(d.count, 8, '両選手の記録があっても 1 試合 1 組');
+  assert.equal(d.mean, 0);
+  assert.ok(Math.abs(d.sd - Math.sqrt(637.5)) < 1e-9, `${d.sd}`);
+  const la = rateDataAxes(a, ctx).find((x) => x.key === 'laning')!;
+  assert.equal(la.scrimGames, 8, 'cs14 の無い 2 試合は数えない');
+  assert.match(la.confidenceReason, /スクリム 8 試合\(重み 2\.0\)を含む/);
+  // JG・MID・ADC は 0 組で下限に満たず、ロールと組の数を出す
+  assert.ok(ctx.warnings.some((w) => /JUNGLE/.test(w) && /0 組/.test(w)), ctx.warnings.join('\n'));
+  assert.ok(!ctx.warnings.some((w) => /TOP/.test(w)));
+});
+
+test('基準40: 評価の入力の組が 7 なら TOP の分布を作らず、レーン戦は実戦の記録を使わない(推定)', () => {
+  const pairs = [10, -20, 30, -40, 5, 15, -25].map((d, i) => scrimPair(`SC-T${i}`, 100 + d, 100));
+  const a = player('A', 'TOP', pairs.map((p) => p[0]));
+  const b = player('B', 'TOP', pairs.map((p) => p[1]));
+  const ctx = buildRatingContext([a, b], [], cfg, NOW);
+  assert.equal(ctx.population.TOP?.['csAt14:diff'], undefined);
+  assert.ok(ctx.warnings.some((w) => /TOP/.test(w) && /7 組/.test(w)), ctx.warnings.join('\n'));
+  const la = rateDataAxes(a, ctx).find((x) => x.key === 'laning')!;
+  assert.equal(la.scrimGames, 0);
+  assert.equal(la.estimated, true);
+  assert.doesNotMatch(la.confidenceReason, /スクリム/);
+});
