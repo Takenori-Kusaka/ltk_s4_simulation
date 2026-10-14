@@ -1,4 +1,4 @@
-// F-004 Task-2: スクリムの記録 → F-009 の試合の記録(GameRecord)。指標の対応表は specs/F-004/spec.md「指標の対応表」
+// F-004 Task-2・Task-12: スクリム・本番の記録 → F-009 の試合の記録(GameRecord)。指標の対応表は specs/F-004/spec.md「指標の対応表」
 // 対応表に無い指標は持たない(F-009 基準 8 で、その指標はその試合で除外される)。DOM と Node 固有の API に依存しない
 import type { Role } from '../data/roster.ts';
 import type { GameRecord, Position } from '../rating/types.ts';
@@ -6,7 +6,7 @@ import type { MatchResult, PlayerResult, TeamResult } from './types.ts';
 
 /** 名簿のロール → teamPosition(src/rating/build.ts の POSITION と同じ値) */
 const POSITION_OF: Record<Role, Position> = { TOP: 'TOP', JG: 'JUNGLE', MID: 'MIDDLE', ADC: 'BOTTOM', SUP: 'UTILITY' };
-/** スクリムの試合の記録の queueId。ランクのキュー(420・440)ではないため、調子の係数(基準14)には使われない */
+/** スクリム・本番の試合の記録の queueId。ランクのキュー(420・440)ではないため、調子の係数(基準14・41)には使われない */
 export const SCRIM_QUEUE_ID = 0;
 
 /** 基準12: 日付の正午(JST)を試合の終了時刻にする */
@@ -33,14 +33,14 @@ export function scrimStats(row: PlayerResult, team: TeamResult, durationMin: num
 }
 
 /**
- * 基準12: 受け付けたスクリムの記録から、選手 ID → 試合の記録(基準26 の csAt14 を含む)。使わない行(「未確認」)は記録を作らず、
- * 対面がその行なら対面なし(F-009 基準 8 で除外)。本番の記録は対象外(個人の評価に入れない。スコープ外)。
- * 基準29: 結果だけの記録は選手の行を持たず、試合の記録(ピックプールの元)を作らない
+ * 基準12・41: 受け付けたスクリム・本番の記録から、選手 ID → 試合の記録(基準26 の csAt14 を含む。kind は記録の kind)。
+ * 使わない行(「未確認」)は記録を作らず、対面がその行なら対面なし(F-009 基準 8 で除外)。
+ * 基準29・41: 結果だけの記録は選手の行を持たず、試合の記録(ピックプールの元)を作らない
  */
 export function scrimGameRecords(games: readonly MatchResult[]): Map<string, GameRecord[]> {
   const out = new Map<string, GameRecord[]>();
   for (const g of games) {
-    if (g.kind !== 'scrim' || g.resultOnly || g.durationSec === null) continue;
+    if (g.resultOnly || g.durationSec === null) continue;
     const durationMin = g.durationSec / 60;
     for (const teamId of g.teams) {
       const team = g.stats[teamId];
@@ -63,7 +63,7 @@ export function scrimGameRecords(games: readonly MatchResult[]): Map<string, Gam
           position: POSITION_OF[row.role],
           me,
           opp,
-          kind: 'scrim',
+          kind: g.kind,
         };
         const list = out.get(row.playerId) ?? [];
         list.push(record);

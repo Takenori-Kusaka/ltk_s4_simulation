@@ -109,7 +109,7 @@ const zOf = (x: number, s: Stat, clip: number) => (s.sd > 0 ? clamp((x - s.mean)
 
 /**
  * ピックプールの素点: 大会のロールで規定の試合数以上遊んだチャンピオンの数と、それらの勝率(試合数で縮小)。
- * F-004 基準16: スクリムの試合も 1 試合として数える(scrimGameWeight は掛けない)。チャンピオンの無い試合(champion が null)は試合の数にも数えない
+ * F-004 基準16・41: スクリム・本番の試合も 1 試合として数える(scrimGameWeight・officialGameWeight は掛けない)。チャンピオンの無い試合(champion が null)は試合の数にも数えない
  */
 function poolRaw(p: RatingPlayerInput, cfg: EngineConfig, now: number) {
   const games = selectGames(p.games, now, cfg, { roleOnly: true, position: p.position }).filter((g) => typeof g.me.championId === 'number');
@@ -278,6 +278,7 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
   const dates = raw.games.map((g) => g.endTime).sort((a, b) => b - a);
   const iso = (t: number) => new Date(t).toISOString().slice(0, 10);
   const scrimGames = raw.games.filter((g) => g.kind === 'scrim').length;
+  const officialGames = raw.games.filter((g) => g.kind === 'official').length;
   return {
     key: axis.key,
     label: axis.label,
@@ -297,8 +298,9 @@ function ratePool(p: RatingPlayerInput, ctx: RatingContext, axis: DataAxisDef): 
     bonus: 0,
     metrics: [],
     scrimGames,
-    // 基準16: ピックプールはスクリムを 1 試合として数える(重み 1.0)
-    confidenceReason: confidenceReasonOf(n, scrimGames, cfg, 1),
+    officialGames,
+    // 基準16・41: ピックプールはスクリム・本番を 1 試合として数える(重み 1.0)
+    confidenceReason: confidenceReasonOf(n, scrimGames, cfg, 1, officialGames, 1),
     poolDetail: { champions: raw.champions, winRate: raw.winRate, list: raw.list },
   };
 }

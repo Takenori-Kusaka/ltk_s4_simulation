@@ -6,8 +6,8 @@ import { join } from 'node:path';
 import { ROSTER } from '../data/roster.ts';
 import { scrimGameRecords } from '../results/to-games.ts';
 import type { MatchResult } from '../results/types.ts';
-import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
-import { blankInfo, extractGame, loadEngineConfig, populationMatch, REACH_UNKNOWN_DOWNGRADE, scrimSentence } from './engine.ts';
+import { buildRatingContext, DATA_AXES, rateDataAxes, type RatedAxis } from './axes.ts';
+import { blankInfo, buildResultsPopulation, extractGame, loadEngineConfig, officialSentence, populationMatch, REACH_UNKNOWN_DOWNGRADE, scrimSentence } from './engine.ts';
 import { roleSwitchDiscount,
   mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
@@ -140,8 +140,8 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
       confidence: a.confidence,
       estimated: a.estimated,
       marks: [],
-      // F-004 基準15: スクリムの試合を使った軸は、その数と重み(ピックプールは 1 試合として数えるため 1.0)を説明に示す
-      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1)]
+      // F-004 基準15・42: スクリム・本番の試合を使った軸は、その数と重み(ピックプールは 1 試合として数えるため 1.0)を説明に示す
+      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1), officialSentence(a.officialGames, a.key === 'pool' ? 1 : cfg.officialGameWeight ?? 1)]
         .filter(Boolean)
         .join('。') + (discount.reason ? `。${discount.reason}` : '') + (ov ? `。${ownerViewSentence(ov)}` : ''),
       data: a,
@@ -181,7 +181,7 @@ export interface LoadOptions {
   rawDir: string;
   /** 根拠の正規化した記録の置き場(shotcalling.json・tournament.json。career.json はあれば読む) */
   groundsDir: string;
-  /** F-004 基準12: 受け付けた試合結果の記録(src/results/load.ts)。スクリムの記録を選手の試合の記録に足す。無ければ足さない */
+  /** F-004 基準12・41: 受け付けた試合結果の記録(src/results/load.ts)。スクリム・本番の記録を選手の試合の記録に足す。無ければ足さない */
   scrims?: readonly MatchResult[];
 }
 
@@ -251,6 +251,12 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       ownerViews: ov.players[r.id] ?? [],
     };
   });
+  // F-004 基準40: csAt14 の組の数が下限に満たないロールと組の数を出力する(評価の組み立て buildRatingContext と同じ入力・同じ計算)。
+  // 実戦の記録(スクリム・本番)が 1 件も無ければ出さない
+  const allGames = players.flatMap((p) => p.games);
+  if (allGames.some((g) => g.kind !== undefined)) {
+    warnings.push(...buildResultsPopulation(allGames, DATA_AXES, loadEngineConfig().cs14MinPairs ?? 0).warnings);
+  }
   const matches = [...infos.values()].filter((x): x is NonNullable<ReturnType<typeof matchInfo>> => !!x).map(populationMatch);
   return { inputs: { players, matches, teamViews: ov.others }, errors, warnings };
 }

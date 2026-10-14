@@ -96,16 +96,14 @@ test('基準12: goldPerMin が無ければ gold ÷ 試合時間(分)、champion 
   assert.ok(Math.abs(by.get('DD-CORE-TOP')![0].me.killParticipation - 6 / 10) < 1e-9);
 });
 
-test('基準12: チームのキルが 0 ならキル関与は 0。本番の記録は対象外', () => {
+// 2026-10-14: 基準41 で本番の記録も試合の記録を作るため、「本番の記録は対象外」の確かめを外し、下の基準41 のテストへ移した
+test('基準12: チームのキルが 0 ならキル関与は 0', () => {
   const rec = record();
   for (const p of team(rec, 'LR CORE').players) { p.kills = 0; p.assists = 0; }
   team(rec, 'LR CORE').kills = 0;
   team(rec, 'LR CORE').assists = 0;
   const by = load([rec]);
   assert.equal(by.get('LR-CORE-MID')![0].me.killParticipation, 0);
-  const r = collectResults([{ file: '2026-10-15-regular-day1.json', kind: 'official', raw: [{ ...record({ kind: 'official', date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, winner: 'CC NEXT', teams: { 'CC NEXT': teamOf('CC NEXT'), 'DD NEXT': teamOf('DD NEXT') } }) }] }], { champions: CHAMPS });
-  assert.deepEqual(r.errors, []);
-  assert.equal(scrimGameRecords(r.games).size, 0);
 });
 
 test('基準14: スクリムの記録はソロランクと同じ条件(120 日・10 分・ロール)で選ばれ、調子の係数(キュー 420・440)には使われない', () => {
@@ -200,4 +198,85 @@ test('基準39: 分布は 1 試合の 1 ロールにつき 1 組。リスナー�
   assert.ok(Math.abs(dist.sd - Math.sqrt(500)) < 1e-9, `${dist.sd}`);
   // SUP は分布を作らない
   assert.equal(out.population.UTILITY?.['csAt14:diff'], undefined);
+});
+
+// ---- F-004 Task-12: 受入基準 41(本番の記録の選手の行から kind official の試合の記録。結果だけの記録は除く。基準 14 を同じに当てる)。受入基準から書いた ----
+
+const OFFICIAL_FILE = '2026-10-15-cc-next-vs-dd-next.json';
+const OFFICIAL_NOON_JST = Date.parse('2026-10-15T12:00:00+09:00');
+/** Regular Stage 1 日目の NEXT の CC NEXT 対 DD NEXT(試合 ID RS-1-CC-DD-NEXT)。CC NEXT の勝ち、40 分 */
+const official = (over: Row = {}): Row => record({
+  kind: 'official', date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, winner: 'CC NEXT',
+  teams: { 'CC NEXT': teamOf('CC NEXT'), 'DD NEXT': teamOf('DD NEXT') }, ...over,
+});
+const loadOfficial = (raw: Row[]) => {
+  const r = collectResults([{ file: OFFICIAL_FILE, kind: 'official', raw }], { champions: CHAMPS });
+  assert.deepEqual(r.errors, []);
+  return r;
+};
+
+test('基準41: 本番の記録の選手の行から、基準12 と同じ規則・対応表で kind official の試合の記録を作る。「未確認」の行は作らず対面も無し', () => {
+  const rec = official();
+  const off = rec.teams as Record<string, { players: Row[] } & Row>;
+  off['DD NEXT'].players[3].mappingConfidence = '未確認(表示名が違う)';
+  // TOP の 14 分の CS: CC NEXT 100・DD NEXT 90(基準26 は本番にも当てる)
+  off['CC NEXT'].players[0].cs14 = 100;
+  off['DD NEXT'].players[0].cs14 = 90;
+  const by = scrimGameRecords(loadOfficial([{ ...rec, cs14Sec: 840 }]).games);
+  assert.equal(by.size, 9, '10 人のうち「未確認」の 1 人を除く');
+  assert.equal(by.has('DD-NEXT-ADC'), false);
+  const top = by.get('CC-NEXT-TOP')!;
+  assert.equal(top.length, 1);
+  const g = top[0];
+  assert.equal(g.kind, 'official');
+  assert.equal(g.matchId, 'RS-1-CC-DD-NEXT');
+  assert.equal(g.queueId, 0);
+  assert.equal(g.position, 'TOP');
+  assert.equal(g.endTime, OFFICIAL_NOON_JST);
+  assert.equal(g.durationMin, 40);
+  // 対応表: 10,000 ゴールド ÷ 40 分 = 250、キル関与 (2 + 4) ÷ 10 = 0.6、ダメージの割合 10,000 ÷ 50,000 = 0.2、ヨリックの key 83
+  assert.ok(Math.abs(g.me.goldPerMinute - 250) < 1e-9);
+  assert.ok(Math.abs(g.me.killParticipation - 0.6) < 1e-9);
+  assert.ok(Math.abs(g.me.teamDamagePercentage - 0.2) < 1e-9);
+  assert.deepEqual([g.me.championId, g.me.win, g.opp?.win], [83, 1, 0]);
+  assert.deepEqual([g.me.csAt14, g.opp?.csAt14], [100, 90]);
+  assert.equal(by.get('DD-NEXT-TOP')![0].kind, 'official');
+  assert.equal(by.get('CC-NEXT-ADC')![0].opp, null, '対面(DD NEXT ADC)が未確認なら対面なし');
+});
+
+test('基準41: 本番の結果だけの記録からは試合の記録を作らない。スクリムと本番を同じ入力に渡せば、それぞれの kind で作る', () => {
+  const ro: Row = {
+    kind: 'official', resultOnly: true, date: '2026-10-15', stage: 'regular', day: 1, tier: 'NEXT', match: null, game: 1, listeners: false,
+    source: { url: 'https://www.youtube.com/watch?v=official' }, winner: 'CC NEXT', teams: { 'CC NEXT': {}, 'DD NEXT': {} },
+  };
+  assert.equal(scrimGameRecords(loadOfficial([ro]).games).size, 0);
+  const sc = collectResults([{ file: SCRIM_FILE, kind: 'scrim', raw: [record()] }], { champions: CHAMPS });
+  assert.deepEqual(sc.errors, []);
+  const by = scrimGameRecords([...sc.games, ...loadOfficial([official()]).games]);
+  assert.equal(by.size, 20);
+  assert.deepEqual(by.get('DD-CORE-MID')!.map((g) => g.kind), ['scrim']);
+  assert.deepEqual(by.get('DD-NEXT-MID')!.map((g) => g.kind), ['official']);
+});
+
+test('基準41・14: 本番の試合の記録はソロランクと同じ条件(120 日・10 分・ロール)で選ばれ、調子の係数(キュー 420・440)に使われない。基準39 の分布には入る', () => {
+  const cfg = loadEngineConfig();
+  const now = Date.parse('2026-10-16T03:00:00Z');
+  const long = scrimGameRecords(loadOfficial([official()]).games).get('DD-NEXT-MID')!;
+  const short = scrimGameRecords(loadOfficial([official({ duration: '09:30' })]).games).get('DD-NEXT-MID')!;
+  assert.equal(selectGames(long, now, cfg, { roleOnly: true, position: 'MIDDLE' }).length, 1);
+  assert.equal(selectGames(short, now, cfg, { roleOnly: false, position: 'MIDDLE' }).length, 0, '10 分未満は除く');
+  assert.equal(selectGames(long, now, cfg, { roleOnly: true, position: 'TOP' }).length, 0, 'ロールが違えば除く');
+  assert.equal(selectGames(long, now + 121 * 86_400_000, cfg, { roleOnly: false, position: 'MIDDLE' }).length, 0, '120 日より古ければ除く');
+  const form = formFactor(long.map((g) => ({ endTime: g.endTime, durationMin: g.durationMin, queueId: g.queueId, win: g.me.win === 1 })), [], now);
+  assert.equal(form.games, 0, '本番は調子の係数の試合に数えない');
+  assert.equal(form.coefficient, 1);
+  // 分布(基準39): 本番 1 試合の TOP の差 CC 100 − DD 70 = 30 → 1 組、二乗平均平方根 30
+  const rec = official();
+  const t = rec.teams as Record<string, { players: Row[] } & Row>;
+  t['CC NEXT'].players[0].cs14 = 100;
+  t['DD NEXT'].players[0].cs14 = 70;
+  const records = [...scrimGameRecords(loadOfficial([{ ...rec, cs14Sec: 840 }]).games).values()].flat();
+  const out = buildResultsPopulation(records, DATA_AXES, 0);
+  assert.equal(out.pairs.TOP.csAt14, 1);
+  assert.ok(Math.abs(out.population.TOP['csAt14:diff'].sd - 30) < 1e-9);
 });
