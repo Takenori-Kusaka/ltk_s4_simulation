@@ -20,6 +20,7 @@ import { ROSTER } from '../data/roster.ts';
 import { evaluateTeams } from '../team/evaluate.ts';
 import { readChampionList, type ChampionList } from '../results/champions.ts';
 import { DEFAULT_RESULTS_ROOT, formatResultError, loadResults, summarizeResults, type LoadedResults } from '../results/load.ts';
+import { buildResultsFile, resultsSummaryOf } from '../results/official.ts';
 
 export interface AggregateMainOptions {
   rawDir?: string;
@@ -32,7 +33,7 @@ export interface AggregateMainOptions {
   groundsDir?: string;
   /** 常識の一覧(既定は src/rating/known-facts.json) */
   facts?: KnownFact[];
-  /** F-004: 試合結果の記録の置き場の親(results/ と scrims/ を持つ)。省略時は記録を読まない。コマンドからの実行では docs/research/grounds */
+  /** F-004: 試合結果の記録の置き場の親(results/ と scrims/ を持つ)。省略時は記録を読まず、results.json も書かない。コマンドからの実行では docs/research/grounds */
   resultsRoot?: string;
 }
 
@@ -90,6 +91,17 @@ function readResults(opts: AggregateMainOptions, publicDir: string, out: (l: str
   for (const x of loaded.excluded) out(`試合結果の記録を除いた: ${x.file}[${x.index}] ${x.reason}(${x.detail})`);
   for (const u of loaded.unconfirmed) out(`試合結果の記録の未確認: ${u.rosterName}(${u.file}[${u.index}] ${u.team} ${u.role})。この行は使わない`);
   return loaded;
+}
+
+/** F-004 基準11: 前回の集計が書いた公開用のファイル(results.json・winrates.json)。無ければ null。読めなければ理由を出して null(初めての集計として扱う) */
+function readPrevious(path: string, out: (l: string) => void): unknown {
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch (e) {
+    out(`前回のファイルを読めない: ${path}: ${(e as Error).message}`);
+    return null;
+  }
 }
 
 /** F-009 基準21・22: 評価を計算し、常識の一覧を検査して、反しなければ ratings.json を書く */
@@ -161,12 +173,25 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   }
   const external = readExternalViews(externalRaw);
   for (const e of external.errors) out(`外部の見立ての入力: ${e}`);
-  // F-005 基準4: 本番とスクリムの結果で θ を当て直す(F-004 の記録が無ければ θ は 0)
-  const resultGames = (results?.games ?? []).map((g) => ({ kind: g.kind, date: g.date, teams: g.teams, winner: g.winner }));
-  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions, results: resultGames });
+  // F-004 Task-3(基準 8・9・11・20): F-005 の結果の入力 games[](本番とスクリム)と連敗の数 k。
+  // 予測は前回の results.json から引き継ぎ、初めて読んだ本番の試合は前回の勝率表から取るため、どちらも作り直す前に読む
   const winratePath = join(publicDir, 'winrates.json');
+  const resultsPath = join(publicDir, 'results.json');
+  const resultsFile = results
+    ? buildResultsFile({ games: results.games, computedAt: now.toISOString(), prevResults: readPrevious(resultsPath, out), prevWinrates: readPrevious(winratePath, out) })
+    : null;
+  // F-005 基準4: 本番とスクリムの結果で θ を当て直す(F-004 の記録が無ければ θ は 0)
+  const resultGames = resultsFile?.games ?? [];
+  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions, results: resultGames });
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
-  writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: null }, null, 2) + '\n');
+  // F-004 基準10: results は本番の試合数・スクリムの試合数・最新の試合日(本番の記録が無い間は null)
+  writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: resultsSummaryOf(resultGames) }, null, 2) + '\n');
+  if (resultsFile) {
+    writeFileSync(resultsPath, JSON.stringify(resultsFile, null, 2) + '\n');
+    const official = resultGames.filter((g) => g.kind === 'official');
+    const streaks = resultsFile.teams.filter((t) => t.k >= 2).map((t) => `${t.key} ${t.k}(${t.form})`);
+    out(`試合結果のファイルを書いた: ${resultsPath}(本番 ${official.length} 試合・スクリム ${resultGames.length - official.length} 試合。予測あり ${official.filter((g) => g.forecast).length}・予測なし ${official.filter((g) => !g.forecast).length}。連敗の数 k が 2 以上: ${streaks.length ? streaks.join('、') : 'なし'})`);
+  }
   const scales = TIERS.map((tier) => `${tier} β ${winrates.beta[tier]} / β_macro ${winrates.betaMacro[tier]} / β_ext ${winrates.betaExt[tier]}`).join('、');
   out(`勝率表を書いた: ${winratePath}(${scales})`);
   const thetas = winrates.teams.filter((t) => t.result.official + t.result.scrim > 0).map((t) => `${t.key} ${t.result.theta > 0 ? '+' : ''}${t.result.theta.toFixed(3)}(本番 ${t.result.official}・スクリム ${t.result.scrim})`);

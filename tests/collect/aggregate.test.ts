@@ -349,3 +349,205 @@ test('コマンド: groundsDir の external-views.json を勝率表の E に入�
   assert.equal(after.betaExt.NEXT, 0);
   assert.ok(lines.some((l) => /外部の見立て/.test(l) && /items\[3\]/.test(l) && /ZZ-CORE/.test(l)));
 });
+
+// ---- F-004 Task-3: 受入基準 8・9・10・11・20・24(results.json・勝率表の results・予測の凍結・再現性)。実装より先に受入基準から書いた ----
+import { ROSTER } from '../../src/data/roster.ts';
+
+type ResultRow = Record<string, unknown>;
+interface ResultsFileLike {
+  kind: string;
+  computedAt: string;
+  games: {
+    matchId: string; kind: string; date: string; stage: string | null; day: number | null; tier: string | null; teams: string[]; winner: string;
+    source: { url: string }; forecast?: { pA: number; pB: number; computedAt: string } | null; forecastReason?: string | null;
+  }[];
+  teams: { key: string; k: number; form: string }[];
+}
+interface WinratesResultsLike {
+  computedAt: string;
+  results: { official: number; scrim: number; latestDate: string } | null;
+  teams: { key: string; result: { theta: number; official: number; scrim: number } }[];
+  matches: { stage: string; day?: number; tier: string; a: string; b: string; pA: number; pB: number }[];
+}
+const RESULT_SOURCE_URL = 'https://www.youtube.com/watch?v=f004-task3';
+const NO_TABLE = '試合日より前の勝率表が無い';
+const PUBLIC_FILES = ['results.json', 'ratings.json', 'winrates.json'];
+
+/** 階級チーム(例 'DD CORE')の名簿の 5 人。champion は null(テスト用の Data Dragon の一覧に依らない) */
+const resultTeam = (label: string): ResultRow => {
+  const [team, tier] = label.split(' ');
+  const players = (['TOP', 'JG', 'MID', 'ADC', 'SUP'] as const).map((role) => {
+    const p = ROSTER.find((x) => x.team === team && x.tier === tier && x.role === role)!;
+    return { role, rosterName: p.name, mappingConfidence: '確信(名簿の Riot ID と一致)', champion: null, kills: 2, deaths: 2, assists: 4, gold: 10000, damage: 10000 };
+  });
+  return { kills: 10, deaths: 10, assists: 20, gold: 50000, players };
+};
+const resultRecord = (a: string, b: string, winner: string, over: ResultRow): ResultRow => ({
+  kind: 'scrim', listeners: false, source: { url: RESULT_SOURCE_URL, resultScreenSec: 5400 }, duration: '30:00', winner, teams: { [a]: resultTeam(a), [b]: resultTeam(b) }, ...over,
+});
+/** Regular Stage の本番の記録。1 日目(2026-10-15)は CC 対 DD・IT 対 LR、3 日目(2026-10-23)は LR 対 DD・IT 対 CC(左がブルー) */
+const regularRecord = (day: number, date: string, blue: string, red: string, tier: string, winner: string): ResultRow =>
+  resultRecord(`${blue} ${tier}`, `${red} ${tier}`, `${winner} ${tier}`, { kind: 'official', date, stage: 'regular', day, tier, match: null, game: 1 });
+const day1 = (blue: string, red: string, tier: string, winner: string) => regularRecord(1, '2026-10-15', blue, red, tier, winner);
+/** LR CORE 対 DD CORE のスクリムの記録 */
+const coreScrim = (date: string, duration: string, winner: string, over: ResultRow = {}) => resultRecord('LR CORE', 'DD CORE', winner, { date, duration, ...over });
+
+/** 記録の置き場の親(results/ と scrims/ を持つ)へ記録を置く。files は「置き場/ファイル名」→ 記録の配列 */
+function putResults(root: string, files: Record<string, ResultRow[]>): string {
+  for (const [rel, raw] of Object.entries(files)) {
+    mkdirSync(join(root, rel.split('/')[0]), { recursive: true });
+    writeFileSync(join(root, rel), JSON.stringify(raw));
+  }
+  return root;
+}
+const resultsRootOf = (files: Record<string, ResultRow[]>) => putResults(mkdtempSync(join(tmpdir(), 'f004-task3-')), files);
+const readJson = <T>(dir: string, name: string): T => JSON.parse(readFileSync(join(dir, name), 'utf8')) as T;
+const gameOf = (publicDir: string, matchId: string) => {
+  const g = readJson<ResultsFileLike>(publicDir, 'results.json').games.find((x) => x.matchId === matchId);
+  assert.ok(g, `${matchId} が results.json の games[] にある`);
+  return g;
+};
+
+/** 集計を基準日 now で実行する(常識の一覧は空にして、評価の中身では止めない)。終了コード 0 を確かめ、出力の行を返す */
+async function aggregateAt(env: { rawDir: string; publicDir: string; snapshotsDir: string }, resultsRoot: string, now: string): Promise<string[]> {
+  const lines: string[] = [];
+  const code = await main({
+    rawDir: env.rawDir, publicDir: env.publicDir, snapshotsDir: env.snapshotsDir, resultsRoot, facts: [],
+    fetch: fakeDdragon().fetch, now: () => new Date(now), out: (l) => lines.push(l),
+  });
+  assert.equal(code, 0, lines.join('\n'));
+  return lines;
+}
+
+test('F-004 基準8・9・20: 集計は results.json に games[](本番とスクリム。試合日の昇順、同じ日は日程の順)と teams[](連敗の数 k と勝敗の並び)を書く', async () => {
+  const env = setupRaw();
+  const root = resultsRootOf({
+    'scrims/2026-10-10-lr-core-vs-dd-core.json': [
+      coreScrim('2026-10-10', '30:00', 'DD CORE'), coreScrim('2026-10-10', '31:00', 'LR CORE'), coreScrim('2026-10-10', '32:00', 'DD CORE', { listeners: true }),
+    ],
+    'scrims/2026-10-16-lr-core-vs-dd-core.json': [coreScrim('2026-10-16', '30:00', 'DD CORE')],
+    // 本番の記録は日程と逆の順に置く
+    'results/2026-10-15-regular-day1.json': [day1('IT', 'LR', 'CORE', 'LR'), day1('CC', 'DD', 'CORE', 'CC'), day1('IT', 'LR', 'NEXT', 'IT'), day1('CC', 'DD', 'NEXT', 'CC')],
+  });
+  const lines = await aggregateAt(env, root, '2026-10-17T03:00:00.000Z');
+  const file = readJson<ResultsFileLike>(env.publicDir, 'results.json');
+  assert.equal(file.kind, 'results');
+  assert.equal(file.computedAt, '2026-10-17T03:00:00.000Z');
+  // 基準8・20: リスナー参加の記録は入らない。スクリムは kind "scrim"
+  assert.deepEqual(file.games.map((g) => [g.matchId, g.kind, g.date, g.winner]), [
+    ['SC-20261010-DD-CORE-LR-CORE-G1', 'scrim', '2026-10-10', 'DD-CORE'],
+    ['SC-20261010-DD-CORE-LR-CORE-G2', 'scrim', '2026-10-10', 'LR-CORE'],
+    ['RS-1-CC-DD-NEXT', 'official', '2026-10-15', 'CC-NEXT'],
+    ['RS-1-CC-DD-CORE', 'official', '2026-10-15', 'CC-CORE'],
+    ['RS-1-IT-LR-NEXT', 'official', '2026-10-15', 'IT-NEXT'],
+    ['RS-1-IT-LR-CORE', 'official', '2026-10-15', 'LR-CORE'],
+    ['SC-20261016-DD-CORE-LR-CORE-G1', 'scrim', '2026-10-16', 'DD-CORE'],
+  ]);
+  const g = file.games[2];
+  assert.deepEqual([g.stage, g.day, g.tier, g.teams, g.source.url], ['regular', 1, 'NEXT', ['CC-NEXT', 'DD-NEXT'], RESULT_SOURCE_URL]);
+  assert.deepEqual([file.games[0].teams, file.games[0].source.url], [['DD-CORE', 'LR-CORE'], RESULT_SOURCE_URL]);
+  // 基準9: 本番だけを数える(スクリムの勝ち負けでは k も並びも動かない)
+  assert.equal(file.teams.length, 12);
+  const streak = Object.fromEntries(file.teams.map((t) => [t.key, [t.k, t.form]]));
+  assert.deepEqual(streak['DD-NEXT'], [1, 'L']);
+  assert.deepEqual(streak['CC-NEXT'], [0, 'W']);
+  assert.deepEqual(streak['DD-CORE'], [1, 'L'], '本番の負けの後のスクリムの勝ちでは 0 に戻らない');
+  assert.deepEqual(streak['LR-CORE'], [0, 'W'], 'スクリムの負けは数えない');
+  assert.deepEqual(streak['DD-MASTERS'], [0, ''], '本番の記録が無い階級チーム');
+  // 基準20: θ への重みはこの機能の側で持たない
+  assert.ok(!/weight/i.test(readFileSync(join(env.publicDir, 'results.json'), 'utf8')));
+  assert.ok(lines.some((l) => /results\.json/.test(l)), '書いたファイルを出力に残す');
+});
+
+test('F-004 基準10: 本番の記録が追加されたら、次の集計で勝率表を本番の結果を含めて作り直し、results に本番の試合数・スクリムの試合数・最新の試合日を書く', async () => {
+  const env = setupRaw();
+  const root = resultsRootOf({ 'scrims/2026-10-10-lr-core-vs-dd-core.json': [coreScrim('2026-10-10', '30:00', 'DD CORE'), coreScrim('2026-10-10', '31:00', 'LR CORE')] });
+  const resultOf = (file: WinratesResultsLike, key: string) => file.teams.find((t) => t.key === key)!.result;
+  await aggregateAt(env, root, '2026-10-14T03:00:00.000Z');
+  const before = readJson<WinratesResultsLike>(env.publicDir, 'winrates.json');
+  // 本番の記録が無い間は null のまま(画面は results の有無で「予想(開幕前)」と「結果を反映」を分ける。基準22)
+  assert.equal(before.results, null);
+  assert.deepEqual(resultOf(before, 'CC-NEXT'), { theta: 0, official: 0, scrim: 0 });
+
+  putResults(root, { 'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'CC'), day1('IT', 'LR', 'NEXT', 'IT')] });
+  await aggregateAt(env, root, '2026-10-16T03:00:00.000Z');
+  const after = readJson<WinratesResultsLike>(env.publicDir, 'winrates.json');
+  assert.equal(after.computedAt, '2026-10-16T03:00:00.000Z');
+  assert.deepEqual(after.results, { official: 2, scrim: 2, latestDate: '2026-10-15' });
+  // θ の当て直し(F-005 基準4)の入力に games[] が渡っている: 本番 1 試合ずつ、勝った側の θ が上がり負けた側が下がる
+  assert.deepEqual([resultOf(after, 'CC-NEXT').official, resultOf(after, 'DD-NEXT').official, resultOf(after, 'DD-CORE').official, resultOf(after, 'DD-CORE').scrim], [1, 1, 0, 2]);
+  assert.ok(resultOf(after, 'CC-NEXT').theta > 0, `CC-NEXT の θ ${resultOf(after, 'CC-NEXT').theta}`);
+  assert.ok(resultOf(after, 'DD-NEXT').theta < 0, `DD-NEXT の θ ${resultOf(after, 'DD-NEXT').theta}`);
+});
+
+test('F-004 基準11: 本番の記録を初めて読んだ集計で、前回の勝率表(試合日の 0 時(JST)より前の計算)の勝率を forecast に書き、以後の集計では書き換えない', async () => {
+  const env = setupRaw();
+  const root = resultsRootOf({});
+  // 開幕前(2026-10-14)の集計。この勝率表が 1 日目の試合の予測になる
+  await aggregateAt(env, root, '2026-10-14T03:00:00.000Z');
+  const opening = readJson<WinratesResultsLike>(env.publicDir, 'winrates.json');
+  const prior = opening.matches.find((m) => m.stage === 'regular' && m.day === 1 && m.tier === 'NEXT' && m.a === 'CC' && m.b === 'DD')!;
+  const frozen = { pA: prior.pA, pB: prior.pB, computedAt: '2026-10-14T03:00:00.000Z' };
+  const empty = readJson<ResultsFileLike>(env.publicDir, 'results.json');
+  assert.deepEqual([empty.games, empty.teams.length, empty.teams.every((t) => t.k === 0 && t.form === '')], [[], 12, true], '記録が 0 件でも results.json を書く');
+
+  // 1 日目の NEXT の記録を初めて読む集計(2026-10-16)
+  putResults(root, { 'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'DD')] });
+  await aggregateAt(env, root, '2026-10-16T03:00:00.000Z');
+  assert.deepEqual(gameOf(env.publicDir, 'RS-1-CC-DD-NEXT').teams, ['CC-NEXT', 'DD-NEXT']);
+  assert.deepEqual(gameOf(env.publicDir, 'RS-1-CC-DD-NEXT').forecast, frozen);
+  assert.equal(readJson<WinratesResultsLike>(env.publicDir, 'winrates.json').computedAt, '2026-10-16T03:00:00.000Z', '勝率表は作り直されている');
+
+  // 同じ日の別の試合の記録が後から増えた集計(2026-10-17)。前回の勝率表は 2026-10-16 の計算で、試合日より前ではない
+  putResults(root, { 'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'DD'), day1('IT', 'LR', 'NEXT', 'IT')] });
+  for (const now of ['2026-10-17T03:00:00.000Z', '2026-10-18T03:00:00.000Z']) {
+    await aggregateAt(env, root, now);
+    assert.deepEqual(gameOf(env.publicDir, 'RS-1-CC-DD-NEXT').forecast, frozen, `${now}: 前回の results.json の forecast を引き継ぐ`);
+    assert.equal(gameOf(env.publicDir, 'RS-1-IT-LR-NEXT').forecast, null, now);
+    assert.equal(gameOf(env.publicDir, 'RS-1-IT-LR-NEXT').forecastReason, NO_TABLE, now);
+  }
+});
+
+test('F-004 基準11: 前回の勝率表が無ければ forecast は null と理由。勝率表の a・b の向きが games[].teams と逆なら勝率を入れ替える', async () => {
+  // 3 日目(2026-10-23)は LR がブルー、DD がレッド。games[].teams は辞書順(DD-NEXT・LR-NEXT)
+  const root = resultsRootOf({ 'results/2026-10-23-regular-day3.json': [regularRecord(3, '2026-10-23', 'LR', 'DD', 'NEXT', 'LR')] });
+  const fresh = setupRaw();
+  await aggregateAt(fresh, root, '2026-10-24T03:00:00.000Z');
+  assert.equal(gameOf(fresh.publicDir, 'RS-3-LR-DD-NEXT').forecast, null);
+  assert.equal(gameOf(fresh.publicDir, 'RS-3-LR-DD-NEXT').forecastReason, NO_TABLE);
+
+  const env = setupRaw();
+  mkdirSync(env.publicDir, { recursive: true });
+  writeFileSync(join(env.publicDir, 'winrates.json'), JSON.stringify({
+    kind: 'winrates', computedAt: '2026-10-22T03:00:00.000Z', matches: [{ stage: 'regular', day: 3, tier: 'NEXT', a: 'LR', b: 'DD', pA: 70, pB: 30 }],
+  }));
+  await aggregateAt(env, root, '2026-10-24T03:00:00.000Z');
+  assert.deepEqual(gameOf(env.publicDir, 'RS-3-LR-DD-NEXT').teams, ['DD-NEXT', 'LR-NEXT']);
+  assert.deepEqual(gameOf(env.publicDir, 'RS-3-LR-DD-NEXT').forecast, { pA: 30, pB: 70, computedAt: '2026-10-22T03:00:00.000Z' });
+});
+
+test('F-004 基準24: 同じ入力(記録・ソロランクの試合・根拠・評価設定・基準日)から同じ results.json・ratings.json・winrates.json を返す', async () => {
+  const root = resultsRootOf({
+    'scrims/2026-10-10-lr-core-vs-dd-core.json': [coreScrim('2026-10-10', '30:00', 'DD CORE'), coreScrim('2026-10-10', '31:00', 'LR CORE')],
+    'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'CC'), day1('CC', 'DD', 'CORE', 'DD'), day1('IT', 'LR', 'NEXT', 'IT'), day1('IT', 'LR', 'CORE', 'LR')],
+  });
+  const NOW_AT = '2026-10-16T03:00:00.000Z';
+  const texts = (publicDir: string) => PUBLIC_FILES.map((f) => readFileSync(join(publicDir, f), 'utf8'));
+  const a = setupRaw(), b = setupRaw();
+  await aggregateAt(a, root, NOW_AT);
+  await aggregateAt(b, root, NOW_AT);
+  const first = texts(a.publicDir);
+  assert.deepEqual(texts(b.publicDir), first, '別の作業用の置き場で集計しても同じ');
+  assert.equal(readJson<ResultsFileLike>(a.publicDir, 'results.json').games.length, 6);
+  // 同じ置き場でもう一度集計しても同じ(前回の results.json と勝率表を読んでも出力は変わらない)
+  await aggregateAt(a, root, NOW_AT);
+  assert.deepEqual(texts(a.publicDir), first, '同じ置き場でもう一度集計しても同じ');
+});
+
+test('F-004: resultsRoot を渡さない集計は記録を読まず、results.json を書かない(勝率表の results は null)', async () => {
+  const env = setupRaw();
+  const code = await main({ rawDir: env.rawDir, publicDir: env.publicDir, snapshotsDir: env.snapshotsDir, facts: [], fetch: fakeDdragon().fetch, now: NOW, out: () => {} });
+  assert.equal(code, 0);
+  assert.ok(!existsSync(join(env.publicDir, 'results.json')));
+  assert.equal(readJson<WinratesResultsLike>(env.publicDir, 'winrates.json').results, null);
+});
