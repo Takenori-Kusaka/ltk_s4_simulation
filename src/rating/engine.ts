@@ -2,6 +2,7 @@
 // データの軸の基礎の点数 = clamp( A×r + 5×(1−r) + P × n/(n+k) × perfScale + 加点, 0, 10 )
 import type {
   AnchorSource,
+  BlankInfo,
   Confidence,
   DataAxisDef,
   DataAxisResult,
@@ -45,20 +46,53 @@ export function exProFloorOf(level: string, years = 0): number {
 /** ランクの表記(最高ランクの説明に使う): Challenger 1883LP、Emerald II 45LP */
 const rankText = (r: RankEntry) => [r.tier, r.division, `${r.lp}LP`].filter(Boolean).join(' ');
 
-export interface AnchorChoice {
-  anchor: number;
-  anchorSource: AnchorSource;
-  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典) */
-  anchorNote?: string;
-  /** ソロランクが無い(基準9: 確度を 1 段下げる) */
-  soloMissing: boolean;
+/** 基準35: 到達の時点(元プロの下限では最終出場年)が不明な記録に付ける印 */
+export const REACH_UNKNOWN_MARK = '到達の時点が不明(減衰なし)';
+/** 基準35: 不明な記録をランクの基準に採った軸の、確度の理由に足す文 */
+export const REACH_UNKNOWN_DOWNGRADE = '到達の時点が不明な記録をランクの基準に採ったため 1 段下げた';
+
+/**
+ * 到達の時点('2021'・'2024-01'・'2025-07-28' の形)→ 時刻(UTC)。年月日ならその日、年だけなら 7 月 1 日、年月だけならその月の 1 日。
+ * この形でなければ null(不明)
+ */
+export function reachTime(at: string | null | undefined): number | null {
+  const m = typeof at === 'string' ? /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(at) : null;
+  if (!m) return null;
+  return m[2] ? Date.UTC(Number(m[1]), Number(m[2]) - 1, m[3] ? Number(m[3]) : 1) : Date.UTC(Number(m[1]), 6, 1);
 }
 
 /**
- * 基準6・9・28〜30: ランクの基準の決め方。
+ * 基準33・34: 到達の時点から計算の基準日までのブランク b(日数 ÷ 365.25。負なら 0)と、
+ * ブランクの減衰 blankDecayPerYear × max(0, b − blankGraceYears)。到達の時点が不明なら減衰なし(基準35)
+ */
+export function blankInfo(at: string | null | undefined, now: number, cfg: Pick<EngineConfig, 'blankDecayPerYear' | 'blankGraceYears'> = loadEngineConfig()): BlankInfo {
+  const t = reachTime(at);
+  if (t === null) return { at: null, years: null, decay: 0 };
+  const years = Math.max(0, (now - t) / DAY / 365.25);
+  return { at: at as string, years, decay: (cfg.blankDecayPerYear ?? 0) * Math.max(0, years - (cfg.blankGraceYears ?? 0)) };
+}
+
+/** 基準36: 「到達 2021、ブランク 5.3 年、−1.28」(減衰が 0 でも示す)。不明なら基準35 の印 */
+const blankText = (b: BlankInfo) => (b.at === null || b.years === null ? REACH_UNKNOWN_MARK : `到達 ${b.at}、ブランク ${b.years.toFixed(1)} 年、−${b.decay.toFixed(2)}`);
+
+export interface AnchorChoice {
+  anchor: number;
+  anchorSource: AnchorSource;
+  /** 出どころの補足(最高ランクの値と出典、元プロの区分と出典、到達の時点・ブランク・減衰) */
+  anchorNote?: string;
+  /** ソロランクが無い(基準9: 確度を 1 段下げる) */
+  soloMissing: boolean;
+  /** 採った記録の到達の時点(元プロの下限では最終出場年)が不明(基準35: 確度を 1 段下げる) */
+  whenUnknown: boolean;
+}
+
+/**
+ * 基準6・9・28〜30・33〜36: ランクの基準の決め方。
  * ソロランク・歴代の最高ランク・今季の最高ランク(出典つき)のうち、基準の値が最も高い記録を採る
  * (LP 不明は 0 LP。同じ値ならソロランク → 歴代 → 今季の順)。どれも無ければ母集団の中央値。
- * 出典つきのプロの経歴があれば、下限を Challenger 0 LP(8.0)にする(元プロの下限)
+ * 歴代の最高ランクは、記録に載ったブランクの減衰を引いた値で比べる(ソロランクと今季の最高ランクは減衰しない)。
+ * 出典つきのプロの経歴があれば、経歴の水準と年数で決めた下限からブランクの減衰を引いた値(8.0 を下回らない)を下限にする(元プロの下限)。
+ * 到達の時点が不明な記録は減衰せず、同じ値の候補があれば不明でない候補を採る
  */
 export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' | 'seasonPeakRank' | 'exPro' | 'medianAnchor'>): AnchorChoice {
   const soloMissing = rankAnchor(input.rank) === null;
@@ -67,17 +101,29 @@ export function resolveAnchor(input: Pick<PlayerAxisInput, 'rank' | 'peakRank' |
     [input.peakRank, '最高ランク'],
     [input.seasonPeakRank, '最高ランク(今季)'],
   ];
-  let choice: AnchorChoice = { anchor: input.medianAnchor ?? 5, anchorSource: '母集団の中央値', soloMissing };
+  let choice: AnchorChoice = { anchor: input.medianAnchor ?? 5, anchorSource: '母集団の中央値', soloMissing, whenUnknown: false };
   let best: number | null = null;
   for (const [r, source] of records) {
-    const a = rankAnchor(r);
-    if (a === null || (best !== null && a <= best)) continue;
+    const raw = rankAnchor(r);
+    if (raw === null) continue;
+    const blank = source === '最高ランク' ? r!.blank : undefined;
+    const a = Math.max(0, raw - (blank?.decay ?? 0));
+    const unknown = blank !== undefined && blank.at === null;
+    if (best !== null && (a < best || (a === best && !(choice.whenUnknown && !unknown)))) continue;
     best = a;
-    choice = { anchor: a, anchorSource: source, soloMissing };
-    if (source !== 'ソロランク') choice.anchorNote = `${rankText(r!)}${r!.source ? `。出典: ${r!.source}` : ''}`;
+    choice = { anchor: a, anchorSource: source, soloMissing, whenUnknown: unknown };
+    if (source !== 'ソロランク') choice.anchorNote = `${rankText(r!)}${r!.source ? `。出典: ${r!.source}` : ''}${blank ? `。${blankText(blank)}` : ''}`;
   }
-  if (input.exPro && choice.anchor < exProFloorOf(input.exPro.level, input.exPro.years ?? 0)) {
-    choice = { ...choice, anchor: exProFloorOf(input.exPro.level, input.exPro.years ?? 0), anchorSource: '元プロの下限', anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}` };
+  if (input.exPro) {
+    const base = exProFloorOf(input.exPro.level, input.exPro.years ?? 0);
+    const blank = input.exPro.blank;
+    // 基準34: 減衰後の下限は Challenger 0 LP の基準(8.0)を下回らない
+    const floor = blank ? Math.max(Math.min(base, EX_PRO_FLOOR), base - blank.decay) : base;
+    const unknown = blank !== undefined && blank.at === null;
+    if (choice.anchor < floor || (choice.anchor === floor && choice.whenUnknown && !unknown)) {
+      const note = blank ? `。${blankText(blank)}${unknown ? '' : `(最終出場年から${floor > base - blank.decay ? `。下限は ${EX_PRO_FLOOR.toFixed(1)} を下回らない` : ''})`}` : '';
+      choice = { ...choice, anchor: floor, anchorSource: '元プロの下限', whenUnknown: unknown, anchorNote: `${input.exPro.level}。出典: ${input.exPro.source}${note}` };
+    }
   }
   return choice;
 }
@@ -181,8 +227,8 @@ export function scoreDataAxis(
   now: number,
   bonus = 0,
 ): DataAxisResult {
-  // ランクの基準と事前値(基準6・9・28〜30)
-  const { anchor, anchorSource, anchorNote, soloMissing } = resolveAnchor(input);
+  // ランクの基準と事前値(基準6・9・28〜30・33〜36)
+  const { anchor, anchorSource, anchorNote, soloMissing, whenUnknown } = resolveAnchor(input);
   const games = selectGames(input.games, now, cfg, { roleOnly: axis.roleDependent, position: input.position })
     .slice()
     .sort((a, b) => b.endTime - a.endTime || a.matchId.localeCompare(b.matchId));
@@ -221,6 +267,8 @@ export function scoreDataAxis(
   const estimated = n === 0;
   let confidence: Confidence = estimated ? '低' : confidenceOf(n, cfg);
   if (soloMissing && !estimated) confidence = downgrade(confidence);
+  // 基準35: 到達の時点が不明な記録をランクの基準に採った軸は、確度を 1 段下げる
+  if (whenUnknown && !estimated) confidence = downgrade(confidence);
   const onRole = games.filter((g) => g.position === input.position).length;
   return {
     key: axis.key,
@@ -231,6 +279,7 @@ export function scoreDataAxis(
     anchor,
     anchorSource,
     ...(anchorNote ? { anchorNote } : {}),
+    ...(whenUnknown ? { anchorWhenUnknown: true } : {}),
     correction,
     shrink,
     effectiveGames: n,
@@ -240,7 +289,7 @@ export function scoreDataAxis(
     oldest: games.length ? isoDay(games[games.length - 1].endTime) : null,
     bonus,
     scrimGames,
-    confidenceReason: confidenceReasonOf(n, scrimGames, cfg),
+    confidenceReason: confidenceReasonOf(n, scrimGames, cfg) + (whenUnknown && !estimated ? `。${REACH_UNKNOWN_DOWNGRADE}` : ''),
     metrics: axis.metrics.map((def, i) => {
       const m = metricAcc[i];
       return {

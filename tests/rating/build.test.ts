@@ -128,8 +128,8 @@ test('AC29/AC30: 軸の説明にランクの基準の出どころ(ソロラン�
   ];
   const ratings = buildRatings({ players, matches: [] }, NOW);
   const reason = (id: string) => ratings.find((r) => r.playerId === id)!.axes.find((a) => a.key === 'ground')!.reason;
-  assert.match(reason('EX'), /ランクの基準 8\.00\(元プロの下限: LJL-sub。出典: https:\/\/example\.test\/wiki\/A\)/);
-  assert.match(reason('PK'), /ランクの基準 8\.16\(最高ランク: Master 120LP。出典: https:\/\/example\.test\/opgg\/pk\)/);
+  assert.match(reason('EX'), /ランクの基準 8\.00\(元プロの下限: LJL-sub。出典: https:\/\/example\.test\/wiki\/A。到達の時点が不明\(減衰なし\)\)/);
+  assert.match(reason('PK'), /ランクの基準 8\.16\(最高ランク: Master 120LP。出典: https:\/\/example\.test\/opgg\/pk。到達の時点が不明\(減衰なし\)\)/);
   assert.match(reason('SO'), /ランクの基準 \d\.\d\d\(ソロランク\)/);
   assert.match(reason('SE'), /ランクの基準 9\.41\(最高ランク\(今季\): Grandmaster 1060LP。出典: https:\/\/example\.test\/opgg\/se\)/);
 });
@@ -346,4 +346,270 @@ test('基準12・32 の計算の例(経歴の記録と出場記録の実デー�
   // 国際大会の記録は全項目に出典がある
   for (const p of inputs.players) for (const e of p.tournament.international ?? []) assert.ok(e.source.length > 0, `${p.name} ${e.event}`);
   assert.equal(find(inputs.players, 'CC-MASTERS-MID').tournament.international?.length, 7);
+});
+
+// F-009 Task-13: 受入基準 6(2026-10-11 の追記)・33〜36(到達点からのブランク)。計算の基準日は仕様の計算の例と同じ 2026-10-11
+import { blankInfo, loadEngineConfig } from '../../src/rating/engine.ts';
+import { readReachedAt } from '../../src/rating/evidence.ts';
+import type { GameRecord } from '../../src/rating/types.ts';
+
+const NOW13 = Date.parse('2026-10-11T00:00:00Z');
+
+test('用語(到達の時点の読み方): 西暦 4 桁の年(年・年月・年月日)と S<n>(n は 1〜20。2010 + n 年)を拾い、最も遅い日付を採る。どちらも無ければ不明', () => {
+  // 仕様の 4 つの形
+  assert.equal(readReachedAt('2019'), '2019');
+  assert.equal(readReachedAt('2024-01'), '2024-01');
+  assert.equal(readReachedAt('2026年9月'), '2026-09');
+  assert.equal(readReachedAt('2020-02-15'), '2020-02-15');
+  // S<n> は 2010 + n 年。n は 1〜20
+  assert.equal(readReachedAt('S6'), '2016');
+  assert.equal(readReachedAt('S1'), '2011');
+  assert.equal(readReachedAt('S20'), '2030');
+  assert.equal(readReachedAt('S21'), null);
+  assert.equal(readReachedAt('S0'), null);
+  // S2026 は S<n> ではなく西暦の年
+  assert.equal(readReachedAt('S2026'), '2026');
+  // 最も遅い日付を採る(年だけは 7 月 1 日として比べる)
+  assert.equal(readReachedAt('2018(S8)・2025'), '2025');
+  assert.equal(readReachedAt('2026-03-16 に到達。2026 にも'), '2026');
+  assert.equal(readReachedAt('2026。2026-10-08 に再到達'), '2026-10-08');
+  assert.equal(readReachedAt('2025-12 と 2026-02-03'), '2026-02-03');
+  // 日付の無い記述、文字列でない値は不明
+  assert.equal(readReachedAt('未確認(NA から JP サーバーへ移った後)'), null);
+  assert.equal(readReachedAt(''), null);
+  assert.equal(readReachedAt(null), null);
+  assert.equal(readReachedAt(undefined), null);
+});
+
+/** 経歴の記録の peak.allTime.when(2026-10-11 の時点の 59 件)と、仕様の読み方で手で読んだ到達の時点 */
+const WHEN_59: [string, string, string | null][] = [
+  ['わしだい', '2026(日本サーバー1位の到達は 2026-02-02 の本人の投稿)', '2026'],
+  ['しゃるる', 'S9(2019)。本人は S7・S8・S9・S10(2017〜2020)の到達を申告', '2020'],
+  ['たぬき忍者', '2026(今季)。ほかに S7・S8 の終了時、2020-07、2022-02 にも Challenger', '2026'],
+  ['Day1', '2018(S8)・2025', '2025'],
+  ['hetel', '2026', '2026'],
+  ['酒寄颯馬', '2026年(スプリットは未特定。Wiki の確認では 2026-09-16(Split 3)に E1)', '2026-09-16'],
+  ['きなこ', '2026-05-03', '2026-05-03'],
+  ['スタンミじゃぱん', '2026-07-22 初到達(7回目の昇格戦)', '2026-07-22'],
+  ['じゃすぱー', 'JP サーバー。2024-05 以前に ADC で初到達、2024-11〜12 頃に再到達', '2024-11'],
+  ['神楽めあ', '2025-05-01 初到達。2026年に今季最高 274LP', '2026'],
+  ['SHAKA', '2026(S2026。4月にまざー3とのデュオでエメラルド昇格)', '2026'],
+  ['まざー3', '2026(S2026。4月に SHAKA とのデュオでエメラルド昇格)', '2026'],
+  ['天ノ川ねる', '2026(S2026。3月にエメラルド昇格)', '2026'],
+  ['夢野あかり', '2026(2026 Season 2)', '2026'],
+  ['白波らむね', '2026 Season 1(3/4 プラチナ到達、4/10 にプラチナ2)', '2026'],
+  ['Yutapon', 'NA S3(2013)に到達との記述あり。LP 最大は S2026', '2026'],
+  ['Rainbrain', 'S2026(今季の最高)と S2024 S2(終了時)', '2026'],
+  ['Ceros', 'S2026。S2025・S2024 S2・S2024 S1 の終了時も Master', '2026'],
+  ['Yuhi', 'S2026。2023-1・2024-2 もシーズン終了時 Challenger', '2026'],
+  ['Nemoh', 'KR で 2020 シーズンに到達(本人のインタビュー)。JP は op.gg で S2023 S2・S2024 S2・S2024 S3・S2025 の終了時 Master(S2024 S1 は D1 40)', '2025'],
+  ['YUKIO(ゆきお)', 'S2026(147LP到達日は未確認。マスター初到達は 2026-05-01 公開の切り抜きの直前)', '2026'],
+  ['k4sen', 'S2023 S2(2024-01 初ダイヤ到達)', '2024-01'],
+  ['葛葉', 'S2023 S2、S2026 に並ぶ', '2026'],
+  ['龍巻ちせ', '2025年頃(デビュー前)', '2025'],
+  ['昏昏アリア', 'S2026(到達日未確認。2026-04-27 時点は D1)', '2026'],
+  ['叶', '2026年9月ごろ(Wiki の 9/4 確認でエメラルド4)', '2026-09'],
+  ['ゆふな', '2026年(10/8 より前)', '2026'],
+  ['空澄セナ', '2026年9月下旬ごろ', '2026-09'],
+  ['獅子堂あかり', '2026-10-08〜10', '2026-10-08'],
+  ['鷹宮リオン', '2026-03-16', '2026-03-16'],
+  ['らいじん', '未確認(NA から JP サーバーへ移った後)', null],
+  ['ゆにか', 'S2026', '2026'],
+  ['Eugeo', '初到達はプロ入り前の JG(エリス)期(本人談)', null],
+  ['Zerost', 'S2026(下限。プロ時代の最高は未確認)', '2026'],
+  ['Enty(えんてぃ)', 'S6(2016)', '2016'],
+  ['mittiii', '2026 シーズン(期中の最高)', '2026'],
+  ['AlphaAzur', '2026 シーズン(期中の最高)', '2026'],
+  ['たかやスペシャル', 'LP の最高は 2026 シーズン。初の Master は 2017(S7、日本サーバー)', '2026'],
+  ['ごんかね', '2026 シーズン(初の Master 到達は 2026-03 ごろ)', '2026'],
+  ['橘ひなの', '2025-08-03 の週報で初めて自己最高 P2(その週のうちに到達。08-04 の日報にも P3→P2)。2026 シーズンにも P2 25LP(到達日は未確認)', '2026'],
+  ['ありけん', '2026-03 上旬(03-02 に G4→G3 で自己最高。G2 96LP は op.gg の今季最高)', '2026-03'],
+  ['まいたけ', '2026 シーズン(05-17 週に G1、05-24 週に P4。P3 の到達日は未確認)', '2026'],
+  ['天帝フォルテ', '2026-04-26 前後(P1→E4 で自己最高更新)', '2026-04-26'],
+  ['白那しずく', '2026-05 下旬(05-31 の週報で自己最高 P2)', '2026-05'],
+  ['apaMEN', '2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Diamond 2 が最高)', '2026-10-11'],
+  ['ねすてぃー / Nesty', '2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2024 S1 の Master 318 が最高)', '2026-10-11'],
+  ['Recap', '2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Challenger 1012 が最高)', '2026-10-11'],
+  ['ハレっち / Haretti', '2020-02 以前(時期は未確認。調査員は op.gg で S8(2018)の 276LP と読んだ)', '2020-02'],
+  ['てぃんとん / ThintoN', '2026 シーズン(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2023 S2 の Grandmaster 693・S2024 S2 の Grandmaster 685)', '2026-10-11'],
+  ['焼きパン', '初到達は 2025-07-27〜08-03 の週。2026-05-10〜17 の週に再到達', '2026-05-10'],
+  ['Killin9Hit', '2026年(2025年にも E4 に到達。LP 未確認)', '2026'],
+  ['乾伸一郎', '2024年スプリット1', '2024'],
+  ['大御所にゅん子', '2026年(週報では 2026-08-23 に M1。6〜7月に一度到達した可能性)', '2026-08-23'],
+  ['千燈ゆうひ', '2025-07-28(初到達)', '2025-07-28'],
+  ['狐白うる', 'S2026', '2026'],
+  ['アステル・レダ', 'S2026(今季の最高。op.gg の Top tier 表示、2026-10-11 取得。同じアカウントの過去シーズン末は S2025 の Gold 4 が最高)', '2026-10-11'],
+  ['春茶', 'S2026', '2026'],
+  ['なぎさっち', 'S2026(初エメラルド 2025-01-24)', '2026'],
+  ['No.1005(とおこ)', 'S2026(ソロ)', '2026'],
+];
+
+test('用語(到達の時点の読み方): 経歴の記録の when 59 件を読む。年を読めないのは 2 件(らいじん・Eugeo)、ブランクの減衰が掛かる(基準日の 1 年前より前)のは 10 件', () => {
+  assert.equal(WHEN_59.length, 59);
+  for (const [name, when, expected] of WHEN_59) assert.equal(readReachedAt(when), expected, `${name}: ${when}`);
+  assert.deepEqual(WHEN_59.filter(([, , at]) => at === null).map(([name]) => name), ['らいじん', 'Eugeo']);
+  const cfg = loadEngineConfig();
+  const decayed = WHEN_59.filter(([, , at]) => blankInfo(at, NOW13, cfg).decay > 0).map(([name, , at]) => `${name} ${at}`);
+  assert.deepEqual(decayed, [
+    'しゃるる 2020', 'Day1 2025', 'じゃすぱー 2024-11', 'Nemoh 2025', 'k4sen 2024-01', '龍巻ちせ 2025',
+    'Enty(えんてぃ) 2016', 'ハレっち / Haretti 2020-02', '乾伸一郎 2024', '千燈ゆうひ 2025-07-28',
+  ]);
+});
+
+test('基準33・34 の入力: career.json の peak.allTime.when から到達の時点、lol.lastCompetitiveYear から最終出場年を読む。読めなければ欄を持たない(不明)。今季の最高ランクには付けない', () => {
+  const career = {
+    kind: 'evidence-career-normalized',
+    players: {
+      'DD-MASTERS-TOP': {
+        peak: {
+          allTime: { tier: 'Challenger', division: null, lp: null, when: 'S6(2016)', source: 'https://example.test/opgg/top' },
+          thisSeason: { tier: 'Diamond', division: 2, lp: 65, when: '2026', source: 'https://example.test/opgg/top' },
+        },
+        lol: { highestLevel: 'LJL-starter', years: { 'LJL-starter': 10 }, lastCompetitiveYear: 2025, basis: ['lolPro[0]'], statusSource: 'https://example.test/wiki/top' },
+      },
+      'DD-MASTERS-JG': {
+        peak: {
+          allTime: { tier: 'Challenger', division: null, lp: 1185, when: '初到達はプロ入り前の JG(エリス)期(本人談)', source: 'https://example.test/opgg/jg' },
+          thisSeason: { tier: 'Challenger', division: null, lp: 1185, when: '2026', source: 'https://example.test/opgg/jg' },
+        },
+        lol: { highestLevel: 'LJL CS-starter', years: { 'LJL CS-starter': 1 }, basis: ['lolPro[0]'], statusSource: 'https://example.test/wiki/jg' },
+      },
+      'DD-MASTERS-MID': {
+        peak: { allTime: { tier: 'Diamond', division: 4, lp: 24, source: 'https://example.test/opgg/mid' }, thisSeason: null },
+        lol: { highestLevel: 'none', years: {}, lastCompetitiveYear: null, basis: [], statusSource: null },
+      },
+    },
+  };
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds(career) });
+  assert.deepEqual(errors, []);
+  const top = find(inputs.players, 'DD-MASTERS-TOP');
+  assert.equal(top.peakRank?.reachedAt, '2016');
+  assert.equal(top.exPro?.lastYear, 2025);
+  assert.equal(top.seasonPeakRank?.reachedAt, undefined, '今季の最高ランクは減衰しないため到達の時点を持たない');
+  // 年を読めない when・最終出場年の無い経歴は、欄を持たない(不明)
+  const jg = find(inputs.players, 'DD-MASTERS-JG');
+  assert.ok(jg.peakRank && !('reachedAt' in jg.peakRank));
+  assert.ok(jg.exPro && !('lastYear' in jg.exPro));
+  // when の無い記録も不明
+  const mid = find(inputs.players, 'DD-MASTERS-MID');
+  assert.ok(mid.peakRank && !('reachedAt' in mid.peakRank));
+});
+
+const p13 = (id: string, extra: Partial<PlayerRatingInput>): PlayerRatingInput => ({
+  playerId: id, name: id, tier: 'MASTERS', position: 'MIDDLE', rank: null, games: [], league: [], shotcalling: [],
+  tournament: { ltk: [], coach: [], pro: [], other: [] }, ...extra,
+});
+const DATA_KEYS = ['ground', 'laning', 'teamfight', 'synergy', 'stability', 'pool'];
+
+test('基準33・34・36 の計算の例(仕様): Ceros 8.78(最高ランク)、Enty 9.92(元プロの下限)、たぬき忍者 10.00(最高ランク)、わしだい 10.00(ソロランク)。6 軸で同じ基準と説明', () => {
+  const src = 'https://example.test/src';
+  const players = [
+    p13('CEROS', {
+      rank: { tier: 'MASTER', division: 'I', lp: 232 },
+      peakRank: { tier: 'Master', division: '', lp: 584, source: src, reachedAt: '2026' },
+      seasonPeakRank: { tier: 'Master', division: '', lp: 584, source: src },
+      exPro: { level: 'LJL-starter', source: src, years: 9, lastYear: 2021 },
+    }),
+    p13('ENTY', {
+      rank: { tier: 'DIAMOND', division: 'II', lp: 65 },
+      peakRank: { tier: 'Challenger', division: '', lp: 0, source: src, reachedAt: '2016' },
+      seasonPeakRank: { tier: 'Diamond', division: 'II', lp: 65, source: src },
+      exPro: { level: 'LJL-starter', source: src, years: 10, lastYear: 2025 },
+    }),
+    p13('TANUKI', {
+      rank: { tier: 'GRANDMASTER', division: 'I', lp: 700 },
+      peakRank: { tier: 'Challenger', division: '', lp: 1580, source: src, reachedAt: '2026' },
+      seasonPeakRank: { tier: 'Challenger', division: '', lp: 1580, source: src },
+      exPro: { level: 'LJL CS-starter', source: src, years: 1 },
+    }),
+    p13('WASHIDAI', {
+      rank: { tier: 'CHALLENGER', division: 'I', lp: 1883 },
+      peakRank: { tier: 'Challenger', division: '', lp: 1883, source: src, reachedAt: '2026' },
+      seasonPeakRank: { tier: 'Challenger', division: '', lp: 1883, source: src },
+      exPro: { level: 'LJL-starter', source: src, years: 5, lastYear: 2025 },
+    }),
+  ];
+  const ratings = buildRatings({ players, matches: [] }, NOW13);
+  const expected: Record<string, RegExp> = {
+    CEROS: /^ランクの基準 8\.78\(最高ランク: Master 584LP。出典: https:\/\/example\.test\/src。到達 2026、ブランク 0\.3 年、−0\.00\)/,
+    ENTY: /^ランクの基準 9\.92\(元プロの下限: LJL-starter。出典: https:\/\/example\.test\/src。到達 2025、ブランク 1\.3 年、−0\.08/,
+    TANUKI: /^ランクの基準 10\.00\(最高ランク: Challenger 1580LP。出典: https:\/\/example\.test\/src。到達 2026、ブランク 0\.3 年、−0\.00\)/,
+    WASHIDAI: /^ランクの基準 10\.00\(ソロランク\)/,
+  };
+  for (const [id, re] of Object.entries(expected)) {
+    for (const key of DATA_KEYS) assert.match(axisOf(ratings, id, key).reason, re, `${id} ${key}`);
+  }
+  // 不明な下限(たぬき忍者の LJL CS、最終出場年なし)は採られないので、印は付かない
+  assert.doesNotMatch(axisOf(ratings, 'TANUKI', 'ground').reason, /到達の時点が不明/);
+});
+
+/** データの軸が推定にならない試合の記録(大会のロールで同じチャンピオンを 20 試合) */
+const games13 = (): GameRecord[] => Array.from({ length: 20 }, (_, i) => ({
+  matchId: `B13-${i}`, endTime: NOW13 - 86_400_000, durationMin: 30, queueId: 420, position: 'MIDDLE',
+  me: { championId: 103, win: i % 2, deaths: 4, totalDamageDealtToChampions: 20000, goldPerMinute: 400 },
+  opp: { deaths: 4, totalDamageDealtToChampions: 20000, goldPerMinute: 400 },
+}));
+
+test('基準35: 到達の時点が不明な記録をランクの基準に採ると、説明に「到達の時点が不明(減衰なし)」の印が付き、データの 6 軸(ピックプールを含む)の確度が 1 段下がる', () => {
+  const src = 'https://example.test/src';
+  const gold = { tier: 'GOLD', division: 'IV', lp: 0 };
+  const peak = { tier: 'Master', division: '', lp: 120, source: src };
+  const players = [
+    p13('KNOWN', { rank: gold, games: games13(), peakRank: { ...peak, reachedAt: '2026' } }),
+    p13('UNKNOWN', { rank: gold, games: games13(), peakRank: peak }),
+    p13('FLOOR-UNKNOWN', { rank: gold, games: games13(), exPro: { level: 'LJL-sub', source: src } }),
+    p13('NOT-ADOPTED', { rank: { tier: 'CHALLENGER', division: 'I', lp: 900 }, games: games13(), peakRank: peak }),
+  ];
+  const ratings = buildRatings({ players, matches: [] }, NOW13);
+  const down = (c: string) => (c === '高' ? '中' : '低');
+  let notEstimated = 0;
+  for (const key of DATA_KEYS) {
+    const known = axisOf(ratings, 'KNOWN', key);
+    assert.match(known.reason, /^ランクの基準 8\.16\(最高ランク: Master 120LP。出典: https:\/\/example\.test\/src。到達 2026、ブランク 0\.3 年、−0\.00\)/, key);
+    const unknown = axisOf(ratings, 'UNKNOWN', key);
+    assert.match(unknown.reason, /^ランクの基準 8\.16\(最高ランク: Master 120LP。出典: https:\/\/example\.test\/src。到達の時点が不明\(減衰なし\)\)/, key);
+    const floor = axisOf(ratings, 'FLOOR-UNKNOWN', key);
+    assert.match(floor.reason, /^ランクの基準 8\.00\(元プロの下限: LJL-sub。出典: https:\/\/example\.test\/src。到達の時点が不明\(減衰なし\)\)/, key);
+    const notAdopted = axisOf(ratings, 'NOT-ADOPTED', key);
+    assert.match(notAdopted.reason, /^ランクの基準 9\.20\(ソロランク\)/, key);
+    assert.equal(known.estimated, unknown.estimated, key);
+    if (known.estimated) continue;
+    notEstimated += 1;
+    // 不明な記録を採った選手は、同じ試合の記録で到達の時点が分かる選手より 1 段低い。採らなければ下がらない
+    assert.equal(unknown.confidence, down(known.confidence), `${key}: ${known.confidence} → ${unknown.confidence}`);
+    assert.equal(unknown.data!.confidence, unknown.confidence, key);
+    assert.match(unknown.data!.confidenceReason, /到達の時点が不明/, key);
+    assert.equal(floor.confidence, down(known.confidence), key);
+    assert.equal(notAdopted.confidence, known.confidence, key);
+    assert.doesNotMatch(known.data!.confidenceReason, /到達の時点が不明/, key);
+    assert.doesNotMatch(notAdopted.data!.confidenceReason, /到達の時点が不明/, key);
+  }
+  assert.ok(notEstimated >= 2, `推定でない軸 ${notEstimated}`);
+  assert.equal(axisOf(ratings, 'KNOWN', 'ground').confidence, '高');
+  assert.equal(axisOf(ratings, 'UNKNOWN', 'ground').confidence, '中');
+  assert.equal(axisOf(ratings, 'KNOWN', 'pool').estimated, false);
+  assert.equal(axisOf(ratings, 'KNOWN', 'pool').confidence, '高');
+  assert.equal(axisOf(ratings, 'UNKNOWN', 'pool').confidence, '中');
+});
+
+test('基準33〜36(経歴の記録の実データ): 到達の時点・最終出場年は読める形で入り、基準の説明は 6 軸で同じ', () => {
+  const { inputs, errors } = loadRatingInputs({ rawDir: rawDir(), groundsDir: 'docs/research/grounds/normalized' });
+  assert.deepEqual(errors, []);
+  for (const p of inputs.players) {
+    if (p.peakRank?.reachedAt !== undefined) assert.match(p.peakRank.reachedAt, /^\d{4}(-\d{2}(-\d{2})?)?$/, p.name);
+    if (p.exPro?.lastYear !== undefined) assert.ok(Number.isInteger(p.exPro.lastYear) && p.exPro.lastYear >= 2009 && p.exPro.lastYear <= 2099,`${p.name} ${p.exPro.lastYear}`);
+    assert.equal(p.seasonPeakRank?.reachedAt, undefined, p.name);
+  }
+  const ratings = buildRatings(inputs, NOW13);
+  for (const r of ratings) {
+    const anchorText = (key: string) => r.axes.find((a) => a.key === key)!.reason.split('。補正')[0];
+    for (const key of DATA_KEYS) assert.equal(anchorText(key), anchorText('ground'), `${r.name} ${key}`);
+    // 歴代の最高ランクまたは元プロの下限を採った選手は、到達・ブランク・減衰か、不明の印のどちらかを示す(基準 36・35)
+    const g = r.axes.find((a) => a.key === 'ground')!;
+    if (g.data!.anchorSource === '最高ランク' || g.data!.anchorSource === '元プロの下限') {
+      assert.match(g.reason, /到達 \d{4}(-\d{2}(-\d{2})?)?、ブランク \d+\.\d 年、−\d+\.\d\d|到達の時点が不明\(減衰なし\)/,`${r.name}: ${g.reason}`);
+    } else {
+      assert.doesNotMatch(g.reason.split('。補正')[0], /ブランク|到達の時点が不明/, r.name);
+    }
+  }
 });

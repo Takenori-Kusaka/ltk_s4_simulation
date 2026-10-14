@@ -7,7 +7,7 @@ import { ROSTER } from '../data/roster.ts';
 import { scrimGameRecords } from '../results/to-games.ts';
 import type { MatchResult } from '../results/types.ts';
 import { buildRatingContext, rateDataAxes, type RatedAxis } from './axes.ts';
-import { extractGame, loadEngineConfig, populationMatch, scrimSentence } from './engine.ts';
+import { blankInfo, extractGame, loadEngineConfig, populationMatch, REACH_UNKNOWN_DOWNGRADE, scrimSentence } from './engine.ts';
 import { roleSwitchDiscount,
   mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
@@ -82,6 +82,7 @@ export interface PlayerRating {
 }
 
 const round2 = (x: number) => Math.round(x * 100) / 100;
+const downgrade = (c: Confidence): Confidence => (c === '高' ? '中' : '低');
 const EMPTY_RECORD: TournamentRecord = { ltk: [], coach: [], pro: [], other: [] };
 
 /** 評価設定の版: 評価に効く設定ファイルの内容のハッシュ(先頭 12 文字) */
@@ -103,9 +104,11 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     tier: p.tier,
     position: p.position,
     rank: p.rank,
-    peakRank: p.peakRank ?? null,
+    // 基準33〜35: 到達点からのブランクを記録へ載せる。歴代の最高ランクは到達の時点から、元プロの下限は最終出場年(7 月 1 日)から計算の基準日まで。
+    // 到達の時点・最終出場年の無い記録は不明(減衰なし)。ソロランクと今季の最高ランクは減衰しないため載せない
+    peakRank: p.peakRank ? { ...p.peakRank, blank: blankInfo(p.peakRank.reachedAt, now, cfg) } : null,
     seasonPeakRank: p.seasonPeakRank ?? null,
-    exPro: p.exPro ?? null,
+    exPro: p.exPro ? { ...p.exPro, blank: blankInfo(p.exPro.lastYear === undefined ? null : String(p.exPro.lastYear), now, cfg) } : null,
     games: p.games,
     ltkSeasons: new Set(p.tournament.ltk.map((x) => x.season)).size,
     ltkSeasonNames: [...new Set(p.tournament.ltk.map((x) => x.season))].sort(),
@@ -118,7 +121,14 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     const show = (base: number) => round2(applyForm(base, form.coefficient));
     // 基準31: ロール転向の割引(LTK の出場シーズンのうち今のロール以外の割合 × 設定の値)をデータの軸から引く
     const discount = roleSwitchDiscount(p.tournament, ROLE_OF[p.position], cfg.roleSwitchPenalty ?? 0);
-    const data = rateDataAxes(ratingPlayers[i], ctx).map((a): AxisRating => {
+    const rated = rateDataAxes(ratingPlayers[i], ctx);
+    // 基準35: ランクの基準は 6 軸で同じ記録を採る。ピックプールは確度を自分で決める(axes.ts の ratePool)ため、
+    // 到達の時点が不明な記録を採ったときの 1 段下げを、ここでほかの 5 軸に揃える
+    const whenUnknown = rated.some((a) => a.anchorWhenUnknown);
+    const aligned = rated.map((a): RatedAxis => (a.key === 'pool' && whenUnknown && !a.anchorWhenUnknown
+      ? { ...a, anchorWhenUnknown: true, ...(a.estimated ? {} : { confidence: downgrade(a.confidence), confidenceReason: `${a.confidenceReason}。${REACH_UNKNOWN_DOWNGRADE}` }) }
+      : a));
+    const data = aligned.map((a): AxisRating => {
       // 基準37: 価値責任者の見立ての加点を、ロール転向の割引の後・調子の前に加える
       const ov = ownerViewAdjust(p.ownerViews ?? [], a.key, ovCfg);
       const base = Math.min(10, Math.max(0, a.base - discount.value + (ov?.value ?? 0)));
