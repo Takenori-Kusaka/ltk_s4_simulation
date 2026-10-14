@@ -8,6 +8,7 @@ import { resolveAnchor,
   buildPopulation,
   scoreDataAxis,
   confidenceOf,
+  roleGamesFloor,
 } from '../../src/rating/engine.ts';
 import type { EngineConfig, GameRecord, MatchForPopulation, DataAxisDef } from '../../src/rating/types.ts';
 
