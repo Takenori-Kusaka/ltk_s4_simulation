@@ -466,9 +466,9 @@ test('基準30: 同じ試合の 2 つの記録の winner が食い違えばエ�
 });
 
 test('基準25: cs14Sec は 780 以上 900 以下の整数、cs14 は 0 以上の整数か null、cs14 が null でない行がある記録は cs14Sec を持つ(本番の記録にも当てる)', () => {
-  const withCs = (rec: Row, cs14: unknown, sec?: unknown) => {
+  const withCs = (rec: Row, cs14: unknown, sec?: unknown, label = 'DD CORE') => {
     if (sec !== undefined) rec.cs14Sec = sec;
-    team(rec, 'DD CORE').players[0].cs14 = cs14;
+    team(rec, label).players[0].cs14 = cs14;
     return rec;
   };
   const r = one([withCs(scrim(), 103, 840)]);
@@ -482,8 +482,8 @@ test('基準25: cs14Sec は 780 以上 900 以下の整数、cs14 は 0 以上�
   for (const cs of [-1, 1.5, '103']) assert.ok(fields(one([withCs(scrim(), cs, 840)])).includes('teams.DD CORE.players[0].cs14'), String(cs));
   assert.deepEqual(one([withCs(scrim(), null)]).errors, [], 'null だけなら cs14Sec は要らない');
   assert.ok(fields(one([withCs(scrim(), 103)])).includes('cs14Sec'), 'cs14 があるのに cs14Sec が無い');
-  assert.ok(fields(one([withCs(official(), 103, 700)], RS_FILE, 'official')).includes('cs14Sec'), '本番にも範囲を当てる');
-  assert.deepEqual(one([withCs(official(), 103, 840)], RS_FILE, 'official').errors, []);
+  assert.ok(fields(one([withCs(official(), 103, 700, 'DD NEXT')], RS_FILE, 'official')).includes('cs14Sec'), '本番にも範囲を当てる');
+  assert.deepEqual(one([withCs(official(), 103, 840, 'DD NEXT')], RS_FILE, 'official').errors, []);
 });
 
 test('基準29: 集計の出力に結果だけの記録の件数とファイル名を示し、結果だけの記録を results.json の games[] に 1 試合として書く', async () => {
