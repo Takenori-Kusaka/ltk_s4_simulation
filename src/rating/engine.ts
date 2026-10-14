@@ -173,6 +173,11 @@ export function confidenceOf(n: number, cfg: EngineConfig): Confidence {
 
 const downgrade = (c: Confidence): Confidence => (c === '高' ? '中' : '低');
 
+/** F-009 基準42: 大会のロールの試合(重みを掛けない件数)が下限に満たない軸は、有効な試合数に依らず確度を「低」にし、理由に件数を足す */
+export function roleGamesFloor<T extends { confidence: Confidence; confidenceReason: string }>(r: T, roleGames: number, min: number): T {
+  return roleGames < min ? { ...r, confidence: '低', confidenceReason: `${r.confidenceReason}。大会のロールの試合 ${roleGames} 件(${min} 未満)` } : r;
+}
+
 /** 1試合の指標の値(対面との差)。相手がいない・値が無いときは null(基準8) */
 export function metricDiff(def: MetricDef, me: Record<string, number>, opp: Record<string, number> | null): number | null {
   if (!opp) return null;
