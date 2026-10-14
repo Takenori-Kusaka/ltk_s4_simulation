@@ -2,6 +2,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-11",
+    "game": 2,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -17,6 +18,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "30:58",
     "durationSec": 1858,
+    "cs14Sec": 840,
     "winner": "CC MASTERS",
     "winnerBasis": "LTKDB の勝利チーム CC。キル 23-10",
     "sides": {
@@ -46,6 +48,7 @@
             "gold": 12269,
             "damage": 16504,
             "cs": null,
+            "cs14": 125,
             "goldPerMin": 396,
             "damageNote": null
           },
@@ -64,6 +67,7 @@
             "gold": 13594,
             "damage": 15124,
             "cs": null,
+            "cs14": 97,
             "goldPerMin": 439,
             "damageNote": null
           },
@@ -82,6 +86,7 @@
             "gold": 12271,
             "damage": 20360,
             "cs": null,
+            "cs14": 125,
             "goldPerMin": 396,
             "damageNote": null
           },
@@ -100,6 +105,7 @@
             "gold": 17480,
             "damage": 36493,
             "cs": null,
+            "cs14": 137,
             "goldPerMin": 564,
             "damageNote": null
           },
@@ -118,6 +124,7 @@
             "gold": 7910,
             "damage": 5676,
             "cs": null,
+            "cs14": 25,
             "goldPerMin": 255,
             "damageNote": null
           }
@@ -144,6 +151,7 @@
             "gold": 9771,
             "damage": 13685,
             "cs": null,
+            "cs14": 120,
             "goldPerMin": 316,
             "damageNote": null
           },
@@ -162,6 +170,7 @@
             "gold": 12704,
             "damage": 14996,
             "cs": null,
+            "cs14": 110,
             "goldPerMin": 410,
             "damageNote": null
           },
@@ -180,6 +189,7 @@
             "gold": 11308,
             "damage": 29782,
             "cs": null,
+            "cs14": 130,
             "goldPerMin": 365,
             "damageNote": null
           },
@@ -198,6 +208,7 @@
             "gold": 12931,
             "damage": 13814,
             "cs": null,
+            "cs14": 141,
             "goldPerMin": 418,
             "damageNote": null
           },
@@ -216,6 +227,7 @@
             "gold": 7652,
             "damage": 5995,
             "cs": null,
+            "cs14": 16,
             "goldPerMin": 247,
             "damageNote": null
           }
@@ -228,6 +240,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-11",
+    "game": 3,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -243,6 +256,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "30:01",
     "durationSec": 1801,
+    "cs14Sec": 840,
     "winner": "LR MASTERS",
     "winnerBasis": "LTKDB の勝利チーム LR。キル 7-22",
     "sides": {
@@ -272,6 +286,7 @@
             "gold": 10538,
             "damage": 20593,
             "cs": null,
+            "cs14": 133,
             "goldPerMin": 351,
             "damageNote": null
           },
@@ -290,6 +305,7 @@
             "gold": 10119,
             "damage": 7296,
             "cs": null,
+            "cs14": 88,
             "goldPerMin": 337,
             "damageNote": null
           },
@@ -308,6 +324,7 @@
             "gold": 9710,
             "damage": 8684,
             "cs": null,
+            "cs14": 108,
             "goldPerMin": 323,
             "damageNote": null
           },
@@ -326,6 +343,7 @@
             "gold": 12498,
             "damage": 18682,
             "cs": null,
+            "cs14": 146,
             "goldPerMin": 416,
             "damageNote": null
           },
@@ -344,6 +362,7 @@
             "gold": 7221,
             "damage": 4625,
             "cs": null,
+            "cs14": 20,
             "goldPerMin": 241,
             "damageNote": null
           }
@@ -370,6 +389,7 @@
             "gold": 11177,
             "damage": 16740,
             "cs": null,
+            "cs14": 134,
             "goldPerMin": 372,
             "damageNote": null
           },
@@ -388,6 +408,7 @@
             "gold": 12869,
             "damage": 14600,
             "cs": null,
+            "cs14": null,
             "goldPerMin": 429,
             "damageNote": null
           },
@@ -406,6 +427,7 @@
             "gold": 12711,
             "damage": 31582,
             "cs": null,
+            "cs14": 133,
             "goldPerMin": 423,
             "damageNote": null
           },
@@ -424,6 +446,7 @@
             "gold": 13717,
             "damage": 14108,
             "cs": null,
+            "cs14": 105,
             "goldPerMin": 457,
             "damageNote": null
           },
@@ -442,6 +465,7 @@
             "gold": 9028,
             "damage": 6940,
             "cs": null,
+            "cs14": 21,
             "goldPerMin": 301,
             "damageNote": null
           }
@@ -450,5 +474,30 @@
     },
     "pickBanOrder": null,
     "notes": null
+  },
+  {
+    "kind": "scrim",
+    "resultOnly": true,
+    "date": "2026-10-11",
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261011_MASTERS_CC_LR_001",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-14T12:47:06.382Z",
+      "videoUrl": null,
+      "retrievedAt": "2026-10-14",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(PR #159 の変換。Claude Opus 5.5)",
+    "winner": "LR MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム LR(選手の行 0 行。勝者だけが分かる)",
+    "teams": {
+      "CC MASTERS": {},
+      "LR MASTERS": {}
+    }
   }
 ]
