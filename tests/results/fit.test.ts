@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, officialWeightVariants, scrimWeightVariants } from '../../src/results/fit.ts';
+import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, officialWeightVariants, oppAdjustVariants, scrimWeightVariants } from '../../src/results/fit.ts';
 import { main } from '../../src/results/fit-cli.ts';
 import type { ResultsGame } from '../../src/results/official.ts';
 import type { Tier } from '../../src/sim/types.ts';
@@ -201,4 +201,76 @@ test('基準43: 命令は基準23 の比較に officialGameWeight の 3 通り�
   assert.match(md, /\| officialGameWeight 0 \| 全体 \| 3 \| 1\.147 \| 0\.440 \| 5 \|/);
   // 基準23 の 2 通りも残る
   assert.match(md, /\| scrimGameWeight 0 \| 全体 \| 3 \| 1\.147 \| 0\.440 \| 5 \|/);
+});
+
+// F-009 Task-18: 受入基準 45(oppAdjust の 3 通り)。実装より先に受入基準から書いた
+const OPP = { ground: 0.15, laning: 0.23 };
+// 設定のまま: CC-NEXT 1・DD-NEXT 0 → 0.8。すべて 0: 同じ S → β = 0 → 0.5。2 倍: CC-NEXT 0・DD-NEXT 1 → 0.2
+const OPP_VARIANTS = [
+  { key: 'opp-config', label: 'oppAdjust 設定の値', S: S_CONFIG },
+  { key: 'opp-0', label: 'oppAdjust すべて 0', S: { 'CC-NEXT': 0, 'DD-NEXT': 0, 'IT-NEXT': null, 'LR-NEXT': null } },
+  { key: 'opp-2x', label: 'oppAdjust 2 倍', S: S_ZERO },
+];
+
+test('基準45: 3 通りの組は評価設定の oppAdjust のまま・すべて 0・2 倍', () => {
+  const v = oppAdjustVariants({ oppAdjust: OPP });
+  // 0.23 × 2 は 2 進の指数だけが変わるため、0.46 と一致する
+  assert.deepEqual(v.map((x) => x.engine), [{}, { oppAdjust: { ground: 0, laning: 0 } }, { oppAdjust: { ground: 0.3, laning: 0.46 } }]);
+  assert.equal(new Set(v.map((x) => x.key)).size, 3);
+  assert.match(v[0].label, /oppAdjust/);
+  assert.match(v[0].label, /設定/);
+  assert.match(v[1].label, /0/);
+  assert.match(v[2].label, /2 倍/);
+  // 設定の値を書き換えない
+  assert.deepEqual(OPP, { ground: 0.15, laning: 0.23 });
+});
+
+test('基準45: 3 通りの事前の勝率で対数損失と Brier スコアを計算し、推奨を書かない', () => {
+  const r = fitReportOf({ games: GAMES, variants: OPP_VARIANTS, targetSd: TARGET_SD });
+  assert.deepEqual(r.priors.map((p) => p.key), ['opp-config', 'opp-0', 'opp-2x']);
+  const [conf, zero, twice] = r.priors;
+  // 設定のまま: 0.8 で勝・負・勝 → (0.223144 × 2 + 1.609438) ÷ 3 = 0.685242、Brier (.04 + .64 + .04) ÷ 3 = 0.24
+  close(conf.all.logLoss, 0.685242, '設定のままの対数損失');
+  close(conf.all.brier, 0.24, '設定のままの Brier');
+  // すべて 0: 0.5 → −ln .5 = 0.693147、Brier .25
+  close(zero.all.logLoss, 0.693147, 'すべて 0 の対数損失');
+  close(zero.all.brier, 0.25, 'すべて 0 の Brier');
+  // 2 倍: 0.2 → (1.609438 × 2 + 0.223144) ÷ 3 = 1.147340、Brier (.64 + .04 + .64) ÷ 3 = 0.44
+  close(twice.all.logLoss, 1.14734, '2 倍の対数損失');
+  close(twice.all.brier, 0.44, '2 倍の Brier');
+  const md = formatFitMarkdown(r, { computedAt: '2026-11-20T00:00:00.000Z' });
+  assert.doesNotMatch(md, RECOMMEND);
+  for (const l of ['oppAdjust 設定の値', 'oppAdjust すべて 0', 'oppAdjust 2 倍']) assert.ok(md.includes(l), l);
+  assert.match(md, /0\.685/);
+  assert.match(md, /0\.693/);
+  assert.match(md, /1\.147/);
+});
+
+test('基準45: 命令は scrimGameWeight の組に加えて oppAdjust の 3 通りで S を作り直し、ファイルへ書く', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'f009-fit-'));
+  const outPath = join(dir, 'results-fit.md');
+  const engines: object[] = [];
+  const code = await main({
+    outPath,
+    now: () => new Date('2026-11-20T00:00:00.000Z'),
+    out: () => {},
+    targetSd: TARGET_SD,
+    engineConfig: { scrimGameWeight: 2, oppAdjust: OPP },
+    loadGames: () => ({ games: GAMES, errors: [] }),
+    scoresOf: (engine: object) => {
+      engines.push(engine);
+      const opp = (engine as { oppAdjust?: Record<string, number> }).oppAdjust;
+      if (!opp) return S_CONFIG;
+      return opp.ground === 0 ? OPP_VARIANTS[1].S : S_ZERO;
+    },
+  });
+  assert.equal(code, 0);
+  // 設定のままの組は上書きなし({})。scrimGameWeight の設定の組と同じ上書きでも、別の組として数える
+  assert.deepEqual(engines.slice(5), [{}, { oppAdjust: { ground: 0, laning: 0 } }, { oppAdjust: { ground: 0.3, laning: 0.46 } }]);
+  const md = readFileSync(outPath, 'utf8');
+  assert.doesNotMatch(md, RECOMMEND);
+  assert.ok(md.includes('scrimGameWeight 0'));
+  assert.match(md, /oppAdjust/);
+  assert.match(md, /0\.693/);
+  assert.match(md, /1\.147/);
 });

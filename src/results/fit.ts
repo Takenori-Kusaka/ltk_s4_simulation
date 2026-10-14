@@ -49,6 +49,18 @@ export function scrimWeightVariants(cfg: Pick<EngineConfig, 'scrimGameWeight'>):
   ];
 }
 
+/** F-009 基準45: 相手の強さの補正 oppAdjust を評価設定のままにした組・すべての軸を 0 にした組・すべての軸を 2 倍にした組 */
+export function oppAdjustVariants(cfg: Pick<EngineConfig, 'oppAdjust'>): EngineVariant[] {
+  const opp = cfg.oppAdjust ?? {};
+  const scaled = (k: number) => Object.fromEntries(Object.entries(opp).map(([axis, v]) => [axis, v * k]));
+  const values = Object.entries(opp).map(([axis, v]) => `${axis} ${v}`).join('・');
+  return [
+    { key: 'opp-config', label: `oppAdjust 設定の値${values ? `(${values})` : ''}`, engine: {} },
+    { key: 'opp-0', label: 'oppAdjust すべて 0', engine: { oppAdjust: scaled(0) } },
+    { key: 'opp-2x', label: 'oppAdjust 2 倍', engine: { oppAdjust: scaled(2) } },
+  ];
+}
+
 /** 基準43: 本番の重み officialGameWeight を評価設定のままにした組、scrimGameWeight と同じ値にした組、0 にした組 */
 export function officialWeightVariants(cfg: Pick<EngineConfig, 'scrimGameWeight' | 'officialGameWeight'>): EngineVariant[] {
   const scrim = cfg.scrimGameWeight ?? 1;
