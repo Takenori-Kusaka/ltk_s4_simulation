@@ -6,7 +6,7 @@ import { ROSTER, type Role } from '../data/roster.ts';
 import { MASTERS_CUPS, REGULAR_DAYS } from '../sim/schedule.ts';
 import { TEAMS, TIERS, type TeamId, type Tier } from '../sim/types.ts';
 import { championKeyOf, type ChampionList } from './champions.ts';
-import type { ExcludedRecord, LoadedResults, MappingConfidence, MatchResult, OfficialInfo, PlayerResult, PlayoffMatch, ResultError, ResultKind, ResultSource, TeamResult, TierTeamId } from './types.ts';
+import type { DraftEntry, ExcludedRecord, LoadedResults, MappingConfidence, MatchResult, OfficialInfo, PlayerResult, PlayoffMatch, ResultError, ResultKind, ResultSource, TeamResult, TierTeamId } from './types.ts';
 
 /** 記録の置き場の親(results/ と scrims/ を持つ) */
 export const DEFAULT_RESULTS_ROOT = 'docs/research/grounds';
@@ -133,6 +133,51 @@ function parseOfficial(raw: Record<string, unknown>, teamIds: TierTeamId[], date
   return ok && matchId ? { info: { stage, day, tier, match: match as OfficialInfo['match'], game }, matchId } : null;
 }
 
+/**
+ * F-006 基準12: BAN・ピックの記録 draft。order は 1 以上の整数で重複なし、または全要素 null。team は記録の 2 つの階級チーム、
+ * PICK は名簿のロールと一覧の champion を持ち各チーム 5 件。選手の行を持つ記録では、同じチーム・同じロールの行の champion(null の行は除く)と照合する
+ */
+function parseDraft(raw: unknown, idOf: Map<string, TierTeamId>, stats: Record<string, TeamResult>, bad: Bad, champions: ChampionList | null | undefined): DraftEntry[] | null {
+  if (!Array.isArray(raw)) return bad('draft', 'BAN・ピックの配列'), null;
+  const out: DraftEntry[] = [];
+  const seen = new Map<number, number>();
+  let ok = true;
+  const fail: Bad = (field, message) => void (bad(field, message), (ok = false));
+  raw.forEach((el, i) => {
+    const prefix = `draft[${i}]`;
+    const failAt = (k: string, m: string) => fail(`${prefix}.${k}`, m);
+    if (!isObj(el)) return failAt('(要素)', 'BAN・ピックの 1 手(オブジェクト)でない');
+    const order = el.order ?? null;
+    if (order !== null) {
+      if (!Number.isInteger(order) || (order as number) < 1) failAt('order', '1 以上の整数か null');
+      else if (seen.has(order as number)) failAt('order', `draft[${seen.get(order as number)}] と同じ順 ${order}`);
+      else seen.set(order as number, i);
+    }
+    const team = typeof el.team === 'string' ? idOf.get(el.team) ?? null : null;
+    if (!team) failAt('team', `teams の 2 つの階級チーム(${[...idOf.keys()].join('・')})のどちらか`);
+    const type = el.type === 'BAN' || el.type === 'PICK' ? el.type : null;
+    if (!type) failAt('type', 'BAN か PICK');
+    const champion = el.champion ?? null;
+    if (champion !== null && typeof champion !== 'string') failAt('champion', 'チャンピオンの日本語名か null');
+    else if (typeof champion === 'string' && champions && !champions.names.has(champion)) failAt('champion', `チャンピオンの一覧(Data Dragon ${champions.version ?? '?'})に無い名前`);
+    else if (type === 'PICK' && champion === null) failAt('champion', 'PICK はチャンピオンの名前を持つ');
+    const role = el.role ?? null;
+    if (type === 'PICK' && !(ROLES as readonly unknown[]).includes(role)) failAt('role', 'PICK は TOP・JG・MID・ADC・SUP のどれか');
+    else if (type === 'BAN' && role !== null) failAt('role', 'BAN は null');
+    // 選手の行との照合(選手の行を持たない記録・champion が null の行は照合しない)
+    const row = team && type === 'PICK' && typeof champion === 'string' ? stats[team]?.players.find((p) => p.role === role) : undefined;
+    if (row && row.champion !== null && row.champion !== champion) failAt('champion', `${el.team} の ${role} の選手の行の champion は ${row.champion}`);
+    out.push({ order: order as number | null, team: team!, type: type!, champion: champion as string | null, role: role as Role | null });
+  });
+  const nulls = out.filter((x) => x.order === null).length;
+  if (nulls > 0 && nulls < out.length) fail('draft', `order が null の要素(${nulls} 件)と整数の要素が混在している`);
+  for (const [label, id] of idOf) {
+    const picks = out.filter((x) => x.team === id && x.type === 'PICK').length;
+    if (picks !== 5) fail('draft', `${label} の PICK が ${picks} 件(各チーム 5 件)`);
+  }
+  return ok ? out : null;
+}
+
 /** 1 要素の検証。通れば試合、リスナー参加なら除外、反すれば errors に欄を出す */
 function parseElement(file: string, index: number, kind: ResultKind, fileDate: string, raw: unknown, champions: ChampionList | null | undefined): { game: MatchResult | null; excluded: ExcludedRecord | null; errors: ResultError[] } {
   const errors: ResultError[] = [];
@@ -207,13 +252,15 @@ function parseElement(file: string, index: number, kind: ResultKind, fileDate: s
   if (cs14Sec !== null && !(Number.isInteger(cs14Sec) && (cs14Sec as number) >= 780 && (cs14Sec as number) <= 900)) bad('cs14Sec', '780 以上 900 以下の整数(秒)');
   else if (cs14Sec === null && Object.values(stats).some((t) => t.players.some((p) => p.cs14 !== null))) bad('cs14Sec', 'cs14 を持つ選手の行があるのに cs14Sec が無い');
   const teamIds = [...idOf.values()].sort() as [TierTeamId, TierTeamId];
+  // F-006 基準12: 任意の欄 draft
+  const draft = raw.draft === undefined || raw.draft === null || errors.length ? null : parseDraft(raw.draft, idOf, stats, bad, champions);
   // 基準1・3: 本番の欄と日程
   const official = kind === 'official' ? parseOfficial(raw, teamIds, date, sides, bad) : null;
   if (errors.length) return result();
   return result({
     matchId: official?.matchId ?? '', kind, date, file, index, resultOnly, duration: durationSec === null ? null : (raw.duration as string), durationSec,
     cs14Sec: cs14Sec as number | null, game: hasGame ? (raw.game as number) : null,
-    teams: teamIds, winner: winner!, sides, source: raw.source as ResultSource, official: official?.info ?? null, stats,
+    teams: teamIds, winner: winner!, sides, source: raw.source as ResultSource, official: official?.info ?? null, stats, draft,
   });
 }
 

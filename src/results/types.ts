@@ -33,6 +33,9 @@ export interface PlayerResult {
 
 export interface TeamResult { kills: number; deaths: number; assists: number; gold: number; players: PlayerResult[] }
 
+/** F-006 基準12: BAN・ピックの 1 手。order は元の記録に順が無い試合では null。champion は BAN しなかった枠・名前の無い BAN で null。role は PICK だけ */
+export interface DraftEntry { order: number | null; team: TierTeamId; type: 'BAN' | 'PICK'; champion: string | null; role: Role | null }
+
 /** 本番の記録だけが持つ日程の欄。day は Regular Stage 1〜6、MASTERS CUP は回 1〜3、Playoffs は null */
 export interface OfficialInfo { stage: Stage; day: number | null; tier: Tier; match: MastersMatch | PlayoffMatch | null; game: number }
 
@@ -62,6 +65,8 @@ export interface MatchResult {
   official: OfficialInfo | null;
   /** 階級チーム ID → チームの値と 5 人の行。結果だけの記録は空 */
   stats: Record<string, TeamResult>;
+  /** F-006 基準12: 任意の欄 draft(BAN・ピックの順)。記録に無ければ null */
+  draft: DraftEntry[] | null;
 }
 
 /** 基準4: 反した欄。index が null ならファイル全体のエラー */

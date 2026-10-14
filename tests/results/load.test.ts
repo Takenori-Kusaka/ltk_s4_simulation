@@ -502,3 +502,98 @@ test('基準29: 集計の出力に結果だけの記録の件数とファイル�
   const results = JSON.parse(readFileSync(join(env.publicDir, 'results.json'), 'utf8')) as { games: { matchId: string; kind: string; winner: string }[] };
   assert.deepEqual(results.games.map((g) => [g.matchId, g.kind, g.winner]), [['SC-20261010-DD-CORE-LR-CORE-G1', 'scrim', 'DD-CORE'], ['SC-20261010-DD-CORE-LR-CORE-G2', 'scrim', 'DD-CORE']]);
 });
+
+// ---- F-006 Task-5: 受入基準 12(スクリムの BAN・ピックの記録 draft の検証)。実装を読まずに受入基準から書いた ----
+
+/** 20 手の draft: 各チーム 5 BAN(5 手目は BAN しなかった枠 null)のあと、各チーム 5 PICK(選手の行と同じチャンピオン)。order は 1〜20 */
+const fullDraft = (a = 'LR CORE', b = 'DD CORE'): Row[] => {
+  const rows: Row[] = [];
+  for (const t of [a, b]) for (let i = 0; i < 5; i += 1) rows.push({ team: t, type: 'BAN', champion: i === 4 ? null : 'アカリ', role: null });
+  for (const t of [a, b]) for (const role of ROLES) rows.push({ team: t, type: 'PICK', champion: CHAMP_BY_ROLE[role], role });
+  return rows.map((x, i) => ({ order: i + 1, ...x }));
+};
+const picksOnly = (): Row[] => fullDraft().filter((x) => x.type === 'PICK');
+const draftErrors = (draft: unknown, base: (over: Row) => Row = scrim) => one([base({ draft })]);
+
+test('基準12: 正しい draft を受け付け、階級チーム ID へ正規化して試合に持たせる。draft の無い記録は null', () => {
+  const r = draftErrors(fullDraft());
+  assert.deepEqual(r.errors, []);
+  assert.equal(r.games.length, 1);
+  const d = r.games[0].draft!;
+  assert.equal(d.length, 20);
+  assert.deepEqual(d[0], { order: 1, team: 'LR-CORE', type: 'BAN', champion: 'アカリ', role: null });
+  assert.deepEqual(d[4], { order: 5, team: 'LR-CORE', type: 'BAN', champion: null, role: null }, '名前の無い BAN(NOBAN)');
+  assert.deepEqual(d[19], { order: 20, team: 'DD-CORE', type: 'PICK', champion: 'ルル', role: 'SUP' });
+  assert.equal(one([scrim()]).games[0].draft, null, 'draft の欄が無い記録');
+});
+
+test('基準12: 順の無い試合(order がすべて null)、BAN の無い draft、選手の行を持たない記録、選手の行の champion が null の行を受け付ける', () => {
+  const noOrder = draftErrors(fullDraft().map((x) => ({ ...x, order: null })));
+  assert.deepEqual(noOrder.errors, []);
+  assert.ok(noOrder.games[0].draft!.every((x) => x.order === null));
+  const picks = draftErrors(picksOnly());
+  assert.deepEqual(picks.errors, []);
+  assert.equal(picks.games[0].draft!.length, 10);
+  // 選手の行を持たない記録では照合しない(選手の行と違うチャンピオンでもよい)
+  const swapped = picksOnly().map((x) => ({ ...x, champion: 'ルル' }));
+  const ro = draftErrors(swapped, resultOnly);
+  assert.deepEqual(ro.errors, []);
+  assert.equal(ro.games[0].draft!.length, 10);
+  // 選手の行の champion が null なら、その行とは照合しない
+  const rec = scrim({ draft: fullDraft().map((x) => (x.team === 'DD CORE' && x.role === 'TOP' ? { ...x, champion: 'パンテオン' } : x)) });
+  team(rec, 'DD CORE').players[0].champion = null;
+  assert.deepEqual(one([rec]).errors, []);
+});
+
+test('基準12: draft の各要素の order・team・type・champion・role に反すれば、ファイル名・要素の番号・欄を出し、記録を使わない', () => {
+  const cases: [string, (d: Row[]) => void, string][] = [
+    ['null でない order の重複', (d) => { d[1].order = 1; }, 'draft[1].order'],
+    ['1 未満の order', (d) => { d[0].order = 0; }, 'draft[0].order'],
+    ['整数でない order', (d) => { d[0].order = 1.5; }, 'draft[0].order'],
+    ['2 つの階級チーム以外の team', (d) => { d[2].team = 'DD NEXT'; }, 'draft[2].team'],
+    ['BAN・PICK 以外の type', (d) => { d[2].type = 'PROTECT'; }, 'draft[2].type'],
+    ['チャンピオンの一覧に無い champion', (d) => { d[2].champion = 'ガレン'; }, 'draft[2].champion'],
+    ['PICK で null の champion', (d) => { d[10].champion = null; }, 'draft[10].champion'],
+    ['PICK で名簿のロールでない role', (d) => { d[10].role = 'BOT'; }, 'draft[10].role'],
+    ['BAN で null でない role', (d) => { d[0].role = 'TOP'; }, 'draft[0].role'],
+    ['PICK の champion と同じチーム・同じロールの選手の行の champion の不一致', (d) => { d[10].champion = 'パンテオン'; }, 'draft[10].champion'],
+  ];
+  for (const [label, mutate, field] of cases) {
+    const d = fullDraft();
+    mutate(d);
+    const r = draftErrors(d);
+    const hit = r.errors.find((e) => e.field === field);
+    assert.ok(hit, `${label}: ${JSON.stringify(r.errors)}`);
+    assert.deepEqual([hit!.file, hit!.index], [SCRIM_FILE, 0], label);
+    assert.ok(formatResultError(hit!).includes(`${SCRIM_FILE}[0] ${field}`), `${label}: ${formatResultError(hit!)}`);
+    assert.equal(r.games.length, 0, label);
+  }
+});
+
+test('基準12: null の order と null でない order の混在、各チーム 5 件でない PICK、配列でない draft はエラー', () => {
+  const draftField = (draft: unknown, base: (over: Row) => Row = scrim) => {
+    const r = draftErrors(draft, base);
+    assert.equal(r.games.length, 0, JSON.stringify(draft).slice(0, 80));
+    return r.errors.filter((e) => e.field === 'draft' || e.field.startsWith('draft[')).map((e) => [e.file, e.index]);
+  };
+  const mixed = fullDraft();
+  mixed[3].order = null;
+  assert.deepEqual(draftField(mixed), [[SCRIM_FILE, 0]], '混在');
+  const four = fullDraft();
+  four.pop(); // DD CORE の PICK が 4 件
+  assert.ok(draftField(four).length > 0, 'PICK が 4 件');
+  const six = fullDraft();
+  six[0] = { order: 1, team: 'LR CORE', type: 'PICK', champion: 'ヨリック', role: 'TOP' }; // LR CORE の PICK が 6 件
+  assert.ok(draftField(six).length > 0, 'PICK が 6 件');
+  assert.ok(draftField(picksOnly().slice(0, 9), resultOnly).length > 0, '選手の行を持たない記録でも PICK の件数は検証する');
+  assert.ok(draftField({ picks: [] }).length > 0, '配列でない');
+});
+
+test('基準12: 既存の記録(draft の欄が無い)は影響を受けず、すべての試合の draft が null', () => {
+  const champPath = 'data/public/champions.json';
+  const champions = existsSync(champPath) ? readChampionList(JSON.parse(readFileSync(champPath, 'utf8'))).list : null;
+  const r = loadResults({ root: 'docs/research/grounds', champions });
+  assert.deepEqual(r.errors.map(formatResultError), []);
+  assert.ok(r.games.length > 0);
+  assert.ok(r.games.every((g) => g.draft === null));
+});
