@@ -190,7 +190,7 @@ export function maturationTerm(team: { tau: number }, d: number, cfg: DynamicsCo
   return cfg.maturation.max * (1 - Math.exp(-d / team.tau));
 }
 
-/** 基準11: 連敗 k が 2 以上なら −min(cap, perLoss × (k − 1))、それ以外は 0。結果の入力(F-004)が無い間は k = 0 */
+/** 基準11: 連敗 k が 2 以上なら −min(cap, perLoss × (k − 1))、それ以外は 0。k は F-004 の集計が本番の結果から数える(dayWinrate が勝率表の mood から渡す) */
 export function moodTerm(k: number, cfg: DynamicsConfig = CFG): number {
   return k >= 2 ? -Math.min(cfg.mood.cap, cfg.mood.perLoss * (k - 1)) : 0;
 }
@@ -235,12 +235,27 @@ export function daysPlayedBefore(tier: Tier, team: TeamId, date: string): number
   return new Set(dates.filter((x) => x < date)).size;
 }
 
+/** F-004 基準9: 本番を戦った試合日と、その日の本番の後の連敗の数 k(試合日の昇順) */
+export interface MoodStep {
+  date: string;
+  k: number;
+}
+
+/** F-004 基準9: 試合日 date の試合に使う k(その日より前の最後の本番の試合日の k)。本番の記録が無ければ 0 */
+export function streakBefore(mood: readonly MoodStep[] | null | undefined, date: string): number {
+  let k = 0;
+  for (const s of mood ?? []) if (s.date < date) k = s.k;
+  return k;
+}
+
 /** 勝率表のファイルの teams[] のうち、この計算に要る項目 */
 export interface DayTeamLike {
   team: string;
   tier: string;
   S: number | null;
   maturation?: Maturation | null;
+  /** F-004 基準9: 集計が本番の結果から数えた k。無ければ k = 0 */
+  mood?: readonly MoodStep[] | null;
 }
 export interface DayWinrate {
   /** その試合日の A の勝率(0〜1) */
@@ -253,6 +268,9 @@ export interface DayWinrate {
   /** 基準17・18: 価値責任者の見立ての項(伸びしろ + 勢い) */
   ownerA: number;
   ownerB: number;
+  /** F-004 基準9・F-005 基準11: その試合日に使う連敗の数 k(A・B) */
+  kA: number;
+  kB: number;
   /** 切り詰めた後の加算(A − B) */
   shift: number;
   /** 仕上がりを加えたか(両チームの戦力 S と τ がそろうときだけ。基準16 の 50.0% は動かさない) */
@@ -269,10 +287,11 @@ export function dayWinrate(
   const B = teams.find((t) => t.team === b && t.tier === tier);
   const dA = daysPlayedBefore(tier, a, date), dB = daysPlayedBefore(tier, b, date);
   const ma = A?.maturation ?? null, mb = B?.maturation ?? null;
+  const kA = streakBefore(A?.mood, date), kB = streakBefore(B?.mood, date);
   const applied = !!(ma && mb && Number.isFinite(ma.tau) && Number.isFinite(mb.tau) && A?.S !== null && A?.S !== undefined && B?.S !== null && B?.S !== undefined);
-  if (!applied) return { p: prior, prior, dA, dB, termA: 0, termB: 0, ownerA: 0, ownerB: 0, shift: 0, applied, a: ma, b: mb };
+  if (!applied) return { p: prior, prior, dA, dB, termA: 0, termB: 0, ownerA: 0, ownerB: 0, kA, kB, shift: 0, applied, a: ma, b: mb };
   const termA = maturationTerm(ma!, dA, cfg), termB = maturationTerm(mb!, dB, cfg);
   const ownerA = ownerTerm(ma!, dA, cfg), ownerB = ownerTerm(mb!, dB, cfg);
-  const shift = dayShift(ma!, mb!, dA, dB, { config: cfg });
-  return { p: winProbOnDay(prior, shift), prior, dA, dB, termA, termB, ownerA, ownerB, shift, applied, a: ma, b: mb };
+  const shift = dayShift(ma!, mb!, dA, dB, { kA, kB, config: cfg });
+  return { p: winProbOnDay(prior, shift), prior, dA, dB, termA, termB, ownerA, ownerB, kA, kB, shift, applied, a: ma, b: mb };
 }

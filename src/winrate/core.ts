@@ -12,7 +12,7 @@ import { TEAMS, TIERS, type TeamId, type Tier } from '../sim/types.ts';
 import type { WinTable } from '../sim/validate.ts';
 import type { OwnerView } from '../rating/owner-views.ts';
 import { fitTheta, type ResultGame, type ThetaConfig, type ThetaSide } from './update.ts';
-import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMember, type MetaChampionLike } from './dynamics.ts';
+import { maturationOf, type DynamicsConfig, type Maturation, type MaturationMember, type MetaChampionLike, type MoodStep } from './dynamics.ts';
 
 export type StageKey = 'regular' | 'masters' | 'playoffs';
 
@@ -81,6 +81,8 @@ export interface TierTeamS {
   members?: readonly MaturationMember[];
   /** 基準18: 価値責任者の見立てのうち、この階級チームの勢い(axis = momentum)の項目 */
   ownerViews?: readonly OwnerView[];
+  /** F-004 基準9: 集計が本番の結果から数えた、試合日ごとの連敗の数 k。無ければ k = 0 */
+  mood?: readonly MoodStep[];
 }
 
 export interface TeamRow {
@@ -100,6 +102,8 @@ export interface TeamRow {
   externalCount: number;
   /** Task-3(基準 9・10・12): 仕上がり(c・m_pool・m・τ と内訳)。試合日ごとの勝率は画面が dynamics.ts の関数で作る */
   maturation: Maturation;
+  /** F-004 基準9: 試合日ごとの連敗の数 k(気持ちの補正は画面が dynamics.ts の dayWinrate で dayShift へ渡す)。本番の記録が無ければ空 */
+  mood: MoodStep[];
   /** 基準4: すべての結果で当て直した θ と、使った本番・スクリムの試合数(結果が無ければ θ 0) */
   result: ThetaSide;
   /** 基準3c: すべての結果でのスクリムの試合数 n_s、見立ての残り具合 λ(小数第二位)、λ × E(小数第二位) */
@@ -285,7 +289,7 @@ export function computePriorWinrates(
       const ext = externalOf(views, key, cfg.external);
       // Task-3: 仕上がり。メタの一覧(opts.meta)が無ければ m_pool = 0.5(中立)で理由を note に残す
       const maturation = maturationOf(t?.members, opts.meta, cfg, t?.ownerViews ?? []);
-      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, result: { theta: 0, official: 0, scrim: 0 }, ns: 0, no: 0, lambda: 1, lambdaE: ext.E };
+      const base = { key, team, tier, M: macro.M, macroParts, macroReason: macro.reason, E: ext.E, externalCount: ext.count, maturation, mood: (t?.mood ?? []).map((s) => ({ date: s.date, k: s.k })), result: { theta: 0, official: 0, scrim: 0 }, ns: 0, no: 0, lambda: 1, lambdaE: ext.E };
       if (!t) rows.push({ ...base, S: null, reason: 'F-010 の計算が無い' });
       else if (t.S === null || !Number.isFinite(t.S)) rows.push({ ...base, S: null, reason: t.reason ?? 'F-010 の計算が無い' });
       else rows.push({ ...base, S: t.S, reason: null });
