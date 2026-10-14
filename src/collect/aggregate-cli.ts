@@ -20,7 +20,8 @@ import { ROSTER } from '../data/roster.ts';
 import { evaluateTeams } from '../team/evaluate.ts';
 import { readChampionList, type ChampionList } from '../results/champions.ts';
 import { DEFAULT_RESULTS_ROOT, formatResultError, loadResults, summarizeResults, type LoadedResults } from '../results/load.ts';
-import { buildResultsFile, resultsSummaryOf } from '../results/official.ts';
+import { buildResultsFile, losingStreakOf, resultsSummaryOf, type ResultsGame } from '../results/official.ts';
+import type { MoodStep } from '../winrate/dynamics.ts';
 
 export interface AggregateMainOptions {
   rawDir?: string;
@@ -182,7 +183,9 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
     : null;
   // F-005 基準4: 本番とスクリムの結果で θ を当て直す(F-004 の記録が無ければ θ は 0)
   const resultGames = resultsFile?.games ?? [];
-  const winrates = computePriorWinrates(tierTeams, { externalViews: external.items, meta: meta.champions, results: resultGames });
+  // F-004 基準9: 本番の結果から数えた k を試合日ごとに勝率表へ渡す(画面が dayShift の kA・kB に使う)
+  const withMood = tierTeams.map((t) => ({ ...t, mood: moodStepsOf(resultGames, `${t.team}-${t.tier}`) }));
+  const winrates = computePriorWinrates(withMood, { externalViews: external.items, meta: meta.champions, results: resultGames });
   const winrateVersion = createHash('sha256').update(JSON.stringify(winrateConfig)).digest('hex').slice(0, 12);
   // F-004 基準10: results は本番の試合数・スクリムの試合数・最新の試合日(本番の記録が無い間は null)
   writeFileSync(winratePath, JSON.stringify({ ...winrates, computedAt: now.toISOString(), configVersion: winrateVersion, results: resultsSummaryOf(resultGames) }, null, 2) + '\n');
@@ -197,6 +200,12 @@ function writeRatings(opts: AggregateMainOptions, publicDir: string, out: (l: st
   const thetas = winrates.teams.filter((t) => t.result.official + t.result.scrim > 0).map((t) => `${t.key} ${t.result.theta > 0 ? '+' : ''}${t.result.theta.toFixed(3)}(本番 ${t.result.official}・スクリム ${t.result.scrim})`);
   out(`結果による更新 θ: ${thetas.length ? thetas.join('、') : 'データなし'}`);
   return errors.length ? 1 : 0;
+}
+
+/** F-004 基準9: 階級チーム key が本番を戦った試合日ごとの、その日の本番の後の連敗の数 k(試合日の昇順)。スクリムは数えない */
+export function moodStepsOf(games: readonly ResultsGame[], key: string): MoodStep[] {
+  const dates = [...new Set(games.filter((g) => g.kind === 'official' && g.teams.includes(key as ResultsGame['winner'])).map((g) => g.date))].sort();
+  return dates.map((date) => ({ date, k: losingStreakOf(games.filter((g) => g.date <= date), key) }));
 }
 
 // 直接の実行の入口。テストは main を呼ぶ
