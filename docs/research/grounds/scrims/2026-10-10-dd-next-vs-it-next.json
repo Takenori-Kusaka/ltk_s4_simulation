@@ -2,6 +2,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-10",
+    "game": 1,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -17,6 +18,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "36:40",
     "durationSec": 2200,
+    "cs14Sec": 840,
     "winner": "DD NEXT",
     "winnerBasis": "LTKDB の勝利チーム DD。キル 20-13",
     "sides": {
@@ -46,6 +48,7 @@
             "gold": 16595,
             "damage": 33131,
             "cs": null,
+            "cs14": 121,
             "goldPerMin": 453,
             "damageNote": null
           },
@@ -64,6 +67,7 @@
             "gold": 13329,
             "damage": 20714,
             "cs": null,
+            "cs14": 110,
             "goldPerMin": 364,
             "damageNote": null
           },
@@ -82,6 +86,7 @@
             "gold": 11359,
             "damage": 17778,
             "cs": null,
+            "cs14": 90,
             "goldPerMin": 310,
             "damageNote": null
           },
@@ -100,6 +105,7 @@
             "gold": 17158,
             "damage": 23048,
             "cs": null,
+            "cs14": 118,
             "goldPerMin": 468,
             "damageNote": null
           },
@@ -118,6 +124,7 @@
             "gold": 9815,
             "damage": 9816,
             "cs": null,
+            "cs14": 12,
             "goldPerMin": 268,
             "damageNote": null
           }
@@ -144,6 +151,7 @@
             "gold": 13055,
             "damage": 25937,
             "cs": null,
+            "cs14": 110,
             "goldPerMin": 356,
             "damageNote": null
           },
@@ -162,6 +170,7 @@
             "gold": 11431,
             "damage": 5597,
             "cs": null,
+            "cs14": 109,
             "goldPerMin": 312,
             "damageNote": null
           },
@@ -180,6 +189,7 @@
             "gold": 10311,
             "damage": 27597,
             "cs": null,
+            "cs14": 78,
             "goldPerMin": 281,
             "damageNote": null
           },
@@ -198,6 +208,7 @@
             "gold": 15077,
             "damage": 17167,
             "cs": null,
+            "cs14": 90,
             "goldPerMin": 411,
             "damageNote": null
           },
@@ -216,6 +227,7 @@
             "gold": 7965,
             "damage": 3719,
             "cs": null,
+            "cs14": 16,
             "goldPerMin": 217,
             "damageNote": null
           }
@@ -228,6 +240,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-10",
+    "game": 2,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -243,6 +256,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "25:30",
     "durationSec": 1530,
+    "cs14Sec": 840,
     "winner": "DD NEXT",
     "winnerBasis": "LTKDB の勝利チーム DD。キル 10-1",
     "sides": {
@@ -272,6 +286,7 @@
             "gold": 11571,
             "damage": 24279,
             "cs": null,
+            "cs14": 128,
             "goldPerMin": 454,
             "damageNote": null
           },
@@ -290,6 +305,7 @@
             "gold": 9186,
             "damage": 7441,
             "cs": null,
+            "cs14": 105,
             "goldPerMin": 360,
             "damageNote": null
           },
@@ -308,6 +324,7 @@
             "gold": 8759,
             "damage": 13072,
             "cs": null,
+            "cs14": 127,
             "goldPerMin": 343,
             "damageNote": null
           },
@@ -326,6 +343,7 @@
             "gold": 12701,
             "damage": 13358,
             "cs": null,
+            "cs14": 108,
             "goldPerMin": 498,
             "damageNote": null
           },
@@ -344,6 +362,7 @@
             "gold": 6496,
             "damage": 3742,
             "cs": null,
+            "cs14": 18,
             "goldPerMin": 255,
             "damageNote": null
           }
@@ -370,6 +389,7 @@
             "gold": 7895,
             "damage": 11006,
             "cs": null,
+            "cs14": 102,
             "goldPerMin": 310,
             "damageNote": null
           },
@@ -388,6 +408,7 @@
             "gold": 7908,
             "damage": 6031,
             "cs": null,
+            "cs14": 107,
             "goldPerMin": 310,
             "damageNote": null
           },
@@ -406,6 +427,7 @@
             "gold": 7543,
             "damage": 9001,
             "cs": null,
+            "cs14": 118,
             "goldPerMin": 296,
             "damageNote": null
           },
@@ -424,6 +446,7 @@
             "gold": 9829,
             "damage": 9797,
             "cs": null,
+            "cs14": 116,
             "goldPerMin": 385,
             "damageNote": null
           },
@@ -442,6 +465,7 @@
             "gold": 5528,
             "damage": 2466,
             "cs": null,
+            "cs14": 22,
             "goldPerMin": 217,
             "damageNote": null
           }
@@ -454,6 +478,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-10",
+    "game": 3,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -469,6 +494,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "35:11",
     "durationSec": 2111,
+    "cs14Sec": 840,
     "winner": "DD NEXT",
     "winnerBasis": "LTKDB の勝利チーム DD。キル 20-13",
     "sides": {
@@ -498,6 +524,7 @@
             "gold": 14324,
             "damage": 30377,
             "cs": null,
+            "cs14": 88,
             "goldPerMin": 407,
             "damageNote": null
           },
@@ -516,6 +543,7 @@
             "gold": 15271,
             "damage": 16032,
             "cs": null,
+            "cs14": 99,
             "goldPerMin": 434,
             "damageNote": null
           },
@@ -534,6 +562,7 @@
             "gold": 11589,
             "damage": 13118,
             "cs": null,
+            "cs14": 87,
             "goldPerMin": 329,
             "damageNote": null
           },
@@ -552,6 +581,7 @@
             "gold": 17245,
             "damage": 19355,
             "cs": null,
+            "cs14": 109,
             "goldPerMin": 490,
             "damageNote": null
           },
@@ -570,6 +600,7 @@
             "gold": 8947,
             "damage": 6155,
             "cs": null,
+            "cs14": 21,
             "goldPerMin": 254,
             "damageNote": null
           }
@@ -596,6 +627,7 @@
             "gold": 12018,
             "damage": 20970,
             "cs": null,
+            "cs14": 101,
             "goldPerMin": 342,
             "damageNote": null
           },
@@ -614,6 +646,7 @@
             "gold": 11265,
             "damage": 10687,
             "cs": null,
+            "cs14": 99,
             "goldPerMin": 320,
             "damageNote": null
           },
@@ -632,6 +665,7 @@
             "gold": 14209,
             "damage": 25923,
             "cs": null,
+            "cs14": 99,
             "goldPerMin": 404,
             "damageNote": null
           },
@@ -650,6 +684,7 @@
             "gold": 13951,
             "damage": 13602,
             "cs": null,
+            "cs14": 100,
             "goldPerMin": 397,
             "damageNote": null
           },
@@ -668,6 +703,7 @@
             "gold": 8050,
             "damage": 6447,
             "cs": null,
+            "cs14": 27,
             "goldPerMin": 229,
             "damageNote": null
           }
@@ -680,6 +716,7 @@
   {
     "kind": "scrim",
     "date": "2026-10-10",
+    "game": 4,
     "listeners": false,
     "source": {
       "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
@@ -695,6 +732,7 @@
     "collectedWith": "Claude Opus 5.5",
     "duration": "32:36",
     "durationSec": 1956,
+    "cs14Sec": 840,
     "winner": "DD NEXT",
     "winnerBasis": "LTKDB の勝利チーム DD。キル 24-8",
     "sides": {
@@ -724,6 +762,7 @@
             "gold": 12098,
             "damage": 20152,
             "cs": null,
+            "cs14": 107,
             "goldPerMin": 371,
             "damageNote": null
           },
@@ -742,6 +781,7 @@
             "gold": 13360,
             "damage": 16793,
             "cs": null,
+            "cs14": 110,
             "goldPerMin": 410,
             "damageNote": null
           },
@@ -760,6 +800,7 @@
             "gold": 11249,
             "damage": 14241,
             "cs": null,
+            "cs14": 122,
             "goldPerMin": 345,
             "damageNote": null
           },
@@ -778,6 +819,7 @@
             "gold": 19260,
             "damage": 28364,
             "cs": null,
+            "cs14": 120,
             "goldPerMin": 591,
             "damageNote": null
           },
@@ -796,6 +838,7 @@
             "gold": 10464,
             "damage": 7647,
             "cs": null,
+            "cs14": 28,
             "goldPerMin": 321,
             "damageNote": null
           }
@@ -822,6 +865,7 @@
             "gold": 10268,
             "damage": 17828,
             "cs": null,
+            "cs14": 97,
             "goldPerMin": 315,
             "damageNote": null
           },
@@ -840,6 +884,7 @@
             "gold": 11743,
             "damage": 6778,
             "cs": null,
+            "cs14": 100,
             "goldPerMin": 360,
             "damageNote": null
           },
@@ -858,6 +903,7 @@
             "gold": 12782,
             "damage": 24665,
             "cs": null,
+            "cs14": 106,
             "goldPerMin": 392,
             "damageNote": null
           },
@@ -876,6 +922,7 @@
             "gold": 11185,
             "damage": 13712,
             "cs": null,
+            "cs14": 97,
             "goldPerMin": 343,
             "damageNote": null
           },
@@ -894,6 +941,7 @@
             "gold": 7483,
             "damage": 4662,
             "cs": null,
+            "cs14": 15,
             "goldPerMin": 230,
             "damageNote": null
           }
