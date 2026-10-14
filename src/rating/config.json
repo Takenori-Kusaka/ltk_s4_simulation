@@ -1,8 +1,10 @@
 {
   "_comment": "F-009 評価設定(ADR-0004・docs/design/rating-model.md)。値は 2026-10-09 に価値責任者が確定した設計書の初期値",
   "engine": {
-    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する",
+    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する。blankDecayPerYear・blankGraceYears は到達点からのブランクの減衰(基準33・34。1 年あたり 0.3 点、猶予 1 年。歴代の最高ランクと元プロの下限に掛かり、下限は 8.0 を下回らない)。2026-10-11 の起案(G-4 再判定 4)",
     "scrimGameWeight": 2,
+    "blankDecayPerYear": 0.3,
+    "blankGraceYears": 1,
     "windowDays": 120,
     "minMinutes": 10,
     "halfLifeDays": 45,

@@ -307,3 +307,232 @@ test('F-004 AC13: スクリムの試合(kind scrim)は新しさの重み × scri
   assert.doesNotMatch(only.confidenceReason, /スクリム/);
   assert.match(only.confidenceReason, /有効な試合数/);
 });
+
+// F-009 Task-13: 受入基準 6(2026-10-11 の追記)・33〜36(到達点からのブランク)。計算の基準日は仕様の計算の例と同じ 2026-10-11
+import { blankInfo, loadEngineConfig, reachTime, REACH_UNKNOWN_MARK } from '../../src/rating/engine.ts';
+
+const NOW13 = Date.parse('2026-10-11T00:00:00Z');
+const BLANK = { blankDecayPerYear: 0.3, blankGraceYears: 1 };
+const SRC = 'https://example.test/src';
+/** 記録に、計算の基準日までのブランクを載せる(評価の組み立て build.ts がすること)。at が null なら到達の時点が不明 */
+const stamp = <T extends object>(r: T, at: string | null) => ({ ...r, blank: blankInfo(at, NOW13, BLANK) });
+const exProOf = (level: string, years: number, lastYear: string | null) => stamp({ level, source: SRC, years }, lastYear);
+const anchorOf = (o: Partial<Parameters<typeof resolveAnchor>[0]>) => resolveAnchor({ rank: null, peakRank: null, seasonPeakRank: null, exPro: null, medianAnchor: 5, ...o });
+const GOLD = { tier: 'GOLD', division: 'IV', lp: 0 };
+
+test('基準33〜36: 評価設定の初期値はブランクの減衰 1 年あたり 0.3、猶予 1 年', () => {
+  const c = loadEngineConfig();
+  assert.equal(c.blankDecayPerYear, 0.3);
+  assert.equal(c.blankGraceYears, 1);
+});
+
+test('用語: 到達の時点は年月日ならその日、年だけなら 7 月 1 日(年月だけならその月の 1 日)。読めなければ不明', () => {
+  assert.equal(reachTime('2021'), Date.UTC(2021, 6, 1));
+  assert.equal(reachTime('2024-01'), Date.UTC(2024, 0, 1));
+  assert.equal(reachTime('2025-07-28'), Date.UTC(2025, 6, 28));
+  assert.equal(reachTime(null), null);
+  assert.equal(reachTime(undefined), null);
+  assert.equal(reachTime('未確認'), null);
+});
+
+test('基準33: ブランク b は到達の時点から計算の基準日までの日数 ÷ 365.25(負なら 0)、減衰は 0.3 × max(0, b − 1)。不明なら減衰なし', () => {
+  // 2021-07-01 → 2026-10-11 は 1928 日。b = 5.28 年、減衰 1.28(仕様の計算の例の Ceros の下限)
+  const ceros = blankInfo('2021', NOW13, BLANK);
+  assert.equal(ceros.at, '2021');
+  assert.ok(Math.abs(ceros.years! - 1928 / 365.25) < 1e-9, `${ceros.years}`);
+  assert.equal(ceros.years!.toFixed(1), '5.3');
+  assert.ok(Math.abs(ceros.decay - 0.3 * (1928 / 365.25 - 1)) < 1e-9, `${ceros.decay}`);
+  assert.equal(ceros.decay.toFixed(2), '1.28');
+  // 判定記録の横展開の値: 到達の時点 → ブランクの年数(小数第 1 位)・減衰(小数第 2 位)
+  const table: [string, string, string][] = [
+    ['2025', '1.3', '0.08'], // Enty・わしだい・Yuhi の最終出場年
+    ['2024', '2.3', '0.38'], // Eugeo の最終出場年、乾伸一郎の到達
+    ['2023', '3.3', '0.68'], // apaMEN
+    ['2022', '4.3', '0.98'], // Nemoh
+    ['2020', '6.3', '1.58'], // Day1
+    ['2019', '7.3', '1.88'], // Zerost・てぃんとん
+    ['2018', '8.3', '2.18'], // らいじん・ハレっち
+    ['2016', '10.3', '2.78'], // Enty の歴代の最高ランク(S6)
+    ['2015', '11.3', '3.08'], // Rainbrain
+    ['2024-01', '2.8', '0.53'], // k4sen
+    ['2020-02', '6.7', '1.71'], // ハレっちの歴代の最高ランク
+    ['2025-07-28', '1.2', '0.06'], // 千燈ゆうひ
+  ];
+  for (const [at, years, decay] of table) {
+    const b = blankInfo(at, NOW13, BLANK);
+    assert.equal(b.years!.toFixed(1), years, at);
+    assert.equal(b.decay.toFixed(2), decay, at);
+  }
+  // 猶予 1 年の内側は減衰 0
+  assert.equal(blankInfo('2026', NOW13, BLANK).decay, 0);
+  assert.equal(blankInfo('2025-10-11', NOW13, BLANK).decay, 0);
+  // 基準日より後の日付はブランク 0
+  assert.equal(blankInfo('2027', NOW13, BLANK).years, 0);
+  assert.equal(blankInfo('2027', NOW13, BLANK).decay, 0);
+  // 不明なら減衰なし
+  assert.deepEqual(blankInfo(null, NOW13, BLANK), { at: null, years: null, decay: 0 });
+  assert.deepEqual(blankInfo('未確認', NOW13, BLANK), { at: null, years: null, decay: 0 });
+  // 値は評価設定から読む(設定に無ければ減衰しない)
+  assert.ok(Math.abs(blankInfo('2021', NOW13, { blankDecayPerYear: 0.2, blankGraceYears: 2 }).decay - 0.2 * (1928 / 365.25 - 2)) < 1e-9);
+  assert.equal(blankInfo('2021', NOW13, {}).decay, 0);
+});
+
+test('基準6・33: 歴代の最高ランクはブランクの減衰を引いた値で比べる。ソロランクと今季の最高ランクは減衰しない(現役の記録より下げない)', () => {
+  // 乾伸一郎の形: 歴代 Emerald I 0LP(6.57)、到達 2024 → −0.38 → 6.19。ソロランクと今季はそれより下 → 最高ランク 6.19
+  const inui = anchorOf({
+    rank: { tier: 'PLATINUM', division: 'III', lp: 97 },
+    peakRank: stamp({ tier: 'Emerald', division: 'I', lp: 0, source: SRC }, '2024'),
+    seasonPeakRank: { tier: 'Platinum', division: 'III', lp: 97, source: SRC },
+  });
+  assert.equal(inui.anchor.toFixed(2), '6.19');
+  assert.equal(inui.anchorSource, '最高ランク');
+  // k4sen の形: 歴代 Diamond IV 24LP(6.93)、到達 2024-01 → −0.53 → 6.39。今季の最高 Emerald II 47LP(6.42)が上 → 今季の記録
+  const k4sen = anchorOf({
+    rank: { tier: 'EMERALD', division: 'III', lp: 0 },
+    peakRank: stamp({ tier: 'Diamond', division: 'IV', lp: 24, source: SRC }, '2024-01'),
+    seasonPeakRank: { tier: 'Emerald', division: 'II', lp: 47, source: SRC },
+  });
+  assert.equal(k4sen.anchor.toFixed(2), '6.42');
+  assert.equal(k4sen.anchorSource, '最高ランク(今季)');
+  // Enty の歴代の形: Challenger(LP 不明 = 8.0)、到達 2016 → −2.78 → 5.22。ソロランク Diamond II 65LP(7.61)が上 → ソロランク
+  const solo = anchorOf({ rank: { tier: 'DIAMOND', division: 'II', lp: 65 }, peakRank: stamp({ tier: 'Challenger', division: '', lp: 0, source: SRC }, '2016') });
+  assert.equal(solo.anchor.toFixed(2), '7.61');
+  assert.equal(solo.anchorSource, 'ソロランク');
+  // ほかの記録が無ければ、減衰後の値(8.0 − 2.78 = 5.22)が基準
+  assert.equal(anchorOf({ peakRank: stamp({ tier: 'Challenger', division: '', lp: 0, source: SRC }, '2016') }).anchor.toFixed(2), '5.22');
+  // 猶予の内側(到達 2026)は減衰しない
+  const fresh = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Master', division: '', lp: 584, source: SRC }, '2026') });
+  assert.equal(fresh.anchor.toFixed(2), '8.78');
+  assert.equal(fresh.anchorSource, '最高ランク');
+  // ソロランクと今季の最高ランクは、ブランクが載っていても減衰しない
+  const season = anchorOf({ rank: stamp({ tier: 'MASTER', division: 'I', lp: 0 }, '2016'), seasonPeakRank: stamp({ tier: 'Master', division: '', lp: 300, source: SRC }, '2016') });
+  assert.equal(season.anchor.toFixed(2), '8.40');
+  assert.equal(season.anchorSource, '最高ランク(今季)');
+  const onlySolo = anchorOf({ rank: stamp({ tier: 'MASTER', division: 'I', lp: 0 }, '2016') });
+  assert.equal(onlySolo.anchor, 8);
+  assert.equal(onlySolo.anchorSource, 'ソロランク');
+});
+
+test('基準34: 元プロの下限は最終出場年(7 月 1 日)からのブランクの減衰を引き、8.0 を下回らない', () => {
+  // Enty の形: LJL のスタメン 10 年(下限 10.0)、最終出場 2025 → −0.08 → 9.92。歴代(減衰後 5.22)とソロランク(7.61)より上 → 元プロの下限
+  const enty = anchorOf({
+    rank: { tier: 'DIAMOND', division: 'II', lp: 65 },
+    peakRank: stamp({ tier: 'Challenger', division: '', lp: 0, source: SRC }, '2016'),
+    exPro: exProOf('LJL-starter', 10, '2025'),
+  });
+  assert.equal(enty.anchor.toFixed(2), '9.92');
+  assert.equal(enty.anchorSource, '元プロの下限');
+  // Ceros の形: 下限 10.0、最終出場 2021 → −1.28 → 8.72。歴代の Master 584LP(到達 2026、減衰 0)8.78 が上 → 最高ランク
+  const ceros = anchorOf({
+    rank: { tier: 'MASTER', division: 'I', lp: 232 },
+    peakRank: stamp({ tier: 'Master', division: '', lp: 584, source: SRC }, '2026'),
+    seasonPeakRank: { tier: 'Master', division: '', lp: 584, source: SRC },
+    exPro: exProOf('LJL-starter', 9, '2021'),
+  });
+  assert.equal(ceros.anchor.toFixed(2), '8.78');
+  assert.equal(ceros.anchorSource, '最高ランク');
+  // 上回る記録が無ければ、減衰後の下限 8.72
+  const floor = anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 9, '2021') });
+  assert.equal(floor.anchor.toFixed(2), '8.72');
+  assert.equal(floor.anchorSource, '元プロの下限');
+  // Day1 の形: 下限 10.0、最終出場 2020 → −1.58 → 8.42
+  assert.equal(anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 5, '2020') }).anchor.toFixed(2), '8.42');
+  // 8.0(Challenger 0 LP)を下回らない: ハレっちの形(下限 10.0、最終出場 2018 → −2.18 → 7.82)は 8.00
+  assert.equal(anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 5, '2018') }).anchor, 8);
+  // 下限が 8.0 の水準(LJL-sub)は、減衰しても 8.0
+  assert.equal(anchorOf({ rank: GOLD, exPro: exProOf('LJL-sub', 3, '2015') }).anchor, 8);
+  // 猶予の内側(最終出場 2026)は下がらない
+  assert.equal(anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 6, '2026') }).anchor, 10);
+});
+
+test('基準35: 到達の時点・最終出場年が不明な記録は減衰せず、説明に「到達の時点が不明(減衰なし)」の印。同じ値の候補があれば不明でない候補を採る', () => {
+  assert.equal(REACH_UNKNOWN_MARK, '到達の時点が不明(減衰なし)');
+  const unknownPeak = stamp({ tier: 'Challenger', division: '', lp: 1185, source: SRC }, null);
+  // 不明な歴代の最高ランクは減衰せずに比べ、採ったら印
+  const a = anchorOf({ rank: GOLD, peakRank: unknownPeak });
+  assert.equal(a.anchor.toFixed(2), '9.58');
+  assert.equal(a.anchorSource, '最高ランク');
+  assert.equal(a.whenUnknown, true);
+  assert.ok((a.anchorNote ?? '').includes(REACH_UNKNOWN_MARK), a.anchorNote);
+  // Eugeo の形: 歴代(不明)と今季が同じ値 → 不明でない今季の記録を採る
+  const e = anchorOf({ rank: GOLD, peakRank: unknownPeak, seasonPeakRank: { tier: 'Challenger', division: '', lp: 1185, source: SRC } });
+  assert.equal(e.anchorSource, '最高ランク(今季)');
+  assert.equal(e.whenUnknown, false);
+  assert.ok(!(e.anchorNote ?? '').includes(REACH_UNKNOWN_MARK), e.anchorNote);
+  // らいじんの形: 歴代 Challenger(LP 不明 = 8.00、到達の時点が不明)と、下限 9.0(最終出場 2018 → −2.18 → 8.00)が同じ値 → 不明でない下限を採る
+  const raijin = anchorOf({
+    rank: { tier: 'DIAMOND', division: 'II', lp: 84 },
+    peakRank: stamp({ tier: 'Challenger', division: '', lp: 0, source: SRC }, null),
+    exPro: exProOf('LJL-starter', 2, '2018'),
+  });
+  assert.equal(raijin.anchor, 8);
+  assert.equal(raijin.anchorSource, '元プロの下限');
+  assert.equal(raijin.whenUnknown, false);
+  // 不明な記録と同じ値のソロランクがあればソロランク
+  const sameSolo = anchorOf({ rank: { tier: 'MASTER', division: 'I', lp: 0 }, peakRank: stamp({ tier: 'Challenger', division: '', lp: 0, source: SRC }, null) });
+  assert.equal(sameSolo.anchorSource, 'ソロランク');
+  assert.equal(sameSolo.whenUnknown, false);
+  // 最終出場年が不明な元プロの下限は減衰せず、採ったら印
+  const t = anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 4, null) });
+  assert.equal(t.anchor, 10);
+  assert.equal(t.anchorSource, '元プロの下限');
+  assert.equal(t.whenUnknown, true);
+  assert.ok((t.anchorNote ?? '').includes(REACH_UNKNOWN_MARK), t.anchorNote);
+  // たぬき忍者の形: 不明な下限(LJL CS、8.0)は採られない(歴代の Challenger 1580LP、到達 2026 の 10.00 が上)→ 印なし
+  const tanuki = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Challenger', division: '', lp: 1580, source: SRC }, '2026'), exPro: exProOf('LJL CS-starter', 1, null) });
+  assert.equal(tanuki.anchor, 10);
+  assert.equal(tanuki.anchorSource, '最高ランク');
+  assert.equal(tanuki.whenUnknown, false);
+  assert.ok(!(tanuki.anchorNote ?? '').includes(REACH_UNKNOWN_MARK), tanuki.anchorNote);
+});
+
+test('基準35: 到達の時点が不明な記録をランクの基準に採ったデータの軸は確度を 1 段下げる。採らなければ下げない', () => {
+  const unknownPeak = stamp({ tier: 'MASTER', division: 'I', lp: 0, source: SRC }, null);
+  const r = scoreDataAxis(axis, { rank: GOLD, peakRank: unknownPeak, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(r.anchor, 8);
+  assert.equal(r.anchorSource, '最高ランク');
+  assert.equal(r.confidence, '中', '有効な試合数は「高」の水準。不明な記録を採ったので 1 段下げる');
+  assert.match(r.confidenceReason, /到達の時点が不明/);
+  assert.ok((r.anchorNote ?? '').includes(REACH_UNKNOWN_MARK), r.anchorNote);
+  // 到達の時点が分かる記録は下げない
+  const known = scoreDataAxis(axis, { rank: GOLD, peakRank: stamp({ tier: 'MASTER', division: 'I', lp: 0, source: SRC }, '2026'), games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(known.anchor, 8);
+  assert.equal(known.confidence, '高');
+  assert.doesNotMatch(known.confidenceReason, /到達の時点が不明/);
+  // 不明な記録があっても、採らなければ下げない
+  const notAdopted = scoreDataAxis(axis, { rank: { tier: 'CHALLENGER', division: 'I', lp: 900 }, peakRank: unknownPeak, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(notAdopted.anchorSource, 'ソロランク');
+  assert.equal(notAdopted.confidence, '高');
+  // 最終出場年が不明な元プロの下限を採った場合も 1 段下げる
+  const floor = scoreDataAxis(axis, { rank: GOLD, exPro: exProOf('LJL-sub', 1, null), games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(floor.anchorSource, '元プロの下限');
+  assert.equal(floor.confidence, '中');
+  // ソロランクが無く(基準 9)、不明な記録を採った(基準 35)ら、それぞれ 1 段ずつ下げる
+  const both = scoreDataAxis(axis, { rank: null, peakRank: unknownPeak, games: twenty(), position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal(both.confidence, '低');
+});
+
+test('基準36: 歴代の最高ランクまたは元プロの下限を採ったら、説明に「到達 2021、ブランク 5.3 年、−1.28」の形で示す(減衰が 0 でも示す)', () => {
+  // 元プロの下限: 最終出場年・ブランク・減衰
+  const floor = anchorOf({ rank: GOLD, exPro: exProOf('LJL-starter', 9, '2021') });
+  assert.match(floor.anchorNote ?? '', /LJL-starter。出典: https:\/\/example\.test\/src。到達 2021、ブランク 5\.3 年、−1\.28/);
+  // 歴代の最高ランク: 到達の時点(年だけ・年月日)
+  const peak = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Emerald', division: 'I', lp: 0, source: SRC }, '2024') });
+  assert.match(peak.anchorNote ?? '', /Emerald I 0LP。出典: https:\/\/example\.test\/src。到達 2024、ブランク 2\.3 年、−0\.38/);
+  const dated = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Master', division: '', lp: 0, source: SRC }, '2025-07-28') });
+  assert.equal(dated.anchor.toFixed(2), '7.94');
+  assert.match(dated.anchorNote ?? '', /到達 2025-07-28、ブランク 1\.2 年、−0\.06/);
+  // 減衰が 0 の場合も示す
+  const fresh = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Challenger', division: '', lp: 1580, source: SRC }, '2026') });
+  assert.match(fresh.anchorNote ?? '', /到達 2026、ブランク 0\.3 年、−0\.00/);
+  // ソロランク・今季の最高ランクを採ったら示さない
+  const season = anchorOf({ rank: GOLD, peakRank: stamp({ tier: 'Diamond', division: 'IV', lp: 24, source: SRC }, '2024-01'), seasonPeakRank: { tier: 'Emerald', division: 'II', lp: 47, source: SRC } });
+  assert.equal(season.anchorSource, '最高ランク(今季)');
+  assert.doesNotMatch(season.anchorNote ?? '', /ブランク/);
+  assert.equal(anchorOf({ rank: { tier: 'MASTER', division: 'I', lp: 0 }, exPro: exProOf('LJL-sub', 1, '2020') }).anchorNote, undefined);
+  // ブランクの載っていない記録(経歴の記録を経ない入力)は従来どおり(減衰・印・説明の追加なし)
+  const legacy = anchorOf({ rank: GOLD, peakRank: { tier: 'MASTER', division: 'I', lp: 0, source: SRC }, exPro: { level: 'LJL-sub', source: SRC } });
+  assert.equal(legacy.anchor, 8);
+  assert.equal(legacy.whenUnknown, false);
+  assert.doesNotMatch(legacy.anchorNote ?? '', /ブランク|到達/);
+});
