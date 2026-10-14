@@ -108,7 +108,7 @@ test('AC2: 勝率と総合の軸に使う戦力 S は相対評価の前の値の
   assert.ok(disp('DD') < 5 && disp('LR') > 5);
 });
 
-test('AC2b: 連携の厚み = 5人の (連携 + 集団戦) ÷ 2 の平均 + 継続性の組の数 × 0.1', () => {
+test('AC2b: 連携の厚み = 5人の (連携 + 集団戦) ÷ 2 の平均 + 継続性の組の数 × 0.02(synergyPairBonus)', () => {
   const ltk = (season: string) => ({ ltk: [{ season, team: 'CC', tier: 'CORE', role: 'MID', wins: null, losses: null, source: 's' }], coach: [], pro: [], other: [] });
   const over = {
     'CC-CORE-TOP': { axes: { synergy: 8, teamfight: 6 }, input: { tournament: ltk('S3') } },
@@ -116,7 +116,7 @@ test('AC2b: 連携の厚み = 5人の (連携 + 集団戦) ÷ 2 の平均 + 継�
     'CC-CORE-MID': { input: { tournament: ltk('S3') } },
   };
   const t = find(computeStrength({ ...world(over), now: NOW }), 'CC', 'CORE');
-  near(axis(t, 'synergy').raw, (7 + 5 * 4) / 5 + 3 * 0.1);
+  near(axis(t, 'synergy').raw, (7 + 5 * 4) / 5 + 3 * 0.02);
 });
 
 test('AC3: 司令塔 = コール力の最大値 × 0.7 + 役の項 × 0.3(6.0 以上の選手が 1人 3.0、2人 2.0、3人以上 1.0、0人 0)', () => {
