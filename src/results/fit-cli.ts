@@ -12,7 +12,7 @@ import type { EngineConfig } from '../rating/types.ts';
 import { evaluateTeams } from '../team/evaluate.ts';
 import winrateConfig from '../winrate/config.json' with { type: 'json' };
 import { readChampionList } from './champions.ts';
-import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, scrimWeightVariants, type EngineVariant } from './fit.ts';
+import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, officialWeightVariants, scrimWeightVariants, type EngineVariant } from './fit.ts';
 import { DEFAULT_RESULTS_ROOT, formatResultError, loadResults } from './load.ts';
 import { buildResultsFile, type ResultsGame } from './official.ts';
 
@@ -48,7 +48,7 @@ const readJsonOrNull = (path: string): unknown => {
 
 /** 組の設定の比較の対象。Task-13・F-009 Task-18 はここへ組を足す */
 function variantsOf(cfg: Partial<EngineConfig>): EngineVariant[] {
-  return [...scrimWeightVariants(cfg)];
+  return [...scrimWeightVariants(cfg), ...officialWeightVariants(cfg)];
 }
 
 /** 評価設定(src/rating/config.json の engine)を一時的に上書きして fn を実行する。評価の計算は設定をこの JSON から読む */
