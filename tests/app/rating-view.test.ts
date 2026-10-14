@@ -126,3 +126,20 @@ test('AC20: 根拠の軸は根拠の一覧(出典と確認の有無)と確度の
   assert.match(a.confidenceReason, /AI が集めた根拠 1 件/);
   assert.match(a.details[0].value, /肯定/);
 });
+
+// F-009 Task-17: 受入基準 44(軸の説明の「相手の強さの補正」)
+test('AC44: 相手の強さの補正で引いた試合がある軸は、説明の補正の行に「相手の強さの補正 +0.03(2 試合)」を示す。無い軸・選手には示さない', () => {
+  const xs = inputs();
+  const me = xs.find((p) => p.playerId === 'DD-CORE-MID')!;
+  // 対面は CC-CORE-MID のスクリム 2 試合。自分 Challenger I 50LP = 8 + 2 × 50 / 1500 = 8.0667、
+  // 対面 Diamond I 50LP = (24 + 3 + 0.5) / 28 × 8 = 7.8571。地力の γ 0.15 × 0.2095 = 0.0314 → +0.03
+  const scrim = (id: string): GameRecord => ({ ...game('MIDDLE', {}, 1), matchId: id, queueId: 0, kind: 'scrim', oppPlayerId: 'CC-CORE-MID' });
+  me.games = [...me.games, scrim('SC-A'), scrim('SC-B')];
+  const players = buildRatings({ players: xs, matches: [] }, NOW);
+  const file: RatingsFile = { ...FILE, players };
+  const axes = ratingAxesView(players.find((p) => p.playerId === 'DD-CORE-MID'));
+  const correction = (key: string) => axes.find((a) => a.key === key)!.details.find((d) => d.label === '補正')!.value;
+  assert.match(correction('ground'), /相手の強さの補正 \+0\.03\(2 試合\)/);
+  assert.doesNotMatch(correction('teamfight'), /相手の強さの補正/, '係数の無い軸');
+  assert.doesNotMatch(ratingAxesView(file.players.find((p) => p.playerId === 'DD-MASTERS-MID')).find((a) => a.key === 'ground')!.details.find((d) => d.label === '補正')!.value, /相手の強さの補正/);
+});

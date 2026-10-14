@@ -676,3 +676,85 @@ test('F-004 AC27・AC42: 本番の試合も csAt14 の分布で標準化し、�
   const noCs = scoreDataAxis(csAxis, { rank: null, medianAnchor: 5, games: [{ ...game({ matchId: 'O3', position: 'TOP', me: { dmg: 1 }, opp: { dmg: 1 } }), kind: 'official', queueId: 0 }], position: 'TOP' }, out.population, cfgO, NOW);
   assert.equal(noCs.officialGames, 0);
 });
+
+// F-009 Task-17: 受入基準 43・46(相手の強さの補正)
+import { oppAdjustSentence } from '../../src/rating/engine.ts';
+
+/** 自分のランクの基準: Diamond IV 0LP = 24 / 28 × 8 = 6.857142857… */
+const DIA = { tier: 'DIAMOND', division: 'IV', lp: 0 };
+const A_DIA = (24 / 28) * 8;
+/** 実戦の記録(重みは新しさ 1 × 種類の重み。cfg に scrimGameWeight が無ければ 1) */
+const real = (o: Partial<GameRecord> & { me?: Record<string, number> }): GameRecord => ({ ...game({ ageDays: 0, ...o }), kind: o.kind ?? 'scrim', queueId: 0 });
+const near = (a: number, b: number, msg = '') => assert.ok(Math.abs(a - b) < 1e-9, `${a} vs ${b} ${msg}`);
+
+test('基準43: 評価設定 oppAdjust の初期値は地力 0.15・レーン戦 0.23・連携 0.20・安定感 0.08。集団戦とピックプールは持たない', () => {
+  assert.deepEqual(loadEngineConfig().oppAdjust, { ground: 0.15, laning: 0.23, synergy: 0.2, stability: 0.08 });
+});
+
+test('基準43: 実戦の記録の試合の値から γ × (自分の基準 − 対面の基準) を引く。ランクの試合と対面の基準が無い試合には引かない', () => {
+  const cfgO: EngineConfig = { ...cfg, oppAdjust: { test: 0.5 } };
+  // 実戦: z = (21000 − 20000) / 1000 = +1、対面の基準 = 自分 − 2 → 引く値 0.5 × 2 = 1.0 → 試合の値 0
+  const scrim = real({ matchId: 'SC-1', me: { dmg: 21000 }, oppAnchor: A_DIA - 2 });
+  // ランクの試合: 対面の基準を持っていても引かない → +1
+  const solo = { ...game({ ageDays: 0, matchId: 'JP1_1', me: { dmg: 21000 } }), oppAnchor: A_DIA - 2 };
+  // 対面が名簿の選手でない実戦(対面の基準なし): 引かない → +1
+  const outside = real({ matchId: 'SC-2', me: { dmg: 21000 } });
+  const r = scoreDataAxis(axis, { rank: DIA, games: [scrim, solo, outside], position: 'MIDDLE' }, population, cfgO, NOW);
+  near(r.correction, (0 + 1 + 1) / 3, '補正 = (0 + 1 + 1) ÷ 3');
+  near(r.anchor, A_DIA);
+  assert.equal(r.oppAdjust!.games, 1);
+  near(r.oppAdjust!.value, 1);
+  // 指標ごとの値(z)は引く前のまま
+  near(r.metrics[0].z, 1);
+});
+
+test('基準43: 引いた後の試合の値は ±zClip(3)に切り詰める', () => {
+  const cfgO: EngineConfig = { ...cfg, oppAdjust: { test: 0.5 } };
+  // z = +3、対面の基準 = 自分 + 4 → 引く値 0.5 × (−4) = −2 → 3 + 2 = 5 → 3
+  const up = real({ me: { dmg: 23000 }, oppAnchor: A_DIA + 4 });
+  near(scoreDataAxis(axis, { rank: DIA, games: [up], position: 'MIDDLE' }, population, cfgO, NOW).correction, 3);
+  // z = −3、対面の基準 = 自分 − 4 → 引く値 +2 → −3 − 2 = −5 → −3
+  const down = real({ me: { dmg: 17000 }, oppAnchor: A_DIA - 4 });
+  near(scoreDataAxis(axis, { rank: DIA, games: [down], position: 'MIDDLE' }, population, cfgO, NOW).correction, -3);
+  // 切り詰めに当たらない値はそのまま: z = +1、引く値 −1 → +2
+  const mid = real({ me: { dmg: 21000 }, oppAnchor: A_DIA + 2 });
+  near(scoreDataAxis(axis, { rank: DIA, games: [mid], position: 'MIDDLE' }, population, cfgO, NOW).correction, 2);
+});
+
+test('基準43: oppAdjust に係数の無い軸には引かない', () => {
+  const g = [real({ me: { dmg: 21000 }, oppAnchor: A_DIA - 2 })];
+  const r = scoreDataAxis(axis, { rank: DIA, games: g, position: 'MIDDLE' }, population, { ...cfg, oppAdjust: { ground: 0.5 } }, NOW);
+  near(r.correction, 1);
+  assert.equal(r.oppAdjust, undefined);
+});
+
+test('基準43・44: 引いた値は試合の重みで平均し、引いた試合の数とともに返す。説明は「相手の強さの補正 +0.17(2 試合)」', () => {
+  const cfgO: EngineConfig = { ...cfg, scrimGameWeight: 2, officialGameWeight: 4, oppAdjust: { test: 0.5 } };
+  // スクリム(重み 2): 引く値 0.5 × 2 = 1.0、本番(重み 4): 引く値 0.5 × (−0.5) = −0.25
+  // 重み付き平均 = (2 × 1.0 + 4 × (−0.25)) ÷ 6 = 1 ÷ 6 = 0.1666…
+  const g = [
+    real({ matchId: 'SC-1', me: { dmg: 21000 }, oppAnchor: A_DIA - 2 }),
+    real({ matchId: 'RS-1', kind: 'official', me: { dmg: 21000 }, oppAnchor: A_DIA + 0.5 }),
+  ];
+  const r = scoreDataAxis(axis, { rank: DIA, games: g, position: 'MIDDLE' }, population, cfgO, NOW);
+  assert.equal(r.oppAdjust!.games, 2);
+  near(r.oppAdjust!.value, 1 / 6);
+  // 補正 = (2 × (1 − 1) + 4 × (1 + 0.25)) ÷ 6 = 5 ÷ 6
+  near(r.correction, 5 / 6);
+  assert.equal(oppAdjustSentence(r.oppAdjust!), '相手の強さの補正 +0.17(2 試合)');
+  assert.equal(oppAdjustSentence({ value: -0.034, games: 3 }), '相手の強さの補正 −0.03(3 試合)');
+});
+
+test('基準46: oppAdjust が無い・空・すべて 0 なら引かず、改訂前と同じ結果を返す', () => {
+  const plain = [
+    real({ matchId: 'SC-1', me: { dmg: 23000 } }),
+    real({ matchId: 'SC-2', me: { dmg: 19000 } }),
+    game({ ageDays: 2, matchId: 'JP1_1', me: { dmg: 20500 } }),
+  ];
+  const withOpp = plain.map((g) => (g.kind ? { ...g, oppAnchor: A_DIA - 3 } : g));
+  const before = scoreDataAxis(axis, { rank: DIA, games: plain, position: 'MIDDLE' }, population, cfg, NOW);
+  assert.equal('oppAdjust' in before, false);
+  for (const c of [cfg, { ...cfg, oppAdjust: {} }, { ...cfg, oppAdjust: { test: 0 } }]) {
+    assert.deepEqual(scoreDataAxis(axis, { rank: DIA, games: withOpp, position: 'MIDDLE' }, population, c, NOW), before);
+  }
+});
