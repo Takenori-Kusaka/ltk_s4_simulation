@@ -158,7 +158,7 @@ const withCs14 = (rec: Row, lr: (number | null)[], dd: (number | null)[]): Row =
 test('基準26: TOP・JG・MID・ADC で両方の行に cs14 があれば csAt14(自分は自分、対面は対面の cs14)。片方が null の ADC・SUP・cs14 の無い記録には持たせず、maxCsAdvantageOnLaneOpponent は作らない', () => {
   // ロールの順は TOP・JG・MID・ADC・SUP。LR CORE 100・80・110・120・20、DD CORE 90・85・100・null・25
   const rec = withCs14(record({ game: 1 }), [100, 80, 110, 120, 20], [90, 85, 100, null, 25]);
-  const old = record({ game: 2 });
+  const old = record({ game: 2, duration: '35:00' });
   const by = load([rec, old]);
   const first = (id: string) => by.get(id)!.find((g) => g.matchId.endsWith('-G1'))!;
   assert.deepEqual([first('DD-CORE-TOP').me.csAt14, first('DD-CORE-TOP').opp?.csAt14], [90, 100]);
@@ -183,7 +183,7 @@ test('基準26: TOP・JG・MID・ADC で両方の行に cs14 があれば csAt14
 test('基準39: 分布は 1 試合の 1 ロールにつき 1 組。リスナー参加の記録・結果だけの記録・ソロランクの試合は入れず、平均 0・二乗平均平方根', () => {
   // TOP の差: 1 試合目 LR 100 − DD 90 = 10、2 試合目 LR 100 − DD 70 = 30。二乗平均平方根 √((100 + 900) ÷ 2) = √500 = 22.3607
   const g1 = withCs14(record({ game: 1 }), [100, 80, 110, 120, 20], [90, 85, 100, 115, 25]);
-  const g2 = withCs14(record({ game: 2 }), [100, 80, 110, 120, 20], [70, 85, 100, 115, 25]);
+  const g2 = withCs14(record({ game: 2, duration: '35:00' }), [100, 80, 110, 120, 20], [70, 85, 100, 115, 25]);
   // リスナー参加の記録(TOP の差 200)は計算に使わない(基準5)
   const lis = withCs14(record({ game: 3, listeners: true }), [300, 80, 110, 120, 20], [100, 85, 100, 115, 25]);
   const ro: Row = { kind: 'scrim', resultOnly: true, date: '2026-10-10', game: 4, listeners: false, source: { url: 'https://demo-lab0110.github.io/ltk-schedule-status-site/' }, winner: 'LR CORE', teams: { 'LR CORE': {}, 'DD CORE': {} } };
