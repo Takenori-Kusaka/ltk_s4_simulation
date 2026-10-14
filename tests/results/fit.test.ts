@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, scrimWeightVariants } from '../../src/results/fit.ts';
+import { enoughOfficialGames, fitReportOf, formatFitMarkdown, MIN_OFFICIAL_GAMES, officialWeightVariants, scrimWeightVariants } from '../../src/results/fit.ts';
 import { main } from '../../src/results/fit-cli.ts';
 import type { ResultsGame } from '../../src/results/official.ts';
 import type { Tier } from '../../src/sim/types.ts';
@@ -151,7 +151,8 @@ test('基準23: 命令は 8 試合以上で docs/research/results-fit.md の形�
   assert.ok(lines.some((l) => /7 試合/.test(l) && /8 試合/.test(l)), lines.join('\n'));
 
   assert.equal(await main({ ...opts, loadGames: () => ({ games: GAMES, errors: [] }) }), 0);
-  assert.deepEqual(engines, [{}, { scrimGameWeight: 0 }]);
+  // 先頭の 2 つが基準23 の組(基準43 などの組はその後ろに足される)
+  assert.deepEqual(engines.slice(0, 2), [{}, { scrimGameWeight: 0 }]);
   const md = readFileSync(outPath, 'utf8');
   assert.doesNotMatch(md, RECOMMEND);
   assert.match(md, /0\.685/);
@@ -161,4 +162,43 @@ test('基準23: 命令は 8 試合以上で docs/research/results-fit.md の形�
   const errPath = join(dir, 'err.md');
   assert.equal(await main({ ...opts, outPath: errPath, loadGames: () => ({ games: GAMES, errors: ['x.json[0] winner: 不正'] }) }), 3);
   assert.equal(existsSync(errPath), false);
+});
+
+test('基準43: officialGameWeight を設定の値・scrimGameWeight と同じ値・0 の 3 通りにした組', () => {
+  const v = officialWeightVariants({ scrimGameWeight: 2, officialGameWeight: 4 });
+  assert.deepEqual(v.map((x) => x.engine), [{}, { officialGameWeight: 2 }, { officialGameWeight: 0 }]);
+  assert.match(v[0].label, /officialGameWeight 4\(設定の値\)/);
+  assert.match(v[1].label, /officialGameWeight 2\(scrimGameWeight と同じ値\)/);
+  assert.match(v[2].label, /officialGameWeight 0/);
+  assert.equal(new Set([...scrimWeightVariants({ scrimGameWeight: 2 }), ...v].map((x) => x.key)).size, 5);
+});
+
+test('基準43: 命令は基準23 の比較に officialGameWeight の 3 通りの対数損失と Brier を足して書き、推奨の文を持たない', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'f004-fit43-'));
+  const outPath = join(dir, 'results-fit.md');
+  const engines: object[] = [];
+  const code = await main({
+    outPath,
+    now: () => new Date('2026-11-20T00:00:00.000Z'),
+    out: () => {},
+    targetSd: TARGET_SD,
+    engineConfig: { scrimGameWeight: 2, officialGameWeight: 4 },
+    loadGames: () => ({ games: GAMES, errors: [] }),
+    // scrimGameWeight 0 と officialGameWeight 0 の組は S_ZERO、ほかは S_CONFIG
+    scoresOf: (engine: { scrimGameWeight?: number; officialGameWeight?: number }) => {
+      engines.push(engine);
+      return engine.scrimGameWeight === 0 || engine.officialGameWeight === 0 ? S_ZERO : S_CONFIG;
+    },
+  });
+  assert.equal(code, 0);
+  assert.deepEqual(engines.slice(2, 5), [{}, { officialGameWeight: 2 }, { officialGameWeight: 0 }]);
+  const md = readFileSync(outPath, 'utf8');
+  assert.doesNotMatch(md, RECOMMEND);
+  // S_CONFIG の組: 対数損失 0.685242、Brier 0.24(基準23 のテストの検算)。S のある 3 試合、数えなかった 5 試合
+  assert.match(md, /\| officialGameWeight 4\(設定の値\) \| 全体 \| 3 \| 0\.685 \| 0\.240 \| 5 \|/);
+  assert.match(md, /\| officialGameWeight 2\(scrimGameWeight と同じ値\) \| 全体 \| 3 \| 0\.685 \| 0\.240 \| 5 \|/);
+  // S_ZERO の組: 対数損失 1.147340、Brier 0.44
+  assert.match(md, /\| officialGameWeight 0 \| 全体 \| 3 \| 1\.147 \| 0\.440 \| 5 \|/);
+  // 基準23 の 2 通りも残る
+  assert.match(md, /\| scrimGameWeight 0 \| 全体 \| 3 \| 1\.147 \| 0\.440 \| 5 \|/);
 });
