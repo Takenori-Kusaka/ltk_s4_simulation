@@ -688,3 +688,39 @@ test('F-004 AC40: csAt14 の組の数が下限に満たないロールと組の�
   assert.equal(cs.filter((w) => /UTILITY/.test(w)).length, 0, 'SUP は分布を作らない');
   assert.deepEqual(loadRatingInputs({ rawDir: rawDir(), groundsDir: grounds() }).warnings.filter((w) => w.includes('csAt14')), []);
 });
+
+// F-009 Task-17: 受入基準 43・44(相手の強さの補正。実戦の記録への対面の選手とランクの基準の付与、軸の説明)
+test('基準43: loadRatingInputs は実戦の記録に対面の選手 ID を付け、buildRatings は対面のランクの基準(基準 6 の決め方)で引く', () => {
+  const { inputs } = f004Inputs([f004Scrim('40:00', 'DD CORE'), f004Scrim('35:00', 'DD CORE'), f004Scrim('30:00', 'LR CORE')]);
+  const dd = inputs.players.find((p) => p.playerId === 'DD-CORE-ADC')!;
+  assert.deepEqual(dd.games.map((g) => g.oppPlayerId), ['LR-CORE-ADC', 'LR-CORE-ADC', 'LR-CORE-ADC']);
+  // 自分 Challenger I 0LP = 8.00、対面 Diamond IV 0LP = 24 / 28 × 8 = 6.857…(差 1.142857…)
+  dd.rank = { tier: 'CHALLENGER', division: 'I', lp: 0 };
+  inputs.players.find((p) => p.playerId === 'LR-CORE-ADC')!.rank = { tier: 'DIAMOND', division: 'IV', lp: 0 };
+  const ratings = buildRatings(inputs, NOW2);
+  const gamma = loadEngineConfig().oppAdjust!;
+  const diff = 8 - (24 / 28) * 8;
+  const ground = axisOf(ratings, 'DD-CORE-ADC', 'ground');
+  assert.equal(ground.data!.anchor, 8);
+  assert.equal(ground.data!.oppAdjust!.games, 3);
+  assert.ok(Math.abs(ground.data!.oppAdjust!.value - gamma.ground * diff) < 1e-9, `${ground.data!.oppAdjust!.value}`);
+  // 0.15 × 1.142857 = 0.1714… → +0.17
+  assert.match(ground.reason, /相手の強さの補正 \+0\.17\(3 試合\)/);
+  // 対面の側は符号が逆: 0.15 × (−1.142857) = −0.1714… → −0.17
+  assert.match(axisOf(ratings, 'LR-CORE-ADC', 'ground').reason, /相手の強さの補正 −0\.17\(3 試合\)/);
+  // 係数の無い軸(集団戦)には引かず、説明にも出さない
+  const tf = axisOf(ratings, 'DD-CORE-ADC', 'teamfight');
+  assert.equal(tf.data!.oppAdjust, undefined);
+  assert.doesNotMatch(tf.reason, /相手の強さの補正/);
+});
+
+test('基準43: 対面の行が使えない(未確認)の試合と、実戦の記録の無い選手には対面の選手 ID を付けない', () => {
+  const raw = f004Scrim('40:00', 'DD CORE') as { teams: Record<string, { players: Row[] }> };
+  raw.teams['LR CORE'].players.find((p) => p.role === 'ADC')!.mappingConfidence = '未確認';
+  const { inputs } = f004Inputs([raw]);
+  assert.deepEqual(inputs.players.find((p) => p.playerId === 'DD-CORE-ADC')!.games.map((g) => g.oppPlayerId), [undefined]);
+  assert.deepEqual(inputs.players.find((p) => p.playerId === 'DD-CORE-MID')!.games.map((g) => g.oppPlayerId), ['LR-CORE-MID']);
+  const ratings = buildRatings(inputs, NOW2);
+  assert.equal(axisOf(ratings, 'DD-CORE-ADC', 'ground').data!.oppAdjust, undefined);
+  assert.doesNotMatch(axisOf(ratings, 'DD-CORE-ADC', 'ground').reason, /相手の強さの補正/);
+});

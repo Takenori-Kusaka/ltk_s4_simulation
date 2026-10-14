@@ -149,6 +149,11 @@ export function officialSentence(officialGames: number, weight: number): string 
   return officialGames > 0 ? `本番 ${officialGames} 試合(重み ${weight.toFixed(1)})を含む` : null;
 }
 
+/** F-009 基準44: 「相手の強さの補正 +0.17(2 試合)」(引いた値の重み付き平均を符号つきの小数第 2 位で) */
+export function oppAdjustSentence(a: { value: number; games: number }): string {
+  return `相手の強さの補正 ${a.value >= 0 ? '+' : '−'}${Math.abs(a.value).toFixed(2)}(${a.games} 試合)`;
+}
+
 /** 確度の理由: 有効な試合数と閾値。スクリム・本番を含む軸はその数と重み(F-004 基準15・42) */
 export function confidenceReasonOf(
   n: number,
@@ -297,6 +302,11 @@ export function scoreDataAxis(
   let pSum = 0;
   let scrimGames = 0;
   let officialGames = 0;
+  // F-009 基準43・46: 相手の強さの補正。係数が無いか 0 の軸は引かない
+  const gamma = cfg.oppAdjust?.[axis.key] ?? 0;
+  let adjSum = 0;
+  let adjW = 0;
+  let adjGames = 0;
   const metricAcc = axis.metrics.map(() => ({ zSum: 0, vSum: 0, w: 0, count: 0 }));
   for (const g of games) {
     const w = gameWeight(g, now, cfg);
@@ -319,7 +329,16 @@ export function scoreDataAxis(
       m.count += 1;
     });
     if (gw === 0) continue; // この試合に使える指標が無い
-    pSum += w * (gz / gw);
+    let value = gz / gw;
+    // 基準43: 対面が名簿の選手である実戦の記録だけ、γ × (自分の基準 − 対面の基準) を引いて ±zClip に切り詰める
+    if (gamma !== 0 && g.kind !== undefined && typeof g.oppAnchor === 'number') {
+      const d = gamma * (anchor - g.oppAnchor);
+      value = clamp(value - d, -cfg.zClip, cfg.zClip);
+      adjSum += w * d;
+      adjW += w;
+      adjGames += 1;
+    }
+    pSum += w * value;
     n += w;
     if (g.kind === 'scrim') scrimGames += 1;
     if (g.kind === 'official') officialGames += 1;
@@ -355,6 +374,7 @@ export function scoreDataAxis(
     scrimGames,
     officialGames,
     confidenceReason: confidenceReasonOf(n, scrimGames, cfg, undefined, officialGames) + (whenUnknown && !estimated ? `。${REACH_UNKNOWN_DOWNGRADE}` : ''),
+    ...(adjGames > 0 ? { oppAdjust: { value: adjSum / adjW, games: adjGames } } : {}),
     metrics: axis.metrics.map((def, i) => {
       const m = metricAcc[i];
       return {

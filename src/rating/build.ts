@@ -7,7 +7,7 @@ import { ROSTER } from '../data/roster.ts';
 import { scrimGameRecords } from '../results/to-games.ts';
 import type { MatchResult } from '../results/types.ts';
 import { buildRatingContext, DATA_AXES, rateDataAxes, type RatedAxis } from './axes.ts';
-import { blankInfo, buildResultsPopulation, extractGame, loadEngineConfig, officialSentence, populationMatch, REACH_UNKNOWN_DOWNGRADE, scrimSentence } from './engine.ts';
+import { blankInfo, buildResultsPopulation, extractGame, loadEngineConfig, officialSentence, oppAdjustSentence, populationMatch, REACH_UNKNOWN_DOWNGRADE, resolveAnchor, scrimSentence } from './engine.ts';
 import { roleSwitchDiscount,
   mergeProYears, readCareerSnapshot, readShotcallingSnapshot, readTournamentSnapshot, shotcallingAxis, tournamentAxis,
   type EvidenceAxisResult, type ShotcallingEvidence, type TournamentRecord,
@@ -115,6 +115,11 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
     masteryScore: p.masteryScore,
   }));
   const ctx = buildRatingContext(ratingPlayers, inputs.matches, cfg, now);
+  // F-009 基準43: 実戦の記録の対面(名簿の選手)のランクの基準を、評価と同じ決め方(基準6。ブランクの減衰の後、階級の中央値)で試合に載せる
+  const anchorOf = new Map(ratingPlayers.map((p) => [p.playerId, resolveAnchor({ ...p, medianAnchor: (p.tier && ctx.tierMedianAnchor[p.tier]) ?? ctx.medianAnchor }).anchor]));
+  for (const p of ratingPlayers) {
+    p.games = p.games.map((g) => (g.oppPlayerId !== undefined && anchorOf.has(g.oppPlayerId) ? { ...g, oppAnchor: anchorOf.get(g.oppPlayerId) } : g));
+  }
   const ovCfg = loadOwnerViewConfig();
   return inputs.players.map((p, i) => {
     const form = formFactor(formGames(p.games), p.league, now);
@@ -141,7 +146,7 @@ export function buildRatings(inputs: RatingInputs, now: number): PlayerRating[] 
       estimated: a.estimated,
       marks: [],
       // F-004 基準15・42: スクリム・本番の試合を使った軸は、その数と重み(ピックプールは 1 試合として数えるため 1.0)を説明に示す
-      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1), officialSentence(a.officialGames, a.key === 'pool' ? 1 : cfg.officialGameWeight ?? 1)]
+      reason: [`ランクの基準 ${a.anchor.toFixed(2)}(${a.anchorSource}${a.anchorNote ? `: ${a.anchorNote}` : ''})`, `補正 ${a.correction.toFixed(2)} × 縮小 ${a.shrink.toFixed(2)}`, a.shapeAdj !== undefined && Math.abs(a.shapeAdj) >= 0.005 ? `形の補正 ${a.shapeAdj > 0 ? '+' : ''}${a.shapeAdj.toFixed(2)}(6 軸の平均からのずれ)` : undefined, a.bonusReason, scrimSentence(a.scrimGames, a.key === 'pool' ? 1 : cfg.scrimGameWeight ?? 1), officialSentence(a.officialGames, a.key === 'pool' ? 1 : cfg.officialGameWeight ?? 1), a.oppAdjust ? oppAdjustSentence(a.oppAdjust) : undefined]
         .filter(Boolean)
         .join('。') + (discount.reason ? `。${discount.reason}` : '') + (ov ? `。${ownerViewSentence(ov)}` : ''),
       data: a,
@@ -189,6 +194,19 @@ export interface LoadOptions {
 export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; errors: string[]; warnings: string[] } {
   const errors: string[] = [];
   const scrimGames = scrimGameRecords(opts.scrims ?? []);
+  // F-009 基準43: 実戦の記録の対面の選手 ID(試合 ID と選手 ID → 同じロールの使う行の選手 ID)。名簿の選手だけ
+  const roster = new Set(ROSTER.map((r) => r.id));
+  const oppOf = new Map<string, string>();
+  for (const g of opts.scrims ?? []) {
+    if (g.resultOnly) continue;
+    for (const teamId of g.teams) {
+      const oppTeam = g.stats[g.teams[0] === teamId ? g.teams[1] : g.teams[0]];
+      for (const row of g.stats[teamId].players) {
+        const opp = oppTeam.players.find((q) => q.role === row.role && q.use);
+        if (row.use && opp && roster.has(opp.playerId)) oppOf.set(`${g.matchId}|${row.playerId}`, opp.playerId);
+      }
+    }
+  }
   const read = <T>(path: string): T | null => {
     try {
       return readJson(path) as T;
@@ -242,7 +260,7 @@ export function loadRatingInputs(opts: LoadOptions): { inputs: RatingInputs; err
       peakRank: career?.peakRank ?? null,
       seasonPeakRank: career?.seasonPeakRank ?? null,
       exPro: career?.exPro ?? null,
-      games: [...games, ...(scrimGames.get(r.id) ?? [])],
+      games: [...games, ...(scrimGames.get(r.id) ?? []).map((g) => (oppOf.has(`${g.matchId}|${r.id}`) ? { ...g, oppPlayerId: oppOf.get(`${g.matchId}|${r.id}`) } : g))],
       league: solo && raw?.collectedAt ? [{ date: raw.collectedAt, tier: solo.tier, division: solo.rank, lp: solo.leaguePoints }] : [],
       masteryScore: typeof ms === 'number' ? ms : typeof ms?.data === 'number' ? ms.data : undefined,
       shotcalling: sc.players[r.id] ?? [],

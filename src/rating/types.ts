@@ -64,6 +64,10 @@ export interface GameRecord {
   opp: Record<string, number> | null;
   /** 記録の種類。scrim = スクリムの記録(F-004。重み scrimGameWeight)、official = 本番の記録(F-004 基準41。重み officialGameWeight)。省略時は Riot API の試合 */
   kind?: 'scrim' | 'official';
+  /** 実戦の記録の対面が名簿の選手のとき、その選手 ID(F-009 基準43。loadRatingInputs が付ける) */
+  oppPlayerId?: string;
+  /** 対面のランクの基準(基準6 の決め方。F-009 基準43。buildRatings が oppPlayerId から付ける) */
+  oppAnchor?: number;
 }
 
 /** 母集団の構築に使う試合(全参加者) */
@@ -128,6 +132,8 @@ export interface EngineConfig {
   blankDecayPerYear?: number;
   /** 減衰しない猶予の年数(初期値 1。省略時 0) */
   blankGraceYears?: number;
+  /** 相手の強さの補正の係数 γ(F-009 基準43。軸のキー → 係数)。無い軸・0 の軸は引かない(基準46) */
+  oppAdjust?: Record<string, number>;
 }
 
 /** 母集団の分布: ロール → 指標のキーとモード → 平均と標準偏差 */
@@ -191,4 +197,6 @@ export interface DataAxisResult {
   officialGames: number;
   /** 確度の理由(有効な試合数。スクリム・本番を含む軸はその数と重み) */
   confidenceReason: string;
+  /** 相手の強さの補正(F-009 基準43・44): 引いた値 γ × (自分の基準 − 対面の基準) の重み付き平均と、引いた試合の数。引いた試合が無ければ無い */
+  oppAdjust?: { value: number; games: number };
 }

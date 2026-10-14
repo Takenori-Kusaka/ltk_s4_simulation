@@ -1,7 +1,8 @@
 {
   "_comment": "F-009 評価設定(ADR-0004・docs/design/rating-model.md)。値は 2026-10-09 に価値責任者が確定した設計書の初期値",
   "engine": {
-    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する。blankDecayPerYear・blankGraceYears は到達点からのブランクの減衰(基準33・34。1 年あたり 0.3 点、猶予 1 年。歴代の最高ランクと元プロの下限に掛かり、下限は 8.0 を下回らない)。2026-10-11 の起案(G-4 再判定 4)。cs14MinPairs は 14 分の CS(csAt14)の分布を作る、ロールごとの実戦の記録の組の数の下限(F-004 基準40。初期値 8。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者・技術判断者が変えてよい)。officialGameWeight は本番 1 試合の重み(F-004 基準42。初期値 4.0 = scrimGameWeight の 2 倍。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者が変えてよい)",
+    "_comment": "scrimGameWeight はスクリム 1 試合の重み(F-004 基準13。ソロランク 1 試合の 2 倍)。AI の起案で、価値責任者の確定を要する。blankDecayPerYear・blankGraceYears は到達点からのブランクの減衰(基準33・34。1 年あたり 0.3 点、猶予 1 年。歴代の最高ランクと元プロの下限に掛かり、下限は 8.0 を下回らない)。2026-10-11 の起案(G-4 再判定 4)。cs14MinPairs は 14 分の CS(csAt14)の分布を作る、ロールごとの実戦の記録の組の数の下限(F-004 基準40。初期値 8。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者・技術判断者が変えてよい)。officialGameWeight は本番 1 試合の重み(F-004 基準42。初期値 4.0 = scrimGameWeight の 2 倍。AI の起案を G-4 再判定 2 docs/gates/g4-F-004-2026-10-14-rejudge2.md で通過。価値責任者が変えてよい)。oppAdjust は相手の強さの補正の係数 γ(F-009 基準43。軸のキー → 係数。実戦の記録のうち対面が名簿の選手である試合の値から γ × (自分のランクの基準 − 対面のランクの基準) を引き、± zClip に切り詰める)。初期値は階級チーム同士のスクリム 75 組(レーン戦は 41 組)で推定した値(地力 0.311・レーン戦 0.468・連携 0.422・安定感 0.160。F-004 の計算の例 7、specs/F-009/spec.md の評価設定の初期値)の半分。集団戦は推定が階級で向きを変える(MASTERS +0.82・NEXT −0.89)ため持たない。AI の起案を G-4 再判定 5 docs/gates/g4-F-009-2026-10-14-rejudge5.md で通過。欄を消すかすべて 0 にすると改訂前と同じ点数に戻る(基準46)。値を変える判断は価値責任者",
+    "oppAdjust": { "ground": 0.15, "laning": 0.23, "synergy": 0.2, "stability": 0.08 },
     "scrimGameWeight": 2,
     "officialGameWeight": 4,
     "cs14MinPairs": 8,
