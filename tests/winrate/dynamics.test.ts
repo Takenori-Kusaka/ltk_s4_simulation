@@ -256,3 +256,49 @@ test('基準9・13・16: 試合日の勝率は両チームの τ と戦力 S が
   assert.equal(none.p, prior);
   assert.equal(none.a, null);
 });
+
+// ---- F-004 Task-10: 受入基準 9(連敗の数 k の dayShift への受け渡し)。実装より先に受入基準から書いた ----
+test('F-004 基準9: 試合日の勝率は勝率表の mood(本番の試合日ごとの、その日の後の k)から、その日より前の k を dayShift の kA・kB へ渡す。k 0・1 は 0、2 は −0.05、4 は −0.15 を ±0.10 に切り詰め', () => {
+  // IT と LR は材料が無く同じ τ のため、仕上がりの項の差は 0。動くのは気持ちの補正だけ
+  const withMood = teams(true).map((t) => (t.team === 'IT' && t.tier === 'NEXT'
+    ? { ...t, mood: [{ date: '2026-10-15', k: 1 }, { date: '2026-10-19', k: 2 }, { date: '2026-10-23', k: 3 }, { date: '2026-10-27', k: 4 }, { date: '2026-11-02', k: 0 }] }
+    : t));
+  const out = computePriorWinrates(withMood, { meta: META });
+  assert.deepEqual(out.teams.find((t) => t.key === 'IT-NEXT')!.mood.map((s) => s.k), [1, 2, 3, 4, 0], '勝率表の teams[] に mood を写す');
+  assert.deepEqual(out.teams.find((t) => t.key === 'LR-NEXT')!.mood, [], '本番の記録が無い階級チームは空');
+  const prior = out.winTable.NEXT['IT>LR'];
+  const on = (date: string) => dayWinrate(out.teams, 'NEXT', 'IT', 'LR', prior, date);
+  // 初日は前の本番が無いため k = 0
+  assert.deepEqual([on('2026-10-15').kA, on('2026-10-15').shift], [0, 0]);
+  // 1 敗の後(k = 1)は 0
+  assert.deepEqual([on('2026-10-19').kA, on('2026-10-19').shift], [1, 0]);
+  assert.equal(on('2026-10-19').p, prior);
+  // 2 連敗の後(k = 2)は −0.05
+  const k2 = on('2026-10-23');
+  assert.deepEqual([k2.kA, k2.kB], [2, 0]);
+  near(k2.shift, -0.05, 1e-12);
+  near(k2.p, winProbOnDay(prior, -0.05), 1e-12);
+  // 4 連敗の後(k = 4)は −0.15 を ±0.10 に切り詰める
+  const k4 = on('2026-11-02');
+  assert.equal(k4.kA, 4);
+  assert.equal(k4.shift, -0.1);
+  // 勝てば 0 に戻る
+  assert.deepEqual([on('2026-11-06').kA, on('2026-11-06').shift], [0, 0]);
+  // 向きを変えれば kB に入り、符号が変わる
+  const rev = dayWinrate(out.teams, 'NEXT', 'LR', 'IT', 1 - prior, '2026-10-23');
+  assert.deepEqual([rev.kA, rev.kB], [0, 2]);
+  near(rev.shift, 0.05, 1e-12);
+  near(rev.p, 1 - k2.p, 1e-9);
+});
+
+test('F-004 基準9: 本番の記録が無い(mood が空、または mood の無い勝率表)とき、気持ちの補正は 0 のまま', () => {
+  const out = computePriorWinrates(teams(true), { meta: META });
+  assert.ok(out.teams.every((t) => Array.isArray(t.mood) && t.mood.length === 0));
+  const prior = out.winTable.NEXT['IT>LR'];
+  const d = dayWinrate(out.teams, 'NEXT', 'IT', 'LR', prior, '2026-11-06');
+  assert.deepEqual([d.kA, d.kB, d.shift, d.p], [0, 0, 0, prior]);
+  // mood の欄の無い勝率表(Task-10 より前の形)でも同じ
+  const old = out.teams.map(({ mood: _m, ...t }) => t);
+  const o = dayWinrate(old, 'NEXT', 'IT', 'LR', prior, '2026-11-06');
+  assert.deepEqual([o.kA, o.kB, o.shift, o.p], [0, 0, 0, prior]);
+});

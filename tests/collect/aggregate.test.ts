@@ -551,3 +551,47 @@ test('F-004: resultsRoot を渡さない集計は記録を読まず、results.js
   assert.ok(!existsSync(join(env.publicDir, 'results.json')));
   assert.equal(readJson<WinratesResultsLike>(env.publicDir, 'winrates.json').results, null);
 });
+
+// ---- F-004 Task-10: 受入基準 9(集計が数えた k の dayShift への受け渡し)。実装より先に受入基準から書いた ----
+import { dayShift, dayWinrate, type DayTeamLike } from '../../src/winrate/dynamics.ts';
+
+interface WinratesMoodLike { teams: (DayTeamLike & { key: string; mood: { date: string; k: number }[] })[] }
+
+test('F-004 基準9: 集計は本番の結果から数えた k を勝率表の teams[].mood へ書き、試合日の勝率の dayShift の kA・kB に届く', async () => {
+  const env = setupRaw();
+  const root = resultsRootOf({
+    'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'CC'), day1('IT', 'LR', 'NEXT', 'IT')],
+    'results/2026-10-19-regular-day2.json': [regularRecord(2, '2026-10-19', 'DD', 'IT', 'NEXT', 'IT')],
+    // スクリムの負けは数えない
+    'scrims/2026-10-21-lr-core-vs-dd-core.json': [coreScrim('2026-10-21', '30:00', 'LR CORE')],
+  });
+  await aggregateAt(env, root, '2026-10-22T03:00:00.000Z');
+  const file = readJson<WinratesMoodLike>(env.publicDir, 'winrates.json');
+  const moodOf = (key: string) => file.teams.find((t) => t.key === key)!.mood;
+  assert.deepEqual(moodOf('DD-NEXT'), [{ date: '2026-10-15', k: 1 }, { date: '2026-10-19', k: 2 }]);
+  assert.deepEqual(moodOf('IT-NEXT'), [{ date: '2026-10-15', k: 0 }, { date: '2026-10-19', k: 0 }]);
+  assert.deepEqual(moodOf('DD-CORE'), [], 'スクリムだけの階級チームは空');
+  // results.json の teams[].k と、勝率表の mood の最後の k は同じ
+  const streaks = readJson<ResultsFileLike>(env.publicDir, 'results.json').teams;
+  for (const t of streaks) assert.equal(moodOf(t.key).at(-1)?.k ?? 0, t.k, t.key);
+  // 戦力 S をそろえて(この置き場の評価では S が無い)、第3日の DD 対 LR の勝率を作る
+  const rows = file.teams.map((t) => ({ ...t, S: 6 }));
+  const d = dayWinrate(rows, 'NEXT', 'DD', 'LR', 0.5, '2026-10-23');
+  assert.equal(d.applied, true);
+  assert.deepEqual([d.kA, d.kB], [2, 0]);
+  assert.equal(d.shift, dayShift(d.a!, d.b!, d.dA, d.dB, { kA: 2 }));
+  assert.ok(Math.abs(d.shift - dayShift(d.a!, d.b!, d.dA, d.dB) - -0.05) < 1e-12, '2 連敗の −0.05 が加わる');
+});
+
+test('F-004 基準9: 本番の記録が無い集計(resultsRoot なし・スクリムだけ)では、勝率表の mood は空で、気持ちの補正は 0', async () => {
+  for (const resultsRoot of [undefined, resultsRootOf({ 'scrims/2026-10-10-lr-core-vs-dd-core.json': [coreScrim('2026-10-10', '30:00', 'DD CORE')] })]) {
+    const env = setupRaw();
+    const code = await main({ rawDir: env.rawDir, publicDir: env.publicDir, snapshotsDir: env.snapshotsDir, resultsRoot, facts: [], fetch: fakeDdragon().fetch, now: NOW, out: () => {} });
+    assert.equal(code, 0);
+    const file = readJson<WinratesMoodLike>(env.publicDir, 'winrates.json');
+    assert.ok(file.teams.every((t) => Array.isArray(t.mood) && t.mood.length === 0));
+    const d = dayWinrate(file.teams.map((t) => ({ ...t, S: 6 })), 'NEXT', 'DD', 'LR', 0.5, '2026-11-06');
+    assert.deepEqual([d.kA, d.kB], [0, 0]);
+    assert.equal(d.shift, dayShift(d.a!, d.b!, d.dA, d.dB));
+  }
+});
