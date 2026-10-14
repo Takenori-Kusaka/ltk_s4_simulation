@@ -20,6 +20,9 @@
 | Task-8 | LTKDB の変換(置き換え・訂正の候補・書く前の検証・名前の照合): 結果だけの記録の置き換え、同じ試合を足さないこと、訂正の候補の出力、書く前の検証と反した試合の隔離、チャンピオン名の正規化、名前の一致しない行を「未確認」にすること | 34, 35, 36 | `.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs`、`.claude/skills/input-ltkdb/SKILL.md`、`tests/results/ltkdb-convert.test.ts`、`tests/results/fixtures/**` | Task-7 | 可(Task-9 と) |
 | Task-9 | 取り込みのワークフロー: 要約を読んで Draft PR(実行ごとに違う名前のブランチ、`results/` と `scrims/` の両方)と、試合 ID ごとの Issue を作る | 38 | `.github/workflows/ltkdb-import.yml`、`.claude/skills/input-ltkdb/SKILL.md` | Task-7 | 可(Task-8 と) |
 | Task-10 | 連敗の数 k を気持ちの補正へ渡す: 集計が本番の結果から数えた k を `dayShift` の `kA`・`kB` へ渡す | 9 | `src/winrate/dynamics.ts`、`src/winrate/core.ts`、`src/collect/aggregate-cli.ts`、`tests/winrate/dynamics.test.ts`、`tests/collect/aggregate.test.ts` | Task-3 | 可(Task-6 と) |
+| Task-11 | (2026-10-14 追加)14 分の CS をレーン戦へ: 記録の `cs14` から指標 `csAt14` を作る(TOP・JG・MID・ADC)、レーン戦の軸の定義への指標の追加、名簿の階級チーム同士の試合の同じロールの差の分布での標準化と組の数の下限 `cs14MinPairs`、説明の「n 試合を含む」の数え方 | 26, 27, 39, 40 | `src/results/to-games.ts`、`src/rating/axes.json`、`src/rating/engine.ts`、`src/rating/axes.ts`、`src/rating/types.ts`、`src/rating/config.json`、`tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/axes.test.ts` | Task-2、Task-6(`cs14` の欄の検証) | 可(Task-12 と。`src/rating/types.ts`・`config.json` に触るため、マージは順に) |
+| Task-12 | (2026-10-14 追加)本番の試合を個人の評価へ: 本番の記録の選手の行から `kind: official` の試合の記録を作ること(結果だけの記録は除く)、`officialGameWeight` の重み、調子の係数とピックプールの数え方、説明の「本番 n 試合(重み w)を含む」 | 41, 42 | `src/results/to-games.ts`、`src/rating/types.ts`、`src/rating/engine.ts`、`src/rating/axes.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-2、Task-6(結果だけの記録の受け口) | 可(Task-11 と。同上) |
+| Task-13 | (2026-10-14 追加)当てはまりの確認に `officialGameWeight` の 3 通り(設定の値・`scrimGameWeight` と同じ値・0)の比較を足す | 43 | `src/results/fit.ts`、`src/results/fit-cli.ts`、`tests/results/fit.test.ts` | Task-5、Task-12 | 可 |
 
 **対応する受入基準のないタスクを作らないでください**。何のための作業か分からないタスクは、完了の判定ができません。
 
@@ -37,7 +40,8 @@
 | 項目 | 上限 | 見込み |
 | --- | --- | --- |
 | 変更行数 | 800(構成 `task.maxChangedLines`) | Task-1 約 400 / Task-2 約 450 / Task-3 約 400 / Task-4 約 450 / Task-5 約 250 |
-| 変更ファイル数 | 15 | 各 5〜11 |
+| 変更行数(2026-10-14 追記。Task-11〜13) | 800 | Task-11 約 350 / Task-12 約 300 / Task-13 約 120(実装とテストの合計) |
+| 変更ファイル数 | 15 | 各 5〜11。Task-11 9、Task-12 9、Task-13 3 |
 | レビュー所要時間 | 30分 | 各 20〜30 分 |
 | 変更行数(2026-10-14 追記。Task-6〜10) | 800 | Task-6 約 350 / Task-7 約 500 / Task-8 約 400 / Task-9 約 120 / Task-10 約 150 |
 | 変更ファイル数(同上) | 15 | Task-6 5 / Task-7 4〜8(固定データを含む)/ Task-8 4〜8 / Task-9 2 / Task-10 5 |
@@ -63,6 +67,9 @@
 | 34, 35, 36 | 単体(置き場に結果だけの記録がある場合の置き換え、`winner` が食い違う場合に置き換えないこと、同じ試合を足さないこと、値を変えた写しでの訂正の候補の出力と置き場が変わらないこと、置き場の記録が持たない欄を比べないこと、試合時間の差 1 秒以内の記録、検証に反した 1 試合だけを書かず残りを書くこと、「ジャーヴァンIV」の置き換え、チャンピオンの一覧を読めない場合の失敗、名前を替えた行とロールを入れ替えた行の「未確認」、表記の違う 9 人が「未確認」にならないこと) | `tests/results/ltkdb-convert.test.ts`、`tests/results/fixtures/**` |
 | 38(ワークフロー) | 手動の実行(`workflow_dispatch`)の実行記録で、Draft PR のブランチの名前と、Issue の有無・題名を人が確かめる。機械の単体のテストは持たない(`gh` の呼び出しを含むワークフローの定義のため) | — |
 | 9(`dayShift` への受け渡し) | 単体(k が 0・1・2・4 のときの気持ちの補正、集計が数えた k が `dayShift` に届くこと、本番の記録が無いとき補正が 0 のままであること) | `tests/winrate/dynamics.test.ts`、`tests/collect/aggregate.test.ts` |
+| 26, 27, 39, 40(2026-10-14) | 単体(TOP・JG・MID・ADC の `csAt14`、SUP と `cs14` が null の試合に持たせないこと、`maxCsAdvantageOnLaneOpponent` を作らないこと、平均 0・二乗平均平方根の分布、リスナー参加と結果だけの記録とソロランクの試合を分布に入れないこと、組の数が 7 と 8 の境界、説明の n) | `tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/axes.test.ts` |
+| 41, 42(2026-10-14) | 単体(本番の行から `official` の記録ができ結果だけの記録からはできないこと、重み 4.0 での n・縮小・確度、調子の係数に入らないこと、ピックプールで 1 試合、説明の文の有無) | `tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` |
+| 43(2026-10-14) | 単体(固定の予測と結果で 3 通りの比較、推奨の文が無いこと) | `tests/results/fit.test.ts` |
 
 テストは**実装より先に生成します**。実装コードをテスト生成の入力に渡しません。
 
@@ -87,6 +94,11 @@
 - (2026-10-14 追記)Task-6 は `src/collect/aggregate-cli.ts` に触れない(Task-3 の PR と同じファイルを変えないため。集計の出力の件数とファイル名は `src/results/load.ts` の出力の関数に足す)
 - (2026-10-14 追記)Task-7・Task-8 の変換のテストは、変換のスクリプトの関数を読み込んで呼ぶ。テストが LTKDB と Data Dragon へ取りに行かないよう、公開データとチャンピオンの一覧は固定データで渡す
 - (2026-10-14 追記)価値責任者が確定する事項(勝者だけの 2 試合を置くか、訂正の候補を自動で書き換えないこと、名前の一致しない行を「未確認」にすること、MASTERS CUP の 3 位決定戦と決勝の決め方)は、確定の前は仕様の起案のとおりに実装する
+
+- (2026-10-14 追記)Task-11・Task-12 は、F-009 の Task-16〜18(安定感・レーン戦の確度・相手の強さ)と同じ `src/rating/` のファイルに触る。マージは Task-11 → Task-12 → F-009 Task-16〜18 の順にする
+- (2026-10-14 追記)価値責任者が確定する値(`officialGameWeight`、`cs14MinPairs`、JG に 14 分の CS を使うか)は、確定の前は仕様の起案の値を評価設定に置き、`_comment` に「価値責任者の確定を要する」と書く
+
+2026-10-14 追記(Task-11〜13): 再判定の記録は `docs/gates/g4-F-004-2026-10-14-rejudge2.md`。判定日と結果は判定者が書く。
 
 ## 承認(G-4)
 
