@@ -49,7 +49,19 @@ export function scrimWeightVariants(cfg: Pick<EngineConfig, 'scrimGameWeight'>):
   ];
 }
 
-const officialOf = (games: readonly ResultsGame[]) => games.filter((g) => g.kind === 'official' && g.tier !== null);
+/** F-009 基準45: 相手の強さの補正 oppAdjust を評価設定のままにした組・すべての軸を 0 にした組・すべての軸を 2 倍にした組 */
+export function oppAdjustVariants(cfg: Pick<EngineConfig, 'oppAdjust'>): EngineVariant[] {
+  const opp = cfg.oppAdjust ?? {};
+  const scaled = (k: number) => Object.fromEntries(Object.entries(opp).map(([axis, v]) => [axis, v * k]));
+  const values = Object.entries(opp).map(([axis, v]) => `${axis} ${v}`).join('・');
+  return [
+    { key: 'opp-config', label: `oppAdjust 設定の値${values ? `(${values})` : ''}`, engine: {} },
+    { key: 'opp-0', label: 'oppAdjust すべて 0', engine: { oppAdjust: scaled(0) } },
+    { key: 'opp-2x', label: 'oppAdjust 2 倍', engine: { oppAdjust: scaled(2) } },
+  ];
+}
+
+const officialOf =(games: readonly ResultsGame[]) => games.filter((g) => g.kind === 'official' && g.tier !== null);
 
 export function enoughOfficialGames(games: readonly ResultsGame[]): boolean {
   return officialOf(games).length >= MIN_OFFICIAL_GAMES;
