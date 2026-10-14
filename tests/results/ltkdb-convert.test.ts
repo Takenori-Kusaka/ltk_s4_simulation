@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ROSTER } from '../../src/data/roster.ts';
@@ -20,12 +20,21 @@ const SCRIM1: Row = FIX['対戦結果まとめ'][0]; // 勝者 IT、試合時間
 const SCRIM2: Row = FIX['対戦結果まとめ'][1]; // 勝者 CC、試合時間 31.9666… 分(= 1918 秒 = 31:58)、計測秒 840
 const DETAIL2: Row[] = FIX['リザルト詳細'];
 
+// F-004 Task-8(基準 34・35・36)で、変換はチャンピオンの一覧を必須の入力にした。fixtures/ltkdb-champions.json は固定データの 10 体とジャーヴァンⅣ
+const CHAMPS_FILE = 'tests/results/fixtures/ltkdb-champions.json';
+const CHAMPS = JSON.parse(readFileSync(CHAMPS_FILE, 'utf8'));
 const root = () => mkdtempSync(join(tmpdir(), 'ltkdb-convert-'));
+// 基準 36 の照合の材料: 2026-10-14 の公開データの「サイト_チームマスタ」と「サイト_選手プロフィール」の抜粋。
+// 固定データの IT の JG は LTKDB の選手名 Yunika で、名簿の名前・Riot ID はゆにか。プロフィールの名前 Yunika で一致する
+const PROFILE = {
+  'サイト_チームマスタ': [{ team_key: 'IT', team_name: 'Iris Tiara' }],
+  'サイト_選手プロフィール': [{ 'チーム名': 'Iris Tiara', '階級': 'masters', 'ロール': 'JG', '名前': 'Yunika' }],
+};
 const siteOf = (matches: Row[], details: Row[], schedule: Row[] = SCHEDULE): Row => ({
   updatedAt: '2026-10-14T12:00:00.000Z',
-  sheets: { '対戦結果まとめ': matches, 'リザルト詳細': details, 'サイト_予定': schedule },
+  sheets: { '対戦結果まとめ': matches, 'リザルト詳細': details, 'サイト_予定': schedule, ...PROFILE },
 });
-const run = (matches: Row[], details: Row[], dir = root(), schedule?: Row[]) => ({ dir, summary: convert(siteOf(matches, details, schedule), { root: dir, today: '2026-10-14', collectedWith: 'test' }) });
+const run = (matches: Row[], details: Row[], dir = root(), schedule?: Row[]) => ({ dir, summary: convert(siteOf(matches, details, schedule), { root: dir, today: '2026-10-14', collectedWith: 'test', champions: CHAMPS }) });
 const read = (dir: string, file: string): Row[] => JSON.parse(readFileSync(join(dir, file), 'utf8'));
 
 /** 本番の「対戦結果まとめ」の合成の行。KDA は 5 人 × (2/2/4) = 10/10/20 */
@@ -203,9 +212,9 @@ test('基準37: 試合番号が文字列でも整数に直して game に書き�
 
 // --- 基準 38: 要約と終了コード ---
 
-const cli = (args: string[]) => {
+const cli = (args: string[], champions = CHAMPS_FILE) => {
   try {
-    return { code: 0, out: execFileSync(process.execPath, [SCRIPT, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }) };
+    return { code: 0, out: execFileSync(process.execPath, [SCRIPT, ...args, '--champions', champions], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }) };
   } catch (e) {
     const err = e as { status: number; stdout: string };
     return { code: err.status, out: err.stdout };
@@ -234,4 +243,170 @@ test('基準38: 最後の行は JSON の要約。書いたファイルがあれ�
   assert.deepEqual(lastJson(second.out).written, []);
   writeFileSync(join(tmp, 'broken.json'), '{ not json');
   assert.equal(cli(['--in', join(tmp, 'broken.json'), '--root', dir]).code, 1);
+});
+
+// --- F-004 Task-8: 受入基準 34・35・36(置き換え・訂正の候補・書く前の検証・名前の照合)。実装より先に受入基準から書いた ---
+// 固定データの SCRIM2(SCRIM_20261013_MASTERS_IT_CC_002)は勝者 CC、1918 秒(31:58)。CC はチーム2(KDA 22/13/49 = 1+2+2+14+3 / 1+4+4+3+1 / 14+5+10+6+14)。
+// CC の ADC Yuhi はルシアン・K14・ゴールド 20451・ダメージ 53013・14分CS 121
+const ID2 = 'SCRIM_20261013_MASTERS_IT_CC_002';
+const SCRIM_FILE = 'scrims/2026-10-13-cc-masters-vs-it-masters.json';
+const raw = (dir: string, file: string) => readFileSync(join(dir, file), 'utf8');
+const fix = (s: Row) => (s.corrections as Row[]).map((c) => [c.field, c.stored, c.ltkdb]);
+const yuhi = (over: Row) => DETAIL2.map((d) => (d['プレイヤー名'] === 'Yuhi' ? { ...d, ...over } : d));
+
+// --- 基準 34: 置き換え・同じ試合を足さない・訂正の候補 ---
+
+test('基準34: 置き場の結果だけの記録は、LTKDB に選手の行 10 行と試合時間が入り勝者が一致すれば、その要素を選手の行を持つ記録で置き換える', () => {
+  const { dir } = run([{ ...SCRIM2, '試合時間': '' }], DETAIL2); // 1 回目: 試合時間が空 → 結果だけ(勝者 CC)
+  assert.equal(read(dir, SCRIM_FILE)[0].resultOnly, true);
+  const { summary } = run([SCRIM2], DETAIL2, dir);
+  const recs = read(dir, SCRIM_FILE);
+  assert.equal(recs.length, 1);
+  assert.deepEqual([recs[0].resultOnly, recs[0].duration, recs[0].winner, recs[0].game], [undefined, '31:58', 'CC MASTERS', 2]);
+  assert.deepEqual(summary.replaced, [{ file: SCRIM_FILE, index: 0, id: ID2 }]);
+  assert.deepEqual([summary.written, summary.corrections], [[], []]);
+});
+
+test('基準34: 置き場の結果だけの記録と LTKDB の勝者が食い違えば置き換えず、置き場を変えずに勝者を訂正の候補に出す', () => {
+  const { dir } = run([{ ...SCRIM2, '試合時間': '', '勝利チーム': 'IT' }], DETAIL2); // 置き場: 結果だけ、勝者 IT
+  const before = raw(dir, SCRIM_FILE);
+  const { summary } = run([SCRIM2], DETAIL2, dir); // LTKDB の現在: 勝者 CC
+  assert.equal(raw(dir, SCRIM_FILE), before);
+  assert.deepEqual([summary.replaced, summary.written], [[], []]);
+  assert.deepEqual(fix(summary), [['winner', 'IT MASTERS', 'CC MASTERS']]);
+  assert.deepEqual((summary.corrections as Row[]).map((c) => [c.id, c.where]), [[ID2, `${SCRIM_FILE}[0]`]]);
+});
+
+test('基準34: 置き場に同じ試合があれば足さない(同じ入力の 2 回目、LTKDB の側が結果だけになった場合)', () => {
+  const { dir } = run([SCRIM2], DETAIL2);
+  const before = raw(dir, SCRIM_FILE);
+  for (const m of [SCRIM2, { ...SCRIM2, '試合時間': '' }]) {
+    const { summary } = run([m], DETAIL2, dir);
+    assert.deepEqual([summary.written, summary.replaced, summary.corrections], [[], [], []]);
+    assert.equal(raw(dir, SCRIM_FILE), before);
+  }
+});
+
+test('基準34: 値を変えた写しでは、置き場を書き換えず、試合 ID・欄・両方の値を訂正の候補に出す', () => {
+  const { dir } = run([SCRIM2], DETAIL2);
+  const before = raw(dir, SCRIM_FILE);
+  // 試合時間 1928 / 60 分(= 1928 秒。1918 秒との差 10 秒)。Yuhi の K 14 → 15(CC の KDA も 23/13/49 に直す)、ゴールド 20451 → 20000、ルシアン → アーリ、14分CS 121 → 130。ダメージは変えない
+  const m = { ...SCRIM2, '試合時間': 1928 / 60, 'チーム2KDA': '23/13/49' };
+  const { summary } = run([m], yuhi({ 'K': 15, 'ゴールド': 20000, 'チャンピオン名': 'アーリ', '14分CS': 130 }), dir);
+  assert.equal(raw(dir, SCRIM_FILE), before);
+  assert.deepEqual([summary.written, summary.replaced], [[], []]);
+  const p = 'teams.CC MASTERS.players[ADC]';
+  assert.deepEqual(fix(summary), [['duration', 1918, 1928], [`${p}.kills`, 14, 15], [`${p}.gold`, 20451, 20000], [`${p}.champion`, 'ルシアン', 'アーリ'], [`${p}.cs14`, 121, 130]]);
+  assert.ok((summary.corrections as Row[]).every((c) => c.id === ID2 && c.where === `${SCRIM_FILE}[0]`));
+});
+
+test('基準34: 置き場の記録が持たない欄(14 分の CS・null のチャンピオン)は比べない。試合時間の差 1 秒は同じとみなす', () => {
+  // 置き場: 計測秒が空(cs14 を持たない)、Yuhi のチャンピオンが空(null)
+  const { dir } = run([{ ...SCRIM2, '計測秒': '' }], yuhi({ 'チャンピオン名': '' }));
+  assert.equal(read(dir, SCRIM_FILE)[0].cs14Sec, undefined);
+  // LTKDB の現在: 計測秒 840 で 14分CS を持ち、チャンピオンはルシアン、試合時間 1919 秒(差 1 秒)
+  const { summary } = run([{ ...SCRIM2, '試合時間': 1919 / 60 }], yuhi({ '14分CS': 130 }), dir);
+  assert.deepEqual([summary.written, summary.corrections], [[], []]);
+});
+
+test('基準34: ltkdbMatchId の無い選手の行を持つスクリム(配信の書き起こし)は、2 チームが同じで試合時間の差が 1 秒以内なら同じ試合。比べるのは勝者だけ', () => {
+  const made = run([SCRIM2], DETAIL2);
+  const stream = (duration: string, sec: number, winner: string) => {
+    const r = { ...read(made.dir, SCRIM_FILE)[0], duration, durationSec: sec, winner, source: { url: 'https://www.youtube.com/watch?v=stream' } };
+    delete (r as Row).game;
+    const dir = root();
+    mkdirSync(join(dir, 'scrims'));
+    writeFileSync(join(dir, 'scrims/2026-10-13-stream-cc-vs-it.json'), JSON.stringify([r]));
+    return dir;
+  };
+  // 31:59 = 1919 秒(LTKDB の 1918 秒と差 1) → 同じ試合。足さない。勝者が同じなら訂正の候補なし
+  const a = stream('31:59', 1919, 'CC MASTERS');
+  assert.deepEqual([run([SCRIM2], DETAIL2, a).summary.written, readdirSync(join(a, 'scrims'))], [[], ['2026-10-13-stream-cc-vs-it.json']]);
+  // 勝者が違えば勝者だけを訂正の候補に出す(Yuhi のゴールドを変えても、ltkdbMatchId の無い記録の選手の行は比べない)
+  const b = stream('31:59', 1919, 'IT MASTERS');
+  assert.deepEqual(fix(run([SCRIM2], yuhi({ 'ゴールド': 1 }), b).summary), [['winner', 'IT MASTERS', 'CC MASTERS']]);
+  // 32:00 = 1920 秒(差 2) → 別の試合。書く
+  const c = stream('32:00', 1920, 'CC MASTERS');
+  assert.deepEqual(run([SCRIM2], DETAIL2, c).summary.written, [{ file: SCRIM_FILE, added: [ID2] }]);
+});
+
+// --- 基準 35: 書く前の検証・反した試合の隔離・チャンピオン名の正規化 ---
+
+test('基準35: 検証に反した 1 試合(一覧に無いチャンピオン)だけを書かず、試合 ID と反した欄を出し、残りの試合を書く', () => {
+  // 003 は 002 の写しで試合時間 25 分(1500 秒)・試合番号 3。試合時間を変えるのは、002 と同じ試合時間だと基準 7 の重複に当たるため
+  const ID3 = 'SCRIM_20261013_MASTERS_IT_CC_003';
+  const d3 = DETAIL2.map((d) => ({ ...d, '試合ID': ID3 }));
+  const { dir, summary } = run([SCRIM2, { ...SCRIM2, '試合ID': ID3, '試合番号': 3, '試合時間': 25 }], [...yuhi({ 'チャンピオン名': 'ナゾノチャンピオン' }), ...d3]);
+  assert.deepEqual(read(dir, SCRIM_FILE).map((r) => [(r.source as Row).ltkdbMatchId, r.game]), [[ID3, 3]]);
+  assert.deepEqual(summary.written, [{ file: SCRIM_FILE, added: [ID3] }]);
+  const sk = (summary.skipped as Row).scrim as Row[];
+  assert.deepEqual(sk.map((x) => x.id), [ID2]);
+  assert.match(sk[0].reason as string, /champion/);
+});
+
+test('基準35: 本番の Regular Stage・準決勝の試合番号 2、日程と違うサイドは読み込みの基準 3 に反し、書かずに隔離する', () => {
+  const swapped = [...players('R_SIDE', 'IT', 'NEXT', 'RED'), ...players('R_SIDE', 'LR', 'NEXT', 'BLUE')]; // 日程は IT がブルー
+  const rows = [
+    off('R_G2', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC', { '試合番号': 2 }),
+    off('R_SIDE', 'LTK4_REGULAR_D1_M3', '2026-10-15', 'IT', 'LR', 'IT'),
+    off('R_OK', 'LTK4_REGULAR_D1_M2', '2026-10-15', 'CC', 'DD', 'DD'),
+    off('MC_G2', 'LTK4_MASTERS_D1_M1', '2026-10-20', 'DD', 'CC', 'DD', { '試合番号': 2 }),
+  ];
+  const { dir, summary } = run(rows, [...both('R_G2', 'CC', 'DD', 'NEXT'), ...swapped, ...both('R_OK', 'CC', 'DD', 'CORE'), ...both('MC_G2', 'DD', 'CC', 'MASTERS')]);
+  assert.deepEqual(readdirSync(join(dir, 'results')), ['2026-10-15-cc-core-vs-dd-core.json']);
+  assert.deepEqual(summary.written, [{ file: 'results/2026-10-15-cc-core-vs-dd-core.json', added: ['R_OK'] }]);
+  const sk = (summary.skipped as Row).official as Row[];
+  assert.deepEqual(sk.map((x) => x.id), ['R_G2', 'R_SIDE', 'MC_G2']);
+  assert.deepEqual(sk.map((x) => /sides/.test(x.reason as string) ? 'sides' : /game/.test(x.reason as string) ? 'game' : x.reason), ['game', 'sides', 'game']);
+});
+
+test('基準35: 一覧に無い「ジャーヴァンIV」は、NFKC で一致する一覧の「ジャーヴァンⅣ」に置き換えて書く', () => {
+  const { dir, summary } = run([SCRIM2], yuhi({ 'チャンピオン名': 'ジャーヴァンIV' }));
+  const ps = ((read(dir, SCRIM_FILE)[0].teams as Row)['CC MASTERS'] as Row).players as Row[];
+  assert.equal(ps.find((p) => p.role === 'ADC')!.champion, 'ジャーヴァンⅣ');
+  assert.deepEqual((summary.skipped as Row).scrim, []);
+});
+
+test('基準35: チャンピオンの一覧を読めなければ、記録を書かず失敗する(convert は例外、CLI は終了コード 1)', () => {
+  const dir = root();
+  assert.throws(() => convert(siteOf([SCRIM2], DETAIL2), { root: dir, today: '2026-10-14', collectedWith: 'test', champions: null }));
+  assert.throws(() => convert(siteOf([SCRIM2], DETAIL2), { root: dir, today: '2026-10-14', collectedWith: 'test', champions: { version: 'x' } }));
+  assert.equal(existsSync(join(dir, 'scrims')), false);
+  const tmp = root();
+  writeFileSync(join(tmp, 'site.json'), JSON.stringify(siteOf([SCRIM2], DETAIL2)));
+  writeFileSync(join(tmp, 'champions.json'), '{ not json');
+  assert.equal(cli(['--in', join(tmp, 'site.json'), '--root', join(tmp, 'grounds')], join(tmp, 'champions.json')).code, 1);
+  assert.equal(existsSync(join(tmp, 'grounds')), false);
+});
+
+// --- 基準 36: 名前の一致しない行を「未確認」に ---
+
+const nameOf = (team: string, tier: string, role: string) => ROSTER.find((p) => p.team === team && p.tier === tier && p.role === role)!.name;
+const confs = (dir: string, file: string, team: string) => (((read(dir, file)[0].teams as Row)[team] as Row).players as Row[]).map((p) => [p.role, p.mappingConfidence]);
+const NEXT_FILE = 'results/2026-10-15-cc-next-vs-dd-next.json';
+
+test('基準36: 名前を替えた行は mappingConfidence を「未確認」にし、試合 ID・席・LTKDB の名前を出す', () => {
+  const rows = both('U1', 'CC', 'DD', 'NEXT').map((r) => (r['チーム名'] === 'CC' && r['ロール'] === 'TOP' ? { ...r, 'プレイヤー名': '代打の選手' } : r));
+  const { dir, summary } = run([off('U1', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC')], rows);
+  assert.deepEqual(confs(dir, NEXT_FILE, 'CC NEXT')[0], ['TOP', '未確認(LTKDB の選手名 代打の選手 がその席の選手と一致しない)']);
+  assert.ok(confs(dir, NEXT_FILE, 'CC NEXT').slice(1).every(([, c]) => /^推定/.test(c as string)));
+  assert.deepEqual(summary.unconfirmed, [{ id: 'U1', team: 'CC NEXT', role: 'TOP', name: '代打の選手' }]);
+});
+
+test('基準36: ロールを入れ替えた行(TOP と JG の名前が逆)はどちらも「未確認」', () => {
+  const [top, jg] = [nameOf('CC', 'NEXT', 'TOP'), nameOf('CC', 'NEXT', 'JG')];
+  const rows = both('U2', 'CC', 'DD', 'NEXT').map((r) => (r['チーム名'] !== 'CC' ? r : r['ロール'] === 'TOP' ? { ...r, 'プレイヤー名': jg } : r['ロール'] === 'JG' ? { ...r, 'プレイヤー名': top } : r));
+  const { dir, summary } = run([off('U2', 'LTK4_REGULAR_D1_M1', '2026-10-15', 'CC', 'DD', 'CC')], rows);
+  assert.deepEqual(confs(dir, NEXT_FILE, 'CC NEXT').slice(0, 2).map(([, c]) => /^未確認/.test(c as string)), [true, true]);
+  assert.deepEqual(summary.unconfirmed, [{ id: 'U2', team: 'CC NEXT', role: 'TOP', name: jg }, { id: 'U2', team: 'CC NEXT', role: 'JG', name: top }]);
+});
+
+test('基準36: 大文字と小文字・全角と半角の違う名前(固定データの IT・CC MASTERS の 10 人のうち英字の 9 人。Yunika はプロフィールの名前と一致)は「未確認」にしない', () => {
+  // 英字を大文字にしてから全角(U+FF01〜U+FF5E)へ。NFKC と小文字化で名簿の名前に戻る。らいじんは変わらない
+  const variant = (n: string) => [...n.toUpperCase()].map((ch) => (ch >= '!' && ch <= '~' ? String.fromCharCode(ch.charCodeAt(0) + 0xfee0) : ch)).join('');
+  const rows = DETAIL2.map((d) => ({ ...d, 'プレイヤー名': variant(d['プレイヤー名'] as string) }));
+  assert.equal(rows.filter((r) => ROSTER.some((p) => p.name === r['プレイヤー名'])).length, 1, '9 人の表記が名簿と違う');
+  const { dir, summary } = run([SCRIM2], rows);
+  assert.deepEqual(summary.unconfirmed, []);
+  assert.ok([...confs(dir, SCRIM_FILE, 'CC MASTERS'), ...confs(dir, SCRIM_FILE, 'IT MASTERS')].every(([, c]) => /^推定/.test(c as string)));
 });
