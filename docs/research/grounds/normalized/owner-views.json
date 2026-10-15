@@ -311,6 +311,36 @@
       "date": "2026-10-15",
       "quote": "負けムードになってからコミュニケーションエラーが多くなってました",
       "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-15 13:35:24 UTC。docs/research/grounds/owner-review-official-20261015.md の発言 4)"
+    },
+    {
+      "targetKind": "team",
+      "target": "IT-CORE",
+      "axis": "momentum",
+      "direction": "+",
+      "strength": "中",
+      "date": "2026-10-15",
+      "quote": "ITは全員前向きプレイできており全レーン有利を築いた結果でした",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-15 14:16:16 UTC。docs/research/grounds/owner-review-official-20261015.md の発言 5)"
+    },
+    {
+      "targetKind": "team",
+      "target": "LR-CORE",
+      "axis": "shotcalling",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-15",
+      "quote": "LRは全くチャンスがなく、フィジカルもマクロも勝てない悲惨な結果でした",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-15 14:16:16 UTC。docs/research/grounds/owner-review-official-20261015.md の発言 5)"
+    },
+    {
+      "targetKind": "team",
+      "target": "LR-CORE",
+      "axis": "momentum",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-15",
+      "quote": "0-6もあり得る感じ",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-15 14:16:16 UTC。docs/research/grounds/owner-review-official-20261015.md の発言 5)"
     }
   ]
 }
