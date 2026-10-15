@@ -1,0 +1,191 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-15",
+    "stage": "regular",
+    "day": 1,
+    "tier": "NEXT",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-15",
+      "note": "価値責任者が共有した公式配信のリザルト画面(試合時間 38:17)から書き起こした。2026-10-15 22:29 JST にスレッドへ共有。チーム 1(ブルー)が IT NEXT。LR の 4 人の表示名とチャンピオン、ありけんのチャンピオンは配信者のアバターに隠れて読めない(champion は null)。配信の URL は未記入。出典の url は大会の公式 X アカウント"
+    },
+    "duration": "38:17",
+    "winner": "IT NEXT",
+    "sides": {
+      "IT NEXT": "ブルー",
+      "LR NEXT": "レッド"
+    },
+    "teams": {
+      "IT NEXT": {
+        "kills": 19,
+        "deaths": 7,
+        "assists": 40,
+        "gold": 71465,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Tachibana Hinano",
+            "rosterName": "橘ひなの",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": 20,
+            "champion": "モルデカイザー",
+            "kills": 1,
+            "deaths": 1,
+            "assists": 8,
+            "cs": null,
+            "gold": 13605,
+            "goldPerMin": 355,
+            "damage": 21819
+          },
+          {
+            "role": "JG",
+            "displayName": "Ariken",
+            "rosterName": "ありけん",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの JG の席)",
+            "level": 18,
+            "champion": null,
+            "kills": 3,
+            "deaths": 3,
+            "assists": 7,
+            "cs": null,
+            "gold": 13417,
+            "goldPerMin": 350,
+            "damage": 13455
+          },
+          {
+            "role": "MID",
+            "displayName": "Maitake",
+            "rosterName": "まいたけ",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの MID の席)",
+            "level": 18,
+            "champion": "ビクター",
+            "kills": 5,
+            "deaths": 0,
+            "assists": 9,
+            "cs": null,
+            "gold": 15009,
+            "goldPerMin": 392,
+            "damage": 29714
+          },
+          {
+            "role": "ADC",
+            "displayName": "Tentei Forte",
+            "rosterName": "天帝フォルテ",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": 16,
+            "champion": "ユナラ",
+            "kills": 10,
+            "deaths": 1,
+            "assists": 2,
+            "cs": null,
+            "gold": 19713,
+            "goldPerMin": 515,
+            "damage": 26804
+          },
+          {
+            "role": "SUP",
+            "displayName": "Shirona Shizuku",
+            "rosterName": "白那しずく",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの SUP の席)",
+            "level": 16,
+            "champion": "レル",
+            "kills": 0,
+            "deaths": 2,
+            "assists": 14,
+            "cs": null,
+            "gold": 9721,
+            "goldPerMin": 254,
+            "damage": 3192
+          }
+        ]
+      },
+      "LR NEXT": {
+        "kills": 7,
+        "deaths": 19,
+        "assists": 18,
+        "gold": 64324,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Kohaku Uru",
+            "rosterName": "狐白うる",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": 20,
+            "champion": "ヨリック",
+            "kills": 5,
+            "deaths": 3,
+            "assists": 1,
+            "cs": null,
+            "gold": 18159,
+            "goldPerMin": 474,
+            "damage": 27716
+          },
+          {
+            "role": "JG",
+            "displayName": "(一部隠れ)Leda",
+            "rosterName": "アステル・レダ",
+            "mappingConfidence": "推定(リザルト画面の表示名の一部が配信者のアバターに隠れている。同じ階級チーム・スコアボードの JG の席)",
+            "level": 16,
+            "champion": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 3,
+            "cs": null,
+            "gold": 11118,
+            "goldPerMin": 290,
+            "damage": 16828
+          },
+          {
+            "role": "MID",
+            "displayName": "(一部隠れ)YA",
+            "rosterName": "春茶",
+            "mappingConfidence": "推定(リザルト画面の表示名の一部が配信者のアバターに隠れている。同じ階級チーム・スコアボードの MID の席)",
+            "level": 15,
+            "champion": null,
+            "kills": 0,
+            "deaths": 6,
+            "assists": 4,
+            "cs": null,
+            "gold": 9999,
+            "goldPerMin": 261,
+            "damage": 13569
+          },
+          {
+            "role": "ADC",
+            "displayName": "(一部隠れ)tty",
+            "rosterName": "なぎさっち",
+            "mappingConfidence": "推定(リザルト画面の表示名の一部が配信者のアバターに隠れている。同じ階級チーム・スコアボードの ADC の席)",
+            "level": null,
+            "champion": null,
+            "kills": 2,
+            "deaths": 2,
+            "assists": 4,
+            "cs": null,
+            "gold": 16265,
+            "goldPerMin": 425,
+            "damage": 26161
+          },
+          {
+            "role": "SUP",
+            "displayName": "(隠れている)",
+            "rosterName": "No.1005",
+            "mappingConfidence": "推定(リザルト画面の表示名の一部が配信者のアバターに隠れている。同じ階級チーム・スコアボードの SUP の席)",
+            "level": null,
+            "champion": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 6,
+            "cs": null,
+            "gold": 8783,
+            "goldPerMin": 229,
+            "damage": 2235
+          }
+        ]
+      }
+    }
+  }
+]
