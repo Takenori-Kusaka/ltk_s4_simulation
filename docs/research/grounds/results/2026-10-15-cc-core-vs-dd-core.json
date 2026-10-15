@@ -1,0 +1,21 @@
+[
+  {
+    "kind": "official",
+    "resultOnly": true,
+    "date": "2026-10-15",
+    "stage": "regular",
+    "day": 1,
+    "tier": "CORE",
+    "match": null,
+    "game": 1,
+    "duration": "40:52",
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-15",
+      "note": "価値責任者が公式配信の画面(ネクサス破壊の場面。試合時間 40:52、キル CC CORE 23 - DD CORE 13、ゴールド 79.5k - 69.4k)で確認し、2026-10-15 20:47 JST にスレッドへ共有した。配信の URL は未記入。出典の url は大会の公式 X アカウント"
+    },
+    "winner": "CC CORE",
+    "teams": { "CC CORE": {}, "DD CORE": {} }
+  }
+]
