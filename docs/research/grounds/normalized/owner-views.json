@@ -301,6 +301,16 @@
       "date": "2026-10-14",
       "quote": "今IT Nextはコーチ全員でどうすれば勝てるかの作戦会議をしていますがメンバー全員意気消沈してどうやったら勝てるかわからないと涙ぐんでいる状態でした",
       "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-14 14:41:58 UTC。docs/research/grounds/owner-review-scrims-20261014.md の発言 3)"
+    },
+    {
+      "targetKind": "team",
+      "target": "LR-NEXT",
+      "axis": "synergy",
+      "direction": "-",
+      "strength": "中",
+      "date": "2026-10-15",
+      "quote": "負けムードになってからコミュニケーションエラーが多くなってました",
+      "source": "価値責任者の見立て(プロジェクトのスレッド 2026-10-15 13:35:24 UTC。docs/research/grounds/owner-review-official-20261015.md の発言 4)"
     }
   ]
 }
