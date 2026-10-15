@@ -1,0 +1,191 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-15",
+    "stage": "regular",
+    "day": 1,
+    "tier": "CORE",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-15",
+      "note": "価値責任者が共有した公式配信のリザルト画面(試合時間 26:55)から書き起こした。2026-10-15 23:16 JST にスレッドへ共有。チーム 1(ブルー)が IT CORE。LR の SUP のゴールドは画面で末尾が読めない(5,93?)ため、チームの合計から差し引いて求めた。レベルが読めない選手は null。配信の URL は未記入。出典の url は大会の公式 X アカウント"
+    },
+    "duration": "26:55",
+    "winner": "IT CORE",
+    "sides": {
+      "IT CORE": "ブルー",
+      "LR CORE": "レッド"
+    },
+    "teams": {
+      "IT CORE": {
+        "kills": 19,
+        "deaths": 2,
+        "assists": 40,
+        "gold": 55893,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "mitiii1",
+            "rosterName": "mittiii",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": null,
+            "champion": "アンベッサ",
+            "kills": 2,
+            "deaths": 2,
+            "assists": 2,
+            "cs": null,
+            "gold": 10257,
+            "goldPerMin": 381,
+            "damage": 12235
+          },
+          {
+            "role": "JG",
+            "displayName": "Alpha Azur",
+            "rosterName": "AlphaAzur",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "スカーナー",
+            "kills": 3,
+            "deaths": 0,
+            "assists": 11,
+            "cs": null,
+            "gold": 10779,
+            "goldPerMin": 400,
+            "damage": 6531
+          },
+          {
+            "role": "MID",
+            "displayName": "Takaya Special",
+            "rosterName": "たかやスペシャル",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの MID の席)",
+            "level": 16,
+            "champion": "オーロラ",
+            "kills": 8,
+            "deaths": 0,
+            "assists": 8,
+            "cs": null,
+            "gold": 12741,
+            "goldPerMin": 473,
+            "damage": 17279
+          },
+          {
+            "role": "ADC",
+            "displayName": "Gonkane",
+            "rosterName": "ごんかね",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": null,
+            "champion": "カイ＝サ",
+            "kills": 5,
+            "deaths": 0,
+            "assists": 7,
+            "cs": null,
+            "gold": 14551,
+            "goldPerMin": 541,
+            "damage": 12154
+          },
+          {
+            "role": "SUP",
+            "displayName": "ReglushLionheart",
+            "rosterName": "レグルシュ・ライオンハート",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": null,
+            "champion": "ノーチラス",
+            "kills": 1,
+            "deaths": 0,
+            "assists": 12,
+            "cs": null,
+            "gold": 7565,
+            "goldPerMin": 281,
+            "damage": 5234
+          }
+        ]
+      },
+      "LR CORE": {
+        "kills": 2,
+        "deaths": 19,
+        "assists": 6,
+        "gold": 39835,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Varvalian",
+            "rosterName": "焼きパン",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": null,
+            "champion": "ナー",
+            "kills": 0,
+            "deaths": 2,
+            "assists": 1,
+            "cs": null,
+            "gold": 8575,
+            "goldPerMin": 319,
+            "damage": 7861
+          },
+          {
+            "role": "JG",
+            "displayName": "Killin9Hit",
+            "rosterName": "Killin9Hit",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの JG の席)",
+            "level": 12,
+            "champion": "ジャーヴァンⅣ",
+            "kills": 0,
+            "deaths": 5,
+            "assists": 2,
+            "cs": null,
+            "gold": 7443,
+            "goldPerMin": 277,
+            "damage": 4610
+          },
+          {
+            "role": "MID",
+            "displayName": "Inui Shinichiro",
+            "rosterName": "乾伸一郎",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの MID の席)",
+            "level": 13,
+            "champion": "シンドラ",
+            "kills": 1,
+            "deaths": 5,
+            "assists": 0,
+            "cs": null,
+            "gold": 8325,
+            "goldPerMin": 309,
+            "damage": 6473
+          },
+          {
+            "role": "ADC",
+            "displayName": "Oogosho Nyunko",
+            "rosterName": "大御所にゅん子",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": 11,
+            "champion": "ヴァルス",
+            "kills": 1,
+            "deaths": 4,
+            "assists": 1,
+            "cs": null,
+            "gold": 9553,
+            "goldPerMin": 355,
+            "damage": 4841
+          },
+          {
+            "role": "SUP",
+            "displayName": "Sendo Yuuhi",
+            "rosterName": "千燈ゆうひ",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの SUP の席)",
+            "level": 11,
+            "champion": "ラカン",
+            "kills": 0,
+            "deaths": 3,
+            "assists": 2,
+            "cs": null,
+            "gold": 5939,
+            "goldPerMin": null,
+            "damage": 2174
+          }
+        ]
+      }
+    }
+  }
+]
