@@ -1,0 +1,740 @@
+[
+  {
+    "kind": "scrim",
+    "date": "2026-10-16",
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261016_MASTERS_IT_DD_001",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-16T00:41:53.495Z",
+      "videoUrl": "https://www.twitch.tv/videos/2901447123",
+      "retrievedAt": "2026-10-16",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "38:55",
+    "durationSec": 2335,
+    "winner": "DD MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム DD。キル 32-25",
+    "sides": {
+      "DD MASTERS": "ブルー",
+      "IT MASTERS": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "DD MASTERS": {
+        "kills": 32,
+        "deaths": 25,
+        "assists": 63,
+        "gold": 86918,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 20,
+            "champion": "オラフ",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 8,
+            "assists": 12,
+            "gold": 16234,
+            "damage": 20742,
+            "cs": null,
+            "goldPerMin": 417,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ヴァイ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 8,
+            "assists": 9,
+            "gold": 13375,
+            "damage": 11711,
+            "cs": null,
+            "goldPerMin": 344,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "マルザハール",
+            "championNote": null,
+            "kills": 7,
+            "deaths": 7,
+            "assists": 7,
+            "gold": 16792,
+            "damage": 37563,
+            "cs": null,
+            "goldPerMin": 431,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ユナラ",
+            "championNote": null,
+            "kills": 18,
+            "deaths": 2,
+            "assists": 8,
+            "gold": 28292,
+            "damage": 84008,
+            "cs": null,
+            "goldPerMin": 727,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ルル",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 0,
+            "assists": 27,
+            "gold": 12225,
+            "damage": 8800,
+            "cs": null,
+            "goldPerMin": 314,
+            "damageNote": null
+          }
+        ]
+      },
+      "IT MASTERS": {
+        "kills": 25,
+        "deaths": 32,
+        "assists": 59,
+        "gold": 76570,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "らいじん",
+            "rosterId": "IT-MASTERS-TOP",
+            "rosterName": "らいじん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム らいじん が名簿の Riot ID と一致)",
+            "level": 19,
+            "champion": "トランドル",
+            "championNote": null,
+            "kills": 8,
+            "deaths": 10,
+            "assists": 7,
+            "gold": 17601,
+            "damage": 19122,
+            "cs": null,
+            "goldPerMin": 452,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ゆにか",
+            "rosterId": "IT-MASTERS-JG",
+            "rosterName": "ゆにか",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ゆにか が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ウーコン",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 7,
+            "assists": 14,
+            "gold": 13242,
+            "damage": 16641,
+            "cs": null,
+            "goldPerMin": 340,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Eugeo",
+            "rosterId": "IT-MASTERS-MID",
+            "rosterName": "Eugeo",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Eugeo が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ライズ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 3,
+            "assists": 11,
+            "gold": 16582,
+            "damage": 34329,
+            "cs": null,
+            "goldPerMin": 426,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Zeroyusi",
+            "rosterId": "IT-MASTERS-ADC",
+            "rosterName": "Zerost",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Zeroyusi が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ルシアン",
+            "championNote": null,
+            "kills": 9,
+            "deaths": 9,
+            "assists": 7,
+            "gold": 17848,
+            "damage": 44746,
+            "cs": null,
+            "goldPerMin": 459,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "えんてぃ",
+            "rosterId": "IT-MASTERS-SUP",
+            "rosterName": "Enty",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム えんてぃ が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ミリオ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 3,
+            "assists": 20,
+            "gold": 11297,
+            "damage": 10174,
+            "cs": null,
+            "goldPerMin": 290,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "リー・シン",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "チョ＝ガス",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ロック",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "シンドラ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "フェイ",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ヴァイ",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ライズ",
+        "role": "MID"
+      },
+      {
+        "order": 9,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": 10,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "マルザハール",
+        "role": "MID"
+      },
+      {
+        "order": 11,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "オラフ",
+        "role": "TOP"
+      },
+      {
+        "order": 12,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "トランドル",
+        "role": "TOP"
+      },
+      {
+        "order": 13,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "ブリッツクランク",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ラカン",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "マオカイ",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ユーミ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      },
+      {
+        "order": 18,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      },
+      {
+        "order": 19,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": 20,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      }
+    ],
+    "notes": null
+  },
+  {
+    "kind": "scrim",
+    "date": "2026-10-16",
+    "game": 2,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261016_MASTERS_IT_DD_002",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-16T00:41:53.495Z",
+      "videoUrl": "https://www.twitch.tv/videos/2901447123",
+      "retrievedAt": "2026-10-16",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "36:32",
+    "durationSec": 2192,
+    "winner": "IT MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム IT。キル 22-18",
+    "sides": {
+      "IT MASTERS": "ブルー",
+      "DD MASTERS": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "IT MASTERS": {
+        "kills": 22,
+        "deaths": 18,
+        "assists": 46,
+        "gold": 72607,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "らいじん",
+            "rosterId": "IT-MASTERS-TOP",
+            "rosterName": "らいじん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム らいじん が名簿の Riot ID と一致)",
+            "level": 19,
+            "champion": "ナー",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 7,
+            "assists": 6,
+            "gold": 12880,
+            "damage": 22446,
+            "cs": null,
+            "goldPerMin": 353,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ゆにか",
+            "rosterId": "IT-MASTERS-JG",
+            "rosterName": "ゆにか",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ゆにか が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ノクターン",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 4,
+            "assists": 13,
+            "gold": 13143,
+            "damage": 14954,
+            "cs": null,
+            "goldPerMin": 360,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Eugeo",
+            "rosterId": "IT-MASTERS-MID",
+            "rosterName": "Eugeo",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Eugeo が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ビクター",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 1,
+            "assists": 9,
+            "gold": 16802,
+            "damage": 36639,
+            "cs": null,
+            "goldPerMin": 460,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Zeroyusi",
+            "rosterId": "IT-MASTERS-ADC",
+            "rosterName": "Zerost",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Zeroyusi が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ジグス",
+            "championNote": null,
+            "kills": 12,
+            "deaths": 1,
+            "assists": 5,
+            "gold": 20073,
+            "damage": 36644,
+            "cs": null,
+            "goldPerMin": 549,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "えんてぃ",
+            "rosterId": "IT-MASTERS-SUP",
+            "rosterName": "Enty",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム えんてぃ が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "ノーチラス",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 5,
+            "assists": 13,
+            "gold": 9709,
+            "damage": 4812,
+            "cs": null,
+            "goldPerMin": 266,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 18,
+        "deaths": 22,
+        "assists": 29,
+        "gold": 68207,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 20,
+            "champion": "ジャックス",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 5,
+            "assists": 5,
+            "gold": 16100,
+            "damage": 25896,
+            "cs": null,
+            "goldPerMin": 441,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "キヤナ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 7,
+            "assists": 7,
+            "gold": 14031,
+            "damage": 15937,
+            "cs": null,
+            "goldPerMin": 384,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "アーリ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 3,
+            "assists": 6,
+            "gold": 13872,
+            "damage": 15769,
+            "cs": null,
+            "goldPerMin": 380,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ルシアン",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 3,
+            "assists": 2,
+            "gold": 15670,
+            "damage": 24436,
+            "cs": null,
+            "goldPerMin": 429,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "ミリオ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 9,
+            "gold": 8534,
+            "damage": 3597,
+            "cs": null,
+            "goldPerMin": 234,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": 1,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "チョ＝ガス",
+        "role": null
+      },
+      {
+        "order": 2,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "リー・シン",
+        "role": null
+      },
+      {
+        "order": 3,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "ライズ",
+        "role": null
+      },
+      {
+        "order": 4,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "フェイ",
+        "role": null
+      },
+      {
+        "order": 5,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "ウーコン",
+        "role": null
+      },
+      {
+        "order": 6,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ルル",
+        "role": null
+      },
+      {
+        "order": 7,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ノクターン",
+        "role": "JG"
+      },
+      {
+        "order": 8,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      },
+      {
+        "order": 9,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      },
+      {
+        "order": 10,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": 11,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ジグス",
+        "role": "ADC"
+      },
+      {
+        "order": 12,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "キヤナ",
+        "role": "JG"
+      },
+      {
+        "order": 13,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": 14,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "ヴェイン",
+        "role": null
+      },
+      {
+        "order": 15,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "オリアナ",
+        "role": null
+      },
+      {
+        "order": 16,
+        "team": "IT MASTERS",
+        "type": "BAN",
+        "champion": "オラフ",
+        "role": null
+      },
+      {
+        "order": 17,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "アーリ",
+        "role": "MID"
+      },
+      {
+        "order": 18,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": 19,
+        "team": "IT MASTERS",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": 20,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ジャックス",
+        "role": "TOP"
+      }
+    ],
+    "notes": null
+  }
+]
