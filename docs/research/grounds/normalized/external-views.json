@@ -1,6 +1,6 @@
 {
   "kind": "external-views",
-  "description": "LoL に詳しい第三者の、階級チーム(TEAM-TIER)についての見立て。向きと強さは要約から機械的に付け、出典を必ず持つ。aiCheck は元の根拠のファイルの値を引き継ぐ(hetel・たかやスペシャルの元のファイルには aiCheck が無いため、その項目には付けていない)。2026-10-10 に取り込んだ文字起こし 4 本(Eugeo 2 本・たぬき忍者・Enty。origin が transcript:<動画の ID> の項目)は、ここへ入れる前に別の AI(Claude Opus 5.5)が前処理の出力と照らして反証を試み、not-refuted のものだけを aiCheck 付きで入れた(unclear は入れていない)。元は docs/research/grounds/evidence-*.json の overall・teamStyle・teamMacro(チーム単位の節)だけで、選手個人の評価(playerTraits・shotcalling)は含めない。生の文字起こしは読んでいない",
+  "description": "LoL に詳しい第三者の、階級チーム(TEAM-TIER)についての見立て。向きと強さは要約から機械的に付け、出典を必ず持つ。aiCheck は元の根拠のファイルの値を引き継ぐ(hetel・たかやスペシャルの元のファイルには aiCheck が無いため、その項目には付けていない)。2026-10-10 に取り込んだ文字起こし 4 本(Eugeo 2 本・たぬき忍者・Enty。origin が transcript:<動画の ID> の項目)は、ここへ入れる前に別の AI(Claude Opus 5.5)が前処理の出力と照らして反証を試み、not-refuted のものだけを aiCheck 付きで入れた(unclear は入れていない)。元は docs/research/grounds/evidence-*.json の overall・teamStyle・teamMacro(チーム単位の節)だけで、選手個人の評価(playerTraits・shotcalling)は含めない。2026-10-17 に、ゆにか(IT MASTERS JG。元プロ)の本番 1 日目の解説配信の overall から 7 件を追記した(反証の試みで強さが強すぎると判定された 2 件は強さを下げて言い直し、再確認で not-refuted)。生の文字起こしは読んでいない",
   "retrievedAt": "2026-10-10",
   "rules": {
     "direction": "強い・最強・優勝候補・完成度が高い・シナジーがあり強い → +。弱い・不安・懸念・苦戦 → −。願望・応援・雑談・体制(誰がコールするか)の説明・強弱を言わない雰囲気の話は入れない。序盤と後半で向きが違う要約は、結論(後半・プレイオフ)の向きを付け、強さは 弱",
@@ -720,6 +720,92 @@
       "date": "2026-10-10",
       "origin": "transcript:zcWe0BfA49k",
       "aiCheck": "not-refuted"
+    },
+    {
+      "target": "DD-NEXT",
+      "direction": "+",
+      "strength": "中",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "完成度が高く、連携と安定感がある。終盤に強い構成。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1514s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted"
+    },
+    {
+      "target": "CC-NEXT",
+      "direction": "-",
+      "strength": "中",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "ジャングルの序盤は非常に良いが、連携不足と小さなミスで崩れる。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1804s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted"
+    },
+    {
+      "target": "CC-CORE",
+      "direction": "+",
+      "strength": "弱",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "構成の面では CC CORE が有利との条件つきの見立て。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2994s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted"
+    },
+    {
+      "target": "DD-CORE",
+      "direction": "-",
+      "strength": "弱",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "ジャングルのドラゴン判断の無理と緊張が課題。トップ酒寄は高評価。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2545s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted"
+    },
+    {
+      "target": "IT-NEXT",
+      "direction": "+",
+      "strength": "弱",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "開始時の見立てで、ジャングル以外の全レーンで IT が有利。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted",
+      "selfTeam": true
+    },
+    {
+      "target": "LR-NEXT",
+      "direction": "+",
+      "strength": "弱",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "終盤はスモルダーのいる LR 側が強いとの見立て。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4326s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted"
+    },
+    {
+      "target": "IT-CORE",
+      "direction": "+",
+      "strength": "中",
+      "speaker": "ゆにか(IT MASTERS JG。元プロ)",
+      "speakerKind": "ex-pro",
+      "summary": "IT CORE が強すぎると、プレーを見て評価。",
+      "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7100s",
+      "date": "2026-10-15",
+      "origin": "transcript:L9zVE-9SN_s",
+      "aiCheck": "not-refuted",
+      "selfTeam": true
     }
   ]
 }

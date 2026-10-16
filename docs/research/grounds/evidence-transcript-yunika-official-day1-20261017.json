@@ -1,0 +1,1606 @@
+{
+ "kind": "evidence-transcript",
+ "file": "20261017-transcript-[000000] 明日ありがとうございます [0.md",
+ "description": "価値責任者が共有した配信の文字起こし(data/transcript/、リポジトリ外)に生成 AI を使わない前処理をかけ、その出力だけを AI が読んで自分の言葉で要約した根拠。原文は転載しない。動画の URL は価値責任者から 2026-10-17 に受け取った。aiCheck は別の AI による反証の試み(人の確認ではない)。overall には aiCheck を付けない。selfTeam=true は話者自身の組織(IT。別の階級を含む)についての発言。前処理の縮小: 63758 字 → 35223 字(55%)、区間 277 → 245、長さ 約 2 時間 16 分",
+ "source": {
+  "title": "LTK Season Finale 本番 1 日目(2026-10-15)の 4 試合を見ながらの解説配信(NEXT CC vs DD・CORE CC vs DD・NEXT IT vs LR・CORE IT vs LR の順)",
+  "url": "https://www.youtube.com/watch?v=L9zVE-9SN_s",
+  "urlPending": false,
+  "speaker": "ゆにか(IT MASTERS JG、元プロ)と推定。根拠: 価値責任者の説明(元プロのゆにかさんの初戦解説)、ありけん・AlphaAzur に教えているとの自称(5:57・1:57:50)。確かさ 高",
+  "retrievedAt": "2026-10-17",
+  "preprocessed": "data/transcript/structured/yunika-official-day1-20261017.json",
+  "preprocessedWith": "e49f04f"
+ },
+ "aiCheckBy": "Claude Opus 5.5 (claude-opus-5-5)",
+ "caveats": [
+  "自動字幕には話者の情報が無い。話者は価値責任者の説明と自称から推定した(source.speaker)。公式配信の実況・解説の音声が混ざっているとみられる区間がある",
+  "試合は本番の公式戦で、kind の値の一覧に無いため unknown とした。公式の結果は docs/research/grounds/results/ に別にあるため usableForResults はすべて false",
+  "話者は IT MASTERS の選手で、IT の選手を指導していると述べる。IT の階級チームについての発言は selfTeam: true",
+  "picks の多くは名前とチャンピオンが同じ区間に出ず、unclear が多い",
+  "反証の試みで refuted になった 2 件は入れていない",
+  "unmapped には名簿の誰かと推定できる呼び名だけを残した"
+ ],
+ "matches": [
+  {
+   "id": "G1",
+   "kind": "unknown",
+   "start": "0:33",
+   "end": "30:04",
+   "ourTeam": "DD-NEXT",
+   "opponent": "CC-NEXT",
+   "opponentBasis": "区間に両チームの選手の名前が出る",
+   "result": "unknown",
+   "resultBasis": "解説の範囲内に勝敗の明言が無い",
+   "usableForResults": false,
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=33s",
+   "notes": "本番の公式戦の解説。NEXT CC vs DD(本番1日目の第1試合と推定)。区間の範囲内に勝敗の明言は無い。レーン: トップ(サイオン)・ジャングル(チョガス)は CC 側、ボットは DD 側(トリスタ)が主導権との事前の見立て。ミッドのスウェイン(DD)は序盤弱い。序盤: ゆふなのチョガスが8分ごろまで非常に良いルートでジャングル戦を優位に進めた。中盤以降: リリアが1コアで先行し、トップのソロキルと下のファイトで DD が流れを取る。ナサスのスタックが止まらない展開。決め手(解説の見立て): DD の連携の良さ(バロン周り)と、CC の単独行動によるキャッチ・小さなミス。終盤はゴールド差が大きいとの言及",
+   "aiCheck": "not-refuted"
+  },
+  {
+   "id": "G2",
+   "kind": "unknown",
+   "start": "30:38",
+   "end": "1:11:04",
+   "ourTeam": "CC-CORE",
+   "opponent": "DD-CORE",
+   "opponentBasis": "きなこ・さかより(酒寄)・スタンミ(DD CORE)と、くずは・火星(k4sen と推定)(CC CORE)の名前が区間に出る",
+   "result": "unknown",
+   "resultBasis": "勝敗の発言は無い。終盤に葛葉が MVP を狙うほどの活躍との発言(1:10:34)はあるが、勝敗の明言ではない",
+   "usableForResults": false,
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1838s",
+   "notes": "本番の公式戦の解説。CORE CC vs DD。レーン: トップはアンベッサ(DD)が序盤弱くクサンテ(CC)が主導権。ジャングルはウーコン(DD)が6から有利。ミッドはプッシュはアーリー(DD)、殴り合いはカシオペア(CC)。ボットは五分。序盤: 各レーンの主導権は全体に CC が取っていたとの見立て。DD のドラゴン判断の無理で事故。構成: 受ける構成の CC(カシオペア・ユナラ・ミリオ)が有利、3コアで非常に強いとの見立て。DD はウーコン・アーリーがカシオペアに入れるかが鍵。終盤: 互いに大きな差がつかないまま長期戦。CC のジャングルのマクロ(トップへの移動・インヒビに行かずリコール)を評価。範囲の終わりの時点でバロン待ち。本番の公式戦の解説。開始は前半の担当の範囲(区間 120 より前)。要点: 終盤のバロン・インヒビの判断を褒める発言が多い。CC CORE の葛葉の集団戦の位置取り・スキル回避が評価され、DD CORE は酒寄のトップのプッシュで相手に仕掛けを強いる形。ピックはアーリー・ユナラ・カシオペア・アンベッサ等の名が出るが誰のものか特定できない",
+   "aiCheck": "not-refuted"
+  },
+  {
+   "id": "G3",
+   "kind": "unknown",
+   "start": "1:11:35",
+   "end": "1:48:06",
+   "ourTeam": "IT-NEXT",
+   "opponent": "LR-NEXT",
+   "opponentBasis": "ひなの・ありけん・まいたけ・天帝・白那(IT NEXT)と、うる(狐白うる)・アステル(LR NEXT)の名前が区間に出る",
+   "result": "unknown",
+   "resultBasis": "勝敗の明言は無い。IT 側がバロンを取った(1:44:04)、ペンタキル(1:48:06、誰のものか不明)の発言のみ",
+   "usableForResults": false,
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+   "notes": "本番の公式戦の解説。要点: 開始時のレーンの見立ては、ジャングル(リリア側=LR)以外すべて IT が有利(1:11:35)。LR はスモルダーの後半とヨリックのスプリットが強み(1:12:06・1:28:02)。序盤から中盤は IT のミッド主導権とビジョン(まいたけ)が効き、狐白うるのトップは強くキルも取る。決め手はありけん・白那のエンゲージ(1:40:02〜1:40:32)とバロン、と解説は見ている",
+   "aiCheck": "not-refuted"
+  },
+  {
+   "id": "G4",
+   "kind": "unknown",
+   "start": "1:48:28",
+   "end": "2:15:33",
+   "ourTeam": "IT-CORE",
+   "opponent": "LR-CORE",
+   "opponentBasis": "ミッチー・アルファ・高谷(たかや)・ゴンカネ・レグ(IT CORE)と、焼きパン・ニュン(LR CORE)の名前が区間に出る",
+   "result": "win",
+   "resultBasis": "『ボットとミッドのガンクが試合を決めた』(2:10:08)、AlphaAzur を MVP とし GG と述べる(2:15:33)。IT CORE の勝ちと読める",
+   "usableForResults": false,
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6508s",
+   "notes": "本番の公式戦の解説。終わりは担当の範囲の末尾(区間 244)。要点: レーンの見立ては トップ=ナー(LR)の主導権、ジャングル=スカーナー(IT)有利、ミッド=シンドラ(LR)のプッシュ(1:48:28)。トップは不利の見立てでも mittiii が CS とレベルで上回る。AlphaAzur のボット・ミッドへのガンクで差がつき、ゴンカネ(カイサ)がキャリー。オブジェクトは取られてもキルで有利(1:56:54)",
+   "aiCheck": "unclear"
+  }
+ ],
+ "picks": {
+  "DD-NEXT-TOP": [
+   {
+    "champion": "ナサス",
+    "game": "G1",
+    "timestamp": "21:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1263s",
+    "note": "シャカさんとナサスが同じ区間で語られる(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-NEXT-TOP": [
+   {
+    "champion": "サイオン",
+    "game": "G1",
+    "timestamp": "1:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=63s",
+    "note": "ナサスの対面として。名前は無く、構成からの推定(確かさ 中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "CC-NEXT-JG": [
+   {
+    "champion": "チョ=ガス",
+    "game": "G1",
+    "timestamp": "5:57",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=357s",
+    "note": "ゆふなのチョガスの動きの解説(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT-JG": [
+   {
+    "champion": "リリア",
+    "game": "G1",
+    "timestamp": "13:12",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=792s",
+    "note": "マザーさん1コア→リリア先行の流れから(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT-MID": [
+   {
+    "champion": "スウェイン",
+    "game": "G1",
+    "timestamp": "3:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=183s",
+    "note": "スウェイン・リリア・ナサスが同じ側の中盤の強さとして語られ、ネルさんがゴースト持ち(17:07)。推定(確かさ 中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "DD-NEXT-ADC": [
+   {
+    "champion": "トリスターナ",
+    "game": "G1",
+    "timestamp": "13:42",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=822s",
+    "note": "赤側(DD と推定)がリリアとトリスと語られる。名前は無く推定(確かさ 中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "CC-NEXT-ADC": [
+   {
+    "champion": "シヴィア",
+    "game": "G1",
+    "timestamp": "29:17",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1757s",
+    "note": "トリスの対面として。名前は無く推定(確かさ 低〜中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "DD-NEXT-SUP": [
+   {
+    "champion": "レオナ",
+    "game": "G1",
+    "timestamp": "26:18",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1578s",
+    "note": "リリアと同じ側にレオナがいるという言及から推定(確かさ 低〜中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "DD-CORE-TOP": [
+   {
+    "champion": "アンベッサ",
+    "game": "G2",
+    "timestamp": "32:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1972s",
+    "note": "酒寄さんのアンベが上手いとの言及(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-TOP": [
+   {
+    "champion": "クサンテ",
+    "game": "G1",
+    "timestamp": "30:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1838s",
+    "note": "アンベッサの対面。ユキオさんの活躍(44:32)から推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-JG": [
+   {
+    "champion": "ウーコン",
+    "game": "G2",
+    "timestamp": "34:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2043s",
+    "note": "ウーコンの動きの直後にきなこさんの話(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-JG": [
+   {
+    "champion": "ヴァイ",
+    "game": "G2",
+    "timestamp": "54:54",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3294s",
+    "note": "カシオペア側のジャングル。火星さん=k4sen の推定と合わせて(確かさ 中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "DD-CORE-MID": [
+   {
+    "champion": "アーリ",
+    "game": "G2",
+    "timestamp": "50:45",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3045s",
+    "note": "ウーコン・アーリー側でスタンミさんの動きを語る(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-MID": [
+   {
+    "champion": "カシオペア",
+    "game": "G2",
+    "timestamp": "32:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1972s",
+    "note": "主導権は葛葉さんとカシオペアの殴り合いの強さの文脈(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-ADC": [
+   {
+    "champion": "ジン",
+    "game": "G2",
+    "timestamp": "48:22",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2902s",
+    "note": "ジャスパーさんのダメージとジンへのキル集中(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-SUP": [
+   {
+    "champion": "レル",
+    "game": "G2",
+    "timestamp": "48:22",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2902s",
+    "note": "カグラメアのフラッシュインとレルのエンゲージ(確かさ 中〜高)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "CC-CORE-ADC": [
+   {
+    "champion": "ユナラ",
+    "game": "G2",
+    "timestamp": "1:03:10",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3790s",
+    "note": "ユナラが強いと竜巻さんが強いが並ぶ(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-SUP": [
+   {
+    "champion": "ミリオ",
+    "game": "G2",
+    "timestamp": "37:43",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2263s",
+    "note": "ユナラ・ミリオの側でアリアの名前(確かさ 中)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "IT-NEXT-TOP": [
+   {
+    "champion": "モルデカイザー",
+    "game": "G2",
+    "timestamp": "1:11:35",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+    "note": "『トップはモルで有利』『IT が有利』から IT のトップと推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-JG": [
+   {
+    "champion": "ウーコン",
+    "game": "G3",
+    "timestamp": "1:33:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5618s",
+    "note": "ありけんのトリニティフォース・ウーコンの話の流れ(1:20:56・1:33:38・1:40:32)から推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-MID": [
+   {
+    "champion": "ビクター",
+    "game": "G2",
+    "timestamp": "1:11:35",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+    "note": "『ミッドはビクター有利』と IT 有利の見立て、まいたけのミッド主導権の発言から推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-SUP": [
+   {
+    "champion": "レル",
+    "game": "G3",
+    "timestamp": "1:34:11",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5651s",
+    "note": "『ウーコンとレルが入れるか』と白那のエンゲージの話から推定。確かさ 中",
+    "aiCheck": "unclear"
+   }
+  ],
+  "IT-NEXT-ADC": [
+   {
+    "champion": "ユナラ",
+    "game": "G3",
+    "timestamp": "1:33:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5618s",
+    "note": "ユナラが IT 側のキャリーとして語られる(1:41:38)。ADC の天帝フォルテと役割から推定。確かさ 低〜中",
+    "aiCheck": "unclear"
+   }
+  ],
+  "LR-NEXT-TOP": [
+   {
+    "champion": "ヨリック",
+    "game": "G3",
+    "timestamp": "1:15:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4538s",
+    "note": "IT 側から『ヨリックとスモルダーが心配』、うるがトップでスプリット(1:24:37)から推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-NEXT-JG": [
+   {
+    "champion": "リリア",
+    "game": "G3",
+    "timestamp": "1:37:12",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5832s",
+    "note": "『ジャングルはリリア有利・ジャングル以外 IT 有利』とアステルの E の評価から推定。確かさ 中",
+    "aiCheck": "unclear"
+   }
+  ],
+  "LR-NEXT-ADC": [
+   {
+    "champion": "スモルダー",
+    "game": "G3",
+    "timestamp": "1:12:06",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4326s",
+    "note": "選手名は出ない。LR 側のスモルダーとロールから推定。確かさ 低",
+    "aiCheck": "unclear"
+   }
+  ],
+  "LR-NEXT-MID": [
+   {
+    "champion": "マルザハール",
+    "game": "G3",
+    "timestamp": "1:36:56",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5816s",
+    "note": "選手名は出ない。『マルザスモルダーが守る』と役割から推定。確かさ 低",
+    "aiCheck": "unclear"
+   }
+  ],
+  "LR-NEXT-SUP": [
+   {
+    "champion": "ジャンナ",
+    "game": "G3",
+    "timestamp": "1:18:43",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4723s",
+    "note": "選手名は出ない。『ジャンナスモルダー』と役割から推定。確かさ 低",
+    "aiCheck": "unclear"
+   }
+  ],
+  "IT-CORE-JG": [
+   {
+    "champion": "スカーナー",
+    "game": "G4",
+    "timestamp": "2:04:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7473s",
+    "note": "『アルファさんの E』『スカーナー』が続けて出る。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-TOP": [
+   {
+    "champion": "アンベッサ",
+    "game": "G4",
+    "timestamp": "2:00:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7200s",
+    "note": "『焼きパンにこれだけ…しかもアンベッサで』からミッチーと推定。確かさ 中〜高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-CORE-TOP": [
+   {
+    "champion": "ナー",
+    "game": "G4",
+    "timestamp": "1:51:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6710s",
+    "note": "ミッチーの相手の『ナーが主導権』から推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-ADC": [
+   {
+    "champion": "カイサ",
+    "game": "G4",
+    "timestamp": "1:50:22",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6622s",
+    "note": "『CS がカイサ勝ってる』とゴンカネがキャリーの話から推定。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-MID": [
+   {
+    "champion": "オーロラ",
+    "game": "G4",
+    "timestamp": "1:52:28",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6748s",
+    "note": "『オーロラ側はジャーバンとシンドラをいなせる』と IT の視点の話から推定。確かさ 低〜中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-CORE-MID": [
+   {
+    "champion": "シンドラ",
+    "game": "G4",
+    "timestamp": "2:15:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=8133s",
+    "note": "アルファのミッドガンクで『シンドラのフラッシュまで落ちた』から LR のミッドと推定。選手名は出ない。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-CORE-JG": [
+   {
+    "champion": "ジャーバン4世",
+    "game": "G3",
+    "timestamp": "1:48:28",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6508s",
+    "note": "『スカーナー有利、ジャーバン』とケイイチ(Killin9Hit と推定)のジャングルの話から。確かさ 中",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "shotcalling": {
+  "DD-NEXT-JG": [
+   {
+    "summary": "DD NEXT はよく仕上がっており、マザーさんのコールが分かりやすいと評価。",
+    "timestamp": "0:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=33s",
+    "date": "2026-10-15",
+    "type": "解説者の評価(第三者)",
+    "direction": "+",
+    "strength": "中",
+    "kind": "player",
+    "collectedBy": "ai",
+    "origin": "transcript:L9zVE-9SN_s",
+    "selfTeam": false,
+    "note": "『マザさん』と聞こえ、まざー3 と推定(確かさ 高)。話者の確かさ 高(配信者本人の解説と推定)。本番の試合前の発言で、過去に見た試合(スクリム等)に基づく評価の可能性",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-TOP": [
+   {
+    "summary": "たぶん橘ひなのがコールしてくれている(ミッドタワーへ)との見立て。",
+    "timestamp": "1:34:39",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5679s",
+    "date": "2026-10-15",
+    "type": "マクロのコール(推定)",
+    "direction": "+",
+    "strength": "弱",
+    "kind": "player",
+    "collectedBy": "ai",
+    "origin": "transcript:L9zVE-9SN_s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。発言自体が『たぶん』の推測。名前は『ひなあの』と聞こえる(橘ひなの)",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "playerTraits": {
+  "CC-NEXT-JG": [
+   {
+    "trait": "mechanics",
+    "summary": "フルクリアやジャングル対決が上手いと高く評価。",
+    "timestamp": "3:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=183s",
+    "selfTeam": false,
+    "note": "名前(ユフナさん)は区間にある。話者 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "序盤のルート(ワードを消しつつボットに圧をかけカニ→ドラゴン)が非常に良いと評価。",
+    "timestamp": "5:57",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=357s",
+    "selfTeam": false,
+    "note": "推論: 解説者が教えている型と同じルートと述べる",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "other",
+    "summary": "序盤の動きはダイヤ上位相当、120点との絶賛。",
+    "timestamp": "9:41",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=581s",
+    "selfTeam": false,
+    "note": "9:10 にも同趣旨",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ボイドグラブ周りの判断で下のジャングルを守れず、エメラルド相当に戻ったとの指摘。",
+    "timestamp": "10:47",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=647s",
+    "selfTeam": false,
+    "note": "10:15 からの続き",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "8分までは非常に上手かったが、大事なターンの理解が課題という趣旨。",
+    "timestamp": "22:11",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1331s",
+    "selfTeam": false,
+    "note": "語尾が省略されており「理解度」の評価の向きは推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT-JG": [
+   {
+    "trait": "macro",
+    "summary": "1コア以降はマザーさんが上回り、リリアの先行で流れを取ったと評価。",
+    "timestamp": "13:12",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=792s",
+    "selfTeam": false,
+    "note": "名前(マザーさん)は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ジャングルのレベルが高く、相手の小さなミスも咎めるとの趣旨。",
+    "timestamp": "27:49",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1669s",
+    "selfTeam": false,
+    "note": "推論: 「レベルが高いから」普段なら響かないミスが響く、と述べる",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT-TOP": [
+   {
+    "trait": "teamfight",
+    "summary": "ナサスが止まらない状態まで育ったとの言及。",
+    "timestamp": "21:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1263s",
+    "selfTeam": false,
+    "note": "名前(シャカさん)は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "other",
+    "summary": "ビルドがやや柔らかく、倒せる余地はあるとの指摘。",
+    "timestamp": "28:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1730s",
+    "selfTeam": false,
+    "note": "名前(シャカさん・釈迦さん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT-MID": [
+   {
+    "trait": "mechanics",
+    "summary": "ネルさんのプレーを上手いと評価(バロンにつながる場面)。",
+    "timestamp": "24:13",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1453s",
+    "selfTeam": false,
+    "note": "名前(ネルさん)は区間にある。p には出ていない",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-NEXT-MID": [
+   {
+    "trait": "laning",
+    "summary": "レーンが強く、ミッドの主導権を持てるとの見立て。",
+    "timestamp": "4:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=248s",
+    "selfTeam": false,
+    "note": "『アスミさん』と聞こえ、空澄セナと推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-NEXT-SUP": [
+   {
+    "trait": "mechanics",
+    "summary": "惜しいフック、良いフックがあったと評価。リリアへのフォーカスができていればとの指摘も。",
+    "timestamp": "18:14",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1094s",
+    "selfTeam": false,
+    "note": "名前(リオンさん)は区間にある。30:04 にも良いフックの言及",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-NEXT-ADC": [
+   {
+    "trait": "other",
+    "summary": "場面の内容は省略されているが、褒める言及がある。",
+    "timestamp": "4:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=278s",
+    "selfTeam": false,
+    "note": "名前(獅子堂さん)は区間にある。根拠としては弱い",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-TOP": [
+   {
+    "trait": "mechanics",
+    "summary": "アンベッサが非常に上手いとの評価。",
+    "timestamp": "32:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1972s",
+    "selfTeam": false,
+    "note": "『坂井アリさん』と聞こえ、酒寄颯馬と推定(確かさ 中〜高。46:35 で酒寄の名前)",
+    "aiCheck": "unclear"
+   },
+   {
+    "trait": "macro",
+    "summary": "上でアグロを引きつけたのが上手かったとの評価。",
+    "timestamp": "47:39",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2859s",
+    "selfTeam": false,
+    "note": "『坂よりさん』=酒寄と推定",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "mechanics",
+    "summary": "落ち着いてバロンへ動き、ウルトで CC を無効にして逃げるなど上手いと評価。",
+    "timestamp": "1:02:36",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3756s",
+    "selfTeam": false,
+    "note": "61:34 にも同趣旨",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "トップを先に押せていることで相手に仕掛けを強いる形を作っていると評価。",
+    "timestamp": "1:10:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4208s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『さかより』と聞こえ、酒寄颯馬と推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-JG": [
+   {
+    "trait": "macro",
+    "summary": "ドラゴンの判断が良くない、無理に触る印象があると指摘。",
+    "timestamp": "42:25",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2545s",
+    "selfTeam": false,
+    "note": "名前(きなこさん)は区間にある。話者 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ドラゴンに対するカウンタージャングルは評価。",
+    "timestamp": "43:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2580s",
+    "selfTeam": false,
+    "note": "42:25 からの続きで、きなこさんを指すと推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "mental",
+    "summary": "焦っている、かなり緊張していると思うとの見立て(不要なフラッシュ)。",
+    "timestamp": "47:06",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2826s",
+    "selfTeam": false,
+    "note": "46:02 にも「焦っちゃってる」。話者の推測",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-MID": [
+   {
+    "trait": "teamfight",
+    "summary": "集団戦では横や裏を取る必要があるとの助言。",
+    "timestamp": "52:42",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3162s",
+    "selfTeam": false,
+    "note": "助言であり評価ではない",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "other",
+    "summary": "アイテムがそろい非常に強い状態との言及。",
+    "timestamp": "1:03:10",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3790s",
+    "selfTeam": false,
+    "note": "名前(スタンミさん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE-ADC": [
+   {
+    "trait": "teamfight",
+    "summary": "フリーでダメージを出し切り、キルが集まったと評価。",
+    "timestamp": "48:22",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2902s",
+    "selfTeam": false,
+    "note": "名前(ジャスパーさん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-MID": [
+   {
+    "trait": "laning",
+    "summary": "レーンの主導権は葛葉さんが取っていたとの見立て。",
+    "timestamp": "32:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1972s",
+    "selfTeam": false,
+    "note": "『クズラさん』と聞こえ、葛葉と推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "mechanics",
+    "summary": "上手いとの評価が複数回。",
+    "timestamp": "56:38",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3398s",
+    "selfTeam": false,
+    "note": "65:50 にも「すごかった」",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "teamfight",
+    "summary": "無理なオールインを心配する言及。",
+    "timestamp": "1:04:47",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3887s",
+    "selfTeam": false,
+    "note": "評価の向きは不確か(確かさ 低〜中)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "teamfight",
+    "summary": "どこに全力で入るのかと心配する場面があり、仕掛けが大胆。",
+    "timestamp": "1:04:47",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3887s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "teamfight",
+    "summary": "集団戦の位置取りがすごく、スキルをよく避けて MVP を狙う活躍と評価。",
+    "timestamp": "1:10:34",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4234s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『クズオ』『くずほ』と聞こえ、葛葉と推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-TOP": [
+   {
+    "trait": "mechanics",
+    "summary": "フラッシュが上手く、毎回レルを弾けていると評価。",
+    "timestamp": "44:32",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2672s",
+    "selfTeam": false,
+    "note": "名前(ユキオさん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-JG": [
+   {
+    "trait": "macro",
+    "summary": "上のカニを抑え、リコール後に上へ行くなどジャングルが良いと評価。",
+    "timestamp": "36:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2168s",
+    "selfTeam": false,
+    "note": "『火星さん』と聞こえ、k4sen と推定(確かさ 中〜高。CC のジャングルの文脈)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "トップへ行く・インヒビに行かずリコールするマクロを高く評価。",
+    "timestamp": "1:05:20",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3920s",
+    "selfTeam": false,
+    "note": "65:50 にも同趣旨",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "トップへ向かう動きをとても良いマクロと評価。リコールの判断も褒める。",
+    "timestamp": "1:05:20",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3920s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『火星さん』『火線さん』と聞こえ、k4sen と推定(確かさ 中)。1:05:50 の『火星サムリコール』も同じ",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE-ADC": [
+   {
+    "trait": "other",
+    "summary": "ユナラがかなり強い状態との言及。",
+    "timestamp": "1:03:10",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3790s",
+    "selfTeam": false,
+    "note": "『竜巻さん』と聞こえ、龍巻ちせと推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-TOP": [
+   {
+    "trait": "laning",
+    "summary": "イグナイトを受けて危険になり、リコールを促される場面。",
+    "timestamp": "1:13:07",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4387s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-MID": [
+   {
+    "trait": "laning",
+    "summary": "ミッドの主導権を持ち、とても上手いと評価。",
+    "timestamp": "1:16:09",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4569s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『マニタケさん』と聞こえ、まいたけと推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ワードで相手ジャングルの位置を見せたのを褒める。",
+    "timestamp": "1:18:13",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4693s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『舞茸さん』と聞こえる(確かさ 高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "相手のピンクワードの破壊が上手いと評価。",
+    "timestamp": "1:42:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6128s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『マイタケさん』と聞こえる(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-JG": [
+   {
+    "trait": "macro",
+    "summary": "ウルフを食べてからドラゴンへ向かうリコールの時機が良いと評価。",
+    "timestamp": "1:22:03",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4923s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『ハリケンさん』と聞こえ、ありけんと推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ミッドとの連携は上手いが、タワーを一緒に殴ることが今後の課題と指摘。",
+    "timestamp": "1:33:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5588s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『有権さん』と聞こえ、ありけんと推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "teamfight",
+    "summary": "とても良いエンゲージで、同じように入れれば勝てるとの見立て。",
+    "timestamp": "1:40:02",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6002s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前(アリケンさん)は区間にある。1:40:32 も同趣旨",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "mental",
+    "summary": "思い切りの良さ・やる気を評価。",
+    "timestamp": "1:44:34",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6274s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『あり計算』と聞こえ、ありけんと推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-SUP": [
+   {
+    "trait": "teamfight",
+    "summary": "白那のウルトも上手かったと評価。",
+    "timestamp": "1:46:42",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6402s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『シロナさん』と聞こえ、白那しずくと推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT-ADC": [
+   {
+    "trait": "other",
+    "summary": "トップにゴールドが回り、天帝フォルテにお金があまり入っていないとの指摘。",
+    "timestamp": "1:37:43",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5863s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『てんていさん』と聞こえる(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-NEXT-TOP": [
+   {
+    "trait": "mechanics",
+    "summary": "スキルショットを褒め、トップがとても良いと評価。",
+    "timestamp": "1:16:42",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4602s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『うるさん』と聞こえ、狐白うると推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "laning",
+    "summary": "トップで相手を上回り、やはり強いとの評価。",
+    "timestamp": "1:25:02",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5102s",
+    "selfTeam": false,
+    "note": "です・ます調で公式の実況・解説の音声の可能性がある。話者の確かさ 中。『コアクール』と聞こえ、狐白うると推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "気づくとトップを押し込まれていて危険と述べる(スプリットの圧)。",
+    "timestamp": "1:46:09",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6369s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『ウルさん』と聞こえる(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-NEXT-JG": [
+   {
+    "trait": "mechanics",
+    "summary": "E が上手いと評価。",
+    "timestamp": "1:37:12",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5832s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前(アステルさん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-JG": [
+   {
+    "trait": "other",
+    "summary": "序盤に動きを心配される場面があった。",
+    "timestamp": "1:50:22",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6622s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前(アルファさん)は区間にある。何が起きたかは本文から不明",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ボットへのガンクを重ねられているのを素晴らしいと評価。",
+    "timestamp": "1:55:26",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6926s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間に無く、前後の AlphaAzur の話の流れから推定(確かさ 中)",
+    "aiCheck": "unclear"
+   },
+   {
+    "trait": "other",
+    "summary": "ジャングラーの顔つきになり、とても上手くなったと評価。",
+    "timestamp": "2:01:04",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7264s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "mechanics",
+    "summary": "E とウルトの使い方がとても上手いと繰り返し評価。",
+    "timestamp": "2:03:32",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7412s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある。2:04:00・2:04:33 も同趣旨",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ボット→ミッドのガンクで試合を動かした、理想のジャングラーと評価。",
+    "timestamp": "2:06:55",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7615s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "macro",
+    "summary": "ボットとミッドのガンクが試合を決め、ゲームを動かしたのは AlphaAzur と述べる。",
+    "timestamp": "2:10:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7808s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "other",
+    "summary": "この試合の MVP と述べる(特にミッドへのガンク)。",
+    "timestamp": "2:15:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=8133s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-TOP": [
+   {
+    "trait": "laning",
+    "summary": "主導権を相手が持つはずの組み合わせで、上手くやっていると評価。",
+    "timestamp": "1:51:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6710s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前(ミッチーさん)は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "other",
+    "summary": "ビルドは修正するよう指摘。",
+    "timestamp": "1:59:29",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7169s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "laning",
+    "summary": "相手の焼きパンに対して CS が上手く、2 レベル差をつけたと評価。",
+    "timestamp": "2:00:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7200s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-ADC": [
+   {
+    "trait": "other",
+    "summary": "キャリーの役割で、成長が順調と評価。",
+    "timestamp": "1:51:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6710s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前(ゴンカネさん)は区間にある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-SUP": [
+   {
+    "trait": "mechanics",
+    "summary": "フックとウルトが上手いと評価。",
+    "timestamp": "1:56:28",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6988s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『レグサン』と聞こえ、レグルシュ・ライオンハートと推定(確かさ 中〜高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE-MID": [
+   {
+    "trait": "macro",
+    "summary": "ボットへロームしたことを褒める。",
+    "timestamp": "1:58:51",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7131s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『タカスペ』と聞こえ、たかやスペシャルと推定(確かさ 高)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "trait": "teamfight",
+    "summary": "とてもダメージを出したと評価。",
+    "timestamp": "2:12:30",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7950s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『高谷さん』と聞こえる(確かさ 高)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-CORE-TOP": [
+   {
+    "trait": "laning",
+    "summary": "(ミッチーへの評価の裏で)焼きパン相手にこれだけやれるのはすごいと、焼きパンを強い相手として扱う。",
+    "timestamp": "2:00:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7200s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。名前は区間にある。焼きパン自身の評価は間接的",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-CORE-ADC": [
+   {
+    "trait": "mental",
+    "summary": "緊張している様子と述べる。",
+    "timestamp": "1:48:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6532s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『ニュンさん』と聞こえ、大御所にゅん子と推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "teamMacro": {
+  "CC-NEXT": [
+   {
+    "text": "ミッドから全員で動かず一人が置かれてキャッチされる、という連携の課題。",
+    "timestamp": "24:44",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1484s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-NEXT": [
+   {
+    "text": "連携でバロンまで取り切る動きができていると評価。",
+    "timestamp": "25:14",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1514s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-CORE": [
+   {
+    "text": "ジャングルのトップへの移動や、インヒビに行かずリコールする判断が良いマクロと評価。",
+    "timestamp": "1:05:20",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3920s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "インヒビへ行かずに引く判断・リコールを褒める(終盤の判断が良い)。",
+    "timestamp": "1:05:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3950s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。チームは k4sen(推定)の話の流れから CC CORE と推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "DD-CORE": [
+   {
+    "text": "ウルト使用後にドラゴンを始めて事故るなど、ドラゴン判断に無理があるとの指摘。",
+    "timestamp": "42:25",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2545s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "トップを先に押して、相手に仕掛けを強いる形を作る。",
+    "timestamp": "1:10:08",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4208s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-NEXT": [
+   {
+    "text": "スプリット相手には集団戦で戦い、ドラゴンを取りに来させればよいとの方針。",
+    "timestamp": "1:25:35",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5135s",
+    "selfTeam": true,
+    "note": "です・ます調で公式の実況・解説の音声の可能性がある。話者の確かさ 中",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "ミッドのタワーかドラゴンのどちらかを取り、ヨリックを集団戦に呼ぶのが IT の狙いとの説明。",
+    "timestamp": "1:28:02",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5282s",
+    "selfTeam": true,
+    "note": "です・ます調で公式の実況・解説の音声の可能性がある。話者の確かさ 中",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "タワーの下で仕掛けられず折り切れない様子を『NEXT らしい』と述べる。",
+    "timestamp": "1:35:58",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5758s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE": [
+   {
+    "text": "オブジェクトは取られたがキルで有利、ボットレーンを圧倒している。",
+    "timestamp": "1:56:54",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7014s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "ジャングラーがレーンを支える位置にいて、相手ジャングルで食べる動き。",
+    "timestamp": "2:07:30",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7650s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "誰かは不明だが良いコールがあったと褒める。",
+    "timestamp": "2:11:28",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7888s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。誰のコールかは不明。チームは流れから IT CORE と推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "text": "試合を終わらせる判断に MASTERS 並みかと驚く。",
+    "timestamp": "2:11:58",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7918s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。チームは流れから IT CORE と推定(確かさ 中)",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "teamStyle": {
+  "DD-NEXT": [
+   {
+    "aspect": "chemistry",
+    "summary": "チームの完成度は赤(DD と推定)が高いとの見立て。",
+    "timestamp": "0:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=0s",
+    "selfTeam": false,
+    "note": "冒頭の「赤」が DD を指すかは推定(確かさ 中)",
+    "aiCheck": "unclear"
+   },
+   {
+    "aspect": "macro",
+    "summary": "ドラゴンを渡してトップで押すような動きもできており、よく仕上がっていた。",
+    "timestamp": "0:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=33s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "chemistry",
+    "summary": "安定感があり、連携が非常に取れていると評価。",
+    "timestamp": "25:14",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1514s",
+    "selfTeam": false,
+    "note": "21:40・24:13 にも同趣旨",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "CC-NEXT": [
+   {
+    "aspect": "chemistry",
+    "summary": "一人でジャングルに入りキャッチされるなど、連携が取れていない場面がある。",
+    "timestamp": "24:44",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1484s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "other",
+    "summary": "小さなミスが命取りになっているとの見立て。",
+    "timestamp": "30:04",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1804s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "pick",
+    "summary": "序盤から主導権を取るバンピック。解説者はこちらが好みとのこと。",
+    "timestamp": "7:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=420s",
+    "selfTeam": false,
+    "aiCheck": "unclear"
+   }
+  ],
+  "CC-CORE": [
+   {
+    "aspect": "lanes",
+    "summary": "各レーンの主導権は全体に CC が取っていたとの見立て。",
+    "timestamp": "35:04",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2104s",
+    "selfTeam": false,
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "pick",
+    "summary": "受ける構成で難易度が低く有利との見立て。",
+    "timestamp": "39:44",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2384s",
+    "selfTeam": false,
+    "note": "49:54・57:34 にも同趣旨",
+    "aiCheck": "unclear"
+   }
+  ],
+  "DD-CORE": [
+   {
+    "aspect": "mental",
+    "summary": "緊張もあり、スキルが決まらない場面があるとの見立て。",
+    "timestamp": "48:52",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2932s",
+    "selfTeam": false,
+    "note": "どの選手かは明示されていない",
+    "aiCheck": "unclear"
+   }
+  ],
+  "IT-NEXT": [
+   {
+    "aspect": "lanes",
+    "summary": "開始時の見立てで、ジャングル以外の全レーンが有利。",
+    "timestamp": "1:11:35",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "teamfight",
+    "summary": "ウーコンとレルのエンゲージが綺麗に入れば集団戦に勝てる構成。",
+    "timestamp": "1:34:11",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5651s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-NEXT": [
+   {
+    "aspect": "scaling",
+    "summary": "終盤はスモルダーが強く、後半寄りの構成。",
+    "timestamp": "1:12:06",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4326s",
+    "selfTeam": false,
+    "note": "です・ます調で公式の実況・解説の音声の可能性がある。話者の確かさ 中",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "split",
+    "summary": "ヨリックのスプリットプッシュで圧をかける。",
+    "timestamp": "1:28:02",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5282s",
+    "selfTeam": false,
+    "note": "です・ます調で公式の実況・解説の音声の可能性がある。話者の確かさ 中",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "defense",
+    "summary": "マルザハールとスモルダーで守る力がある。",
+    "timestamp": "1:36:56",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=5816s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "IT-CORE": [
+   {
+    "aspect": "lanes",
+    "summary": "トップは相手の主導権、ジャングルはスカーナーが有利という見立て。",
+    "timestamp": "1:48:28",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6508s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "composition",
+    "summary": "とても雪だるま式に伸ばす構成で、CORE の中でもレベルが高い。",
+    "timestamp": "2:04:33",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7473s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "aspect": "playstyle",
+    "summary": "相手のキャリーを潰す動きが多い。",
+    "timestamp": "2:06:14",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7574s",
+    "selfTeam": true,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "coaches": {
+  "DD-MASTERS-MID": [
+   {
+    "summary": "DD NEXT のバンピックは中盤・終盤を見た構成で、LTK NEXT ではこの方が強いと思うとの評価。",
+    "timestamp": "7:00",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=420s",
+    "selfTeam": false,
+    "note": "『忍者さん』と聞こえ、たぬき忍者と推定(過去の根拠で DD NEXT のコーチ)。19:55 にも「バンピック上手」(確かさ 高)",
+    "aiCheck": "unclear"
+   }
+  ],
+  "IT-MASTERS-JG": [
+   {
+    "summary": "(話者自身)ありけん・AlphaAzur にジャングルのルートを教えているとの言及。",
+    "timestamp": "5:57",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=357s",
+    "selfTeam": true,
+    "note": "話者はゆにか。名簿の IT MASTERS JG と同名で、IT の選手を指導している発言から同一人物の可能性が高い。依頼の前提(大会の出場選手ではない)と食い違うため、selfTeam は指示どおり false にしたが要確認",
+    "aiCheck": "not-refuted"
+   },
+   {
+    "summary": "AlphaAzur に強気なインベード等を教えてきたと話す(話者本人の指導)。",
+    "timestamp": "1:57:50",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7070s",
+    "selfTeam": true,
+    "note": "話者がゆにかさんであれば、名簿の IT-MASTERS-JG(ゆにか)と同じ人。指示どおり selfTeam は false とした。1:55:55 にも『ユニカコーチング』の語がある",
+    "aiCheck": "not-refuted"
+   }
+  ],
+  "LR-MASTERS-JG": [
+   {
+    "summary": "LR CORE のコーチであると言及(相手ジャングラーのドラゴンの知識の文脈)。",
+    "timestamp": "1:55:26",
+    "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6926s",
+    "selfTeam": false,
+    "note": "話者はゆにかさん(配信者)と推定。確かさ 高。『ネスティさん』と聞こえ、ねすてぃーと推定(確かさ 高)。どのチームのコーチかは文脈(LR CORE との試合中)から推定",
+    "aiCheck": "not-refuted"
+   }
+  ]
+ },
+ "overall": [
+  {
+   "target": "DD-NEXT",
+   "summary": "完成度が高く、連携と安定感がある。終盤に強い構成。",
+   "direction": "+",
+   "strength": "中",
+   "timestamp": "25:14",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1514s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "CC-NEXT",
+   "summary": "ジャングルの序盤は非常に良いが、連携不足と小さなミスで崩れる。",
+   "direction": "-",
+   "strength": "中",
+   "timestamp": "30:04",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1804s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "CC-NEXT-JG",
+   "summary": "8分まではチャレンジャー級と絶賛。その後のターンの理解が課題。",
+   "direction": "+",
+   "strength": "中",
+   "timestamp": "22:11",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=1331s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "CC-CORE",
+   "summary": "構成の面では CC CORE が有利との条件つきの見立て。",
+   "direction": "+",
+   "strength": "弱",
+   "timestamp": "49:54",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2994s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "DD-CORE",
+   "summary": "ジャングルのドラゴン判断の無理と緊張が課題。トップ酒寄は高評価。",
+   "direction": "-",
+   "strength": "弱",
+   "timestamp": "42:25",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=2545s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "DD-CORE-TOP",
+   "summary": "アンベッサが非常に上手く、余裕のある動き。",
+   "direction": "+",
+   "strength": "中",
+   "timestamp": "1:02:36",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3756s",
+   "speaker": "ゆにか(配信者と推定。自動字幕に話者情報なし)",
+   "speakerConfidence": "高",
+   "selfTeam": false
+  },
+  {
+   "target": "IT-NEXT",
+   "summary": "開始時の見立てで、ジャングル以外の全レーンで IT が有利。",
+   "direction": "+",
+   "strength": "弱",
+   "timestamp": "1:11:35",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4295s",
+   "speaker": "ゆにか(推定)",
+   "speakerConfidence": "高",
+   "selfTeam": true
+  },
+  {
+   "target": "LR-NEXT",
+   "summary": "終盤はスモルダーのいる LR 側が強いとの見立て。",
+   "direction": "+",
+   "strength": "弱",
+   "timestamp": "1:12:06",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4326s",
+   "speaker": "ゆにか、または公式の解説(不明)",
+   "speakerConfidence": "中",
+   "selfTeam": false
+  },
+  {
+   "target": "IT-CORE",
+   "summary": "IT CORE が強すぎると、プレーを見て評価。",
+   "direction": "+",
+   "strength": "中",
+   "timestamp": "1:58:20",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7100s",
+   "speaker": "ゆにか(推定)",
+   "speakerConfidence": "高",
+   "selfTeam": true
+  },
+  {
+   "target": "IT-CORE",
+   "summary": "IT CORE は本当に強いと評価。前回も強かったとも述べる(2:12:30)。",
+   "direction": "+",
+   "strength": "強",
+   "timestamp": "2:08:00",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=7680s",
+   "speaker": "ゆにか(推定)",
+   "speakerConfidence": "高",
+   "selfTeam": true
+  },
+  {
+   "target": "IT-CORE",
+   "summary": "IT MASTERS とスクリムするかと冗談めかすほどの出来と評価。",
+   "direction": "+",
+   "strength": "中",
+   "timestamp": "2:14:43",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=8083s",
+   "speaker": "ゆにか(推定)",
+   "speakerConfidence": "高",
+   "selfTeam": true
+  }
+ ],
+ "unmapped": [
+  {
+   "heard": "ユイさん",
+   "guess": "CC-MASTERS-ADC(Yuhi)。CC NEXT のバンピック担当(コーチ)として語られる。確かさ 低〜中",
+   "summary": "序盤から主導権を取るバンピックで、解説者はこちらが好み。",
+   "timestamp": "7:00",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=420s"
+  },
+  {
+   "heard": "メイカさん/メーカーさん",
+   "guess": "CC-NEXT-TOP(叶)。トップを押す・フリーファームの文脈。確かさ 低",
+   "summary": "トップでプッシュ、うまくできていたとの言及。",
+   "timestamp": "3:37",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=217s"
+  },
+  {
+   "heard": "さこいでさん",
+   "guess": "DD-CORE-TOP(酒寄颯馬)。確かさ 低",
+   "summary": "「うまい」と褒める言及。",
+   "timestamp": "59:12",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=3552s"
+  },
+  {
+   "heard": "ケイイチさん",
+   "guess": "LR-CORE-JG(Killin9Hit)。確かさ 低〜中",
+   "summary": "カニのファイトで有利、ドラゴンの時機を知っているとの言及(相手のジャングラーの文脈)。",
+   "timestamp": "1:53:53",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6833s"
+  },
+  {
+   "heard": "イネイさん",
+   "guess": "LR-CORE-MID(乾伸一郎)。確かさ 低〜中",
+   "summary": "ミッドで主導権を取っているとの言及。",
+   "timestamp": "1:53:53",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=6833s"
+  },
+  {
+   "heard": "トーコさん",
+   "guess": "LR-NEXT-SUP(No.1005)。確かさ 低",
+   "summary": "ワードが偉い、敵を弾ける(ジャンナの可能性)との言及。LR 側の誰か。",
+   "timestamp": "1:16:09",
+   "source": "https://www.youtube.com/watch?v=L9zVE-9SN_s&t=4569s"
+  }
+ ],
+ "preprocessingNotes": [
+  "話者「ゆにか」は名簿の IT-MASTERS-JG と同名。5:57 で ありけん・AlphaAzur を指導していると述べており、出場選手(IT 所属)の可能性が高い。selfTeam の扱いの前提を人が確認すべき",
+  "0:00 の「ITのコーチ対決」は、直後の NEXT CC vs DD のコーチ(忍者さん・ユイさん)の対決の聞き違いの可能性(IT の試合ではない)",
+  "辞書に無い呼び名: マザさん/マザーさん/マザワさん(まざー3。p に出ない区間あり)、アスミさん(空澄セナ)、火星さん/カセンさん/火線さん/カシエンさん(k4sen)、坂井アリさん/坂よりさん/酒寄りさん(酒寄颯馬)、クズラさん/クズワさん(葛葉)、竜巻さん(龍巻ちせ)、カグラメア/カブラメア(神楽めあ)、ジャスパーさん(じゃすぱー)、ネルさん(天ノ川ねる)、ユフダンさん(ゆふな)、忍者さん/ニンニン(たぬき忍者)、ユイさん、メイカさん、ポンポンアリア(昏昏アリア)、リオソン(鷹宮リオン)、和紙台(わしだい)",
+  "一般語の誤検出: c の LR-NEXT-TOP(13:12・49:24・56:08・58:22・58:52)は「神」(ほめ言葉・ジン)への部分一致で、狐白うるとは無関係。5:57 の p IT-CORE-JG は「アルファさん」への言及で試合の選手ではない(話者が教えた相手)",
+  "k の shotcalling が付いた 11:17・21:40・65:20 はコールの帰属を述べていない(判断やマクロの評価)。63:54 は「誰がコールしたんだろう」で帰属は不明",
+  "「無敵やん」(0:33)が人名か不明。辞書と照合できない",
+  "チャンピオン名(サイオン・チョガス・リリア・ナサス・アンベ・カサンテ・ウーコン・アーリー・カシオペア・ジン・レル・ユナラ・ミリオ・バイ)が手がかりとして拾われておらず、ピックの推定に有用",
+  "ありけん(IT-NEXT-JG)の聞き違いが多く、対応づけられていない: 『ハリケン』『マリケン』『ワリケン』『バリケン』『有権』『アリケイ』『あり計算』",
+  "橘ひなの(IT-NEXT-TOP)の聞き違い『ヒナーノ』『ひなあの』『ひなうの』『たましのな』が対応づけられていない(『ひなのさん』は対応づけ済み)",
+  "まいたけ(IT-NEXT-MID)の『マニタケ』『舞茸』『マイタケ』が対応づけられていない",
+  "狐白うる(LR-NEXT-TOP)の『コハクール』『コアクール』が対応づけられていない。『うるさん』『ウルさん』は c にだけ出る",
+  "白那しずく(IT-NEXT-SUP)の『シロナ』、天帝フォルテ(IT-NEXT-ADC)の『天帝』『てんてい』『てんてん』、アステル・レダの『アステル』『アステリ』が p に出ない",
+  "k4sen(CC-CORE-JG)の『火星』『火線』、葛葉の『クズオ』『くずほ』、酒寄颯馬の『さかより』『サカウリ』が辞書に無い",
+  "IT CORE の『ミッチー』『ミッチ』(mittiii)、『レグさん』『レグサン』(IT-CORE-SUP)、『タカスペ』『高谷』(IT-CORE-MID)、『ニュン』(LR-CORE-ADC)が区間によって拾われていない。『アラファ』『アルフ』(AlphaAzur)も",
+  "『ケイイチ』(Killin9Hit と推定)、『イネイ』(乾伸一郎と推定)、『ネスティ』(ねすてぃー)が辞書に無い",
+  "一般語の部分一致の誤検出: 1:22:03 の『取りこねる』の『ねる』が DD-NEXT-MID(天ノ川ねる)の候補になっている。1:23:03 の c の LR-NEXT-TOP も根拠となる語が見当たらない",
+  "鉤括弧つきの区間(1:24:37〜1:25:02)や、です・ます調の区間(1:12:06・1:28:02)は公式の実況・解説の音声が混ざった可能性がある。話者の区別の手がかりとして残すとよい",
+  "チャンピオン名(モル・ウーコン・ビクター・レル・ユナラ・ヨリック・リリア・スモルダー・マルザ・ジャンナ・スカーナー・アンベッサ・ナー・カイサ・オーロラ・シンドラ・ジャーバン・バルス)が手がかりとして分類されていない。ピックの抜き出しに有用",
+  "名簿では ゆにか が IT-MASTERS-JG にある。配信者を第三者として selfTeam を false にする指示と食い違う可能性がある(IT CORE の試合では自身の組織の話になる)。統合の際に人が確かめる必要がある"
+ ]
+}
