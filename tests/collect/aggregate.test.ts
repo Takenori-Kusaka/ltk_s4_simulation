@@ -509,21 +509,21 @@ test('F-004 基準11: 本番の記録を初めて読んだ集計で、前回の�
 });
 
 test('F-004 基準11: 前回の勝率表が無ければ forecast は null と理由。勝率表の a・b の向きが games[].teams と逆なら勝率を入れ替える', async () => {
-  // 3 日目(2026-10-23)は LR がブルー、DD がレッド。games[].teams は辞書順(DD-NEXT・LR-NEXT)
-  const root = resultsRootOf({ 'results/2026-10-23-regular-day3.json': [regularRecord(3, '2026-10-23', 'LR', 'DD', 'NEXT', 'LR')] });
+  // 2 日目(2026-10-19)は LR がブルー、DD がレッド。games[].teams は辞書順(DD-NEXT・LR-NEXT)
+  const root = resultsRootOf({ 'results/2026-10-19-regular-day2.json': [regularRecord(2, '2026-10-19', 'LR', 'DD', 'NEXT', 'LR')] });
   const fresh = setupRaw();
-  await aggregateAt(fresh, root, '2026-10-24T03:00:00.000Z');
-  assert.equal(gameOf(fresh.publicDir, 'RS-3-LR-DD-NEXT').forecast, null);
-  assert.equal(gameOf(fresh.publicDir, 'RS-3-LR-DD-NEXT').forecastReason, NO_TABLE);
+  await aggregateAt(fresh, root, '2026-10-20T03:00:00.000Z');
+  assert.equal(gameOf(fresh.publicDir, 'RS-2-LR-DD-NEXT').forecast, null);
+  assert.equal(gameOf(fresh.publicDir, 'RS-2-LR-DD-NEXT').forecastReason, NO_TABLE);
 
   const env = setupRaw();
   mkdirSync(env.publicDir, { recursive: true });
   writeFileSync(join(env.publicDir, 'winrates.json'), JSON.stringify({
-    kind: 'winrates', computedAt: '2026-10-22T03:00:00.000Z', matches: [{ stage: 'regular', day: 3, tier: 'NEXT', a: 'LR', b: 'DD', pA: 70, pB: 30 }],
+    kind: 'winrates', computedAt: '2026-10-18T03:00:00.000Z', matches: [{ stage: 'regular', day: 2, tier: 'NEXT', a: 'LR', b: 'DD', pA: 70, pB: 30 }],
   }));
-  await aggregateAt(env, root, '2026-10-24T03:00:00.000Z');
-  assert.deepEqual(gameOf(env.publicDir, 'RS-3-LR-DD-NEXT').teams, ['DD-NEXT', 'LR-NEXT']);
-  assert.deepEqual(gameOf(env.publicDir, 'RS-3-LR-DD-NEXT').forecast, { pA: 30, pB: 70, computedAt: '2026-10-22T03:00:00.000Z' });
+  await aggregateAt(env, root, '2026-10-20T03:00:00.000Z');
+  assert.deepEqual(gameOf(env.publicDir, 'RS-2-LR-DD-NEXT').teams, ['DD-NEXT', 'LR-NEXT']);
+  assert.deepEqual(gameOf(env.publicDir, 'RS-2-LR-DD-NEXT').forecast, { pA: 30, pB: 70, computedAt: '2026-10-18T03:00:00.000Z' });
 });
 
 test('F-004 基準24: 同じ入力(記録・ソロランクの試合・根拠・評価設定・基準日)から同じ results.json・ratings.json・winrates.json を返す', async () => {
@@ -561,22 +561,22 @@ test('F-004 基準9: 集計は本番の結果から数えた k を勝率表の t
   const env = setupRaw();
   const root = resultsRootOf({
     'results/2026-10-15-regular-day1.json': [day1('CC', 'DD', 'NEXT', 'CC'), day1('IT', 'LR', 'NEXT', 'IT')],
-    'results/2026-10-19-regular-day2.json': [regularRecord(2, '2026-10-19', 'DD', 'IT', 'NEXT', 'IT')],
+    'results/2026-10-23-regular-day3.json': [regularRecord(3, '2026-10-23', 'DD', 'IT', 'NEXT', 'IT')],
     // スクリムの負けは数えない
     'scrims/2026-10-21-lr-core-vs-dd-core.json': [coreScrim('2026-10-21', '30:00', 'LR CORE')],
   });
-  await aggregateAt(env, root, '2026-10-22T03:00:00.000Z');
+  await aggregateAt(env, root, '2026-10-24T03:00:00.000Z');
   const file = readJson<WinratesMoodLike>(env.publicDir, 'winrates.json');
   const moodOf = (key: string) => file.teams.find((t) => t.key === key)!.mood;
-  assert.deepEqual(moodOf('DD-NEXT'), [{ date: '2026-10-15', k: 1 }, { date: '2026-10-19', k: 2 }]);
-  assert.deepEqual(moodOf('IT-NEXT'), [{ date: '2026-10-15', k: 0 }, { date: '2026-10-19', k: 0 }]);
+  assert.deepEqual(moodOf('DD-NEXT'), [{ date: '2026-10-15', k: 1 }, { date: '2026-10-23', k: 2 }]);
+  assert.deepEqual(moodOf('IT-NEXT'), [{ date: '2026-10-15', k: 0 }, { date: '2026-10-23', k: 0 }]);
   assert.deepEqual(moodOf('DD-CORE'), [], 'スクリムだけの階級チームは空');
   // results.json の teams[].k と、勝率表の mood の最後の k は同じ
   const streaks = readJson<ResultsFileLike>(env.publicDir, 'results.json').teams;
   for (const t of streaks) assert.equal(moodOf(t.key).at(-1)?.k ?? 0, t.k, t.key);
-  // 戦力 S をそろえて(この置き場の評価では S が無い)、第3日の DD 対 LR の勝率を作る
+  // 戦力 S をそろえて(この置き場の評価では S が無い)、第6日の DD 対 LR の勝率を作る
   const rows = file.teams.map((t) => ({ ...t, S: 6 }));
-  const d = dayWinrate(rows, 'NEXT', 'DD', 'LR', 0.5, '2026-10-23');
+  const d = dayWinrate(rows, 'NEXT', 'DD', 'LR', 0.5, '2026-11-06');
   assert.equal(d.applied, true);
   assert.deepEqual([d.kA, d.kB], [2, 1], 'LR-NEXT は 1 日目に IT-NEXT に負けている(k = 1 の補正は 0)');
   assert.equal(d.shift, dayShift(d.a!, d.b!, d.dA, d.dB, { kA: 2 }));

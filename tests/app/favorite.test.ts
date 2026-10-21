@@ -172,13 +172,13 @@ test('基準15(a)・(b): 選手の直近の試合は階級チームの直近の�
   assert.equal(playerNext(file, sena, at('2026-10-15T23:30:00+09:00'))!.label, 'DAY 1');
   const n2 = playerNext(file, sena, at('2026-10-16T00:00:00+09:00'))!;
   assert.equal(n2.label, 'DAY 2');
-  assert.equal(n2.opponent, 'LR');
-  // MASTERS CUP の日(10/20)に NEXT の選手が見ると、次の Regular Stage の日(Day 3。CC はレッド、相手 IT)
+  assert.equal(n2.opponent, 'IT');
+  // MASTERS CUP の日(10/20)に NEXT の選手が見ると、次の Regular Stage の日(Day 3。CC はブルー、相手 LR)
   const n3 = playerNext(file, sena, at('2026-10-20T12:00:00+09:00'))!;
   assert.equal(n3.label, 'DAY 3');
-  assert.equal(n3.side, 'RED');
-  assert.equal(n3.opponent, 'IT');
-  assert.equal(n3.p, file.matches.find((m) => m.stage === 'regular' && m.day === 3 && m.tier === 'NEXT' && m.b === 'CC')!.pB.toFixed(1));
+  assert.equal(n3.side, 'BLUE');
+  assert.equal(n3.opponent, 'LR');
+  assert.equal(n3.p, file.matches.find((m) => m.stage === 'regular' && m.day === 3 && m.tier === 'NEXT' && m.a === 'CC')!.pA.toFixed(1));
   // MASTERS の選手は準決勝
   const washidai = ROSTER.find((p) => p.id === 'DD-MASTERS-TOP')!;
   const m1 = playerNext(file, washidai, at('2026-10-16T00:00:00+09:00'))!;
@@ -194,11 +194,11 @@ test('基準15(a)・(b): 選手の直近の試合は階級チームの直近の�
   const f = facing(sena, now)!;
   const o = nextOpponent(sena.id, jstDate(now))!;
   assert.equal(f.id, o.opponentId);
-  assert.equal(f.id, 'IT-NEXT-MID');
+  assert.equal(f.id, 'LR-NEXT-MID');
   assert.equal(f.team, n3.opponent);
-  assert.equal(f.name, ROSTER.find((p) => p.id === 'IT-NEXT-MID')!.name);
+  assert.equal(f.name, ROSTER.find((p) => p.id === 'LR-NEXT-MID')!.name);
   assert.equal(f.href, opponentCompareHref(sena.id, now));
-  assert.equal(f.href, '#/compare/CC-NEXT-MID/IT-NEXT-MID');
+  assert.equal(f.href, '#/compare/CC-NEXT-MID/LR-NEXT-MID');
   assert.equal(facing(sena, at('2026-11-07T00:00:00+09:00')), null);
 });
 

@@ -67,8 +67,8 @@ const byId = <T extends { matchId: string }>(games: readonly T[], id: string): T
 /** NEXT の Regular Stage 3 日分。DD は 3 連敗、CC は 勝ち → 負け → 負け、IT は 3 連勝、LR は 負け → 勝ち → 勝ち */
 const next3Days = (): Row[] => [
   rs(1, 'CC', 'DD', 'NEXT', 'CC'), rs(1, 'IT', 'LR', 'NEXT', 'IT'),
-  rs(2, 'CC', 'LR', 'NEXT', 'LR'), rs(2, 'DD', 'IT', 'NEXT', 'IT'),
-  rs(3, 'LR', 'DD', 'NEXT', 'LR'), rs(3, 'IT', 'CC', 'NEXT', 'IT'),
+  rs(2, 'LR', 'DD', 'NEXT', 'LR'), rs(2, 'IT', 'CC', 'NEXT', 'IT'),
+  rs(3, 'CC', 'LR', 'NEXT', 'LR'), rs(3, 'DD', 'IT', 'NEXT', 'IT'),
 ];
 /** MASTERS CUP 第 1 回。準決勝は DD・IT の勝ち、3 位決定戦は CC の勝ち、決勝は IT → DD → IT */
 const cup1 = (): Row[] => [
@@ -175,7 +175,7 @@ test('基準9: 試合日を渡せば、その日より前の本番だけで数�
 
 test('基準10: 本番の試合数・スクリムの試合数・最新の試合日を返す。本番の記録が無ければ null', () => {
   const scrims = () => [sc('2026-10-10', 'LR CORE', 'DD CORE', 'DD CORE', '30:00'), sc('2026-10-10', 'LR CORE', 'DD CORE', 'DD CORE', '31:00')];
-  const games = resultGamesOf(load([...scrims(), rs(1, 'CC', 'DD', 'NEXT', 'CC'), rs(2, 'CC', 'LR', 'NEXT', 'LR'), rs(2, 'DD', 'IT', 'NEXT', 'IT')]).games);
+  const games = resultGamesOf(load([...scrims(), rs(1, 'CC', 'DD', 'NEXT', 'CC'), rs(2, 'LR', 'DD', 'NEXT', 'LR'), rs(2, 'IT', 'CC', 'NEXT', 'IT')]).games);
   assert.deepEqual(resultsSummaryOf(games), { official: 3, scrim: 2, latestDate: '2026-10-19' });
   assert.equal(resultsSummaryOf(resultGamesOf(load(scrims()).games)), null, 'スクリムだけ');
   assert.equal(resultsSummaryOf([]), null, '記録なし');
@@ -189,7 +189,7 @@ const table = (computedAt: string): Row => ({
   matches: [
     { stage: 'regular', day: 1, tier: 'NEXT', a: 'CC', b: 'DD', pA: 61.3, pB: 38.7 },
     { stage: 'regular', day: 1, tier: 'CORE', a: 'CC', b: 'DD', pA: 45, pB: 55 },
-    { stage: 'regular', day: 3, tier: 'NEXT', a: 'LR', b: 'DD', pA: 70, pB: 30 },
+    { stage: 'regular', day: 2, tier: 'NEXT', a: 'LR', b: 'DD', pA: 70, pB: 30 },
     { stage: 'masters', cup: 1, tier: 'MASTERS', a: 'DD', b: 'CC', pA: 58.2, pB: 41.8 },
     { stage: 'masters', cup: 1, tier: 'MASTERS', a: 'IT', b: 'LR', pA: 66, pB: 34 },
   ],
@@ -204,14 +204,14 @@ const NO_TABLE = '試合日より前の勝率表が無い';
 test('基準11: 予測は、試合日の 0 時(JST)より前に計算した勝率表の、その試合の両チームの勝率と computedAt', () => {
   const at = '2026-10-14T03:00:00.000Z';
   const games = resultGamesOf(load([
-    rs(1, 'CC', 'DD', 'NEXT', 'CC'), rs(3, 'LR', 'DD', 'NEXT', 'LR'), mc(1, 'semi1', 'DD', 'CC', 'DD'), mc(1, 'third', 'CC', 'LR', 'CC'),
+    rs(1, 'CC', 'DD', 'NEXT', 'CC'), rs(2, 'LR', 'DD', 'NEXT', 'LR'), mc(1, 'semi1', 'DD', 'CC', 'DD'), mc(1, 'third', 'CC', 'LR', 'CC'),
     mc(1, 'final', 'DD', 'IT', 'IT', 2), po('2026-11-21', 'upperFinal', 1, 'NEXT', 'DD', 'CC', 'DD'),
   ]).games);
   const f = (id: string) => forecastOf(byId(games, id), table(at));
   assert.deepEqual(f('RS-1-CC-DD-NEXT'), { forecast: { pA: 61.3, pB: 38.7, computedAt: at }, forecastReason: null });
   // pA は games[].teams の 1 つ目、pB は 2 つ目の勝率。勝率表の a・b(ブルー・レッド)の向きが逆なら入れ替える
-  assert.deepEqual(byId(games, 'RS-3-LR-DD-NEXT').teams, ['DD-NEXT', 'LR-NEXT']);
-  assert.deepEqual(f('RS-3-LR-DD-NEXT').forecast, { pA: 30, pB: 70, computedAt: at });
+  assert.deepEqual(byId(games, 'RS-2-LR-DD-NEXT').teams, ['DD-NEXT', 'LR-NEXT']);
+  assert.deepEqual(f('RS-2-LR-DD-NEXT').forecast, { pA: 30, pB: 70, computedAt: at });
   assert.deepEqual(f('MC1-semi1-G1').forecast, { pA: 41.8, pB: 58.2, computedAt: at });
   // 勝率表の matches[] に無い組(3 位決定戦・決勝・Playoffs)は、ステージごとの勝率表 stageWinTables から引く
   assert.deepEqual(f('MC1-third-G1').forecast, { pA: 55.8, pB: 44.2, computedAt: at });
@@ -270,9 +270,9 @@ test('基準24: 同じ記録・同じ基準日・同じ前回のファイルか�
   assert.equal(a.computedAt, '2026-10-24T03:00:00.000Z');
   assert.deepEqual(ids(a.games), [
     'SC-20261010-DD-CORE-LR-CORE-G1', 'SC-20261010-DD-CORE-LR-CORE-G2', 'SC-20261011-DD-NEXT-IT-NEXT-G1',
-    'RS-1-CC-DD-NEXT', 'RS-1-IT-LR-NEXT', 'RS-2-CC-LR-NEXT', 'RS-2-DD-IT-NEXT',
+    'RS-1-CC-DD-NEXT', 'RS-1-IT-LR-NEXT', 'RS-2-LR-DD-NEXT', 'RS-2-IT-CC-NEXT',
     'MC1-semi1-G1', 'MC1-semi2-G1', 'MC1-third-G1', 'MC1-final-G1', 'MC1-final-G2', 'MC1-final-G3',
-    'RS-3-LR-DD-NEXT', 'RS-3-IT-CC-NEXT',
+    'RS-3-CC-LR-NEXT', 'RS-3-DD-IT-NEXT',
   ]);
   const streak = Object.fromEntries(a.teams.map((t) => [t.key, [t.k, t.form]]));
   assert.deepEqual([streak['CC-NEXT'], streak['DD-NEXT'], streak['LR-MASTERS'], streak['DD-MASTERS'], streak['LR-CORE']], [[2, 'LLW'], [3, 'LLL'], [2, 'LL'], [1, 'LWLW'], [0, '']]);

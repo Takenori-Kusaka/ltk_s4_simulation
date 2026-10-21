@@ -26,7 +26,7 @@ test('AC9: 確率の表を返す(各チームのシード1〜4位の確率と優
 
 test('AC9: 確定済みの試合は結果どおりに扱う(DD が RS 全勝・MC 全優勝なら 1位シード確率 100%)', () => {
   const regular = [] as NonNullable<SimInput['results']>['regular'];
-  const days: [number, string, string][] = [[1, 'CC', 'DD'], [2, 'DD', 'IT'], [3, 'LR', 'DD'], [4, 'DD', 'CC'], [5, 'IT', 'DD'], [6, 'DD', 'LR']];
+  const days: [number, string, string][] = [[1, 'CC', 'DD'], [2, 'LR', 'DD'], [3, 'DD', 'IT'], [4, 'DD', 'CC'], [5, 'IT', 'DD'], [6, 'DD', 'LR']];
   for (const [day, a, b] of days) for (const tier of ['NEXT', 'CORE'] as const) regular!.push({ day, teams: [a, b] as any, tier, winner: 'DD' });
   const masters = [1, 2, 3].flatMap((cup) => [
     { cup, match: 'semi1' as const, winner: 'DD' as const },

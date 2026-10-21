@@ -240,7 +240,7 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
     assert.equal(m.pA, m.pLaneA);
     assert.equal(m.dataMissing, null);
   }
-  const ccLr = nextMatch(out, 2, 'CC', 'LR');
+  const ccLr = nextMatch(out, 3, 'CC', 'LR');
   assert.ok(ccLr);
   assert.equal(ccLr.pA, 51.9);
   const ccDd = nextMatch(out, 1, 'CC', 'DD');
@@ -257,7 +257,7 @@ test('基準3b: M を計算できない階級チームが関わる試合は p_ma
   assert.equal(nextMatch(none, 1, 'CC', 'DD')?.pA, 41.5);
   // S を計算できない試合は従来どおり 50.0%(p_lane・p_macro・p_external も 50.0%)
   const noS = computePriorWinrates(teams({ NEXT: { ...EXAMPLE, LR: null } }, { NEXT: EXAMPLE_M }), { externalViews: VIEWS });
-  const x = nextMatch(noS, 2, 'CC', 'LR');
+  const x = nextMatch(noS, 3, 'CC', 'LR');
   assert.ok(x);
   assert.equal(x.pA, 50.0);
   assert.equal(x.pLaneA, 50.0);
