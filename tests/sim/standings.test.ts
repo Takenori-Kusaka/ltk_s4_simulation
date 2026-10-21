@@ -9,8 +9,8 @@ import { scoreRegularCard, mastersCupPoints, computeSeeds } from '../../src/sim/
 test('AC1: Regular Stage の6日・各日2カードとサイドが公式の表と一致する (QC-04)', () => {
   const expected = [
     [['CC', 'DD'], ['IT', 'LR']],
-    [['CC', 'LR'], ['DD', 'IT']],
     [['LR', 'DD'], ['IT', 'CC']],
+    [['CC', 'LR'], ['DD', 'IT']],
     [['LR', 'IT'], ['DD', 'CC']],
     [['IT', 'DD'], ['LR', 'CC']],
     [['CC', 'IT'], ['DD', 'LR']],

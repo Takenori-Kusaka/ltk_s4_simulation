@@ -19,9 +19,9 @@ test('基準15: NEXT・CORE は Regular Stage の日程から、基準日以降�
   // 試合日の当日はその日の相手
   assert.deepEqual(nextOpponent('CC-NEXT-TOP', '2026-10-15'), { opponentId: 'DD-NEXT-TOP', team: 'DD', date: '2026-10-15' });
   // 翌日から次の試合日までは次の試合の相手
-  assert.deepEqual(nextOpponent('CC-NEXT-TOP', '2026-10-16'), { opponentId: 'LR-NEXT-TOP', team: 'LR', date: '2026-10-19' });
-  assert.deepEqual(nextOpponent('CC-NEXT-TOP', '2026-10-19'), { opponentId: 'LR-NEXT-TOP', team: 'LR', date: '2026-10-19' });
-  assert.deepEqual(nextOpponent('IT-CORE-MID', '2026-10-20'), { opponentId: 'CC-CORE-MID', team: 'CC', date: '2026-10-23' });
+  assert.deepEqual(nextOpponent('CC-NEXT-TOP', '2026-10-16'), { opponentId: 'IT-NEXT-TOP', team: 'IT', date: '2026-10-19' });
+  assert.deepEqual(nextOpponent('CC-NEXT-TOP', '2026-10-19'), { opponentId: 'IT-NEXT-TOP', team: 'IT', date: '2026-10-19' });
+  assert.deepEqual(nextOpponent('IT-CORE-MID', '2026-10-20'), { opponentId: 'DD-CORE-MID', team: 'DD', date: '2026-10-23' });
 });
 
 test('基準15: MASTERS は MASTERS CUP の準決勝の組み合わせから相手を決める(当日を含む)', () => {
