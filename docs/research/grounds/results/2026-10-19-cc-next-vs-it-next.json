@@ -1,0 +1,386 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-19",
+    "stage": "regular",
+    "day": 2,
+    "tier": "NEXT",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "LTK4_REGULAR_D2_M3_RESULT",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2904893011?t=17094s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs",
+    "duration": "34:55",
+    "durationSec": 2095,
+    "cs14Sec": 840,
+    "winner": "CC NEXT",
+    "winnerBasis": "LTKDB の勝利チーム CC。キル 4-20",
+    "sides": {
+      "IT NEXT": "ブルー",
+      "CC NEXT": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "IT NEXT": {
+        "kills": 4,
+        "deaths": 20,
+        "assists": 13,
+        "gold": 55113,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Tachibana Hinano",
+            "rosterId": "IT-NEXT-TOP",
+            "rosterName": "橘ひなの",
+            "mappingConfidence": "推定(LTKDB の選手名 橘ひなの・サモナーネーム Tachibana Hinano。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "モルデカイザー",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 6,
+            "assists": 3,
+            "gold": 10427,
+            "damage": 18351,
+            "cs": null,
+            "cs14": 69,
+            "goldPerMin": 299,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Ariken",
+            "rosterId": "IT-NEXT-JG",
+            "rosterName": "ありけん",
+            "mappingConfidence": "推定(LTKDB の選手名 ありけん・サモナーネーム Ariken。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 15,
+            "champion": "ジャーヴァンⅣ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 5,
+            "assists": 3,
+            "gold": 9794,
+            "damage": 3660,
+            "cs": null,
+            "cs14": 100,
+            "goldPerMin": 280,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Maitake",
+            "rosterId": "IT-NEXT-MID",
+            "rosterName": "まいたけ",
+            "mappingConfidence": "推定(LTKDB の選手名 まいたけ・サモナーネーム Maitake。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 18,
+            "champion": "ビクター",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 2,
+            "assists": 2,
+            "gold": 12794,
+            "damage": 24801,
+            "cs": null,
+            "cs14": 115,
+            "goldPerMin": 366,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Tentei Forte",
+            "rosterId": "IT-NEXT-ADC",
+            "rosterName": "天帝フォルテ",
+            "mappingConfidence": "推定(LTKDB の選手名 天帝フォルテ・サモナーネーム Tentei Forte。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 14,
+            "champion": "ジンクス",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 3,
+            "assists": 2,
+            "gold": 14286,
+            "damage": 11478,
+            "cs": null,
+            "cs14": 111,
+            "goldPerMin": 409,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "Shirona Shizuku",
+            "rosterId": "IT-NEXT-SUP",
+            "rosterName": "白那しずく",
+            "mappingConfidence": "推定(LTKDB の選手名 白那しずく・サモナーネーム Shirona Shizuku。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 13,
+            "champion": "タム・ケンチ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 3,
+            "gold": 7812,
+            "damage": 4816,
+            "cs": null,
+            "cs14": 25,
+            "goldPerMin": 224,
+            "damageNote": null
+          }
+        ]
+      },
+      "CC NEXT": {
+        "kills": 20,
+        "deaths": 4,
+        "assists": 35,
+        "gold": 67187,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Kanae",
+            "rosterId": "CC-NEXT-TOP",
+            "rosterName": "叶",
+            "mappingConfidence": "推定(LTKDB の選手名 叶・サモナーネーム Kanae。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 20,
+            "champion": "オラフ",
+            "championNote": null,
+            "kills": 9,
+            "deaths": 1,
+            "assists": 4,
+            "gold": 15787,
+            "damage": 20879,
+            "cs": null,
+            "cs14": 105,
+            "goldPerMin": 452,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Yufuna",
+            "rosterId": "CC-NEXT-JG",
+            "rosterName": "ゆふな",
+            "mappingConfidence": "推定(LTKDB の選手名 ゆふな・サモナーネーム Yufuna。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "ウーコン",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 1,
+            "assists": 9,
+            "gold": 13526,
+            "damage": 14672,
+            "cs": null,
+            "cs14": 98,
+            "goldPerMin": 387,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Asumi Sena",
+            "rosterId": "CC-NEXT-MID",
+            "rosterName": "空澄セナ",
+            "mappingConfidence": "推定(LTKDB の選手名 空澄セナ・サモナーネーム Asumi Sena。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "マルザハール",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 0,
+            "assists": 5,
+            "gold": 11804,
+            "damage": 15093,
+            "cs": null,
+            "cs14": 103,
+            "goldPerMin": 338,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Shishido Akari",
+            "rosterId": "CC-NEXT-ADC",
+            "rosterName": "獅子堂あかり",
+            "mappingConfidence": "推定(LTKDB の選手名 獅子堂あかり・サモナーネーム Shishido Akari。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "ユナラ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 0,
+            "assists": 6,
+            "gold": 16935,
+            "damage": 23882,
+            "cs": null,
+            "cs14": 118,
+            "goldPerMin": 485,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "Takamiya Rion",
+            "rosterId": "CC-NEXT-SUP",
+            "rosterName": "鷹宮リオン",
+            "mappingConfidence": "推定(LTKDB の選手名 鷹宮リオン・サモナーネーム Takamiya Rion。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 14,
+            "champion": "ノーチラス",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 2,
+            "assists": 11,
+            "gold": 9135,
+            "damage": 3119,
+            "cs": null,
+            "cs14": 30,
+            "goldPerMin": 262,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "シェン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "アカリ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "レオナ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "オーロラ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "BAN",
+        "champion": "シヴィア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "BAN",
+        "champion": "レル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "BAN",
+        "champion": "オリアナ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "BAN",
+        "champion": "エズリアル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "BAN",
+        "champion": "ゼリ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "BAN",
+        "champion": "アッシュ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "モルデカイザー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ビクター",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "ジンクス",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT NEXT",
+        "type": "PICK",
+        "champion": "タム・ケンチ",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "PICK",
+        "champion": "オラフ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "PICK",
+        "champion": "マルザハール",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "CC NEXT",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  }
+]
