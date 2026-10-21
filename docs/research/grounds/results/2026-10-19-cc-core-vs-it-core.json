@@ -1,0 +1,386 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-19",
+    "stage": "regular",
+    "day": 2,
+    "tier": "CORE",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "LTK4_REGULAR_D2_M4_RESULT",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2904908857?t=17676s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs",
+    "duration": "33:40",
+    "durationSec": 2020,
+    "cs14Sec": 840,
+    "winner": "IT CORE",
+    "winnerBasis": "LTKDB の勝利チーム IT。キル 22-1",
+    "sides": {
+      "IT CORE": "ブルー",
+      "CC CORE": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "IT CORE": {
+        "kills": 22,
+        "deaths": 1,
+        "assists": 42,
+        "gold": 66645,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "mittiii1",
+            "rosterId": "IT-CORE-TOP",
+            "rosterName": "mittiii",
+            "mappingConfidence": "推定(LTKDB の選手名 mittiii・サモナーネーム mittiii1。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 19,
+            "champion": "ナー",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 1,
+            "assists": 8,
+            "gold": 13381,
+            "damage": 31267,
+            "cs": null,
+            "cs14": 151,
+            "goldPerMin": 397,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Alpha Azur",
+            "rosterId": "IT-CORE-JG",
+            "rosterName": "AlphaAzur",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Alpha Azur が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "スカーナー",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 0,
+            "assists": 6,
+            "gold": 12741,
+            "damage": 6244,
+            "cs": null,
+            "cs14": 102,
+            "goldPerMin": 378,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Takaya Special",
+            "rosterId": "IT-CORE-MID",
+            "rosterName": "たかやスペシャル",
+            "mappingConfidence": "推定(LTKDB の選手名 たかやスペシャル・サモナーネーム Takaya Special。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 18,
+            "champion": "フェイ",
+            "championNote": null,
+            "kills": 7,
+            "deaths": 0,
+            "assists": 6,
+            "gold": 15214,
+            "damage": 38587,
+            "cs": null,
+            "cs14": 142,
+            "goldPerMin": 452,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Gonkane",
+            "rosterId": "IT-CORE-ADC",
+            "rosterName": "ごんかね",
+            "mappingConfidence": "推定(LTKDB の選手名 ごんかね・サモナーネーム Gonkane。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "コグ＝マウ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 0,
+            "assists": 7,
+            "gold": 15664,
+            "damage": 18940,
+            "cs": null,
+            "cs14": 129,
+            "goldPerMin": 465,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "ReglushLionheart",
+            "rosterId": "IT-CORE-SUP",
+            "rosterName": "レグルシュ・ライオンハート",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ReglushLionheart が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "ルル",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 0,
+            "assists": 15,
+            "gold": 9645,
+            "damage": 3426,
+            "cs": null,
+            "cs14": 31,
+            "goldPerMin": 286,
+            "damageNote": null
+          }
+        ]
+      },
+      "CC CORE": {
+        "kills": 1,
+        "deaths": 22,
+        "assists": 2,
+        "gold": 50640,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "YUKIO",
+            "rosterId": "CC-CORE-TOP",
+            "rosterName": "YUKIO",
+            "mappingConfidence": "推定(LTKDB の選手名 YUKIO・サモナーネーム YUKIO。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "カ・サンテ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 0,
+            "gold": 9533,
+            "damage": 4892,
+            "cs": null,
+            "cs14": 130,
+            "goldPerMin": 283,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "k4sen",
+            "rosterId": "CC-CORE-JG",
+            "rosterName": "k4sen",
+            "mappingConfidence": "推定(LTKDB の選手名 k4sen・サモナーネーム k4sen。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 14,
+            "champion": "リー・シン",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 6,
+            "assists": 1,
+            "gold": 9075,
+            "damage": 8316,
+            "cs": null,
+            "cs14": 107,
+            "goldPerMin": 270,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Kuzuha",
+            "rosterId": "CC-CORE-MID",
+            "rosterName": "葛葉",
+            "mappingConfidence": "推定(LTKDB の選手名 葛葉・サモナーネーム Kuzuha。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "ライズ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 4,
+            "assists": 0,
+            "gold": 11951,
+            "damage": 14603,
+            "cs": null,
+            "cs14": 106,
+            "goldPerMin": 355,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Tatsumaki Chise",
+            "rosterId": "CC-CORE-ADC",
+            "rosterName": "龍巻ちせ",
+            "mappingConfidence": "推定(LTKDB の選手名 龍巻ちせ・サモナーネーム Tatsumaki Chise。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 15,
+            "champion": "アッシュ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 1,
+            "gold": 12783,
+            "damage": 13435,
+            "cs": null,
+            "cs14": 121,
+            "goldPerMin": 380,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "Konkon Aria",
+            "rosterId": "CC-CORE-SUP",
+            "rosterName": "昏昏アリア",
+            "mappingConfidence": "推定(LTKDB の選手名 昏昏アリア・サモナーネーム Konkon Aria。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 13,
+            "champion": "セラフィーン",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 0,
+            "gold": 7298,
+            "damage": 5631,
+            "cs": null,
+            "cs14": 20,
+            "goldPerMin": 217,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "リリア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "レオナ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "ミリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "サイオン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "BAN",
+        "champion": "マルファイト",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "BAN",
+        "champion": "オーロラ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "BAN",
+        "champion": "ヴェイン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "BAN",
+        "champion": "リサンドラ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "スカーナー",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "フェイ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "コグ＝マウ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "IT CORE",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "PICK",
+        "champion": "カ・サンテ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "PICK",
+        "champion": "リー・シン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "PICK",
+        "champion": "ライズ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "CC CORE",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  }
+]

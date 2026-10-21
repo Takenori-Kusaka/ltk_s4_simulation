@@ -1,0 +1,386 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-19",
+    "stage": "regular",
+    "day": 2,
+    "tier": "CORE",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "LTK4_REGULAR_D2_M2_RESULT",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2904905808?t=10840s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs",
+    "duration": "31:07",
+    "durationSec": 1867,
+    "cs14Sec": 840,
+    "winner": "DD CORE",
+    "winnerBasis": "LTKDB の勝利チーム DD。キル 1-11",
+    "sides": {
+      "LR CORE": "ブルー",
+      "DD CORE": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR CORE": {
+        "kills": 1,
+        "deaths": 11,
+        "assists": 3,
+        "gold": 45418,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Varvalian",
+            "rosterId": "LR-CORE-TOP",
+            "rosterName": "焼きパン",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Varvalian が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "アンベッサ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 3,
+            "assists": 0,
+            "gold": 8870,
+            "damage": 11284,
+            "cs": null,
+            "cs14": 93,
+            "goldPerMin": 285,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Killin9Hit",
+            "rosterId": "LR-CORE-JG",
+            "rosterName": "Killin9Hit",
+            "mappingConfidence": "推定(LTKDB の選手名 Killin9Hit・サモナーネーム Killin9Hit。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 15,
+            "champion": "ヴァイ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 4,
+            "assists": 1,
+            "gold": 9378,
+            "damage": 2255,
+            "cs": null,
+            "cs14": 99,
+            "goldPerMin": 301,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Inui Shinichiro",
+            "rosterId": "LR-CORE-MID",
+            "rosterName": "乾伸一郎",
+            "mappingConfidence": "推定(LTKDB の選手名 乾伸一郎・サモナーネーム Inui Shinichiro。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 15,
+            "champion": "シンドラ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 1,
+            "assists": 0,
+            "gold": 10163,
+            "damage": 11655,
+            "cs": null,
+            "cs14": 139,
+            "goldPerMin": 327,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Ogosho Nyunko",
+            "rosterId": "LR-CORE-ADC",
+            "rosterName": "大御所にゅん子",
+            "mappingConfidence": "推定(LTKDB の選手名 大御所にゅん子・サモナーネーム Ogosho Nyunko。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 13,
+            "champion": "エズリアル",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 1,
+            "assists": 1,
+            "gold": 10275,
+            "damage": 10179,
+            "cs": null,
+            "cs14": 108,
+            "goldPerMin": 330,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "Sendo Yuuhi",
+            "rosterId": "LR-CORE-SUP",
+            "rosterName": "千燈ゆうひ",
+            "mappingConfidence": "推定(LTKDB の選手名 千燈ゆうひ・サモナーネーム Sendo Yuuhi。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 12,
+            "champion": "アリスター",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 2,
+            "assists": 1,
+            "gold": 6732,
+            "damage": 1940,
+            "cs": null,
+            "cs14": 25,
+            "goldPerMin": 216,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD CORE": {
+        "kills": 11,
+        "deaths": 1,
+        "assists": 22,
+        "gold": 58111,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Sakayori Soma",
+            "rosterId": "DD-CORE-TOP",
+            "rosterName": "酒寄颯馬",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Sakayori Soma が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "レネクトン",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 0,
+            "assists": 2,
+            "gold": 14003,
+            "damage": 15114,
+            "cs": null,
+            "cs14": 130,
+            "goldPerMin": 450,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "kinako",
+            "rosterId": "DD-CORE-JG",
+            "rosterName": "きなこ",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム kinako が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "シン・ジャオ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 0,
+            "assists": 5,
+            "gold": 11181,
+            "damage": 4477,
+            "cs": null,
+            "cs14": 102,
+            "goldPerMin": 359,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "sutanmiJPN",
+            "rosterId": "DD-CORE-MID",
+            "rosterName": "スタンミじゃぱん",
+            "mappingConfidence": "推定(LTKDB の選手名 SUTANMIJPN・サモナーネーム sutanmiJPN。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "カシオペア",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 1,
+            "assists": 4,
+            "gold": 10075,
+            "damage": 7553,
+            "cs": null,
+            "cs14": 134,
+            "goldPerMin": 324,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Jasper",
+            "rosterId": "DD-CORE-ADC",
+            "rosterName": "じゃすぱー",
+            "mappingConfidence": "推定(LTKDB の選手名 JASPER・サモナーネーム Jasper。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 14,
+            "champion": "ルシアン",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 0,
+            "assists": 4,
+            "gold": 14698,
+            "damage": 16957,
+            "cs": null,
+            "cs14": 140,
+            "goldPerMin": 472,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "Kagura Mea",
+            "rosterId": "DD-CORE-SUP",
+            "rosterName": "神楽めあ",
+            "mappingConfidence": "推定(LTKDB の選手名 神楽めあ・サモナーネーム Kagura Mea。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 13,
+            "champion": "ミリオ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 0,
+            "assists": 7,
+            "gold": 8154,
+            "damage": 3534,
+            "cs": null,
+            "cs14": 19,
+            "goldPerMin": 262,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "オレリオン・ソル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ツイステッド・フェイト",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "ルル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "スカーナー",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "BAN",
+        "champion": "マルファイト",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ベイガー",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "アニビア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ニーコ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "BAN",
+        "champion": "ノーチラス",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "アンベッサ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "ヴァイ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "シンドラ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "エズリアル",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR CORE",
+        "type": "PICK",
+        "champion": "アリスター",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "レネクトン",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "シン・ジャオ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "カシオペア",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD CORE",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  }
+]

@@ -1,0 +1,386 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-19",
+    "stage": "regular",
+    "day": 2,
+    "tier": "NEXT",
+    "match": null,
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "LTK4_REGULAR_D2_M1_RESULT",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2904887452?t=10915s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs",
+    "duration": "37:38",
+    "durationSec": 2258,
+    "cs14Sec": 840,
+    "winner": "DD NEXT",
+    "winnerBasis": "LTKDB の勝利チーム DD。キル 12-14",
+    "sides": {
+      "LR NEXT": "ブルー",
+      "DD NEXT": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR NEXT": {
+        "kills": 12,
+        "deaths": 14,
+        "assists": 26,
+        "gold": 61670,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Kohaku Uru",
+            "rosterId": "LR-NEXT-TOP",
+            "rosterName": "狐白うる",
+            "mappingConfidence": "推定(LTKDB の選手名 狐白うる・サモナーネーム Kohaku Uru。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 18,
+            "champion": "ヨリック",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 5,
+            "assists": 6,
+            "gold": 13665,
+            "damage": 33694,
+            "cs": null,
+            "cs14": 106,
+            "goldPerMin": 363,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Astel Leda",
+            "rosterId": "LR-NEXT-JG",
+            "rosterName": "アステル・レダ",
+            "mappingConfidence": "推定(LTKDB の選手名 アステル・レダ・サモナーネーム Astel Leda。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "シヴァーナ",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 2,
+            "assists": 2,
+            "gold": 14129,
+            "damage": 11875,
+            "cs": null,
+            "cs14": 104,
+            "goldPerMin": 375,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "HARUTYA",
+            "rosterId": "LR-NEXT-MID",
+            "rosterName": "春茶",
+            "mappingConfidence": "推定(LTKDB の選手名 春茶・サモナーネーム HARUTYA。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "アーリ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 1,
+            "assists": 5,
+            "gold": 10719,
+            "damage": 20186,
+            "cs": null,
+            "cs14": 123,
+            "goldPerMin": 285,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Nagisatty",
+            "rosterId": "LR-NEXT-ADC",
+            "rosterName": "なぎさっち",
+            "mappingConfidence": "推定(LTKDB の選手名 なぎさっち・サモナーネーム Nagisatty。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 15,
+            "champion": "ミス・フォーチュン",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 1,
+            "assists": 7,
+            "gold": 14582,
+            "damage": 24830,
+            "cs": null,
+            "cs14": 98,
+            "goldPerMin": 387,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "No1005",
+            "rosterId": "LR-NEXT-SUP",
+            "rosterName": "No.1005",
+            "mappingConfidence": "推定(LTKDB の選手名 No.1005・サモナーネーム No1005。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 13,
+            "champion": "レオナ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 5,
+            "assists": 6,
+            "gold": 8575,
+            "damage": 7411,
+            "cs": null,
+            "cs14": 17,
+            "goldPerMin": 228,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD NEXT": {
+        "kills": 14,
+        "deaths": 12,
+        "assists": 39,
+        "gold": 67028,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "SHAKA",
+            "rosterId": "DD-NEXT-TOP",
+            "rosterName": "SHAKA",
+            "mappingConfidence": "推定(LTKDB の選手名 SHAKA・サモナーネーム SHAKA。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 20,
+            "champion": "ナサス",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 2,
+            "assists": 6,
+            "gold": 15684,
+            "damage": 26989,
+            "cs": null,
+            "cs14": 79,
+            "goldPerMin": 417,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "Mother3",
+            "rosterId": "DD-NEXT-JG",
+            "rosterName": "まざー3",
+            "mappingConfidence": "推定(LTKDB の選手名 まざー3・サモナーネーム Mother3。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "ウーコン",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 4,
+            "assists": 10,
+            "gold": 12263,
+            "damage": 10686,
+            "cs": null,
+            "cs14": 110,
+            "goldPerMin": 326,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Amanogawa Neru",
+            "rosterId": "DD-NEXT-MID",
+            "rosterName": "天ノ川ねる",
+            "mappingConfidence": "推定(LTKDB の選手名 天ノ川ねる・サモナーネーム Amanogawa Neru。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 17,
+            "champion": "ヴェックス",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 2,
+            "assists": 6,
+            "gold": 11210,
+            "damage": 21777,
+            "cs": null,
+            "cs14": 114,
+            "goldPerMin": 298,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Yumeno Akari",
+            "rosterId": "DD-NEXT-ADC",
+            "rosterName": "夢野あかり",
+            "mappingConfidence": "推定(LTKDB の選手名 夢野あかり・サモナーネーム Yumeno Akari。名簿の Riot ID と表示が違う。同じ階級チーム・同じロール)",
+            "level": 16,
+            "champion": "アッシュ",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 2,
+            "assists": 7,
+            "gold": 17148,
+            "damage": 34314,
+            "cs": null,
+            "cs14": 125,
+            "goldPerMin": 456,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "ramuchi",
+            "rosterId": "DD-NEXT-SUP",
+            "rosterName": "白波らむね",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ramuchi が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "セラフィーン",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 2,
+            "assists": 10,
+            "gold": 10723,
+            "damage": 12711,
+            "cs": null,
+            "cs14": 15,
+            "goldPerMin": 285,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "BAN",
+        "champion": "オラフ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "BAN",
+        "champion": "ビクター",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "BAN",
+        "champion": "シンドラ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "BAN",
+        "champion": "ジャーヴァンⅣ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "エイトロックス",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "リリア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "ノーチラス",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "スウェイン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "BAN",
+        "champion": "マルザハール",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "PICK",
+        "champion": "ヨリック",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "PICK",
+        "champion": "シヴァーナ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "PICK",
+        "champion": "アーリ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "PICK",
+        "champion": "ミス・フォーチュン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR NEXT",
+        "type": "PICK",
+        "champion": "レオナ",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ナサス",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ウーコン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "ヴェックス",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD NEXT",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  }
+]
