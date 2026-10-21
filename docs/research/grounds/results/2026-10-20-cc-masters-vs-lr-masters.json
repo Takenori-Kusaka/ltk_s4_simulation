@@ -153,9 +153,9 @@
           },
           {
             "role": "ADC",
-            "displayName": "Harettl",
+            "displayName": "Haretti",
             "rosterName": "ハレっち",
-            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
             "level": 15,
             "champion": "ジン",
             "kills": 2,
