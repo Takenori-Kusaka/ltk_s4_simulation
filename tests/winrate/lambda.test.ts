@@ -31,14 +31,14 @@ test('AC3c: λ = scrimHalf(4)÷(4 + 両チームの n_s の平均)。外部の�
   assert.equal(o.betaExt.NEXT, plain.betaExt.NEXT, 'β_ext は変わらない');
   const it = o.teams.find((t) => t.key === 'IT-NEXT')!;
   assert.deepEqual([it.ns, it.lambda, it.lambdaE], [4, 0.5, 1.5]);
-  // Day 2(10/19)の DD 対 IT: 4 試合とも前日まで
-  const m = nextMatch(o, 2);
+  // Day 3(10/23)の DD 対 IT: 4 試合とも前日まで
+  const m = nextMatch(o, 3);
   const itIsA = m.a === 'IT';
   assert.equal(itIsA ? m.lambdaA : m.lambdaB, 0.5);
   assert.equal(itIsA ? m.nsA : m.nsB, 4);
   // DD・IT とも 4 試合で、平均 4 → λ = 0.5
   assert.equal(m.extLogit, Math.round(m.betaExt * 0.5 * (m.eA - m.eB) * 1000) / 1000);
-  assert.ok(Math.abs(m.extLogit) < Math.abs(nextMatch(plain, 2).extLogit), '見立ての項が小さくなる');
+  assert.ok(Math.abs(m.extLogit) < Math.abs(nextMatch(plain, 3).extLogit), '見立ての項が小さくなる');
 });
 
 test('AC3c: スクリム数が違う 2 チームにも同じ λ を掛け、外部の見立ての項の向きは λ を掛ける前と変わらない', () => {
