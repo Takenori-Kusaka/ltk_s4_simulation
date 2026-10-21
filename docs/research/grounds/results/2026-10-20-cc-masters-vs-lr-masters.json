@@ -1,0 +1,188 @@
+[
+  {
+    "kind": "official",
+    "date": "2026-10-20",
+    "stage": "masters",
+    "day": 1,
+    "tier": "MASTERS",
+    "match": "third",
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-21",
+      "note": "価値責任者が共有した CC MASTERS の Yutapon の視点のリザルト画面「勝利・33:16」から書き起こした(2026-10-21 18:44 JST にスレッドへ共有)。LR の TOP・JG のレベルは配信のロゴに隠れて読めないため null。画面は自分のチームをチーム 1 に出すため、ブルー・レッドは分からない(sides は書かない)。CS は画面に無い。配信の URL は未記入。出典の url は大会の公式 X アカウント"
+    },
+    "duration": "33:16",
+    "winner": "CC MASTERS",
+    "winnerBasis": "CC MASTERS の Yutapon の画面が「勝利」。キル 13-11。価値責任者の報告「3 位決定戦 cc vs lr は cc の勝ち」",
+    "teams": {
+      "CC MASTERS": {
+        "kills": 13,
+        "deaths": 11,
+        "assists": 22,
+        "gold": 63551,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Yutapon",
+            "rosterName": "Yutapon",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": 18,
+            "champion": "グラガス",
+            "kills": 4,
+            "deaths": 4,
+            "assists": 4,
+            "cs": null,
+            "gold": 12856,
+            "goldPerMin": 386,
+            "damage": 18601
+          },
+          {
+            "role": "JG",
+            "displayName": "Rainbrain",
+            "rosterName": "Rainbrain",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ヴァイ",
+            "kills": 5,
+            "deaths": 1,
+            "assists": 5,
+            "cs": null,
+            "gold": 14132,
+            "goldPerMin": 425,
+            "damage": 10147
+          },
+          {
+            "role": "MID",
+            "displayName": "Ceros",
+            "rosterName": "Ceros",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "エコー",
+            "kills": 3,
+            "deaths": 2,
+            "assists": 4,
+            "cs": null,
+            "gold": 13794,
+            "goldPerMin": 415,
+            "damage": 18286
+          },
+          {
+            "role": "ADC",
+            "displayName": "Yuhi",
+            "rosterName": "Yuhi",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ルシアン",
+            "kills": 1,
+            "deaths": 2,
+            "assists": 2,
+            "cs": null,
+            "gold": 14702,
+            "goldPerMin": 442,
+            "damage": 10898
+          },
+          {
+            "role": "SUP",
+            "displayName": "Nemoh",
+            "rosterName": "Nemoh",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの SUP の席)",
+            "level": 13,
+            "champion": "ミリオ",
+            "kills": 0,
+            "deaths": 2,
+            "assists": 7,
+            "cs": null,
+            "gold": 8067,
+            "goldPerMin": 242,
+            "damage": 1325
+          }
+        ]
+      },
+      "LR MASTERS": {
+        "kills": 11,
+        "deaths": 13,
+        "assists": 20,
+        "gold": 59474,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "apaMEN",
+            "rosterName": "apaMEN",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": null,
+            "champion": "エイトロックス",
+            "kills": 1,
+            "deaths": 5,
+            "assists": 1,
+            "cs": null,
+            "gold": 10893,
+            "goldPerMin": 327,
+            "damage": 12952
+          },
+          {
+            "role": "JG",
+            "displayName": "Nesty",
+            "rosterName": "ねすてぃー",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの JG の席)",
+            "level": null,
+            "champion": "アンベッサ",
+            "kills": 4,
+            "deaths": 4,
+            "assists": 2,
+            "cs": null,
+            "gold": 13263,
+            "goldPerMin": 399,
+            "damage": 10918
+          },
+          {
+            "role": "MID",
+            "displayName": "Recap",
+            "rosterName": "Recap",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ビクター",
+            "kills": 3,
+            "deaths": 3,
+            "assists": 5,
+            "cs": null,
+            "gold": 12622,
+            "goldPerMin": 379,
+            "damage": 22712
+          },
+          {
+            "role": "ADC",
+            "displayName": "Harettl",
+            "rosterName": "ハレっち",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": 15,
+            "champion": "ジン",
+            "kills": 2,
+            "deaths": 1,
+            "assists": 5,
+            "cs": null,
+            "gold": 14431,
+            "goldPerMin": 434,
+            "damage": 10812
+          },
+          {
+            "role": "SUP",
+            "displayName": "ThintoN",
+            "rosterName": "てぃんとん",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの SUP の席)",
+            "level": 12,
+            "champion": "ノーチラス",
+            "kills": 1,
+            "deaths": 0,
+            "assists": 7,
+            "cs": null,
+            "gold": 8265,
+            "goldPerMin": 248,
+            "damage": 4279
+          }
+        ]
+      }
+    }
+  }
+]
