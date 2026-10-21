@@ -8,6 +8,7 @@ LTK Season: Finale シミュレーターの入力と仕様の材料です。AI �
 | [players-dd-cc.md](players-dd-cc.md) | Dahlia Diadem / Camellia Crown の30名(ランク・持ちチャンピオン・LTK 歴) |
 | [players-it-lr.md](players-it-lr.md) | Iris Tiara / Laurel Regalia の30名 |
 | [meta-draft.md](meta-draft.md) | パッチ 26.20 の変更点、大会期間のパッチ予定、過去 LTK のピック・BAN 傾向、レート帯別の強いチャンピオン |
+| [forecast-log.md](forecast-log.md) | 試合日ごとの予測と結果の記録(公開サイトの履歴から取り出した試合日前の勝率、的中、外れた理由の見立て) |
 
 - 事前分析メモ(`tmp/` の Markdown)との主な相違: LR NEXT SUP の No.1005 と「とおこ」は同一人物。コーチは公式発表済み。複数選手のロール変更とランクの更新
 - 生データ(取得したページ、集計 CSV、第三者の公開スプレッドシート、公式スライド画像)は `tmp/research-data/` に置き、コミットしません。第三者の著作物を公開リポジトリで再配布しないためです
