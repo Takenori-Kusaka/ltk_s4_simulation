@@ -21,5 +21,191 @@
       "DD MASTERS": {},
       "IT MASTERS": {}
     }
+  },
+  {
+    "kind": "official",
+    "date": "2026-10-20",
+    "stage": "masters",
+    "day": 1,
+    "tier": "MASTERS",
+    "match": "final",
+    "game": 2,
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-21",
+      "note": "価値責任者が共有した IT MASTERS の Yunika の視点のリザルト画面「勝利・41:54」から書き起こした(2026-10-21 18:50 JST にスレッドへ共有)。Yunika のレベルは配信の参加者の枠に隠れて読めないため null。画面は自分のチームをチーム 1 に出すため、ブルー・レッドは分からない(sides は書かない)。CS は画面に無い。配信の URL は未記入。出典の url は大会の公式 X アカウント"
+    },
+    "duration": "41:54",
+    "winner": "IT MASTERS",
+    "winnerBasis": "IT MASTERS の Yunika の画面が「勝利」。キル 19-17。価値責任者の報告「決勝 2 試合目 dd vs it は it の勝ち」",
+    "teams": {
+      "IT MASTERS": {
+        "kills": 19,
+        "deaths": 17,
+        "assists": 55,
+        "gold": 77730,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Raizin",
+            "rosterName": "らいじん",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": 20,
+            "champion": "カ・サンテ",
+            "kills": 6,
+            "deaths": 4,
+            "assists": 9,
+            "cs": null,
+            "gold": 16100,
+            "goldPerMin": 384,
+            "damage": 33181
+          },
+          {
+            "role": "JG",
+            "displayName": "Yunika",
+            "rosterName": "ゆにか",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの JG の席)",
+            "level": null,
+            "champion": "ヴァイ",
+            "kills": 2,
+            "deaths": 3,
+            "assists": 11,
+            "cs": null,
+            "gold": 14048,
+            "goldPerMin": 335,
+            "damage": 17345
+          },
+          {
+            "role": "MID",
+            "displayName": "Eugeo",
+            "rosterName": "Eugeo",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "カシオペア",
+            "kills": 3,
+            "deaths": 5,
+            "assists": 9,
+            "cs": null,
+            "gold": 15513,
+            "goldPerMin": 370,
+            "damage": 27601
+          },
+          {
+            "role": "ADC",
+            "displayName": "Zerost",
+            "rosterName": "Zerost",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": 18,
+            "champion": "シヴィア",
+            "kills": 7,
+            "deaths": 2,
+            "assists": 9,
+            "cs": null,
+            "gold": 20915,
+            "goldPerMin": 499,
+            "damage": 57837
+          },
+          {
+            "role": "SUP",
+            "displayName": "Enty",
+            "rosterName": "Enty",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの SUP の席)",
+            "level": 15,
+            "champion": "レル",
+            "kills": 1,
+            "deaths": 3,
+            "assists": 17,
+            "cs": null,
+            "gold": 11154,
+            "goldPerMin": 266,
+            "damage": 10393
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 17,
+        "deaths": 19,
+        "assists": 37,
+        "gold": 77294,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "Washidai",
+            "rosterName": "わしだい",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの TOP の席)",
+            "level": 20,
+            "champion": "ザーヘン",
+            "kills": 3,
+            "deaths": 3,
+            "assists": 7,
+            "cs": null,
+            "gold": 16633,
+            "goldPerMin": 397,
+            "damage": 35883
+          },
+          {
+            "role": "JG",
+            "displayName": "Syaruru",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの JG の席)",
+            "level": 18,
+            "champion": "チョ＝ガス",
+            "kills": 5,
+            "deaths": 6,
+            "assists": 7,
+            "cs": null,
+            "gold": 15766,
+            "goldPerMin": 376,
+            "damage": 15226
+          },
+          {
+            "role": "MID",
+            "displayName": "Tanukininja",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの MID の席)",
+            "level": 18,
+            "champion": "アニビア",
+            "kills": 2,
+            "deaths": 3,
+            "assists": 7,
+            "cs": null,
+            "gold": 13872,
+            "goldPerMin": 331,
+            "damage": 11876
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1",
+            "rosterName": "Day1",
+            "mappingConfidence": "推定(リザルト画面の表示名と名簿の Riot ID が違う。同じ階級チーム・スコアボードの ADC の席)",
+            "level": 18,
+            "champion": "エズリアル",
+            "kills": 7,
+            "deaths": 2,
+            "assists": 4,
+            "cs": null,
+            "gold": 20311,
+            "goldPerMin": 485,
+            "damage": 38511
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(リザルト画面の表示名が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "レオナ",
+            "kills": 0,
+            "deaths": 5,
+            "assists": 12,
+            "cs": null,
+            "gold": 10712,
+            "goldPerMin": 256,
+            "damage": 5837
+          }
+        ]
+      }
+    }
   }
 ]
