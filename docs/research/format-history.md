@@ -76,12 +76,13 @@
 | Day | 日付 | カード1(ブルー vs レッド) | カード2(ブルー vs レッド) |
 |---|---|---|---|
 | 1 | 10/15(木) | CC vs DD | IT vs LR |
-| 2 | 10/19(月) | CC vs LR | DD vs IT |
-| 3 | 10/23(金) | LR vs DD | IT vs CC |
+| 2 | 10/19(月) | LR vs DD | IT vs CC |
+| 3 | 10/23(金) | CC vs LR | DD vs IT |
 | 4 | 10/27(火) | LR vs IT | DD vs CC |
 | 5 | 11/2(月) | IT vs DD | LR vs CC |
 | 6 | 11/6(金) | CC vs IT | DD vs LR |
 
+- **2026-10-21 訂正**: 公式画像の時点では Day2 が CC vs LR・DD vs IT、Day3 が LR vs DD・IT vs CC だったが、実際の Day2(10/19)は LR vs DD・IT vs CC で行われた(価値責任者の観戦。LTKDB の予定 `LTK4_REGULAR_D2_M1`〜`M4`・`LTK4_REGULAR_D3_M1`〜`M4`、2026-10-20 更新、https://demo-lab0110.github.io/ltk-schedule-status-site/ )。Day2 と Day3 のカードを入れ替えた(サイドはそれぞれのカードのまま)。Day4〜6 と MASTERS CUP は LTKDB の予定と一致する
 - 確認した点: 同じ相手と 2回当たり、ブルーとレッドを 1回ずつ受け持つ。例: CC vs DD は Day1 で CC がブルー、Day4 で DD がブルー。全 6組で成立している。
 - **1日の試合順は未確認**。S3 は「カード1 NEXT → カード1 CORE → カード2 NEXT → カード2 CORE」の順だった(S3 の VOD のチャプター。例 https://www.youtube.com/watch?v=7H724XZLZdw )。Finale も同じ順と見込まれるが、まだ発表は無い。CORE の制限(NEXT で使われたチャンピオンの使用禁止)の都合上、同じカードの NEXT が先に行われることは規則から確定する。
 - **開始時刻は未確認**。過去の開始時刻は、S1・S2 が 19:00、S3 が 18:00(S3 の YouTube 概要欄 https://www.youtube.com/watch?v=NZkY17NnAes )。
