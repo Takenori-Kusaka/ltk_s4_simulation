@@ -1,0 +1,1522 @@
+[
+  {
+    "kind": "scrim",
+    "date": "2026-10-17",
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261017_MASTERS_LR_DD_001",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2903002782?t=3380s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "35:38",
+    "durationSec": 2138,
+    "cs14Sec": 840,
+    "winner": "DD MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム DD。キル 23-27",
+    "sides": {
+      "LR MASTERS": "ブルー",
+      "DD MASTERS": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR MASTERS": {
+        "kills": 23,
+        "deaths": 27,
+        "assists": 55,
+        "gold": 69010,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "もちあき",
+            "rosterId": "LR-MASTERS-TOP",
+            "rosterName": "apaMEN",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム もちあき が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ナー",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 6,
+            "assists": 6,
+            "gold": 10778,
+            "damage": 22890,
+            "cs": null,
+            "cs14": 102,
+            "goldPerMin": 302,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ねすてぃー",
+            "rosterId": "LR-MASTERS-JG",
+            "rosterName": "ねすてぃー",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ねすてぃー が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "リー・シン",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 4,
+            "assists": 10,
+            "gold": 15497,
+            "damage": 29784,
+            "cs": null,
+            "cs14": null,
+            "goldPerMin": 435,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Recap",
+            "rosterId": "LR-MASTERS-MID",
+            "rosterName": "Recap",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Recap が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "オーロラ",
+            "championNote": null,
+            "kills": 8,
+            "deaths": 7,
+            "assists": 10,
+            "gold": 13822,
+            "damage": 32788,
+            "cs": null,
+            "cs14": 128,
+            "goldPerMin": 388,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Haretti",
+            "rosterId": "LR-MASTERS-ADC",
+            "rosterName": "ハレっち",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Haretti が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "アッシュ",
+            "championNote": null,
+            "kills": 7,
+            "deaths": 3,
+            "assists": 9,
+            "gold": 17916,
+            "damage": 33145,
+            "cs": null,
+            "cs14": 123,
+            "goldPerMin": 503,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "てぃんとん",
+            "rosterId": "LR-MASTERS-SUP",
+            "rosterName": "てぃんとん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム てぃんとん が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "セラフィーン",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 7,
+            "assists": 20,
+            "gold": 10997,
+            "damage": 9973,
+            "cs": null,
+            "cs14": 16,
+            "goldPerMin": 309,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 27,
+        "deaths": 23,
+        "assists": 68,
+        "gold": 74293,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 19,
+            "champion": "カミール",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 3,
+            "assists": 15,
+            "gold": 16356,
+            "damage": 26707,
+            "cs": null,
+            "cs14": 113,
+            "goldPerMin": 459,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "セジュアニ",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 4,
+            "assists": 18,
+            "gold": 13120,
+            "damage": 16345,
+            "cs": null,
+            "cs14": 88,
+            "goldPerMin": 368,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ロック",
+            "championNote": null,
+            "kills": 9,
+            "deaths": 7,
+            "assists": 8,
+            "gold": 15411,
+            "damage": 23395,
+            "cs": null,
+            "cs14": null,
+            "goldPerMin": 432,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ユナラ",
+            "championNote": null,
+            "kills": 9,
+            "deaths": 4,
+            "assists": 11,
+            "gold": 20510,
+            "damage": 35933,
+            "cs": null,
+            "cs14": 116,
+            "goldPerMin": 576,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "ルル",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 5,
+            "assists": 16,
+            "gold": 8896,
+            "damage": 4499,
+            "cs": null,
+            "cs14": 20,
+            "goldPerMin": 250,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ガリオ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ノーチラス",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ノクターン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ランブル",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "カシオペア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "ライズ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "リー・シン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "オーロラ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "アッシュ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "セラフィーン",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "カミール",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "セジュアニ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ロック",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ユナラ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ルル",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  },
+  {
+    "kind": "scrim",
+    "date": "2026-10-17",
+    "game": 2,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261017_MASTERS_LR_DD_002",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2903002782?t=7900s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "31:42",
+    "durationSec": 1902,
+    "cs14Sec": 840,
+    "winner": "LR MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム LR。キル 17-15",
+    "sides": {
+      "LR MASTERS": "レッド",
+      "DD MASTERS": "ブルー"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR MASTERS": {
+        "kills": 17,
+        "deaths": 15,
+        "assists": 37,
+        "gold": 64648,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "もちあき",
+            "rosterId": "LR-MASTERS-TOP",
+            "rosterName": "apaMEN",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム もちあき が名簿の Riot ID と一致)",
+            "level": 20,
+            "champion": "ヨリック",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 1,
+            "assists": 5,
+            "gold": 16686,
+            "damage": 23154,
+            "cs": null,
+            "cs14": 114,
+            "goldPerMin": 526,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ねすてぃー",
+            "rosterId": "LR-MASTERS-JG",
+            "rosterName": "ねすてぃー",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ねすてぃー が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "チョ＝ガス",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 7,
+            "assists": 5,
+            "gold": 11245,
+            "damage": 7730,
+            "cs": null,
+            "cs14": 99,
+            "goldPerMin": 355,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Recap",
+            "rosterId": "LR-MASTERS-MID",
+            "rosterName": "Recap",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Recap が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "アカリ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 6,
+            "assists": 6,
+            "gold": 12401,
+            "damage": 23779,
+            "cs": null,
+            "cs14": 138,
+            "goldPerMin": 391,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Haretti",
+            "rosterId": "LR-MASTERS-ADC",
+            "rosterName": "ハレっち",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Haretti が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "エズリアル",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 1,
+            "assists": 8,
+            "gold": 14821,
+            "damage": 34778,
+            "cs": null,
+            "cs14": 134,
+            "goldPerMin": 468,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "てぃんとん",
+            "rosterId": "LR-MASTERS-SUP",
+            "rosterName": "てぃんとん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム てぃんとん が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "カルマ",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 0,
+            "assists": 13,
+            "gold": 9495,
+            "damage": 8113,
+            "cs": null,
+            "cs14": 24,
+            "goldPerMin": 300,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 15,
+        "deaths": 18,
+        "assists": 46,
+        "gold": 56813,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ランブル",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 6,
+            "assists": 10,
+            "gold": 11395,
+            "damage": 29139,
+            "cs": null,
+            "cs14": 104,
+            "goldPerMin": 359,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ノクターン",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 4,
+            "assists": 8,
+            "gold": 11396,
+            "damage": 16499,
+            "cs": null,
+            "cs14": 99,
+            "goldPerMin": 359,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ガリオ",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 3,
+            "assists": 9,
+            "gold": 11789,
+            "damage": 18669,
+            "cs": null,
+            "cs14": null,
+            "goldPerMin": 372,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "ルシアン",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 2,
+            "assists": 7,
+            "gold": 14316,
+            "damage": 29776,
+            "cs": null,
+            "cs14": 121,
+            "goldPerMin": 452,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "ミリオ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 3,
+            "assists": 12,
+            "gold": 7917,
+            "damage": 4371,
+            "cs": null,
+            "cs14": 23,
+            "goldPerMin": 250,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ライズ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "カシオペア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ヨリック",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "アカリ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "エズリアル",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "カルマ",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ランブル",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ノクターン",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ガリオ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ルシアン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ミリオ",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  },
+  {
+    "kind": "scrim",
+    "date": "2026-10-17",
+    "game": 3,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261017_MASTERS_LR_DD_003",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2903002782?t=12964s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "30:50",
+    "durationSec": 1850,
+    "cs14Sec": 840,
+    "winner": "DD MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム DD。キル 21-19",
+    "sides": {
+      "LR MASTERS": "ブルー",
+      "DD MASTERS": "レッド"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR MASTERS": {
+        "kills": 21,
+        "deaths": 19,
+        "assists": 48,
+        "gold": 58632,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "もちあき",
+            "rosterId": "LR-MASTERS-TOP",
+            "rosterName": "apaMEN",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム もちあき が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "アンベッサ",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 4,
+            "assists": 2,
+            "gold": 11845,
+            "damage": 20999,
+            "cs": null,
+            "cs14": 115,
+            "goldPerMin": 384,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ねすてぃー",
+            "rosterId": "LR-MASTERS-JG",
+            "rosterName": "ねすてぃー",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ねすてぃー が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ジャーヴァンⅣ",
+            "championNote": null,
+            "kills": 5,
+            "deaths": 4,
+            "assists": 11,
+            "gold": 12541,
+            "damage": 18394,
+            "cs": null,
+            "cs14": null,
+            "goldPerMin": 407,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Recap",
+            "rosterId": "LR-MASTERS-MID",
+            "rosterName": "Recap",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Recap が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ゼラス",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 3,
+            "assists": 13,
+            "gold": 12162,
+            "damage": 26963,
+            "cs": null,
+            "cs14": 131,
+            "goldPerMin": 394,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Haretti",
+            "rosterId": "LR-MASTERS-ADC",
+            "rosterName": "ハレっち",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Haretti が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "ケイトリン",
+            "championNote": null,
+            "kills": 8,
+            "deaths": 4,
+            "assists": 5,
+            "gold": 13900,
+            "damage": 19676,
+            "cs": null,
+            "cs14": 121,
+            "goldPerMin": 451,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "てぃんとん",
+            "rosterId": "LR-MASTERS-SUP",
+            "rosterName": "てぃんとん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム てぃんとん が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "バード",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 4,
+            "assists": 17,
+            "gold": 8184,
+            "damage": 7994,
+            "cs": null,
+            "cs14": 20,
+            "goldPerMin": 265,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 19,
+        "deaths": 21,
+        "assists": 38,
+        "gold": 62699,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 18,
+            "champion": "ジャックス",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 3,
+            "assists": 8,
+            "gold": 13197,
+            "damage": 20980,
+            "cs": null,
+            "cs14": 97,
+            "goldPerMin": 428,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "キヤナ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 7,
+            "assists": 4,
+            "gold": 11457,
+            "damage": 12242,
+            "cs": null,
+            "cs14": 87,
+            "goldPerMin": 372,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ライズ",
+            "championNote": null,
+            "kills": 10,
+            "deaths": 2,
+            "assists": 4,
+            "gold": 15262,
+            "damage": 23114,
+            "cs": null,
+            "cs14": null,
+            "goldPerMin": 495,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "ジン",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 3,
+            "assists": 12,
+            "gold": 14713,
+            "damage": 14668,
+            "cs": null,
+            "cs14": 124,
+            "goldPerMin": 477,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "ノーチラス",
+            "championNote": null,
+            "kills": 0,
+            "deaths": 6,
+            "assists": 10,
+            "gold": 8070,
+            "damage": 4693,
+            "cs": null,
+            "cs14": 21,
+            "goldPerMin": 262,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "アンベッサ",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ジャーヴァンⅣ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ゼラス",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ケイトリン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "バード",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ジャックス",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "キヤナ",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ライズ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  },
+  {
+    "kind": "scrim",
+    "date": "2026-10-17",
+    "game": 4,
+    "listeners": false,
+    "source": {
+      "url": "https://demo-lab0110.github.io/ltk-schedule-status-site/",
+      "dataUrl": "https://raw.githubusercontent.com/demo-lab0110/ltk-schedule-status-site/main/site-data.json",
+      "ltkdbMatchId": "SCRIM_20261017_MASTERS_LR_DD_004",
+      "ltkdbStatus": "承認済",
+      "ltkdbUpdatedAt": "2026-10-20T09:29:38.571Z",
+      "videoUrl": "https://www.twitch.tv/videos/2903002782?t=16664s",
+      "retrievedAt": "2026-10-21",
+      "note": "非公式のファンサイト LTKDB(LTK Schedule & Status)の試合結果のまとめ。サイトの説明では一部の値はスクリーンショットの OCR で、後で直されることがある。結果画面の時刻は無い"
+    },
+    "collectedBy": "ai",
+    "collectedWith": "ltkdb-to-scrims.mjs(GitHub Actions)",
+    "duration": "28:12",
+    "durationSec": 1692,
+    "cs14Sec": 840,
+    "winner": "LR MASTERS",
+    "winnerBasis": "LTKDB の勝利チーム LR。キル 23-19",
+    "sides": {
+      "LR MASTERS": "レッド",
+      "DD MASTERS": "ブルー"
+    },
+    "sidesBasis": "LTKDB の各選手の行のサイド(BLUE/RED)",
+    "teams": {
+      "LR MASTERS": {
+        "kills": 23,
+        "deaths": 19,
+        "assists": 58,
+        "gold": 60662,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "もちあき",
+            "rosterId": "LR-MASTERS-TOP",
+            "rosterName": "apaMEN",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム もちあき が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ヨリック",
+            "championNote": null,
+            "kills": 3,
+            "deaths": 6,
+            "assists": 3,
+            "gold": 12205,
+            "damage": 25354,
+            "cs": null,
+            "cs14": 111,
+            "goldPerMin": 433,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "ねすてぃー",
+            "rosterId": "LR-MASTERS-JG",
+            "rosterName": "ねすてぃー",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム ねすてぃー が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "トランドル",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 4,
+            "assists": 14,
+            "gold": 11467,
+            "damage": 16406,
+            "cs": null,
+            "cs14": 95,
+            "goldPerMin": 407,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Recap",
+            "rosterId": "LR-MASTERS-MID",
+            "rosterName": "Recap",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Recap が名簿の Riot ID と一致)",
+            "level": 16,
+            "champion": "シンドラ",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 2,
+            "assists": 11,
+            "gold": 11586,
+            "damage": 25087,
+            "cs": null,
+            "cs14": 126,
+            "goldPerMin": 411,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Haretti",
+            "rosterId": "LR-MASTERS-ADC",
+            "rosterName": "ハレっち",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Haretti が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "ジン",
+            "championNote": null,
+            "kills": 11,
+            "deaths": 2,
+            "assists": 9,
+            "gold": 16876,
+            "damage": 35333,
+            "cs": null,
+            "cs14": 134,
+            "goldPerMin": 598,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "てぃんとん",
+            "rosterId": "LR-MASTERS-SUP",
+            "rosterName": "てぃんとん",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム てぃんとん が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "ノーチラス",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 5,
+            "assists": 21,
+            "gold": 8528,
+            "damage": 8181,
+            "cs": null,
+            "cs14": 20,
+            "goldPerMin": 302,
+            "damageNote": null
+          }
+        ]
+      },
+      "DD MASTERS": {
+        "kills": 19,
+        "deaths": 23,
+        "assists": 32,
+        "gold": 52944,
+        "players": [
+          {
+            "role": "TOP",
+            "displayName": "鉄砲玉",
+            "rosterId": "DD-MASTERS-TOP",
+            "rosterName": "わしだい",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム 鉄砲玉 が名簿の Riot ID と一致)",
+            "level": 17,
+            "champion": "ナー",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 2,
+            "assists": 9,
+            "gold": 13728,
+            "damage": 32252,
+            "cs": null,
+            "cs14": 115,
+            "goldPerMin": 487,
+            "damageNote": null
+          },
+          {
+            "role": "JG",
+            "displayName": "syaruru",
+            "rosterId": "DD-MASTERS-JG",
+            "rosterName": "しゃるる",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム syaruru が名簿の Riot ID と一致)",
+            "level": 14,
+            "champion": "チョ＝ガス",
+            "championNote": null,
+            "kills": 4,
+            "deaths": 6,
+            "assists": 6,
+            "gold": 10624,
+            "damage": 10313,
+            "cs": null,
+            "cs14": 97,
+            "goldPerMin": 377,
+            "damageNote": null
+          },
+          {
+            "role": "MID",
+            "displayName": "Ninja of Ninjas",
+            "rosterId": "DD-MASTERS-MID",
+            "rosterName": "たぬき忍者",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Ninja of Ninjas が名簿の Riot ID と一致)",
+            "level": 15,
+            "champion": "エコー",
+            "championNote": null,
+            "kills": 6,
+            "deaths": 4,
+            "assists": 5,
+            "gold": 10457,
+            "damage": 16264,
+            "cs": null,
+            "cs14": 126,
+            "goldPerMin": 371,
+            "damageNote": null
+          },
+          {
+            "role": "ADC",
+            "displayName": "Day1week",
+            "rosterId": "DD-MASTERS-ADC",
+            "rosterName": "Day1",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム Day1week が名簿の Riot ID と一致)",
+            "level": 13,
+            "champion": "カイ＝サ",
+            "championNote": null,
+            "kills": 2,
+            "deaths": 6,
+            "assists": 5,
+            "gold": 10886,
+            "damage": 13241,
+            "cs": null,
+            "cs14": 105,
+            "goldPerMin": 386,
+            "damageNote": null
+          },
+          {
+            "role": "SUP",
+            "displayName": "hetel",
+            "rosterId": "DD-MASTERS-SUP",
+            "rosterName": "hetel",
+            "mappingConfidence": "確信(LTKDB のサモナーネーム hetel が名簿の Riot ID と一致)",
+            "level": 11,
+            "champion": "ニーコ",
+            "championNote": null,
+            "kills": 1,
+            "deaths": 5,
+            "assists": 7,
+            "gold": 7249,
+            "damage": 11178,
+            "cs": null,
+            "cs14": 24,
+            "goldPerMin": 257,
+            "damageNote": null
+          }
+        ]
+      }
+    },
+    "pickBanOrder": null,
+    "draft": [
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ライズ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": "ロック",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "アーリ",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "リー・シン",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": "カシオペア",
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "BAN",
+        "champion": null,
+        "role": null
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ヨリック",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "トランドル",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "シンドラ",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ジン",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "LR MASTERS",
+        "type": "PICK",
+        "champion": "ノーチラス",
+        "role": "SUP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ナー",
+        "role": "TOP"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "チョ＝ガス",
+        "role": "JG"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "エコー",
+        "role": "MID"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "カイ＝サ",
+        "role": "ADC"
+      },
+      {
+        "order": null,
+        "team": "DD MASTERS",
+        "type": "PICK",
+        "champion": "ニーコ",
+        "role": "SUP"
+      }
+    ],
+    "notes": null
+  }
+]
