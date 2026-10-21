@@ -1,0 +1,25 @@
+[
+  {
+    "kind": "official",
+    "resultOnly": true,
+    "date": "2026-10-20",
+    "stage": "masters",
+    "day": 1,
+    "tier": "MASTERS",
+    "match": "final",
+    "game": 1,
+    "listeners": false,
+    "source": {
+      "url": "https://x.com/lolthek4sen",
+      "retrievedAt": "2026-10-21",
+      "note": "価値責任者が共有した IT MASTERS の視点のリザルト画面「敗北・30:34・2026/10/20」から書き起こした(2026-10-21 18:49 JST にスレッドへ共有)。この画面はダメージの列が無く、チャンピオン名も文字で出ないため、結果だけの記録にした。画面で読める値: キル 21(DD)-17(IT)、ゴールド 62,818(DD)-60,129(IT)。DD の選手の KDA は Washidai 4/3/6・Syaruru 2/4/11・Tanukininja 4/5/7・Day1 7/5/4・hetel 0/4/7、IT は Yunika 3/4/10・Raizin 9/6/4・Eugeo 3/3/8・Zerost 3/1/12・Enty 3/3/12。画面は自分のチームをチーム 1 に出すため、ブルー・レッドは分からない。出典の url は大会の公式 X アカウント"
+    },
+    "duration": "30:34",
+    "winner": "DD MASTERS",
+    "winnerBasis": "IT MASTERS の視点の画面が「敗北」。キル 21-17。価値責任者の報告「決勝戦 it vs dd 1 試合目、dd の勝ち」",
+    "teams": {
+      "DD MASTERS": {},
+      "IT MASTERS": {}
+    }
+  }
+]
