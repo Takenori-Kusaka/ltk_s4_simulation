@@ -199,8 +199,11 @@ export function convert(site, { root = 'docs/research/grounds', dryRun = false, 
     if (item.rows.length > 10) return skip(`選手の行が ${item.rows.length} 行(10 を超える)`);
     item.resultOnly = item.rows.length < 10 || m['試合時間'] === ''; // 基準 33
     if (kind === 'scrim') {
-      const tier = id.split('_')[2];
-      if (!TIERS.includes(tier)) return skip(`階級が読めない(${tier})`);
+      // 階級は試合 ID の 3 つ目(SCRIM_<日付>_<階級>_…)。その形でない試合 ID(LTK4_SCRIM_<日付>_<組>_<階級>_CANDIDATE_…)は、スケジュールID の指す予定の行の tier
+      const fromId = id.split('_')[2];
+      const sched = schedule.find((x) => x.schedule_id === m['スケジュールID']);
+      const tier = TIERS.includes(fromId) ? fromId : String(sched?.tier ?? '').toUpperCase();
+      if (!TIERS.includes(tier)) return skip(`階級が読めない(試合 ID の ${fromId}、予定の tier ${sched ? sched.tier || '(空)' : '(予定の行が無い)'})`);
       if (![m['チーム1名'], m['チーム2名']].every((t) => roster.has(seatKey(t, tier, 'TOP')))) return skip(`名簿の階級チーム同士でない(${m['チーム1名']}・${m['チーム2名']})`);
       item.place = { tier };
     } else {
