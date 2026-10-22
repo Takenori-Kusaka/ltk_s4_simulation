@@ -24,6 +24,7 @@
 | Task-12 | (2026-10-14 追加)本番の試合を個人の評価へ: 本番の記録の選手の行から `kind: official` の試合の記録を作ること(結果だけの記録は除く)、`officialGameWeight` の重み、調子の係数とピックプールの数え方、説明の「本番 n 試合(重み w)を含む」 | 41, 42 | `src/results/to-games.ts`、`src/rating/types.ts`、`src/rating/engine.ts`、`src/rating/axes.ts`、`src/rating/build.ts`、`src/rating/config.json`、`tests/results/to-games.test.ts`、`tests/rating/engine.test.ts`、`tests/rating/build.test.ts` | Task-2、Task-6(結果だけの記録の受け口) | 可(Task-11 と。同上) |
 | Task-13 | (2026-10-14 追加)当てはまりの確認に `officialGameWeight` の 3 通り(設定の値・`scrimGameWeight` と同じ値・0)の比較を足す | 43 | `src/results/fit.ts`、`src/results/fit-cli.ts`、`tests/results/fit.test.ts` | Task-5、Task-12 | 可 |
 | Task-14 | (2026-10-14 追加)LTKDB の BAN・ピックを記録の `draft` へ: BP詳細の行から `draft` を作る規則(`team`・`type`・`role`、チャンピオン名の正規化と「NOBAN」・空の BAN の null、`order` と要素の並び)、`draft` を書かない試合の条件と出力、既存の記録に `draft` を足さないことと「draft の無い既存の記録」の出力、既存の `draft` との食い違いの訂正の候補、置き換えの記録への `draft`、要約の項目 | 44, 45, 46, 47 | `.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs`、`.claude/skills/input-ltkdb/SKILL.md`、`tests/results/ltkdb-convert.test.ts`、`tests/results/fixtures/**` | Task-7、Task-8、F-006 Task-5 | 否(Task-8・Task-9 と同じファイルに触る) |
+| Task-15 | (2026-10-22 追加)本番の `game` を試合の形と試合 ID の末尾 `_P<n>_RESULT` から決める。本番の行の「試合番号」を読まない。BO1 の試合の `_P<n>`(n が 2 以上)の行を書かない | 31, 32, 33 | `.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs`、`.claude/skills/input-ltkdb/SKILL.md`、`tests/results/ltkdb-convert.test.ts` | Task-7、Task-8 | 否(Task-7・Task-8・Task-14 と同じファイルに触る) |
 
 **対応する受入基準のないタスクを作らないでください**。何のための作業か分からないタスクは、完了の判定ができません。
 
@@ -50,6 +51,7 @@
 | 変更行数(2026-10-14 追記。Task-14) | 800 | Task-14 約 460(変換のスクリプト約 120 は算定の外。テスト約 200、固定データ約 260 = BP詳細の階級チーム同士の 260 行を 1 行 1 レコードで) |
 | 変更ファイル数(同上) | 15 | Task-14 4〜5 |
 | レビュー所要時間(同上) | 30分 | Task-14 25 分 |
+| 変更行数(2026-10-22 追記。Task-15) | 800 | Task-15 約 80(変換のスクリプト約 20 は算定の外。テスト約 60) |
 
 上限を超える見込みのタスクは分割します。**目安は行数ではなくレビュー可能性です**。行数は実装コードの差分で数え、記録のファイル(`docs/research/grounds/scrims/*.json`)・チャンピオンの一覧(`data/public/champions.json`)・自動生成ファイルは除きます。
 
@@ -90,6 +92,7 @@
 | 6 | Task-8・Task-9 | 層5 のマージ後の main | 変換の置き換え・訂正の候補・検証・照合 / 取り込みのワークフロー(並列。どちらも `.claude/skills/input-ltkdb/SKILL.md` に触るため、マージは順に) |
 | —(層4〜6 と独立) | Task-10 | Task-3 のマージ後の main | 連敗の数 k を気持ちの補正へ |
 | 7(2026-10-14 追記) | Task-14 | Task-8 と F-006 Task-5 のマージ後の main | LTKDB の BAN・ピックを記録の `draft` へ |
+| 8(2026-10-22 追記) | Task-15 | G-4 の再判定 4 の通過後の main | 本番の `game` を試合の形から |
 
 ## AI エージェントへ与える分割の指示
 
@@ -108,6 +111,8 @@
 2026-10-14 追記(Task-11〜13): 再判定の記録は `docs/gates/g4-F-004-2026-10-14-rejudge2.md`。判定日と結果は判定者が書く。
 
 2026-10-14 追記(Task-14): 再判定の記録は `docs/gates/g4-F-004-2026-10-14-rejudge3.md`。判定日と結果は判定者が書く。
+
+2026-10-22 追記(Task-15): 再判定の記録は `docs/gates/g4-F-004-2026-10-22-rejudge4.md`。判定日と結果は判定者が書く。Task-15 の PR は `.claude/**` を変えるため `state:needs-platform` を付け、既存のテストのうち本番の `game` を「試合番号」で与える 2 件(基準 31・32 の決勝の G2、基準 35 の Regular Stage・準決勝の 2 ゲーム目)は、入力を試合 ID の末尾 `_P02_RESULT` へ替える(期待は変えない)。基準 31 のテストの名前の「game を試合番号から」も改定に合わせて直す。これらは受入基準の改定に伴うテストの変更で、G-4 の再判定 4 の対象に含める
 
 ## 承認(G-4)
 
