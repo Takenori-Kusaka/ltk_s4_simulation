@@ -176,6 +176,19 @@ test('基準33: 本番の結果だけの記録は日程と一致した行だけ(
   assert.deepEqual(summary.resultOnly, ['OFF_RO']);
 });
 
+test('基準33: 試合 ID の 3 つ目が階級でないスクリム(LTK4_SCRIM_<日付>_<組>_<階級>_CANDIDATE_…)は、スケジュールID の指す予定の行の tier を階級にする。どちらからも読めなければ書かない', () => {
+  const id = 'LTK4_SCRIM_20261013_ITCC_MASTERS_CANDIDATE_P01_RESULT';
+  const sched = { schedule_id: 'LTK4_SCRIM_20261013_ITCC_MASTERS_CANDIDATE_P01', event_date: '2026-10-13', match_type: 'スクリム', stage: 'SCRIM', tier: 'masters' };
+  const a = run([{ ...SCRIM1, '試合ID': id, 'スケジュールID': sched.schedule_id }], [], root(), [...SCHEDULE, sched]);
+  const [r] = read(a.dir, 'scrims/2026-10-13-cc-masters-vs-it-masters.json');
+  assert.deepEqual([r.kind, r.resultOnly, r.game, r.winner, (r.source as Row).ltkdbMatchId], ['scrim', true, 1, 'IT MASTERS', id]);
+  const b = run([{ ...SCRIM1, '試合ID': id, 'スケジュールID': 'NO_SUCH_SCHEDULE' }], []);
+  assert.equal(existsSync(join(b.dir, 'scrims')) && readdirSync(join(b.dir, 'scrims')).length > 0, false);
+  const sk = (b.summary.skipped as Row).scrim as Row[];
+  assert.deepEqual(sk.map((x) => x.id), [id]);
+  assert.match(sk[0].reason as string, /階級が読めない/);
+});
+
 // --- 基準 37: 14 分の CS と試合の番号の写し ---
 
 test('基準37: 計測秒 840 のスクリムは cs14Sec と各選手の cs14 を写し、game に試合番号を書く', () => {
