@@ -11,6 +11,7 @@
   import ComparePage from '../compare/ComparePage.svelte';
   import MetaPage from '../meta/MetaPage.svelte';
   import SimPage from '../sim/SimPage.svelte';
+  import FinalReportPage from '../report/FinalReportPage.svelte';
   import type { RatingsFile } from '../rating/view.ts';
 
   let { files, ratings, winrates }: { files: Record<string, PlayerFile>; ratings?: RatingsFile; winrates?: unknown } = $props();
@@ -59,6 +60,12 @@
           <span>{TEAM_INFO[teamOfPage].name.toUpperCase()}</span>
         {/if}
       </nav>
+    {:else if route.page === 'report'}
+      <nav class="crumb" aria-label="現在の位置">
+        <a href="#/">ALL HOUSES</a>
+        <span aria-hidden="true">·</span>
+        <span>FINAL REPORT</span>
+      </nav>
     {/if}
   </header>
   <div bind:this={content}>
@@ -82,6 +89,8 @@
       <MetaPage {ratings} />
     {:else if route.page === 'sim'}
       <SimPage {winrates} />
+    {:else if route.page === 'report'}
+      <FinalReportPage />
     {:else if route.page === 'compare'}
       {#key route.targets.join('/')}
         <ComparePage targets={route.targets} {ratings} />

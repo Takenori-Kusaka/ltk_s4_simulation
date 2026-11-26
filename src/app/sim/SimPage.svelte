@@ -30,7 +30,7 @@
     <p class="sub">{stageNotice(file)} · 10,000 回のシミュレーションから</p>
     <p class="meta">乱数の種 {sim.seed} · 試行 {sim.trials.toLocaleString('ja-JP')} 回 · 勝率表の計算日時 {when(sim.computedAt)}</p>
   {/if}
-  <p class="hero-links"><a class="chip" href="#/">四つの王家へ戻る ›</a></p>
+  <p class="hero-links"><a class="chip" href="#/report">最終レポート（事後検証）を見る ›</a> <a class="chip" href="#/">四つの王家へ戻る ›</a></p>
 </section>
 
 {#if file && sim && table}

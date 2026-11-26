@@ -145,6 +145,7 @@ export type Route =
   | { page: 'compare-start'; target: string }
   | { page: 'meta' }
   | { page: 'sim' }
+  | { page: 'report' }
   | { page: 'notfound'; hash: string };
 
 /** F-008: 比較の対象の種類。選手 ID・階級チーム(CC-CORE)・チーム全体(CC)。存在しなければ null */
@@ -200,6 +201,8 @@ export function parseRoute(hash: string): Route {
   if (upper === '/META') return { page: 'meta' };
   // F-013 基準7: 勝率とシミュレーションの結果のページ
   if (upper === '/SIM') return { page: 'sim' };
+  // 最終レポート（事後検証）
+  if (upper === '/REPORT' || upper === '/FINAL-REPORT') return { page: 'report' };
   return { page: 'notfound', hash };
 }
 
@@ -222,6 +225,7 @@ export function pageTitle(r: Route): string {
   if (r.page === 'compare-start') return `比較 ${r.target} | ${site}`;
   if (r.page === 'meta') return `メタ解説 | ${site}`;
   if (r.page === 'sim') return `勝率とシミュレーション | ${site}`;
+  if (r.page === 'report') return `最終検証レポート | ${site}`;
   return site;
 }
 

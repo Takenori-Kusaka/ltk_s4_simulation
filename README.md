@@ -1,3 +1,13 @@
+# LTK Season: Finale (Season 4) シミュレーター — crinoid [ARCHIVED]
+
+> ⚠️ **アーカイブ化のお知らせ**:  
+> 大会「League The k4sen Season: Finale (LTK Season 4)」は 2026年11月22日をもって全日程を終了しました。  
+> 🏆 **優勝**: **Camellia Crown (CC)**  
+> 📊 **最終事後検証レポート**: [GitHub Pages で公開中](https://takenori-kusaka.github.io/crinoid/#/report) / [docs/final-report.md](docs/final-report.md)  
+> 本リポジトリは大会終了に伴いアーカイブ化され、GitHub Actions の自動実行・データ収集・デプロイはすべて停止しています。
+
+---
+
 # ピットイン方式 準拠テンプレート
 
 [ピットイン方式](https://takenori-kusaka.github.io/process-compass/phase4-process-design/overview/)(正式名称: AI協調型ソフトウェア開発プロセス標準)に沿って開発するためのプロジェクトテンプレートです。

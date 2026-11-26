@@ -1,24 +1,9 @@
-# G-5 自動検証(CI)
-#
-# 必須ステータスチェックの名前は gate-g5 に固定します。個々の検査ジョブではなく、
-# 集約ジョブ1つを必須にすることで、検査を足しても保護設定を変えずに済みます。
-#
-# 実際に走るコマンドは adapters/<stack>.json から差し込みます。
-# プロセスの骨格を言語に依存させないためです。
+# ARCHIVED: LTK Season 4 終了に伴い本ワークフローは停止・アーカイブ化されました。
+# CI 自動実行は停止しています。
 
 name: gate-g5
 
 on:
-  pull_request:
-    # edited: PR の本文(トレーラ Spec・リスク区分)を直したときに、pr-rules を再実行する
-    # labeled / unlabeled: 停止の申し立て(ラベル state:stop-requested。標準 第7章 7.11)を付けた時点で保留し、
-    # 外したときにも解除の記録があるかを確かめ直す
-    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
-  # PR を経ない体制でも、構成の書き換え(変化点を経ない書き換え、記録の切り詰め)を出荷までに検出する。
-  # 既定ブランチへの push で契約検査を走らせ、push の直前のコミットの構成と比べる(標準 第3章 3.13.5)。
-  # 既定ブランチの名前が main でない場合は、ここを改める(このファイルは強制層であり、変更は AI維持管理者の承認を要する)
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

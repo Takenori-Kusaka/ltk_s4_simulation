@@ -18,22 +18,12 @@
 # あるときだけマージします(第5章 5.5.6)。承認の後は、このワークフローを手動で実行して判定し直します。
 # 承認(gh pr review --approve)を行う手順を、このワークフローへ足してはなりません。
 #
-# 2026-10-01 時点で、このワークフローは実際の GitHub 上で実行して確かめていません(手動実行の経路を含む)。
-# 有効化する前に、試験用のリポジトリで該当する変更と該当しない変更を流して確かめてください。
-# 手順と、有効化する組織が負う責任は README.md「委任した変更のマージの経路」にあります。
+# ARCHIVED: LTK Season 4 終了に伴い本ワークフローは停止・アーカイブ化されました。
+# 自動実行は停止しています。
 
 name: delegation
 
 on:
-  # pull_request_target は、ワークフローの定義を基底ブランチから読む。PR の側の定義では動かない
-  pull_request_target:
-    types: [opened, synchronize, reopened, ready_for_review, edited]
-  # G-5 の完了後に判定し直す。workflow_run は既定ブランチの定義で動く
-  workflow_run:
-    workflows: [gate-g5]
-    types: [completed]
-  # 開発者の席の責任者が承認した後などに、判定し直す。定義は既定ブランチから読む。
-  # pull_request_review は PR の側の定義で動くため、使ってはならない(マージのトークンに届く定義を PR が書き換えられる)
   workflow_dispatch:
     inputs:
       pr:

@@ -1,18 +1,9 @@
-# LTKDB から試合結果を毎日取り込む(/input-ltkdb の機械の部分。F-004 基準 38)
-#
-# 価値責任者の求め(2026-10-12): LTKDB を毎日集計して勝率へ反映する。
-# 変換は生成 AI を使わないスクリプト(.claude/skills/input-ltkdb/reference/ltkdb-to-scrims.mjs)。
-# 変換は出力の最後の行に JSON の要約を出す。このワークフローは要約を読み、
-# - 書かなかった本番の試合と訂正の候補の試合 ID ごとに、開いた Issue が無ければ `state:needs-po` の Issue を 1 件作る
-# - 書いたファイルか置き換えがあれば、実行ごとに違う名前のブランチを push して Draft PR を出す(`scrims/` と `results/`)
-# マージと Ready は人。PR を作れなかった場合も Issue は作り、ジョブを失敗にする(黙って成功にしない)。
-# 勝率への反映は、マージの後に価値責任者の手元で集計を流したときに起きる(data/raw は手元にだけある)。
+# ARCHIVED: LTK Season 4 終了に伴い本ワークフローは停止・アーカイブ化されました。
+# 大会終了に伴い、LTKDB の自動取り込み(cron)は停止しています。
 
 name: ltkdb-import
 
 on:
-  schedule:
-    - cron: '45 22 * * *' # 毎日 7:45 JST(8:15 の site-deploy の前)
   workflow_dispatch:
 
 permissions:

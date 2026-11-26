@@ -54,10 +54,16 @@
   <p class="sub">四つの花の王家、六十の名。最後の玉座を占う予言の書。</p>
   {#if days > 0}
     <p class="countdown">開幕まで <strong>{days}</strong> 日</p>
+  {:else if now > new Date('2026-11-22T23:59:59+09:00')}
+    <div class="finale-closed frame">
+      <p class="closed-title">🏆 大会閉幕 · 覇者 Camellia Crown</p>
+      <p class="closed-desc">League The k4sen Season: Finale は全日程を終了しました。シミュレーターの予測精度と実際の結果を検証した最終レポートを公開しています。</p>
+      <p class="closed-action"><a class="chip gold-chip" href="#/report">最終レポート（事後検証）を読む ›</a></p>
+    </div>
   {:else}
     <p class="countdown">大会 開催中</p>
   {/if}
-  <p class="hero-links"><a class="chip" href="#/sim">全試合の予想 ›</a> <a class="chip" href="#/meta">いまのメタを知る ›</a></p>
+  <p class="hero-links"><a class="chip" href="#/report">最終検証レポート ›</a> <a class="chip" href="#/sim">全試合の予想 ›</a> <a class="chip" href="#/meta">いまのメタを知る ›</a></p>
 </section>
 
 <div class="forecast">
@@ -112,3 +118,36 @@
     </section>
   {/each}
 </div>
+
+<style>
+  .finale-closed {
+    margin: 20px auto 24px;
+    max-width: 680px;
+    padding: 20px 24px;
+    background: radial-gradient(circle at top, rgba(200, 50, 74, 0.15), rgba(20, 22, 30, 0.95));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  .closed-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin: 0 0 8px;
+  }
+  .closed-desc {
+    font-size: 0.9rem;
+    color: #c5c9d4;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  .closed-action {
+    margin: 0;
+  }
+  .gold-chip {
+    background: rgba(255, 215, 0, 0.15) !important;
+    border-color: #ffd700 !important;
+    color: #ffd700 !important;
+    font-weight: 700;
+  }
+</style>

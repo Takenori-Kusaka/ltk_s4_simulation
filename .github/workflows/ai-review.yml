@@ -1,19 +1,10 @@
-# AI レビュー(G-5 の拡張)
-#
-# **独立レビュー(G-6)の代替ではありません。**
-#
-# - PR へコメントするだけ。承認(approve)は行わない
-# - 必須ステータスチェックにしない。合否条件にすると自動化バイアスを招く
-# - 出力は監査の入力として使える。判定そのものには使わない
-#
-# 権限を pull-requests: write に留め、承認に必要な権限を与えていません。
-# 「承認させない」を指示ではなく設定で担保するためです。
+# ARCHIVED: LTK Season 4 終了に伴い本ワークフローは停止・アーカイブ化されました。
+# PR 時の自動実行は停止しています。
 
 name: ai-review
 
 on:
-  pull_request:
-    types: [opened, synchronize, ready_for_review]
+  workflow_dispatch:
 
 permissions:
   contents: read
